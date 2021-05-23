@@ -1,17 +1,17 @@
-import React, { FunctionComponent, useContext } from "react";
-import { Link } from "react-router-dom";
-import { atom, useAtom } from "jotai";
-import UserContext, { UserContextType } from "../../context/UserContext";
-import styled from "styled-components";
-import Sidebar from "./sidebar/Sidebar";
-import "./Navbar.css";
+import React, { FunctionComponent, useContext } from "react"
+import { Link } from "react-router-dom"
+import { atom, useAtom } from "jotai"
+import UserContext, { UserContextType } from "../../context/UserContext"
+import styled from "styled-components"
+import Sidebar from "./sidebar/Sidebar"
+import "./Navbar.css"
 
-import logo from "../../images/logo_app.png";
-import { IconContext } from "react-icons"; //https://react-icons.github.io/react-icons/
-import { AiOutlineMenu as SidebarIcon } from "react-icons/ai"; //https://react-icons.github.io/react-icons/
-import { BiUserCircle as LoggedUserIcon } from "react-icons/bi";
-import { BiWrench, BiGridAlt } from "react-icons/bi"; //https://react-icons.github.io/react-icons/
-import { BiUserX as NoUserIcon } from "react-icons/bi";
+import logo from "../../images/logo_app.png"
+import { IconContext } from "react-icons" //https://react-icons.github.io/react-icons/
+import { AiOutlineMenu as SidebarIcon } from "react-icons/ai" //https://react-icons.github.io/react-icons/
+import { BiUserCircle as LoggedUserIcon } from "react-icons/bi"
+import { AiOutlineShopping as ShoppingCartIcon} from "react-icons/ai"
+import { BiUserX as NoUserIcon } from "react-icons/bi"
 
 const Nav = styled.div``;
 const NavIconLink = styled(Link)``;
@@ -57,11 +57,8 @@ const Navbar: FunctionComponent = () => {
             {isLogged && <LoggedUserIcon />}
             {!isLogged && <NoUserIcon />}
           </NavIconLink>
-          <NavIconLink className="NavIconLink" to="/subpage01/page02">
-            <BiWrench />
-          </NavIconLink>
           <NavIconLink className="NavIconLink" to="/subpage01/page03">
-            <BiGridAlt />
+            <ShoppingCartIcon />
           </NavIconLink>
         </div>
       </Nav>
