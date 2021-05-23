@@ -57,7 +57,7 @@ const Navbar: FunctionComponent = () => {
             {isLogged && <LoggedUserIcon />}
             {!isLogged && <NoUserIcon />}
           </NavIconLink>
-          <NavIconLink className="NavIconLink" to="/subpage01/page03">
+          <NavIconLink className="NavIconLink" to="/cart">
             <ShoppingCartIcon />
           </NavIconLink>
         </div>
