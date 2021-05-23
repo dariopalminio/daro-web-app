@@ -1,0 +1,36 @@
+.login-form {
+    max-width: 320px;
+    width: 100%;
+  }
+  
+  .login-form label {
+    display: block;
+    font-size: 14px;
+  }
+  
+  .form-error, .login-form small {
+    color: red;
+    font-size: 12px;
+    margin-top: -12px;
+    display: block;
+  }
+  
+  .login-form input {
+    background: #fff;
+    border: none;
+    display: block;
+    line-height: 2;
+    font-size: 16px;
+    width: 100%;
+    padding: 0 8px;
+    margin-bottom: 16px;
+    margin-top: 4px;
+  }
+  
+  .login-form input.error {
+    border: 1px solid red;
+  }
+  
+  .login-form .login-button {
+    width: 100%;
+  }
