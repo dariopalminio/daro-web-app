@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react"
 import { Route, Switch } from "react-router-dom"
-import { LoginPage } from "../pages/User/LoginPage"
+import { LoginPage } from "../pages/user/LoginPage"
 import { Page03 } from "../pages/subpage01/Page03"
 import { Page02 } from "../pages/subpage01/Page02"
 import { Page01 } from "../pages/subpage01/Page01"
