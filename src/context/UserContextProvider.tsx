@@ -1,22 +1,23 @@
-import { FC, useState } from "react";
-import UserContext from "./UserContext";
+import { FC, useEffect } from "react";
+import UserContext, {RecoveryUserFromWebBrowser} from "./UserContext";
+import { atom, useAtom } from "jotai";
+import { UserDefaultValue } from "../hooks/useUser";
 
+
+export const UserAtom = atom(UserDefaultValue);
 
 const UserContextProvider: FC = ({ children }) => {
-  const [jwt, setJWT] = useState(
-    () => window.sessionStorage.getItem('jwt')
-  )
-  const [isLogged, setIsLogged] = useState(
-    Boolean(jwt)
-  )
+  const [user, setUser] = useAtom(UserAtom);
+
+  useEffect(() => {
+    setUser(RecoveryUserFromWebBrowser)
+  }, [setUser])
 
   return (
     <UserContext.Provider
       value={{
-        jwt, 
-        isLogged,
-        setJWT, 
-        setIsLogged
+        user,
+        setUser,
       }}
     >
       {children}

@@ -31,7 +31,7 @@ const NavIconLinkRightStyle: React.CSSProperties = {
 export const sidebarLeftStatus = atom(false);
 
 const Navbar: FunctionComponent = () => {
-  const { isLogged } = useContext(UserContext) as UserContextType;
+  const { user } = useContext(UserContext) as UserContextType;
   const [sidebarLeftIsShown, setSidebarIsShown] = useAtom(sidebarLeftStatus);
 
   const showSidebar = () => setSidebarIsShown(!sidebarLeftIsShown);
@@ -54,8 +54,8 @@ const Navbar: FunctionComponent = () => {
 
         <div className="RightNavWrap" style={NavIconLinkRightStyle}>
           <NavIconLink className="NavIconLink" to="/user/login">
-            {isLogged && <LoggedUserIcon />}
-            {!isLogged && <NoUserIcon />}
+            {user?.isLogged && <LoggedUserIcon />}
+            {!user?.isLogged && <NoUserIcon />}
           </NavIconLink>
           <NavIconLink className="NavIconLink" to="/cart">
             <ShoppingCartIcon />

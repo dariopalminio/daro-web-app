@@ -1,23 +1,35 @@
-import { createContext} from 'react'
-
+import { createContext } from 'react'
+import { UserType, UserDefaultValue } from '../hooks/useUser'
 
 // Global user context type
 export type UserContextType = {
-    jwt: string | null
-    isLogged: Boolean
-    setJWT: (jwt: string | null) => void
-    setIsLogged: (isLogged: boolean) => void
+  user: (UserType | undefined)
+  setUser: (newUser: UserType) => void
+}
+
+// Recovery data from web browser Storage
+export const RecoveryUserFromWebBrowser = (): UserType => {
+  if (typeof Storage !== "undefined") {
+    // Code when Storage is supported
+    const jwtValue = window.sessionStorage.getItem("jwt");
+    const userRecovered: UserType = {
+      jwt: jwtValue,
+      isLogged: Boolean(jwtValue),
+    };
+    return userRecovered;
+  } else {
+    //Code when Storage is NOT supported
+    return UserDefaultValue;
   }
+}
 
 // Initial values for global user context 
 export const UserContextDefaultValues: UserContextType = {
-    jwt: null,
-    isLogged: false,
-    setJWT: () => {},
-    setIsLogged: () => {}
-  };
+  user: UserDefaultValue,
+  setUser: () => { },
+};
 
 // Global user context
 const UserContext = createContext<UserContextType>(UserContextDefaultValues)
 
-export default UserContext 
+export default UserContext
