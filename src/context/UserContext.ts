@@ -25,7 +25,10 @@ export const RecoveryUserFromWebBrowser = (): UserType => {
 
 // Initial values for global user context 
 export const UserContextDefaultValues: UserContextType = {
-  user: UserDefaultValue,
+  user: {
+    jwt: null,
+    isLogged: false,
+  },
   setUser: () => { },
 };
 

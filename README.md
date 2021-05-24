@@ -17,6 +17,13 @@ npm i @types/react-router-dom --save-dev
 
 npm i react-icons  --save-dev
 
+npm i dotenv
+
+npm i md5  --save-dev
+
+npm i axios --save-dev
+
+# npm i universal-cookie --save-dev
 
 ## Available Scripts
 

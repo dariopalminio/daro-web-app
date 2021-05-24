@@ -16,22 +16,35 @@ export const UserDefaultValue: UserType = {
 export default function useUser() {
     const {
         user, setUser } = useContext(UserContext) as UserContextType;
-    const [state, setState] = useState({ loading: false, error: false })
+    const [state, setState] = useState({ loading: false, error: false, msg: "" })
 
     /**
      * login
      */
-    const login = useCallback(({ username, password }: any) => {
-        setState({ loading: true, error: false })
-        const jwt: string | null = loginService({ username, password })
-        if (jwt) window.sessionStorage.setItem('jwt', jwt)
-        setState({ loading: false, error: false })
-        const userValue: UserType = {
-            jwt: jwt,
-            isLogged: Boolean(jwt)
-        }
-        setUser(userValue)
-    }, [setUser])
+    const login = useCallback(({ email, password }: any) => {
+        setState({ loading: true, error: false, msg: ""  })
+        //const jwt: string | null = loginService({ email, password })
+        
+  
+            setState({loading: true, error: false, msg: "" })
+            loginService({email, password})
+              .then(jwt => {//OK
+                window.sessionStorage.setItem('jwt', jwt)
+                setState({loading: false, error: false, msg: "OK" })
+                console.log("useUser jwt")
+                console.log(jwt)
+                const userValue: UserType = {
+                    jwt: jwt,
+                    isLogged: Boolean(jwt)
+                }
+                setUser(userValue)
+              })
+              .catch(err => {
+                window.sessionStorage.removeItem('jwt')
+                setState({loading: false, error: true, msg: err.message })
+                console.error(err)
+              })
+          }, [setUser])
 
     /**
      * logout
@@ -45,6 +58,7 @@ export default function useUser() {
         isLogged: user?.isLogged,
         isLoginLoading: state.loading,
         hasLoginError: state.error,
+        msg: state.msg,
         login,
         logout
     }

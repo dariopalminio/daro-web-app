@@ -3,17 +3,17 @@ import useUser from "../../hooks/useUser";
 import "./Login.css";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { isLoginLoading, hasLoginError, login, isLogged, logout } = useUser();
+  const { isLoginLoading, hasLoginError, msg, login, isLogged, logout } = useUser();
 
   /**
    * Login
    */
   const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login({ username, password });
+    login({ email, password });
   };
 
   /**
@@ -35,11 +35,11 @@ export default function Login() {
       {!isLogged && !isLoginLoading && (
         <form className="login-form" onSubmit={handleLoginSubmit}>
           <label>
-            username
+          email
             <input
-              placeholder="username"
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
+              placeholder="nilson@email.com"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
             />
           </label>
 
@@ -47,7 +47,7 @@ export default function Login() {
             password
             <input
               type="password"
-              placeholder="password"
+              placeholder="nilson"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
@@ -56,7 +56,8 @@ export default function Login() {
           <button className="login-button">Login</button>
         </form>
       )}
-      {hasLoginError && <strong>Credentials are invalid</strong>}
+      {hasLoginError && <strong>Error</strong>}
+      <br/> Msg:{msg}
     </div>
   );
 }
