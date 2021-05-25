@@ -19,7 +19,7 @@ export default function Login() {
    */
   const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login( email, password );
+    login(email, password);
   };
 
   /**
@@ -30,43 +30,42 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div className="absoluteCenteredDiv">
       {isLoginLoading && <strong>Checking credentials...</strong>}
       {!isLogged && !isLoginLoading && (
-        <form className="login-form" onSubmit={handleLoginSubmit}>
-          <label>
-            email
+        <form action="index.html" onSubmit={handleLoginSubmit}>
+          <div className="box">
+            <h1>Login Form</h1>
             <input
+              className="username"
               placeholder="nilson@email.com"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />
-          </label>
-
-          <label>
-            password
             <input
+              className="username"
               type="password"
               placeholder="nilson"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
-          </label>
 
-          <button className="login-button">Login</button>
+            <button className="button">Login</button>
+          </div>
         </form>
       )}
-      <div className="LoginMessage">
+<br/>
+      {isLogged && (
+        <div className="box">
+          Do you want to log out? <br />
+          <button className="button" onClick={() => onClickLogoutHandler()}>Logout</button>
+        </div>
+      )}
+      <div className="message-box">
         {hasLoginError && <strong>Error: </strong>}
         {msg} <br />
         {isLogged && <label>You are already logged! </label>}
       </div>
-      {isLogged && (
-        <div>
-          Do you want to log out?{" "}
-          <button onClick={() => onClickLogoutHandler()}>Logout</button>
-        </div>
-      )}
     </div>
   );
 }
