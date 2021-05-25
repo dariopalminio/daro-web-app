@@ -32,18 +32,21 @@ export default function Login() {
   return (
     <div className="absoluteCenteredDiv">
       {isLoginLoading && <strong>Checking credentials...</strong>}
+
       {!isLogged && !isLoginLoading && (
-        <form action="index.html" onSubmit={handleLoginSubmit}>
+        <form action="#" onSubmit={handleLoginSubmit}>
           <div className="box">
             <h1>Login Form</h1>
+            <label className="login-label">Email</label>
             <input
-              className="username"
+              className="input"
               placeholder="nilson@email.com"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />
+            <label className="login-label">Password</label>
             <input
-              className="username"
+              className="input"
               type="password"
               placeholder="nilson"
               onChange={(e) => setPassword(e.target.value)}
@@ -54,18 +57,26 @@ export default function Login() {
           </div>
         </form>
       )}
-<br/>
+      <br />
+
       {isLogged && (
         <div className="box">
-          Do you want to log out? <br />
-          <button className="button" onClick={() => onClickLogoutHandler()}>Logout</button>
+          <label className="logout-label">
+            You are already logged! Do you want to log out?{" "}
+          </label>
+          <br />
+          <button className="button" onClick={() => onClickLogoutHandler()}>
+            Logout
+          </button>
         </div>
       )}
-      <div className="message-box">
-        {hasLoginError && <strong>Error: </strong>}
-        {msg} <br />
-        {isLogged && <label>You are already logged! </label>}
-      </div>
+
+      {hasLoginError && (
+        <div className="message-error-box"><label className="error-label">
+            Error: {msg}
+            <br />{" "}  </label>
+        </div>
+      )}
     </div>
   );
 }

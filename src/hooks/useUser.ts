@@ -26,7 +26,7 @@ export const UserDefaultValue: UserType = {
  */
 export default function useUser() {
     const { user, setUser } = useContext(UserContext) as UserContextType;
-    const [state, setState] = useState({ loading: false, error: false, msg: "" })
+    const [state, setState] = useState({ loading: false, error: false, msg: '' })
 
     /**
      * login
