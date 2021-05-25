@@ -4,7 +4,13 @@ import Navbar from "./components/layout/Navbar";
 import MainContainer from "./components/layout/MainContainer";
 import UserContextProvider from "./context/UserContextProvider";
 
-
+/**
+ * tsx-web-shop App
+ * 
+ * @visibleName Web Shop App
+ * @version 1.0.0
+ * @author [Dario Palminio](https://github.com/dariopalminio/tsx-web-shop.git)
+ */
 const App: FunctionComponent = () => {
   return (
     <UserContextProvider>

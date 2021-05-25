@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
 import UserContext, { UserContextType } from '../context/UserContext'
-import loginService from '../services/UserService'
+import { LoginRequest, callLoginService } from '../services/UserService'
 
 // Global user type
 export type UserType = {
@@ -8,49 +8,60 @@ export type UserType = {
     isLogged: Boolean
 }
 
+// Global user default value
 export const UserDefaultValue: UserType = {
     jwt: null,
     isLogged: false,
 }
 
+/**
+ * useUser Custom Hook
+ * 
+ * @returns 
+ *      isLogged: Boolean
+ *      hasLoginError: string
+ *      msg: string
+ *      login function
+ *      logout function
+ */
 export default function useUser() {
-    const {
-        user, setUser } = useContext(UserContext) as UserContextType;
+    const { user, setUser } = useContext(UserContext) as UserContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: "" })
 
     /**
      * login
      */
-    const login = useCallback(({ email, password }: any) => {
-        setState({ loading: true, error: false, msg: ""  })
-        //const jwt: string | null = loginService({ email, password })
-        
-  
-            setState({loading: true, error: false, msg: "" })
-            loginService({email, password})
-              .then(jwt => {//OK
+    const login = useCallback((email: string, password: string) => {
+        setState({ loading: true, error: false, msg: "Trying to login!" })
+
+        let loginRequestData: LoginRequest = { email, password }
+
+        callLoginService(loginRequestData)
+            .then(jwt => {
+                // Authorized
                 window.sessionStorage.setItem('jwt', jwt)
-                setState({loading: false, error: false, msg: "OK" })
-                console.log("useUser jwt")
-                console.log(jwt)
+                setState({ loading: false, error: false, msg: "Authorized" })
                 const userValue: UserType = {
                     jwt: jwt,
                     isLogged: Boolean(jwt)
                 }
                 setUser(userValue)
-              })
-              .catch(err => {
+            })
+            .catch(err => {
+                // Unauthorized
                 window.sessionStorage.removeItem('jwt')
-                setState({loading: false, error: true, msg: err.message })
+                setState({ loading: false, error: true, msg: err.message })
                 console.error(err)
-              })
-          }, [setUser])
+                console.error(err.errorInfo)
+            })
+    }, [setUser])
 
     /**
      * logout
      */
     const logout = useCallback(() => {
         window.sessionStorage.removeItem('jwt')
+        setState({ loading: false, error: false, msg: "You are not logged in!" })
         setUser(UserDefaultValue)
     }, [setUser])
 
