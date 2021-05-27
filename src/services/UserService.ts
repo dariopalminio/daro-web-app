@@ -45,8 +45,6 @@ export type LoginResponse =
  * @returns access_token JWT
  */
 export const callLoginService = async (loginRequestData: LoginRequest): Promise<any> => {
-  console.log("callLogin loginService, email: ", loginRequestData.email)
-  console.log("callLogin loginService, password: ", loginRequestData.password)
 
   let url = `${ENDPOINT}/login`
 
