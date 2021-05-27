@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import Alert from "@material-ui/lab/Alert";
 import useUser from "../../hooks/useUser";
 import "./Login.css";
 
@@ -30,51 +34,76 @@ export default function Login() {
   };
 
   return (
-    <div className="absoluteCenteredDiv">
-      {isLoginLoading && <strong>Checking credentials...</strong>}
-
+    <div>
       {!isLogged && !isLoginLoading && (
         <form action="#" onSubmit={handleLoginSubmit}>
-          <div className="box">
-            <h1>Login Form</h1>
-            <label className="login-label">Email</label>
-            <input
-              className="input"
-              placeholder="nilson@email.com"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-            />
-            <label className="login-label">Password</label>
-            <input
-              className="input"
-              type="password"
-              placeholder="nilson"
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-            />
+          <Paper className="paper-custom">
+            <div className="wrapper-center">
+              {" "}
+              <h1>Login Form</h1>
+            </div>
+            <div className="wrapper-center">
+              <TextField
+                id="standard-basic"
+                className="textfield-custom"
+                label="Email"
+                placeholder="nilson@email.com"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />{" "}
+            </div>
+            <div className="wrapper-center">
+              <TextField
+                id="standard-basic"
+                className="textfield-custom"
+                label="Password"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+            </div>
+            <b />
 
-            <button className="button">Login</button>
-          </div>
+            <div className="wrapper-center-for-button">
+              <Button variant="contained" color="primary" type="submit">
+                Login
+              </Button>
+            </div>
+          </Paper>
         </form>
       )}
       <br />
 
+      {isLoginLoading && (
+        <div className="box">
+          <strong>Checking credentials...</strong>
+        </div>
+      )}
+
       {isLogged && (
         <div className="box">
-          <label className="logout-label">
+          <Alert severity="success">
             You are already logged! Do you want to log out?{" "}
-          </label>
+          </Alert>
           <br />
-          <button className="button" onClick={() => onClickLogoutHandler()}>
-            Logout
-          </button>
+          <div className="wrapper-center">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => onClickLogoutHandler()}
+            >
+              Logout
+            </Button>
+          </div>
         </div>
       )}
 
       {hasLoginError && (
-        <div className="message-error-box"><label className="error-label">
+        <div className="wrapper-center">
+          <Alert severity="error">
             Error: {msg}
-            <br />{" "}  </label>
+            <br />{" "}
+          </Alert>
         </div>
       )}
     </div>
