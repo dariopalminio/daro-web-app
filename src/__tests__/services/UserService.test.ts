@@ -1,10 +1,10 @@
 import { cleanup } from '@testing-library/react'
 import axios from 'axios';
-import { LoginRequest, callLoginService } from '../../services/UserService'
+import { LoginRequest, loginService } from '../../services/UserService'
 
 afterEach(cleanup);
 
-test('mocking axios request', async () => {
+test('loginService mocking axios OK request', async () => {
 
     const jwtExample = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw'
     
@@ -24,7 +24,7 @@ test('mocking axios request', async () => {
 
     axios.post = myMock.mockResolvedValue(responseOKMocked)
 
-    const service = await callLoginService(loginRequestData)
+    const service = await loginService(loginRequestData)
 
     expect(service).toBeDefined();
     expect(service).toBe(jwtExample);

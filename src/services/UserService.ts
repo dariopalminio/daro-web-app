@@ -44,7 +44,7 @@ export type LoginResponse =
  * @param param0 loginRequestData LoginRequest
  * @returns access_token JWT
  */
-export const callLoginService = async (loginRequestData: LoginRequest): Promise<any> => {
+export const loginService = async (loginRequestData: LoginRequest): Promise<any> => {
 
   let url = `${ENDPOINT}/login`
 
