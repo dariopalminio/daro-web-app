@@ -1,17 +1,14 @@
 
 import * as GlobalConfig from '../config/GlobalConfig';
 import axios from 'axios';
-
-
-const ENDPOINT =
-  GlobalConfig.fake_endpoints ?
-    GlobalConfig.FakeAPIEndpoints.auth : GlobalConfig.APIEndpoints.auth
+import qs from 'querystring'
 
 export type LoginRequest = {
-  email: string
+  username: string
   password: string
+  grant_type: string
+  client_id: string
 }
-
 
 export type LoginResponse =
   {
@@ -40,22 +37,36 @@ export type LoginResponse =
   }
 
 /**
- * Consumer cliente for login on User Service server
+ * Consumer cliente for login on Keycloak Server & Bearer Token
+ * configured with OpenID Endpoint configuration, Login with email = true and Access Type = public
  * @param param0 loginRequestData LoginRequest
  * @returns access_token JWT
  */
-export const loginService = async (loginRequestData: LoginRequest): Promise<any> => {
+export const loginService = async (user: string, pass: string): Promise<any> => {
 
-  let url = `${ENDPOINT}/login`
+  let loginRequestData: LoginRequest = {
+    username: user,
+    password: pass,
+    grant_type: 'password',
+    client_id: GlobalConfig.client_id
+  }
 
-  const response: LoginResponse = await axios.post(url, loginRequestData)
+  const ENDPOINT =
+    GlobalConfig.fake_endpoints ?
+      GlobalConfig.FakeAPIEndpoints.auth : GlobalConfig.APIEndpoints.auth
+
+  let realm = GlobalConfig.keycloak_realm
+
+  let url = `${ENDPOINT}/realms/${realm}/protocol/openid-connect/token`
+
+  const response: LoginResponse = await axios.post(url, qs.stringify(loginRequestData))
 
   if (response.status !== 200) {
     // Unauthorized or other error (401, 400, 406...)
     throw new Error('Response is NOT OK. Could not authenticate!')
   }
 
-  const { access_token } = response.data //data={access_token: "..."}
-  
+  const { access_token } = response.data
+
   return access_token
 }

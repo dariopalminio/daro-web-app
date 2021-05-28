@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
 import UserContext, { UserContextType } from '../context/UserContext'
-import { LoginRequest, loginService } from '../services/UserService'
+import { loginService } from '../services/UserService'
 
 // Global user type
 export type UserType = {
@@ -34,9 +34,8 @@ export default function useUser() {
     const login = useCallback((email: string, password: string) => {
         setState({ loading: true, error: false, msg: "Trying to login!" })
 
-        let loginRequestData: LoginRequest = { email, password }
 
-        loginService(loginRequestData)
+        loginService(email, password)
             .then(jwt => {
                 // Authorized
                 window.sessionStorage.setItem('jwt', jwt)

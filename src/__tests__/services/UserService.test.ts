@@ -18,15 +18,17 @@ test('loginService mocking axios OK request', async () => {
     }
 
     let loginRequestData: LoginRequest = {
-        email: "e@mail.com",
-        password: "123"
+        username: 'user',
+        password: 'pass',
+        grant_type: 'password',
+        client_id: 'rest-client-test'
     }
 
     const myMock = jest.fn()
 
     axios.post = myMock.mockResolvedValue(responseOKMocked)
 
-    const service = await loginService(loginRequestData)
+    const service = await loginService('user','pass')
 
     expect(service).toBeDefined()
     expect(service).toBe(jwtExample)
