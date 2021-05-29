@@ -11,6 +11,7 @@ const MainContainer: FunctionComponent = () => {
   return (
     <div className="MainContainer">
       <Switch>
+        <Route path="/" component={Page01} exact></Route>
         <Route path="/user/login" component={LoginPage} exact></Route>
         <Route path="/cart" component={CartPage} exact></Route>
         <Route path="/subpage01/page03" component={Page03} exact></Route>

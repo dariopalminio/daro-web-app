@@ -48,18 +48,16 @@ export const loginService = async (user: string, pass: string): Promise<any> => 
     username: user,
     password: pass,
     grant_type: 'password',
-    client_id: GlobalConfig.client_id
+    client_id: GlobalConfig.Keycloak.client_id
   }
 
-  const ENDPOINT =
-    GlobalConfig.fake_endpoints ?
-      GlobalConfig.FakeAPIEndpoints.auth : GlobalConfig.APIEndpoints.auth
+  const ENDPOINT = GlobalConfig.APIEndpoints.auth
 
-  let realm = GlobalConfig.keycloak_realm
+  const REALM = GlobalConfig.Keycloak.realm
 
-  let url = `${ENDPOINT}/realms/${realm}/protocol/openid-connect/token`
+  const URL = `${ENDPOINT}/auth/realms/${REALM}/protocol/openid-connect/token`
 
-  const response: LoginResponse = await axios.post(url, qs.stringify(loginRequestData))
+  const response: LoginResponse = await axios.post(URL, qs.stringify(loginRequestData))
 
   if (response.status !== 200) {
     // Unauthorized or other error (401, 400, 406...)

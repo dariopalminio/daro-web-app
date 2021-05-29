@@ -50,8 +50,6 @@ export default function useUser() {
                 // Unauthorized
                 window.sessionStorage.removeItem('jwt')
                 setState({ loading: false, error: true, msg: err.message })
-                console.error(err)
-                console.error(err.errorInfo)
             })
     }, [setUser])
 
