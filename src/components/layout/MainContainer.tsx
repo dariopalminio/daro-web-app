@@ -7,6 +7,10 @@ import { Page02 } from "../pages/subpage01/Page02";
 import { Page01 } from "../pages/subpage01/Page01";
 import { Page04 } from "../pages/subpage02/Page04";
 
+/**
+ * MainContainer Function Component
+ * @returns 
+ */
 const MainContainer: FunctionComponent = () => {
   return (
     <div className="MainContainer">

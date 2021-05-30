@@ -19,6 +19,7 @@ npm i axios --save-dev
 npm install @material-ui/core
 npm install @material-ui/icons
 npm install @material-ui/lab
+npm install @material-ui/styles
 
 # npm i universal-cookie --save-dev
 

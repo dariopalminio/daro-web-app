@@ -52,9 +52,7 @@ export const loginService = async (user: string, pass: string): Promise<any> => 
   }
 
   const ENDPOINT = GlobalConfig.APIEndpoints.auth
-
   const REALM = GlobalConfig.Keycloak.realm
-
   const URL = `${ENDPOINT}/auth/realms/${REALM}/protocol/openid-connect/token`
 
   const response: LoginResponse = await axios.post(URL, qs.stringify(loginRequestData))
