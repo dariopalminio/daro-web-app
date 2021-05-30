@@ -5,15 +5,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Useful commands to create project from zero
 
-npx create-react-app react-typescript-tech-radar --template typescript
-npm i styled-components  --save-dev
-npm i @types/styled-components --save-dev
-npm i react-router-dom  --save-dev
-npm i @types/react-router-dom --save-dev
-npm i react-icons  --save-dev
-npm i dotenv
-npm i md5  --save-dev
-npm i axios --save-dev
+npx create-react-app react-typescript-tech-radar --template typescript\
+npm i styled-components  --save-dev\
+npm i @types/styled-components --save-dev\
+npm i react-router-dom  --save-dev\
+npm i @types/react-router-dom --save-dev\
+npm i react-icons  --save-dev\
+npm i dotenv\
+npm i md5  --save-dev\
+npm i axios --save-dev\
 
 # Install system design for React components from https://material-ui.com/
 npm install @material-ui/core
