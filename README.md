@@ -13,7 +13,11 @@ npm install @types/react-router-dom\
 npm install react-icons\
 npm install dotenv\
 npm install md5\
-npm install axios
+npm install axios\
+
+# Install testin library
+npm install @testing-library/react-hooks\
+npm install react-test-renderer -D
 
 # Install system design for React components from https://material-ui.com/
 npm install @material-ui/core\

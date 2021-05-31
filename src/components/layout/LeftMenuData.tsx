@@ -20,11 +20,4 @@ export const LeftMenuData: MenuItemType[] = [
     icon: <MailIcon />,
     divider: false,
   },
-  {
-    key: "",
-    title: "",
-    path: "",
-    icon: {},
-    divider: true,
-  },
 ];

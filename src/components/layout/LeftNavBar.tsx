@@ -86,16 +86,16 @@ const LeftNavBar: FunctionComponent = () => {
       <Divider />
       <List>
         {LeftMenuData.map((item, index) => {
-          if (item.divider === false)
+         
             return (
               <ListItem button key={item.key} component={Link} to={item.path}>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.title} />
               </ListItem>
             );
-          else return <Divider />;
-        })}
+         })}
       </List>
+      <Divider />
     </Drawer>
   );
 };

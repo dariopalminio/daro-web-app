@@ -62,7 +62,8 @@ const TopNavBar: FunctionComponent = () => {
   };
 
   return (
-    <AppBar
+    <AppBar  
+      data-testid="AppBar" 
       position="fixed"
       className={clsx(classes.appBar, {
         [classes.appBarShift]: openLeft,

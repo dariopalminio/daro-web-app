@@ -13,7 +13,7 @@ import { Page04 } from "../pages/subpage02/Page04";
  */
 const MainContainer: FunctionComponent = () => {
   return (
-    <div className="MainContainer">
+    <div id="MainContainer" data-testid="MainContainer" className="MainContainer">
       <Switch>
         <Route path="/" component={Page01} exact></Route>
         <Route path="/user/login" component={LoginPage} exact></Route>

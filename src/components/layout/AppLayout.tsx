@@ -52,7 +52,7 @@ const AppLayout: FunctionComponent = () => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div id="AppLayout" data-testid="AppLayout" className={classes.root}>
       <CssBaseline />
       <TopNavBar />
       <LeftNavBar />

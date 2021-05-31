@@ -14,7 +14,6 @@ import "./Login.css";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const { isLoginLoading, hasLoginError, msg, login, isLogged, logout } =
     useUser();
 
@@ -34,9 +33,14 @@ export default function Login() {
   };
 
   return (
-    <div>
+    <div id="LoginFormContainer" data-testid="LoginFormContainer">
       {!isLogged && !isLoginLoading && (
-        <form action="#" onSubmit={handleLoginSubmit}>
+        <form
+          id="LoginForm"
+          data-testid="LoginForm"
+          action="#"
+          onSubmit={handleLoginSubmit}
+        >
           <Paper className="paper-custom">
             <div className="wrapper-center">
               {" "}

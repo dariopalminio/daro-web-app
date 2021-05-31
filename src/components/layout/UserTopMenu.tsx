@@ -1,11 +1,12 @@
-import React, { FunctionComponent } from "react"
-import MenuItem from "@material-ui/core/MenuItem"
-import Menu from "@material-ui/core/Menu"
-import AccountCircle from "@material-ui/icons/AccountCircle"
-import IconButton from "@material-ui/core/IconButton"
-import clsx from "clsx"
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles"
-import { Link } from "react-router-dom"
+import React, { FunctionComponent, useContext } from "react";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import IconButton from "@material-ui/core/IconButton";
+import clsx from "clsx";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+import UserContext, { UserContextType } from "../../context/UserContext";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,19 +19,27 @@ const useStyles = makeStyles((theme: Theme) =>
 
 /**
  * UserTopMenu Function Component
- * @returns 
+ * @returns
  */
 const UserTopMenu: FunctionComponent = () => {
-  const classes = useStyles()
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-  const openAnchorEl = Boolean(anchorEl)
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { user, setUser } = useContext(UserContext) as UserContextType;
+
+  const openAnchorEl = Boolean(anchorEl);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl(null)
+    setAnchorEl(null);
+  };
+
+  const getLoginMenuText = () => {
+    if (user && !user?.isLogged) {
+      return "Login";
+    } else return "Logout";
   };
 
   return (
@@ -59,11 +68,14 @@ const UserTopMenu: FunctionComponent = () => {
         open={openAnchorEl}
         onClose={handleClose}
       >
-        <MenuItem component={Link} to="/user/login" onClick={handleClose}>Login</MenuItem>
-        <MenuItem component={Link} to="/subpage01/Page01" onClick={handleClose}>My account</MenuItem>
+
+        <MenuItem component={Link} to="/user/login" onClick={handleClose}>
+          {getLoginMenuText()}
+        </MenuItem>
+
       </Menu>
     </div>
   );
 };
 
-export default UserTopMenu
+export default UserTopMenu;
