@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
 import UserContext, { UserContextType } from '../context/UserContext'
-import { loginService } from '../services/UserService'
+import  loginService  from '../services/UserService'
 
 // Global user type
 export type UserType = {
@@ -25,7 +25,7 @@ export const UserDefaultValue: UserType = {
  *      logout function
  */
 export default function useUser() {
-    const { user, setUser } = useContext(UserContext) as UserContextType;
+    const { user, setUser } = useContext(UserContext) as UserContextType
     const [state, setState] = useState({ loading: false, error: false, msg: '' })
 
     /**
@@ -42,7 +42,7 @@ export default function useUser() {
                 setState({ loading: false, error: false, msg: "Authorized" })
                 const userValue: UserType = {
                     jwt: jwt,
-                    isLogged: Boolean(jwt)
+                    isLogged: true
                 }
                 setUser(userValue)
             })
@@ -50,8 +50,9 @@ export default function useUser() {
                 // Unauthorized
                 window.sessionStorage.removeItem('jwt')
                 setState({ loading: false, error: true, msg: err.message })
+                setUser(UserDefaultValue)
             })
-    }, [setUser])
+    }, [ setState, setUser])
 
     /**
      * logout
@@ -60,7 +61,7 @@ export default function useUser() {
         window.sessionStorage.removeItem('jwt')
         setState({ loading: false, error: false, msg: "You are not logged in!" })
         setUser(UserDefaultValue)
-    }, [setUser])
+    }, [setState, setUser])
 
     return {
         isLogged: user?.isLogged,

@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react'
 import axios from 'axios'
-import { LoginRequest, LoginResponse, loginService } from '../../services/UserService'
+import loginService , { LoginRequest, LoginResponse } from '../../services/UserService'
 
 afterEach(cleanup);
 

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
 import useUser from "../../hooks/useUser";
 import "./Login.css";
+import UserContext, { UserContextType } from '../../context/UserContext'
 
 /**
  * Login
@@ -14,7 +15,8 @@ import "./Login.css";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { isLoginLoading, hasLoginError, msg, login, isLogged, logout } =
+  const { user } = useContext(UserContext) as UserContextType
+  const { isLoginLoading, hasLoginError, msg, login, logout } =
     useUser();
 
   /**
@@ -34,13 +36,9 @@ export default function Login() {
 
   return (
     <div id="LoginFormContainer" data-testid="LoginFormContainer">
-      {!isLogged && !isLoginLoading && (
-        <form
-          id="LoginForm"
-          data-testid="LoginForm"
-          action="#"
-          onSubmit={handleLoginSubmit}
-        >
+      {!(user?.isLogged) && !isLoginLoading && (
+        <form id="LoginForm" data-testid="LoginForm" 
+        action="#" onSubmit={handleLoginSubmit}>
           <Paper className="paper-custom">
             <div className="wrapper-center">
               {" "}
@@ -84,7 +82,7 @@ export default function Login() {
         </div>
       )}
 
-      {isLogged && (
+      {(user?.isLogged) && (
         <div className="box">
           <Alert severity="success">
             You are already logged! Do you want to log out?{" "}

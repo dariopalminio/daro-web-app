@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const UserTopMenu: FunctionComponent = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { user, setUser } = useContext(UserContext) as UserContextType;
+  const { user } = useContext(UserContext) as UserContextType;
 
   const openAnchorEl = Boolean(anchorEl);
 
@@ -39,7 +39,7 @@ const UserTopMenu: FunctionComponent = () => {
   const getLoginMenuText = () => {
     if (user && !user?.isLogged) {
       return "Login";
-    } else return "Logout";
+    } else return "Go to Logout";
   };
 
   return (
