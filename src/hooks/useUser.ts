@@ -26,20 +26,20 @@ export const UserDefaultValue: UserType = {
  */
 export default function useUser() {
     const { user, setUser } = useContext(UserContext) as UserContextType
-    const [state, setState] = useState({ loading: false, error: false, msg: '' })
+    const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false })
 
     /**
      * login
      */
     const login = useCallback((email: string, password: string) => {
-        setState({ loading: true, error: false, msg: "Trying to login!" })
+        setState({ loading: true, error: false, msg: "Trying to login!", isLoggedOk: false })
 
 
         loginService(email, password)
             .then(jwt => {
                 // Authorized
                 window.sessionStorage.setItem('jwt', jwt)
-                setState({ loading: false, error: false, msg: "Authorized" })
+                setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true })
                 const userValue: UserType = {
                     jwt: jwt,
                     isLogged: true
@@ -49,7 +49,7 @@ export default function useUser() {
             .catch(err => {
                 // Unauthorized
                 window.sessionStorage.removeItem('jwt')
-                setState({ loading: false, error: true, msg: err.message })
+                setState({ loading: false, error: true, msg: err.message, isLoggedOk: false })
                 setUser(UserDefaultValue)
             })
     }, [ setState, setUser])
@@ -59,12 +59,12 @@ export default function useUser() {
      */
     const logout = useCallback(() => {
         window.sessionStorage.removeItem('jwt')
-        setState({ loading: false, error: false, msg: "You are not logged in!" })
+        setState({ loading: false, error: false, msg: "You are not logged in!", isLoggedOk: false })
         setUser(UserDefaultValue)
     }, [setState, setUser])
 
     return {
-        isLogged: user?.isLogged,
+        isLoggedOk: state.isLoggedOk,
         isLoginLoading: state.loading,
         hasLoginError: state.error,
         msg: state.msg,
