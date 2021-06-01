@@ -1,20 +1,27 @@
-import { screen, render } from "@testing-library/react";
+import * as ReactDOM from "react-dom";
 import Login from "../../../components/user/Login";
 
-describe("Login component", () => {
+describe("Renders Login component", () => {
+  let container: HTMLDivElement;
+
   beforeEach(() => {
-    render(<Login />);
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    ReactDOM.render(<Login />, container);
   });
 
-  it("test form structure: should render a form html element", () => {
-    expect(screen.queryByText(/Login Form/i)).toBeInTheDocument();
+  afterEach(() => {
+    document.body.removeChild(container);
+    container.remove();
+  });
 
-    const formElement: HTMLFormElement = screen.getByTestId(
-      "LoginForm"
-    ) as HTMLFormElement;
-
-    expect(formElement).toBeInTheDocument;
-    expect(screen.getByRole("textbox")).toBeInTheDocument;
-    expect(screen.getByRole("button")).toBeInTheDocument;
+  test("Renders correctly initial document", () => {
+    const forms = container.querySelectorAll("form");
+    const inputs = container.querySelectorAll("input");
+    const buttons = container.querySelectorAll("button");
+    expect(forms).toHaveLength(1);
+    expect(inputs).toHaveLength(2);
+    expect(buttons).toHaveLength(1);
+    expect(buttons[0].type).toBe("submit");
   });
 });
