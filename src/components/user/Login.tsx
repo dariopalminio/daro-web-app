@@ -1,11 +1,30 @@
 import React, { useState, useContext } from "react";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
 import useUser from "../../hooks/useUser";
 import "./Login.css";
-import UserContext, { UserContextType } from '../../context/UserContext'
+import UserContext, { UserContextType } from "../../context/UserContext";
+import clsx from "clsx";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      "& > * + *": {
+        justifyContent: "center",
+        textAlign: "center",
+      },
+    },
+    linkClass: {
+      paddingTop: "1.5em",
+      position: "relative",
+      rigt: "1em",
+    },
+  })
+);
 
 /**
  * Login
@@ -15,9 +34,9 @@ import UserContext, { UserContextType } from '../../context/UserContext'
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { user } = useContext(UserContext) as UserContextType
-  const { isLoginLoading, hasLoginError, msg, login, logout } =
-    useUser();
+  const { user } = useContext(UserContext) as UserContextType;
+  const { isLoginLoading, hasLoginError, msg, login, logout } = useUser();
+  const classes = useStyles();
 
   /**
    * Login
@@ -36,9 +55,13 @@ export default function Login() {
 
   return (
     <div id="LoginFormContainer" data-testid="LoginFormContainer">
-      {!(user?.isLogged) && !isLoginLoading && (
-        <form id="LoginForm" data-testid="LoginForm" 
-        action="#" onSubmit={handleLoginSubmit}>
+      {!user?.isLogged && !isLoginLoading && (
+        <form
+          id="LoginForm"
+          data-testid="LoginForm"
+          action="#"
+          onSubmit={handleLoginSubmit}
+        >
           <Paper className="paper-custom">
             <div className="wrapper-center">
               {" "}
@@ -66,6 +89,12 @@ export default function Login() {
             </div>
             <b />
 
+            <div className="wrapper-center">
+              <Link className={clsx(classes.linkClass)} href="/user/register">
+                Register
+              </Link>
+            </div>
+
             <div className="wrapper-center-for-button">
               <Button variant="contained" color="primary" type="submit">
                 Login
@@ -82,7 +111,7 @@ export default function Login() {
         </div>
       )}
 
-      {(user?.isLogged) && (
+      {user?.isLogged && (
         <div className="box">
           <Alert severity="success">
             You are already logged! Do you want to log out?{" "}
