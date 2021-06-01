@@ -1,35 +1,71 @@
 import { cleanup } from '@testing-library/react'
 import axios from 'axios'
-import loginService , { LoginRequest, LoginResponse } from '../../services/UserService'
+import loginService, { LoginResponse } from '../../services/UserService'
 
-afterEach(cleanup);
 
-test('loginService mocking axios OK request', async () => {
+describe('Test UserService service', () => {
 
-    const jwtExample = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw'
+    afterEach(cleanup);
 
-    const responseOKMocked: LoginResponse = {
-        data: { access_token: jwtExample },
-        status: 200,
-        statusText: "OK",
-        headers: {},
-        config: {},
-        request: {}
-    }
+    test('loginService, mocking axios OK request, should be SUCCESSFUL and responses a JWT', async () => {
 
-    let loginRequestData: LoginRequest = {
-        username: 'user',
-        password: 'pass',
-        grant_type: 'password',
-        client_id: 'rest-client-test'
-    }
+        const jwtExample = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw'
 
-    const myMock = jest.fn()
+        const responseOKMocked: LoginResponse = {
+            data: { access_token: jwtExample },
+            status: 200,
+            statusText: "OK",
+            headers: {},
+            config: {},
+            request: {}
+        }
 
-    axios.post = myMock.mockResolvedValue(responseOKMocked)
+        const myMock = jest.fn()
 
-    const service = await loginService('user','pass')
+        axios.post = myMock.mockResolvedValue(responseOKMocked)
 
-    expect(service).toBeDefined()
-    expect(service).toBe(jwtExample)
+        let authorized = false
+        let jwtResult = ""
+        let error = null
+
+        await loginService('user', 'pass').then(jwt => {
+            authorized = true
+            jwtResult = jwt
+        }).catch(err => {
+            error = err
+        })
+
+        expect(authorized).toBe(true)
+        expect(jwtResult).toBe(jwtExample)
+        expect(error).toBeNull
+    });
+
+    test('loginService, mocking axios bad request, should be Unauthorized and responses a Error', async () => {
+
+        const responseBadMocked: LoginResponse = {
+            data: { access_token: '' },
+            status: 401,
+            statusText: "Unauthorized",
+            headers: {},
+            config: {},
+            request: {}
+        }
+
+        const myMock = jest.fn()
+
+        axios.post = myMock.mockResolvedValue(responseBadMocked)
+
+        let authorized = false
+        let error = null
+
+        await loginService('userBad', 'passBad').then(jwt => {
+            authorized = true
+        }).catch(err => {
+            error = err
+        })
+
+        expect(error).toBeInstanceOf(Error)
+        expect(authorized).toBe(false)
+    });
+
 });

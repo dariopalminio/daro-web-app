@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import App from '../App'
 
-test('renders layout divs', () => {
+test('App should renders layout divs', () => {
   render(<App />)
 
   const appLayoutDiv: HTMLDivElement = screen.getByTestId(

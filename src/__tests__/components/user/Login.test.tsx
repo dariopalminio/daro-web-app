@@ -1,4 +1,3 @@
-import React, { FunctionComponent } from "react";
 import { screen, render } from "@testing-library/react";
 import Login from "../../../components/user/Login";
 
@@ -7,7 +6,7 @@ describe("Login component", () => {
     render(<Login />);
   });
 
-  it("test form structure", () => {
+  it("test form structure: should render a form html element", () => {
     expect(screen.queryByText(/Login Form/i)).toBeInTheDocument();
 
     const formElement: HTMLFormElement = screen.getByTestId(

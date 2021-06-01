@@ -15,7 +15,7 @@ npm install dotenv\
 npm install md5\
 npm install axios\
 
-# Install testin library
+# Install testing library
 npm install @testing-library/react-hooks\
 npm install react-test-renderer -D
 
