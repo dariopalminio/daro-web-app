@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
 import useUser from "../../hooks/useUser";
+import { emailIsValid } from "../../commons/userValidations";
 import "./Login.css";
 import UserContext, { UserContextType } from "../../context/UserContext";
 import clsx from "clsx";
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailNotValid, setEmailNotValid] = useState(false);
   const { user } = useContext(UserContext) as UserContextType;
   const { isLoginLoading, hasLoginError, msg, login, logout } = useUser();
   const classes = useStyles();
@@ -51,6 +53,21 @@ export default function Login() {
    */
   const onClickLogoutHandler = (): void => {
     logout();
+  };
+
+  /**
+   * Validate if the email is in the correct format
+   * @param emailValue 
+   */
+  const validateEmail = (emailValue: string): void => {
+
+    setEmail(emailValue)
+
+    if (!emailIsValid(emailValue)) {
+      setEmailNotValid(true)
+    }else{
+      setEmailNotValid(false)
+    }
   };
 
   return (
@@ -73,8 +90,9 @@ export default function Login() {
                 className="textfield-custom"
                 label="Email"
                 placeholder="nilson@email.com"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => validateEmail(e.target.value)}
                 value={email}
+                {...(emailNotValid && { error: true, helperText: 'Email inválido' })}
               />{" "}
             </div>
             <div className="wrapper-center">

@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
 import UserContext, { UserContextType } from '../context/UserContext'
-import  loginService  from '../services/UserService'
+import loginService from '../services/UserService'
 
 // Global user type
 export type UserType = {
@@ -52,7 +52,7 @@ export default function useUser() {
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false })
                 setUser(UserDefaultValue)
             })
-    }, [ setState, setUser])
+    }, [setState, setUser])
 
     /**
      * logout
@@ -63,12 +63,13 @@ export default function useUser() {
         setUser(UserDefaultValue)
     }, [setState, setUser])
 
+
     return {
         isLoggedOk: state.isLoggedOk,
         isLoginLoading: state.loading,
         hasLoginError: state.error,
         msg: state.msg,
         login,
-        logout
+        logout,
     }
 }
