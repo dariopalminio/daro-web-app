@@ -7,4 +7,4 @@ export const LoginPage: FunctionComponent = () => {
   <br/>
   <Login />
 </>
-}
+};

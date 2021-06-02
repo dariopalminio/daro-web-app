@@ -50,7 +50,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 /**
  * TopNavBar Function Component
- * @returns 
+ * 
+ * @visibleName TopNavBar View
  */
 const TopNavBar: FunctionComponent = () => {
   const classes = useStyles();

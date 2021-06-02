@@ -45,7 +45,8 @@ export const openLeftStatus = atom(false);
 
 /**
  * AppLayout Function Component
- * @returns 
+ * 
+ * @visibleName AppLayout View
  */
 const AppLayout: FunctionComponent = () => {
   const [openLeft] = useAtom(openLeftStatus);

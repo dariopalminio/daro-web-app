@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { FunctionComponent, useState, useContext } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
 import useUser from "../../hooks/useUser";
-import { emailIsValid } from "../../commons/userValidations";
+import { emailIsValid } from "../../helpers/userValidations";
 import "./Login.css";
 import UserContext, { UserContextType } from "../../context/UserContext";
 import clsx from "clsx";
@@ -28,11 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * Login
+ * Login Function Component
  *
  * @visibleName Login View
  */
-export default function Login() {
+ export const Login: FunctionComponent = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailNotValid, setEmailNotValid] = useState(false);
@@ -89,7 +90,7 @@ export default function Login() {
                 id="standard-basic"
                 className="textfield-custom"
                 label="Email"
-                placeholder="nilson@email.com"
+                placeholder="daro@email.com"
                 onChange={(e) => validateEmail(e.target.value)}
                 value={email}
                 {...(emailNotValid && { error: true, helperText: 'Email inválido' })}
@@ -111,6 +112,7 @@ export default function Login() {
               <Link className={clsx(classes.linkClass)} href="/user/register">
                 Register
               </Link>
+              
             </div>
 
             <div className="wrapper-center-for-button">
@@ -158,3 +160,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;

@@ -53,7 +53,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 /**
  * LeftNavBar Function Component
- * @returns 
+ *
+ * @visibleName LeftNavBar View
  */
 const LeftNavBar: FunctionComponent = () => {
   const [openLeft, setOpenLeft] = useAtom(openLeftStatus);
@@ -86,14 +87,13 @@ const LeftNavBar: FunctionComponent = () => {
       <Divider />
       <List>
         {LeftMenuData.map((item, index) => {
-         
-            return (
-              <ListItem button key={item.key} component={Link} to={item.path}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.title} />
-              </ListItem>
-            );
-         })}
+          return (
+            <ListItem button key={item.key} component={Link} to={item.path}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.title} />
+            </ListItem>
+          );
+        })}
       </List>
       <Divider />
     </Drawer>
