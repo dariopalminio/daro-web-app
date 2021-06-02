@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     papperRegisterForm: {
       width: "400px",
-      height: "360px",
+      height: "420px",
       margin: "0 auto 0 auto",
       padding: "0px 0px 0px 0px",
     },
@@ -100,6 +100,9 @@ export const UserRegister: FunctionComponent = () => {
         onSubmit={handleLoginSubmit}
       >
         <Paper className={clsx(classes.papperRegisterForm)}>
+        <div className={clsx(classes.wrapperCenter)}>
+              <h1>Register</h1>
+            </div>
           <div className={clsx(classes.wrapperCenter)}>
             <TextField
               id="standard-basic-1"
