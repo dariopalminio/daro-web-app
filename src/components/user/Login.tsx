@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
 import useUser from "../../hooks/useUser";
-import { emailIsValid } from "../../helpers/userValidations";
+import { emailIsValid, EmailValidation } from "../../helpers/userValidations";
 import "./Login.css";
 import UserContext, { UserContextType } from "../../context/UserContext";
 import clsx from "clsx";
@@ -60,11 +60,13 @@ const useStyles = makeStyles((theme: Theme) =>
    * Validate if the email is in the correct format
    * @param emailValue 
    */
-  const validateEmail = (emailValue: string): void => {
+  const handleEmailChange = async (emailValue: string) => {
 
     setEmail(emailValue)
 
-    if (!emailIsValid(emailValue)) {
+    if (! await EmailValidation.isValid({
+      email: emailValue,
+    })) {
       setEmailNotValid(true)
     }else{
       setEmailNotValid(false)
@@ -91,7 +93,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 className="textfield-custom"
                 label="Email"
                 placeholder="daro@email.com"
-                onChange={(e) => validateEmail(e.target.value)}
+                onChange={(e) => handleEmailChange(e.target.value)}
                 value={email}
                 {...(emailNotValid && { error: true, helperText: 'Email inválido' })}
               />{" "}

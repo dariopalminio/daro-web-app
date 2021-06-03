@@ -57,15 +57,7 @@ export const UserRegister: FunctionComponent = () => {
     e.preventDefault();
   };
 
-  const validateFirstName = (firstNameValue: string): void => {
-    setFirstName(firstNameValue);
-  };
-
-  /**
-   * Validate if the email is in the correct format
-   * @param emailValue
-   */
-  const validateEmail = (emailValue: string): void => {
+  const handleEmailChange = (emailValue: string): void => {
     setEmail(emailValue);
 
     if (!emailIsValid(emailValue)) {
@@ -75,20 +67,20 @@ export const UserRegister: FunctionComponent = () => {
     }
   };
 
-  /**
-   * Validate if pass is ok
-   * @param emailValue
-   */
-  const validatePass = (passOne: string): void => {
+  const handlePasswordChange = (passOne: string): void => {
     setPassword(passOne);
   };
 
-  /**
-   * Validate if pass is ok
-   * @param emailValue
-   */
-  const validateConfirmPass = (passTwo: string): void => {
+  const handleConfirmPassChange = (passTwo: string): void => {
     setConfirmPassword(passTwo);
+  };
+
+  const handleFirstNameChange = (firstNameValue: string): void => {
+    setFirstName(firstNameValue);
+  };
+
+  const handleLastNameChange = (lastNameValue: string): void => {
+    setLastName(lastNameValue);
   };
 
   return (
@@ -100,16 +92,16 @@ export const UserRegister: FunctionComponent = () => {
         onSubmit={handleLoginSubmit}
       >
         <Paper className={clsx(classes.papperRegisterForm)}>
-        <div className={clsx(classes.wrapperCenter)}>
-              <h1>Register</h1>
-            </div>
+          <div className={clsx(classes.wrapperCenter)}>
+            <h1>Register</h1>
+          </div>
           <div className={clsx(classes.wrapperCenter)}>
             <TextField
               id="standard-basic-1"
               className="textfield-custom"
               label="First Name"
               placeholder=""
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(e) => handleFirstNameChange(e.target.value)}
               value={firstName}
               {...(false && { error: true, helperText: "Email inválido" })}
             />
@@ -120,7 +112,7 @@ export const UserRegister: FunctionComponent = () => {
               className="textfield-custom"
               label="First Name"
               placeholder=""
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={(e) => handleLastNameChange(e.target.value)}
               value={lastName}
               {...(false && { error: true, helperText: "Email inválido" })}
             />
@@ -131,7 +123,7 @@ export const UserRegister: FunctionComponent = () => {
               className="textfield-custom"
               label="Email"
               placeholder="daro@email.com"
-              onChange={(e) => validateEmail(e.target.value)}
+              onChange={(e) => handleEmailChange(e.target.value)}
               value={email}
               {...(emailNotValid && {
                 error: true,
@@ -150,7 +142,7 @@ export const UserRegister: FunctionComponent = () => {
               className="textfield-custom"
               label="Password"
               type="password"
-              onChange={(e) => validatePass(e.target.value)}
+              onChange={(e) => handlePasswordChange(e.target.value)}
               value={password}
             />
           </div>
@@ -160,7 +152,7 @@ export const UserRegister: FunctionComponent = () => {
               className="textfield-custom"
               label="Confirm Password"
               type="password"
-              onChange={(e) => validateConfirmPass(e.target.value)}
+              onChange={(e) => handleConfirmPassChange(e.target.value)}
               value={confirmPassword}
             />
           </div>
