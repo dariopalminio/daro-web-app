@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
-  const [emailErrorText, setEmailErrorText] = useState('Email inválido');
+  const [emailErrorText] = useState('Email inválido');
   const { user } = useContext(UserContext) as UserContextType;
   const { isLoginLoading, hasLoginError, msg, login, logout } = useUser();
   const classes = useStyles();

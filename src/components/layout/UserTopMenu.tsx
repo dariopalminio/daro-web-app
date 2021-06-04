@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 /**
  * UserTopMenu Function Component
- * 
+ *
  * @visibleName UserTopMenu View
  */
 const UserTopMenu: FunctionComponent = () => {
@@ -69,14 +69,16 @@ const UserTopMenu: FunctionComponent = () => {
         open={openAnchorEl}
         onClose={handleClose}
       >
-
+        
         <MenuItem component={Link} to="/user/login" onClick={handleClose}>
           {getLoginMenuText()}
         </MenuItem>
-        <MenuItem component={Link} to="/user/register" onClick={handleClose}>
-          Register
-        </MenuItem>
 
+        {user && !user?.isLogged && (
+          <MenuItem component={Link} to="/user/register" onClick={handleClose}>
+            Register
+          </MenuItem>
+        )}
       </Menu>
     </div>
   );
