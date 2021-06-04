@@ -7,7 +7,6 @@ import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
 import useUser from "../../hooks/useUser";
 import { emailIsValid, EmailValidation } from "../../helpers/userValidations";
-import "./Login.css";
 import UserContext, { UserContextType } from "../../context/UserContext";
 import clsx from "clsx";
 
@@ -24,7 +23,26 @@ const useStyles = makeStyles((theme: Theme) =>
       position: "relative",
       rigt: "1em",
     },
-  })
+    paperLoginForm: {
+      width: "300px",
+      margin: "0 auto 0 auto",
+      padding: "0px 0px 0px 0px",
+    },
+    wrapperCenter: {
+      display: "flex",
+      justifyContent: "center",
+    },
+    wrapperCenterForButton: {
+      display: "flex",
+      justifyContent: "center",
+      padding: "20px",
+    },
+    h1Custom: {
+      fontSize: "1.5em",
+      color: "#525252",
+      paddingLeft: "1rem",
+    },
+  }),
 );
 
 /**
@@ -36,7 +54,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailNotValid, setEmailNotValid] = useState(false);
+  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
+  const [emailErrorText, setEmailErrorText] = useState('Email inválido');
   const { user } = useContext(UserContext) as UserContextType;
   const { isLoginLoading, hasLoginError, msg, login, logout } = useUser();
   const classes = useStyles();
@@ -67,9 +86,9 @@ const useStyles = makeStyles((theme: Theme) =>
     if (! await EmailValidation.isValid({
       email: emailValue,
     })) {
-      setEmailNotValid(true)
+      setEmailIsInvalid(true)
     }else{
-      setEmailNotValid(false)
+      setEmailIsInvalid(false)
     }
   };
 
@@ -82,12 +101,11 @@ const useStyles = makeStyles((theme: Theme) =>
           action="#"
           onSubmit={handleLoginSubmit}
         >
-          <Paper className="paper-custom">
-            <div className="wrapper-center">
-              {" "}
-              <h1>Login Form</h1>
+          <Paper className={clsx(classes.paperLoginForm)}>
+            <div className={clsx(classes.wrapperCenter)}>
+              <h1 className={clsx(classes.h1Custom)}>Login Form</h1>
             </div>
-            <div className="wrapper-center">
+            <div className={clsx(classes.wrapperCenter)}>
               <TextField
                 id="standard-basic"
                 className="textfield-custom"
@@ -95,10 +113,10 @@ const useStyles = makeStyles((theme: Theme) =>
                 placeholder="daro@email.com"
                 onChange={(e) => handleEmailChange(e.target.value)}
                 value={email}
-                {...(emailNotValid && { error: true, helperText: 'Email inválido' })}
-              />{" "}
+                {...(emailIsInvalid && { error: true, helperText: emailErrorText })}
+              />
             </div>
-            <div className="wrapper-center">
+            <div className={clsx(classes.wrapperCenter)}>
               <TextField
                 id="standard-basic-2"
                 className="textfield-custom"
@@ -110,14 +128,14 @@ const useStyles = makeStyles((theme: Theme) =>
             </div>
             <b />
 
-            <div className="wrapper-center">
+            <div className={clsx(classes.wrapperCenter)}>
               <Link className={clsx(classes.linkClass)} href="/user/register">
                 Register
               </Link>
               
             </div>
-
-            <div className="wrapper-center-for-button">
+            
+            <div className={clsx(classes.wrapperCenterForButton)}>
               <Button variant="contained" color="primary" type="submit">
                 Login
               </Button>
@@ -139,7 +157,7 @@ const useStyles = makeStyles((theme: Theme) =>
             You are already logged! Do you want to log out?{" "}
           </Alert>
           <br />
-          <div className="wrapper-center">
+          <div className={clsx(classes.wrapperCenter)}>
             <Button
               variant="contained"
               color="primary"
@@ -152,7 +170,7 @@ const useStyles = makeStyles((theme: Theme) =>
       )}
 
       {hasLoginError && (
-        <div className="wrapper-center">
+        <div className={clsx(classes.wrapperCenter)}>
           <Alert severity="error">
             Error: {msg}
             <br />{" "}

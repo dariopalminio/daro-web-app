@@ -15,6 +15,14 @@ export const emailIsValid = (emailValue: string): boolean => {
   }
 };
 
+export const confirmPassIsValid = (pasOne: string, passTwo: string): boolean => {
+  if (pasOne!=passTwo) {
+    return false
+  } else {
+    return true
+  }
+};
+
 //Email validation
 export const EmailValidation = yup.object().shape({
   email: yup.string().email().required(),
