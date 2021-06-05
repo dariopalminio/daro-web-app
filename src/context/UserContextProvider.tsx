@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import UserContext, {RecoveryUserFromWebBrowser} from "./UserContext";
 import { atom, useAtom } from "jotai";
-import { UserDefaultValue } from "../hooks/useUser";
+import { UserDefaultValue } from "../hooks/useLogin";
 
 
 export const UserAtom = atom(UserDefaultValue);

@@ -1,12 +1,12 @@
 require('@testing-library/react');
 import { waitFor } from '@testing-library/react'
 import { renderHook, act } from '@testing-library/react-hooks'
-import useUser from "../../hooks/useUser";
+import useLogin from "../../hooks/useLogin";
 
 const userOk = "ok"
 const passOk = "ok"
 
-jest.mock("../../services/UserService", () => {
+jest.mock("../../services/user/LoginService", () => {
     return async function loginService(user: string, pass: string): Promise<any> {
         return await new Promise<any>(
             function (resolve, reject) {
@@ -25,7 +25,7 @@ jest.mock("../../services/UserService", () => {
 describe('Test useUser Hook', () => {
 
     test('login with BAD credentials should to FAIL', async () => {
-        const { result, waitForNextUpdate } = renderHook(() => useUser());
+        const { result, waitForNextUpdate } = renderHook(() => useLogin());
 
         act(() => {
             result.current.login("bad", "bad");
@@ -36,7 +36,7 @@ describe('Test useUser Hook', () => {
     });
 
     test('login with credentials OK should be SUCCESSFUL', async () => {
-        const { result, waitForNextUpdate } = renderHook(() => useUser());
+        const { result, waitForNextUpdate } = renderHook(() => useLogin());
 
         act(() => {
             result.current.login(userOk, passOk);

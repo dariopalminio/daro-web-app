@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import { UserType, UserDefaultValue } from '../hooks/useUser'
+import { UserType, UserDefaultValue } from '../hooks/useLogin'
 
 // Global user context type
 export type UserContextType = {

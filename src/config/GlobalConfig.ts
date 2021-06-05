@@ -10,7 +10,8 @@ export const APIEndpoints = {
 
 export const Keycloak = {
   realm: process.env.REACT_APP_REALM as string,
-  client_id: process.env.REACT_APP_CLIENT_ID as string
+  client_id: process.env.REACT_APP_CLIENT_ID as string,
+  client_secret: process.env.REACT_APP_CLIENT_SECRET as string
 }
 
 

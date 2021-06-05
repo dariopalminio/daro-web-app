@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
 import UserContext, { UserContextType } from '../context/UserContext'
-import loginService from '../services/UserService'
+import loginService from '../services/user/LoginService'
 
 // Global user type
 export type UserType = {
@@ -24,7 +24,7 @@ export const UserDefaultValue: UserType = {
  *      login function
  *      logout function
  */
-export default function useUser() {
+export default function useLogin() {
     const { user, setUser } = useContext(UserContext) as UserContextType
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false })
 

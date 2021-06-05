@@ -5,8 +5,8 @@ import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
-import useUser from "../../hooks/useUser";
-import { emailIsValid, EmailValidation } from "../../helpers/userValidations";
+import useLogin from "../../hooks/useLogin";
+import { EmailValidation } from "../../helpers/userValidations";
 import UserContext, { UserContextType } from "../../context/UserContext";
 import clsx from "clsx";
 
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState('Email inválido');
   const { user } = useContext(UserContext) as UserContextType;
-  const { isLoginLoading, hasLoginError, msg, login, logout } = useUser();
+  const { isLoginLoading, hasLoginError, msg, login, logout } = useLogin();
   const classes = useStyles();
 
   /**
