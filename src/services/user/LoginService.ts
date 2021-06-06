@@ -21,7 +21,7 @@ export type LoginRequest = {
  */
  export default async function loginService (user: string, pass: string): Promise<any>  {
 
-    let loginRequestData: LoginRequest = {
+    const body: LoginRequest = {
       username: user,
       password: pass,
       grant_type: 'password',
@@ -33,7 +33,7 @@ export type LoginRequest = {
     const REALM = GlobalConfig.Keycloak.realm
     const URL = `${ENDPOINT}/auth/realms/${REALM}/protocol/openid-connect/token`
   
-    const response: ResponseType = await axios.post(URL, qs.stringify(loginRequestData))
+    const response: ResponseType = await axios.post(URL, qs.stringify(body))
   
     if (response.status !== 200) {
       // Unauthorized or other error (401, 400, 406...)

@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import clsx from "clsx";
+import useRegister from "../../hooks/useRegister";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,12 +71,20 @@ export const UserRegister: FunctionComponent = () => {
   const [confirmPassValid, setConfirmPassValid] = useState(true);
   const [confirmPassErrorText] = useState('Pasword does not match!');
   const classes = useStyles();
+  const { isRegisterOk,
+    isLoginLoading,
+    hasLoginError,
+    msg,
+    register } = useRegister();
 
   /**
    * Register
    */
   const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    register(firstName, lastName, email, password);
+
   };
 
   const handleEmailChange = async (emailValue: string) => {
@@ -112,6 +121,8 @@ export const UserRegister: FunctionComponent = () => {
 
   return (
     <div>
+      { isRegisterOk && (<label>User Created!</label>)}
+      { !isRegisterOk && (
       <form
         id="RegisterForm"
         data-testid="RegisterForm"
@@ -137,7 +148,7 @@ export const UserRegister: FunctionComponent = () => {
             <TextField
               id="standard-basic-2"
               className={clsx(classes.textfieldCustom)}
-              label="First Name"
+              label="Last Name"
               placeholder=""
               onChange={(e) => handleLastNameChange(e.target.value)}
               value={lastName}
@@ -202,6 +213,7 @@ export const UserRegister: FunctionComponent = () => {
           </div>
         </Paper>
       </form>
+      )}
     </div>
   );
 };
