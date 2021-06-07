@@ -5,7 +5,7 @@ import registerService from '../services/user/RegisterService'
 
 /**
  * cuseRegister Custom Hook
- * 
+ * Custom Hook for create new user
  */
 export default function useRegister() {
 
@@ -21,43 +21,43 @@ export default function useRegister() {
         email: string,
         password: string) => {
 
-        setState({ loading: true, error: false, msg: "Trying to login!", wasCreatedOk: false })
+        setState({ loading: true, error: false, msg: "Trying to Register!", wasCreatedOk: false })
 
-
+        // First: obtains admin access token
         const responseAdminToken: Promise<any> = getAdminTokenService();
 
+        // Second: creates a new user with authorization using admin access token
         responseAdminToken.then(jwtAdminToken => {
 
-                const resonseReg = registerService(
-                    firstname,
-                    lastname,
-                    email,
-                    password, jwtAdminToken);
+            const resonseReg = registerService(
+                firstname,
+                lastname,
+                email,
+                password, jwtAdminToken);
 
-                    resonseReg.then(statusText => {
-                        const msgText = statusText + " Your account has been created successfully. Now you can log in."
-                        setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true })
-                        const userValue: UserType = {
-                            jwt: "",
-                            isLogged: false,
-                            isRegistered: true
-                        }
-                        setUser(userValue)
-                    }).catch(err => {
-                        // Request failed with status code 409 (Conflict) or 400 (Bad Request)
-                        let errorText =  err.message
-                        if (err.message==="Request failed with status code 409") 
-                            errorText =  "Register is NOT OK. CONFLICT: Username already exists!"
-                        setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false })
-                        setUser(UserDefaultValue)
-                    })
-          
+            resonseReg.then(statusText => {
+                const msgText = statusText + " Your account has been created successfully. Now you can log in."
+                setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true })
+                const userValue: UserType = {
+                    jwt: "",
+                    isLogged: false,
+                    isRegistered: true
+                }
+                setUser(userValue)
+            }).catch(err => {
+                // Request failed with status code 409 (Conflict) or 400 (Bad Request)
+                let errorText = err.message
+                if (err.message === "Request failed with status code 409")
+                    errorText = "Register is NOT OK. CONFLICT: Username already exists!"
+                setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false })
+                setUser(UserDefaultValue)
             })
+
+        })
             .catch(err => {
                 // Error Can not acquire Admin token from service
-                console.log("err");
-                console.log(err);
-                setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false })
+                const errorText = err.message + " " + "Error Can not acquire Admin token from service."
+                setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false })
                 setUser(UserDefaultValue)
 
             })
@@ -67,7 +67,7 @@ export default function useRegister() {
 
     return {
         wasCreatedOk: state.wasCreatedOk,
-        isLoginLoading: state.loading,
+        isRegisterLoading: state.loading,
         hasRegisterError: state.error,
         msg: state.msg,
         register,

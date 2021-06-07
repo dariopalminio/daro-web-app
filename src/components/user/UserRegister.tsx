@@ -76,7 +76,7 @@ export const UserRegister: FunctionComponent = () => {
   const [confirmPassValid, setConfirmPassValid] = useState(true);
   const [confirmPassErrorText] = useState("Pasword does not match!");
   const classes = useStyles();
-  const { wasCreatedOk, isLoginLoading, hasRegisterError, msg, register } =
+  const { wasCreatedOk, isRegisterLoading, hasRegisterError, msg, register } =
     useRegister();
 
   /**
@@ -245,12 +245,9 @@ export const UserRegister: FunctionComponent = () => {
         </form>
       )}
 
-{hasRegisterError && (
-        <Alert severity="error">
-          {msg}
-        </Alert>
-      )}
+      {hasRegisterError && <Alert severity="error">{msg}</Alert>}
 
+      {isRegisterLoading && <Alert severity="info">{msg}</Alert>}
     </div>
   );
 };
