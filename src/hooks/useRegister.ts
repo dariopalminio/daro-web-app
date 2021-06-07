@@ -1,5 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
-import getNewAdminTokenService from '../services/user/GetNewAdminTokenService'
+import getAdminTokenService from '../services/user/GetAdminTokenService'
+import UserContext, { UserContextType, UserType, UserDefaultValue } from '../context/UserContext'
 import registerService from '../services/user/RegisterService'
 
 /**
@@ -8,7 +9,8 @@ import registerService from '../services/user/RegisterService'
  */
 export default function useRegister() {
 
-    const [state, setState] = useState({ loading: false, error: false, msg: '', isRegisterOk: false })
+    const { setUser } = useContext(UserContext) as UserContextType
+    const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false })
 
     /**
      * Register
@@ -19,25 +21,35 @@ export default function useRegister() {
         email: string,
         password: string) => {
 
-        setState({ loading: true, error: false, msg: "Trying to login!", isRegisterOk: false })
+        setState({ loading: true, error: false, msg: "Trying to login!", wasCreatedOk: false })
 
 
-        const resonseAdminToken: Promise<any> = getNewAdminTokenService();
+        const responseAdminToken: Promise<any> = getAdminTokenService();
 
-        resonseAdminToken.then(jwt => {
+        responseAdminToken.then(jwtAdminToken => {
 
                 const resonseReg = registerService(
                     firstname,
                     lastname,
                     email,
-                    password, jwt);
+                    password, jwtAdminToken);
 
                     resonseReg.then(statusText => {
-                        console.log("Register OK", statusText)
-                        setState({ loading: false, error: false, msg: statusText, isRegisterOk: true })
+                        const msgText = statusText + " Your account has been created successfully. Now you can log in."
+                        setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true })
+                        const userValue: UserType = {
+                            jwt: "",
+                            isLogged: false,
+                            isRegistered: true
+                        }
+                        setUser(userValue)
                     }).catch(err => {
-                        console.log("Register BAD", err)
-                        setState({ loading: false, error: false, msg: err.message, isRegisterOk: false })
+                        // Request failed with status code 409 (Conflict) or 400 (Bad Request)
+                        let errorText =  err.message
+                        if (err.message==="Request failed with status code 409") 
+                            errorText =  "Register is NOT OK. CONFLICT: Username already exists!"
+                        setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false })
+                        setUser(UserDefaultValue)
                     })
           
             })
@@ -45,17 +57,18 @@ export default function useRegister() {
                 // Error Can not acquire Admin token from service
                 console.log("err");
                 console.log(err);
-                setState({ loading: false, error: true, msg: err.message, isRegisterOk: false })
+                setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false })
+                setUser(UserDefaultValue)
 
             })
 
-    }, [setState])
+    }, [setState, setUser])
 
 
     return {
-        isRegisterOk: state.isRegisterOk,
+        wasCreatedOk: state.wasCreatedOk,
         isLoginLoading: state.loading,
-        hasLoginError: state.error,
+        hasRegisterError: state.error,
         msg: state.msg,
         register,
     }

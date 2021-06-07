@@ -74,7 +74,7 @@ const UserTopMenu: FunctionComponent = () => {
           {getLoginMenuText()}
         </MenuItem>
 
-        {user && !user?.isLogged && (
+        {user && !user?.isRegistered && (
           <MenuItem component={Link} to="/user/register" onClick={handleClose}>
             Register
           </MenuItem>

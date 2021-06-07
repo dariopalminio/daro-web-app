@@ -38,9 +38,6 @@ export default async function registerService(
   password: string,
   jwt: string): Promise<any> {
 
-  console.log(`Start Creating user with usernamename: ${email} `);
-
-
   const body: UserRepresentation = {
     firstName: firstname,
     lastName: lastname,
@@ -74,13 +71,14 @@ export default async function registerService(
 
   switch (response.status) {
     case 409: //CONFLICT
-      throw new Error('Response is NOT OK. CONFLICT: Username already exists!')
+      const error = new Error('Response is NOT OK. CONFLICT: Username already exists!')
+      throw error
     case 400: //BAD_REQUEST:
       throw new Error('Response is NOT OK. BAD REQUEST!')
     case 201: //Created
       return response.statusText
     default:
-      throw new Error('Response is NOT OK. Could not register!')
+      throw new Error('Response is NOT OK. Could not register. There was some mistake!')
   }
 
 }

@@ -17,7 +17,7 @@ export type NewAdminTokenRequestBody = {
  * same login url: `/auth/realms/my-realm-test/protocol/openid-connect/token`,
  * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 */
-export default async function getNewAdminTokenService(): Promise<any> {
+export default async function getAdminTokenService(): Promise<any> {
 
     const body: NewAdminTokenRequestBody = {
       client_id: GlobalConfig.Keycloak.client_id,

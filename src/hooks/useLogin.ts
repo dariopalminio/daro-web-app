@@ -1,18 +1,6 @@
 import { useCallback, useContext, useState } from 'react'
-import UserContext, { UserContextType } from '../context/UserContext'
+import UserContext, { UserContextType, UserType, UserDefaultValue } from '../context/UserContext'
 import loginService from '../services/user/LoginService'
-
-// Global user type
-export type UserType = {
-    jwt: (string | null)
-    isLogged: Boolean
-}
-
-// Global user default value
-export const UserDefaultValue: UserType = {
-    jwt: null,
-    isLogged: false,
-}
 
 /**
  * useUser Custom Hook
@@ -42,7 +30,8 @@ export default function useLogin() {
                 setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true })
                 const userValue: UserType = {
                     jwt: jwt,
-                    isLogged: true
+                    isLogged: true,
+                    isRegistered: true
                 }
                 setUser(userValue)
             })

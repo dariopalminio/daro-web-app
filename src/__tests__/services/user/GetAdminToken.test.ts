@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react'
 import axios from 'axios'
-import getNewAdminTokenService from '../../../services/user/GetNewAdminTokenService'
+import getAdminTokenService from '../../../services/user/GetAdminTokenService'
 import { ResponseType } from '../../../services/user/ResponseType'
 
 describe('Test UserService service', () => {
@@ -28,7 +28,7 @@ describe('Test UserService service', () => {
         let jwtResult = ""
         let error = null
 
-        await getNewAdminTokenService().then(jwt => {
+        await getAdminTokenService().then(jwt => {
             authorized = true
             jwtResult = jwt
         }).catch(err => {

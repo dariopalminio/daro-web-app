@@ -1,5 +1,19 @@
 import { createContext } from 'react'
-import { UserType, UserDefaultValue } from '../hooks/useLogin'
+
+// Global user type
+export type UserType = {
+  jwt: (string | null)
+  isLogged: Boolean
+  isRegistered: Boolean
+}
+
+// Global user default value
+export const UserDefaultValue: UserType = {
+  jwt: null,
+  isLogged: false,
+  isRegistered: false,
+}
+
 
 // Global user context type
 export type UserContextType = {
@@ -15,6 +29,7 @@ export const RecoveryUserFromWebBrowser = (): UserType => {
     const userRecovered: UserType = {
       jwt: jwtValue,
       isLogged: Boolean(jwtValue),
+      isRegistered: Boolean(jwtValue),
     };
     return userRecovered;
   } else {
@@ -28,6 +43,7 @@ export const UserContextDefaultValues: UserContextType = {
   user: {
     jwt: null,
     isLogged: false,
+    isRegistered: false,
   },
   setUser: () => { },
 };

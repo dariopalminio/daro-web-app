@@ -5,26 +5,30 @@ import {
   EmailValidation,
   PasswordValidation,
 } from "../../helpers/userValidations";
+import useRegister from "../../hooks/useRegister";
+import UserContext, { UserContextType } from "../../context/UserContext";
+
+//@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
 import clsx from "clsx";
-import useRegister from "../../hooks/useRegister";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      "& > * + *": {
-        justifyContent: "center",
-        textAlign: "center",
-      },
+      flexGrow: 1,
     },
     papperRegisterForm: {
       width: "400px",
-      height: "480px",
+      height: "570px",
       margin: "0 auto 0 auto",
-      padding: "0px 0px 0px 0px",
+      padding: theme.spacing(2),
+      textAlign: "center",
+      color: theme.palette.text.secondary,
     },
     wrapperCenter: {
       display: "flex",
@@ -47,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "#525252",
       paddingLeft: "1rem",
     },
-    buttonCustom:{
+    buttonCustom: {
       margin: "0 auto auto auto",
     },
   })
@@ -59,23 +63,21 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName UserRegister View
  */
 export const UserRegister: FunctionComponent = () => {
+  const { user } = useContext(UserContext) as UserContextType;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailValid, setEmailValid] = useState(true);
-  const [emailErrorText] = useState('Email inválido');
+  const [emailErrorText] = useState("Email inválido");
   const [passValid, setPassValid] = useState(true);
-  const [passErrorText] = useState('Invalid Password');
+  const [passErrorText] = useState("Invalid Password");
   const [confirmPassValid, setConfirmPassValid] = useState(true);
-  const [confirmPassErrorText] = useState('Pasword does not match!');
+  const [confirmPassErrorText] = useState("Pasword does not match!");
   const classes = useStyles();
-  const { isRegisterOk,
-    isLoginLoading,
-    hasLoginError,
-    msg,
-    register } = useRegister();
+  const { wasCreatedOk, isLoginLoading, hasRegisterError, msg, register } =
+    useRegister();
 
   /**
    * Register
@@ -84,7 +86,6 @@ export const UserRegister: FunctionComponent = () => {
     e.preventDefault();
 
     register(firstName, lastName, email, password);
-
   };
 
   const handleEmailChange = async (emailValue: string) => {
@@ -121,99 +122,135 @@ export const UserRegister: FunctionComponent = () => {
 
   return (
     <div>
-      { isRegisterOk && (<label>User Created!</label>)}
-      { !isRegisterOk && (
-      <form
-        id="RegisterForm"
-        data-testid="RegisterForm"
-        action="#"
-        onSubmit={handleLoginSubmit}
-      >
-        <Paper className={clsx(classes.papperRegisterForm)}>
-          <div className={clsx(classes.wrapperCenter)}>
-            <h1 className={clsx(classes.h1Custom)}>Register</h1>
-          </div>
-          <div className={clsx(classes.wrapperCenter)}>
-            <TextField
-              id="standard-basic-1"
-              className={clsx(classes.textfieldCustom)}
-              label="First Name"
-              placeholder=""
-              onChange={(e) => handleFirstNameChange(e.target.value)}
-              value={firstName}
-              {...(false && { error: true, helperText: "Requerido" })}
-            />
-          </div>
-          <div className={clsx(classes.wrapperCenter)}>
-            <TextField
-              id="standard-basic-2"
-              className={clsx(classes.textfieldCustom)}
-              label="Last Name"
-              placeholder=""
-              onChange={(e) => handleLastNameChange(e.target.value)}
-              value={lastName}
-              {...(false && { error: true, helperText: "Requerido" })}
-            />
-          </div>
-          <div className={clsx(classes.wrapperCenter)}>
-            <TextField
-              id="standard-basic-3"
-              className={clsx(classes.textfieldCustom)}
-              label="Email"
-              placeholder="daro@email.com"
-              onChange={(e) => handleEmailChange(e.target.value)}
-              value={email}
-              {...(!emailValid && {
-                error: true,
-                helperText: emailErrorText,
-              })}
-            />
-          </div>
-
-          <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
-            <label className={clsx(classes.labelForPass)}>
-              Enter a minimum of 10 characters
-              with numbers and letters.
-            </label>
-          </div>
-
-          <div className={clsx(classes.wrapperCenter)}>
-            <TextField
-              id="standard-basic-4"
-              className={clsx(classes.textfieldCustom)}
-              label="Password"
-              type="password"
-              onChange={(e) => handlePasswordChange(e.target.value)}
-              value={password}
-              {...(!passValid && {
-                error: true,
-                helperText: passErrorText,
-              })}
-            />
-          </div>
-          <div className={clsx(classes.wrapperCenter)}>
-            <TextField
-              id="standard-basic-5"
-              className={clsx(classes.textfieldCustom)}
-              label="Confirm Password"
-              type="password"
-              onChange={(e) => handleConfirmPassChange(e.target.value)}
-              value={confirmPassword}
-              {...(!confirmPassValid && {
-                error: true,
-                helperText: confirmPassErrorText,
-              })}
-            />
-          </div>
-          <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
-            <Button className={clsx(classes.buttonCustom)}
-            variant="contained" color="primary" type="submit">
-              Register
-            </Button>
-          </div>
-        </Paper>
-      </form>
+      {wasCreatedOk && (
+        <Alert severity="success">
+          Your account has been created successfully. Now you can log in.
+        </Alert>
       )}
+
+      {!user?.isRegistered && (
+        <form
+          id="RegisterForm"
+          data-testid="RegisterForm"
+          action="#"
+          onSubmit={handleLoginSubmit}
+        >
+          <Paper className={clsx(classes.papperRegisterForm)}>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item xs={12}>
+                <div className={clsx(classes.wrapperCenter)}>
+                  <h1 className={clsx(classes.h1Custom)}>Register</h1>
+                </div>
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  id="standard-basic-1"
+                  className={clsx(classes.textfieldCustom)}
+                  label="First Name"
+                  placeholder=""
+                  onChange={(e) => handleFirstNameChange(e.target.value)}
+                  value={firstName}
+                  {...(false && { error: true, helperText: "Requerido" })}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  id="standard-basic-2"
+                  className={clsx(classes.textfieldCustom)}
+                  label="Last Name"
+                  placeholder=""
+                  onChange={(e) => handleLastNameChange(e.target.value)}
+                  value={lastName}
+                  {...(false && { error: true, helperText: "Requerido" })}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  id="standard-basic-3"
+                  className={clsx(classes.textfieldCustom)}
+                  label="Email"
+                  placeholder="daro@email.com"
+                  onChange={(e) => handleEmailChange(e.target.value)}
+                  value={email}
+                  {...(!emailValid && {
+                    error: true,
+                    helperText: emailErrorText,
+                  })}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <div className={clsx(classes.wrapperCenter)}>
+                  <label className={clsx(classes.labelForPass)}>
+                    Enter a minimum of 10 characters with numbers and letters.
+                  </label>
+                </div>
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  id="standard-basic-4"
+                  className={clsx(classes.textfieldCustom)}
+                  label="Password"
+                  type="password"
+                  onChange={(e) => handlePasswordChange(e.target.value)}
+                  value={password}
+                  {...(!passValid && {
+                    error: true,
+                    helperText: passErrorText,
+                  })}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <div className={clsx(classes.wrapperCenter)}>
+                  <TextField
+                    id="standard-basic-5"
+                    className={clsx(classes.textfieldCustom)}
+                    label="Confirm Password"
+                    type="password"
+                    onChange={(e) => handleConfirmPassChange(e.target.value)}
+                    value={confirmPassword}
+                    {...(!confirmPassValid && {
+                      error: true,
+                      helperText: confirmPassErrorText,
+                    })}
+                  />
+                </div>
+              </Grid>
+
+              <Grid item xs={12}>
+                <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
+                  <Button
+                    className={clsx(classes.buttonCustom)}
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                  >
+                    Register
+                  </Button>
+                </div>
+              </Grid>
+            </Grid>
+          </Paper>
+        </form>
+      )}
+
+{hasRegisterError && (
+        <Alert severity="error">
+          {msg}
+        </Alert>
+      )}
+
     </div>
   );
 };
