@@ -1,10 +1,16 @@
 import { createContext } from 'react'
+import { boolean, string } from 'yup/lib/locale'
 
 // Global user type
 export type UserType = {
   jwt: (string | null)
   isLogged: Boolean
   isRegistered: Boolean
+  email: string,
+  email_verified: boolean,
+  given_name: string,
+  preferred_username: string,
+  sub: string,
 }
 
 // Global user default value
@@ -12,8 +18,12 @@ export const UserDefaultValue: UserType = {
   jwt: null,
   isLogged: false,
   isRegistered: false,
+  email: "",
+  email_verified: false,
+  given_name: "",
+  preferred_username: "",
+  sub: "", // sub is the ID
 }
-
 
 // Global user context type
 export type UserContextType = {
@@ -30,6 +40,11 @@ export const RecoveryUserFromWebBrowser = (): UserType => {
       jwt: jwtValue,
       isLogged: Boolean(jwtValue),
       isRegistered: Boolean(jwtValue),
+      email: "",
+      email_verified: false,
+      given_name: "",
+      preferred_username: "",
+      sub: "",
     };
     return userRecovered;
   } else {
@@ -44,6 +59,11 @@ export const UserContextDefaultValues: UserContextType = {
     jwt: null,
     isLogged: false,
     isRegistered: false,
+    email: "",
+    email_verified: false,
+    given_name: "",
+    preferred_username: "",
+    sub: "",
   },
   setUser: () => { },
 };

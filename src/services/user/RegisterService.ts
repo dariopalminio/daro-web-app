@@ -1,7 +1,7 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 
-export type UserRepresentation = {
+export type NewUserRepresentation = {
   username: string
   enabled: string
   emailVerified: string
@@ -36,9 +36,9 @@ export default async function registerService(
   lastname: string,
   email: string,
   password: string,
-  jwt: string): Promise<any> {
+  adminToken: string): Promise<any> {
 
-  const body: UserRepresentation = {
+  const body: NewUserRepresentation = {
     firstName: firstname,
     lastName: lastname,
     email: email,
@@ -54,22 +54,18 @@ export default async function registerService(
     enabled: "true",
   };
 
-  const ENDPOINT = GlobalConfig.APIEndpoints.auth
-  const REALM = GlobalConfig.Keycloak.realm
-  const URL = `${ENDPOINT}/auth/admin/realms/${REALM}/users`
+  //User endpoint
+  const URL = GlobalConfig.URLPath.users
 
   try {
 
     const response: AxiosResponse = await axios({
       method: 'post',
       url: URL,
-      headers: { 'Authorization': `Bearer ${jwt}` },
+      headers: { 'Authorization': `Bearer ${adminToken}` },
       data: body
     });
 
-
-    console.log(response.status);
-    console.log(response);
     return response.statusText
 
   } catch (error) {

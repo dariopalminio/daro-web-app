@@ -16,3 +16,10 @@ export const Keycloak = {
   password_admin: process.env.REACT_APP_AUTH_PASSWORD_ADMIN as string,
 }
 
+//urlPath `${ENDPOINT}/auth/realms/${REALM}/protocol/openid-connect/userinfo`
+
+export const URLPath = {
+  userInfo: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/userinfo`,
+  users: `${APIEndpoints.auth}/auth/admin/realms/${Keycloak.realm}/users`,
+  token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
+}

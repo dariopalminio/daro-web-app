@@ -1,6 +1,7 @@
 import { useCallback, useContext, useState } from 'react'
 import UserContext, { UserContextType, UserType, UserDefaultValue } from '../context/UserContext'
 import loginService from '../services/user/LoginService'
+import getUserInfoService from '../services/user/GetUserInfoService'
 
 /**
  * useUser Custom Hook
@@ -22,18 +23,34 @@ export default function useLogin() {
     const login = useCallback((email: string, password: string) => {
         setState({ loading: true, error: false, msg: "Trying to login!", isLoggedOk: false })
 
-
+        // First: authenticate user and pass
         loginService(email, password)
             .then(jwt => {
-                // Authorized
-                window.sessionStorage.setItem('jwt', jwt)
-                setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true })
-                const userValue: UserType = {
-                    jwt: jwt,
-                    isLogged: true,
-                    isRegistered: true
-                }
-                setUser(userValue)
+
+                // Second: retrieve user information
+                getUserInfoService(jwt).then(userdata => {
+                    // Authorized
+                    window.sessionStorage.setItem('jwt', jwt)
+                    setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true })
+                    const userValue: UserType = {
+                        jwt: jwt,
+                        isLogged: true,
+                        isRegistered: true,
+                        email: userdata.email,
+                        email_verified: userdata.email_verified,
+                        given_name: userdata.given_name,
+                        preferred_username: userdata.preferred_username,
+                        sub: userdata.sub,
+                    }
+                    setUser(userValue)
+                }).catch(err => {
+                // Unauthorized
+                window.sessionStorage.removeItem('jwt')
+                const errMsg = err.message + " Unauthorized because could not get user information"
+                setState({ loading: false, error: true, msg: errMsg, isLoggedOk: false })
+                setUser(UserDefaultValue)
+                })
+
             })
             .catch(err => {
                 // Unauthorized

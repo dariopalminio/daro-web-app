@@ -41,7 +41,12 @@ export default function useRegister() {
                 const userValue: UserType = {
                     jwt: "",
                     isLogged: false,
-                    isRegistered: true
+                    isRegistered: true,
+                    email: "",
+                    email_verified: false,
+                    given_name: "",
+                    preferred_username: "",
+                    sub: "",
                 }
                 setUser(userValue)
             }).catch(err => {

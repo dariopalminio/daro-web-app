@@ -156,7 +156,7 @@ const useStyles = makeStyles((theme: Theme) =>
       {user?.isLogged && (
         <div className="box">
           <Alert severity="success">
-            You are already logged! Do you want to log out?{" "}
+          {user.given_name} You are already logged! Do you want to log out?{" "}
           </Alert>
           <br />
           <div className={clsx(classes.wrapperCenter)}>
