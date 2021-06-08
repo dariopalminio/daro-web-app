@@ -1,7 +1,6 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import qs from 'querystring'
-import { ResponseType } from './ResponseType'
 
 export type NewAdminTokenRequestBody = {
   client_id: string,
@@ -32,7 +31,7 @@ export default async function getAdminTokenService(): Promise<any> {
     const REALM = GlobalConfig.Keycloak.realm
     const URL = `${ENDPOINT}/auth/realms/${REALM}/protocol/openid-connect/token`
   
-    const response: ResponseType = await axios.post(URL, qs.stringify(body))
+    const response: AxiosResponse = await axios.post(URL, qs.stringify(body))
   
     if (response.status !== 200) {
       // Unauthorized or other error (401, 400, 406...)
