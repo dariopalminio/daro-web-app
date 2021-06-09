@@ -7,6 +7,10 @@ export enum AuthStatusEnum {
     CONFLICT = 409, //CONFLICT: Username already exists!
     BAD_REQUEST = 400,
     ERR_CONNECTION_REFUSED = 102, //Network Error
+    FORBIDDEN = 403,
+    NOT_FOUND = 404,
+    REQUEST_TIMEOUT = 408,
+    UNSUPPORTED_MEDIA_TYPE = 415,
 }
 
 /**
@@ -18,6 +22,10 @@ export const AuthStatusText = {
     'CONFLICT': { status: 409, text: 'Conflict: username already exists!' },
     'BAD_REQUEST': { status: 400, text: 'Bad Request!' },
     'ERR_CONNECTION_REFUSED': { status: 102, text: 'Network Error!' },
+    'FORBIDDEN': { status: 403, text: 'Forbidden' },
+    'NOT_FOUND': { status: 404, text: 'Not Found' },
+    'REQUEST_TIMEOUT': { status: 408, text: 'Request Timeout' },
+    'UNSUPPORTED_MEDIA_TYPE': { status: 415, text: 'Unsupported Media Type' },
 };
 
 export interface IAuthError<T = any> extends Error {
