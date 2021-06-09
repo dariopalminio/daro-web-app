@@ -51,8 +51,7 @@ export default function useRegister() {
                 setUser(userValue)
             }).catch(err => {
                 // Request failed with status code 409 (Conflict) or 400 (Bad Request)
-                let errorText = err.statusText
-                setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false })
+                setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false })
                 setUser(UserDefaultValue)
             })
 

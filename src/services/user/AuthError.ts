@@ -13,8 +13,8 @@ export enum AuthStatusEnum {
  * Dictionary of customized messages for status errors
  */
 export const AuthStatusText = {
-    'UNKNOWN': { status: 0, text: 'UNKNOWN' },
-    'UNAUTHORIZED': { status: 401, text: 'UNAUTHORIZED' },
+    'UNKNOWN': { status: 0, text: 'Unknown' },
+    'UNAUTHORIZED': { status: 401, text: 'Unauthorized!' },
     'CONFLICT': { status: 409, text: 'Conflict: username already exists!' },
     'BAD_REQUEST': { status: 400, text: 'Bad Request!' },
     'ERR_CONNECTION_REFUSED': { status: 102, text: 'Network Error!' },
@@ -32,14 +32,12 @@ export interface IAuthError<T = any> extends Error {
 export class AuthError<T = any> extends Error {
     status: number;
     statusText: string;
-    customText: string;
 
-    constructor(error: Error, status: number, statusText: string, customText: string) {
-        super(error.message);
-        this.stack = error.stack;
+    constructor(message: string, stack: string, status: number, statusText: string) {
+        super(message);
+        this.stack = stack;
         this.name = 'AuthError';
         this.status = status;
-        this.customText = customText;
         this.statusText = statusText;
     }
 }
@@ -61,23 +59,23 @@ export function handleAxiosError(e: any): AuthError {
 
             switch (status) {
                 case AuthStatusEnum.UNAUTHORIZED:
-                    return new AuthError(e, status, txt, AuthStatusText.UNAUTHORIZED.text);
+                    return new AuthError(AuthStatusText.UNAUTHORIZED.text, e.stack, status, txt);
 
                 case AuthStatusEnum.CONFLICT:
-                    return new AuthError(e, status, txt, AuthStatusText.CONFLICT.text);
+                    return new AuthError(AuthStatusText.CONFLICT.text, e.stack, status, txt);
 
                 case AuthStatusEnum.BAD_REQUEST:
-                    return new AuthError(e, status, txt, AuthStatusText.BAD_REQUEST.text);
+                    return new AuthError(AuthStatusText.BAD_REQUEST.text, e.stack, status, txt);
 
                 default:
-                    return new AuthError(e, status, txt, AuthStatusText.UNKNOWN.text);
+                    return new AuthError(AuthStatusText.UNKNOWN.text, e.stack, status, txt);
             }
         }
     }
 
-    if (e.message == "Network Error") {
-        return new AuthError(e, AuthStatusEnum.ERR_CONNECTION_REFUSED, "Network Error", AuthStatusText.ERR_CONNECTION_REFUSED.text);
+    if (e.message === "Network Error") {
+        return new AuthError(AuthStatusText.ERR_CONNECTION_REFUSED.text, e.stack, AuthStatusEnum.ERR_CONNECTION_REFUSED, "Network Error");
     }
 
-    return new AuthError(e, AuthStatusEnum.UNKNOWN, e.message, AuthStatusText.UNKNOWN.text);
+    return new AuthError(AuthStatusText.UNKNOWN.text, e.stack, AuthStatusEnum.UNKNOWN, e.message);
 }

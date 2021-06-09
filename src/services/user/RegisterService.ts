@@ -66,10 +66,11 @@ export default async function registerService(
       headers: { 'Authorization': `Bearer ${adminToken}` },
       data: body
     });
-
+console.log("NO EXCEPTION")
     return response.statusText
 
   } catch (error) {
+    console.log("SI EXCEPTION")
     // response.status !== 201
     // CONFLICT: error.message="Request failed with status code 409"
     // BAD_REQUEST: error.message="Request failed with status code 400"

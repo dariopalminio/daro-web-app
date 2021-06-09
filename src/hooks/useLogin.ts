@@ -46,7 +46,7 @@ export default function useLogin() {
                 }).catch(err => {
                 // Unauthorized
                 window.sessionStorage.removeItem('jwt')
-                const errMsg = err.customText
+                const errMsg = err.message
                 setState({ loading: false, error: true, msg: errMsg, isLoggedOk: false })
                 setUser(UserDefaultValue)
                 })
@@ -55,7 +55,7 @@ export default function useLogin() {
             .catch(err => {
                 // Unauthorized
                 window.sessionStorage.removeItem('jwt')
-                setState({ loading: false, error: true, msg: err.customText, isLoggedOk: false })
+                setState({ loading: false, error: true, msg: err.message, isLoggedOk: false })
                 setUser(UserDefaultValue)
             })
     }, [setState, setUser])
