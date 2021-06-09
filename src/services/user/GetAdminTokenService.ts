@@ -1,5 +1,6 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
+import { handleAxiosError, AuthError } from '../../services/user/AuthError';
 import qs from 'querystring'
 
 export type NewAdminTokenRequestBody = {
@@ -31,7 +32,7 @@ export default async function getAdminTokenService(): Promise<any> {
   const URL = GlobalConfig.URLPath.token
 
   try {
-
+    //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const response: AxiosResponse = await axios.post(URL, qs.stringify(body))
 
     const { access_token } = response.data
@@ -40,7 +41,7 @@ export default async function getAdminTokenService(): Promise<any> {
     
   } catch (error) {
     // response.status !== 200
-    console.log(error.message)
-    throw error;
+    const e: AuthError = handleAxiosError(error);
+    throw e;
   }
 }

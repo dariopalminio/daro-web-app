@@ -2,6 +2,7 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'querystring'
+import { handleAxiosError, AuthError } from '../../services/user/AuthError';
 
 export type LoginRequest = {
   username: string
@@ -32,7 +33,7 @@ export default async function loginService(username: string, pass: string): Prom
   const URL = GlobalConfig.URLPath.token
 
   try {
-
+    //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const response: AxiosResponse = await axios.post(URL, qs.stringify(body))
 
     const { access_token } = response.data
@@ -41,6 +42,7 @@ export default async function loginService(username: string, pass: string): Prom
 
   } catch (error) {
     // response.status !== 200
-    throw error;
+    const e: AuthError = handleAxiosError(error);
+    throw e;
   }
 };

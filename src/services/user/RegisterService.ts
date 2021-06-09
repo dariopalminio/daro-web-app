@@ -1,5 +1,6 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
+import { handleAxiosError, AuthError } from '../../services/user/AuthError';
 
 export type NewUserRepresentation = {
   username: string
@@ -72,6 +73,7 @@ export default async function registerService(
     // response.status !== 201
     // CONFLICT: error.message="Request failed with status code 409"
     // BAD_REQUEST: error.message="Request failed with status code 400"
-    throw error;
+    const e: AuthError = handleAxiosError(error);
+    throw e;
   }
 }

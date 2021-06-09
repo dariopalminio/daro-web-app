@@ -1,6 +1,7 @@
 
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
+import { handleAxiosError, AuthError } from '../../services/user/AuthError';
 
 /**
  * Get users Returns a list of users, filtered according to params.
@@ -23,7 +24,7 @@ export default async function getUserByNameService(username: string, adminToken:
   }
 
   try {
-
+    //get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
     const response: AxiosResponse = await axios.get(URL, config)
 
     if (!response.data[0]) {
@@ -34,7 +35,7 @@ export default async function getUserByNameService(username: string, adminToken:
 
   } catch (error) {
     // response.status !== 200
-    console.log(error.message)
-    throw error;
+    const e: AuthError = handleAxiosError(error);
+    throw e;
   }
 };
