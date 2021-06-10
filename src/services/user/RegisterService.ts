@@ -66,7 +66,7 @@ export default async function registerService(
       headers: { 'Authorization': `Bearer ${adminToken}` },
       data: body
     });
-console.log("NO EXCEPTION")
+
     return response.statusText
 
   } catch (error) {

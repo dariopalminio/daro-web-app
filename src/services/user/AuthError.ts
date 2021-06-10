@@ -11,21 +11,23 @@ export enum AuthStatusEnum {
     NOT_FOUND = 404,
     REQUEST_TIMEOUT = 408,
     UNSUPPORTED_MEDIA_TYPE = 415,
+    NO_CONTENT = 204,
 }
 
 /**
  * Dictionary of customized messages for status errors
  */
 export const AuthStatusText = {
-    'UNKNOWN': { status: 0, text: 'Unknown' },
+    'UNKNOWN': { status: 0, text: 'Unknown!' },
     'UNAUTHORIZED': { status: 401, text: 'Unauthorized!' },
     'CONFLICT': { status: 409, text: 'Conflict: username already exists!' },
     'BAD_REQUEST': { status: 400, text: 'Bad Request!' },
     'ERR_CONNECTION_REFUSED': { status: 102, text: 'Network Error!' },
-    'FORBIDDEN': { status: 403, text: 'Forbidden' },
-    'NOT_FOUND': { status: 404, text: 'Not Found' },
-    'REQUEST_TIMEOUT': { status: 408, text: 'Request Timeout' },
-    'UNSUPPORTED_MEDIA_TYPE': { status: 415, text: 'Unsupported Media Type' },
+    'FORBIDDEN': { status: 403, text: 'Forbidden!' },
+    'NOT_FOUND': { status: 404, text: 'Not Found!' },
+    'REQUEST_TIMEOUT': { status: 408, text: 'Request Timeout.' },
+    'UNSUPPORTED_MEDIA_TYPE': { status: 415, text: 'Unsupported Media Type.' },
+    'NO_CONTENT': { status: 204, text: 'No content.' },
 };
 
 export interface IAuthError<T = any> extends Error {

@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
    * Logout
    */
   const onClickLogoutHandler = (): void => {
-    logout();
+    logout(user);
   };
 
   /**
@@ -160,7 +160,7 @@ const useStyles = makeStyles((theme: Theme) =>
           </Alert>
           <br />
           <div className={clsx(classes.wrapperCenter)}>
-            <Button
+            <Button 
               variant="contained"
               color="primary"
               onClick={() => onClickLogoutHandler()}

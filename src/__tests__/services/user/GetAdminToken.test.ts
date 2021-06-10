@@ -1,6 +1,6 @@
-import { cleanup } from '@testing-library/react'
-import axios , { AxiosResponse } from 'axios'
-import getAdminTokenService from '../../../services/user/GetAdminTokenService'
+import { cleanup } from '@testing-library/react';
+import axios, { AxiosResponse } from 'axios';
+import getAdminTokenService from '../../../services/user/GetAdminTokenService';
 
 describe('Test UserService service', () => {
 
@@ -8,7 +8,7 @@ describe('Test UserService service', () => {
 
     test('Acquire Admin Access Token with Client Credentials Grant, mocking axios OK request, should be SUCCESSFUL and responses a JWT', async () => {
 
-        const jwtExample = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw'
+        const jwtExample = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw';
 
         const responseOKMocked: AxiosResponse = {
             data: { access_token: jwtExample },
@@ -17,26 +17,26 @@ describe('Test UserService service', () => {
             headers: {},
             config: {},
             request: {}
-        }
+        };
 
-        const myMock = jest.fn()
+        const myMock = jest.fn();
 
-        axios.post = myMock.mockResolvedValue(responseOKMocked)
+        axios.post = myMock.mockResolvedValue(responseOKMocked);
 
-        let authorized = false
-        let jwtResult = ""
-        let error = null
+        let authorized = false;
+        let jwtResult = "";
+        let error = null;
 
         await getAdminTokenService().then(jwt => {
-            authorized = true
-            jwtResult = jwt
+            authorized = true;
+            jwtResult = jwt;
         }).catch(err => {
-            error = err
+            error = err;
         })
 
-        expect(authorized).toBe(true)
-        expect(jwtResult).toBe(jwtExample)
-        expect(error).toBeNull
+        expect(authorized).toBe(true);
+        expect(jwtResult).toBe(jwtExample);
+        expect(error).toBeNull;
     });
 
 });

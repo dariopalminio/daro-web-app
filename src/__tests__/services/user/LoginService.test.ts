@@ -1,6 +1,6 @@
-import { cleanup } from '@testing-library/react'
-import axios , { AxiosResponse } from 'axios'
-import loginService from '../../../services/user/LoginService'
+import { cleanup } from '@testing-library/react';
+import axios , { AxiosResponse } from 'axios';
+import loginService from '../../../services/user/LoginService';
 
 describe('Test UserService service', () => {
 
@@ -17,45 +17,45 @@ describe('Test UserService service', () => {
             headers: {},
             config: {},
             request: {}
-        }
+        };
 
-        const myMock = jest.fn()
+        const myMock = jest.fn();
 
-        axios.post = myMock.mockResolvedValue(responseOKMocked)
+        axios.post = myMock.mockResolvedValue(responseOKMocked);
 
-        let authorized = false
-        let jwtResult = ""
-        let error = null
+        let authorized = false;
+        let jwtResult = "";
+        let error = null;
 
         await loginService('user', 'pass').then(jwt => {
-            authorized = true
-            jwtResult = jwt
+            authorized = true;
+            jwtResult = jwt;
         }).catch(err => {
-            error = err
+            error = err;
         })
 
-        expect(authorized).toBe(true)
-        expect(jwtResult).toBe(jwtExample)
-        expect(error).toBeNull
+        expect(authorized).toBe(true);
+        expect(jwtResult).toBe(jwtExample);
+        expect(error).toBeNull;
     });
 
     test('loginService, mocking axios bad request, should be Unauthorized and responses a Error', async () => {
 
-        const myMock = jest.fn()
+        const myMock = jest.fn();
 
-        axios.post = myMock.mockResolvedValue(new Error("Unauthorized"))
+        axios.post = myMock.mockResolvedValue(new Error("Unauthorized"));
 
-        let authorized = false
-        let error = null
+        let authorized = false;
+        let error = null;
 
         await loginService('userBad', 'passBad').then(jwt => {
-            authorized = true
+            authorized = true;
         }).catch(err => {
-            error = err
-        })
+            error = err;
+        });
 
-        expect(error).toBeInstanceOf(Error)
-        expect(authorized).toBe(false)
+        expect(error).toBeInstanceOf(Error);
+        expect(authorized).toBe(false);
     });
 
 });

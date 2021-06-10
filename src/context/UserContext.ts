@@ -10,7 +10,7 @@ export type UserType = {
   email_verified: boolean,
   given_name: string,
   preferred_username: string,
-  sub: string,
+  userId: string,
 }
 
 // Global user default value
@@ -22,7 +22,7 @@ export const UserDefaultValue: UserType = {
   email_verified: false,
   given_name: "",
   preferred_username: "",
-  sub: "", // sub is the ID
+  userId: "", // sub is the ID userId
 }
 
 // Global user context type
@@ -44,7 +44,7 @@ export const RecoveryUserFromWebBrowser = (): UserType => {
       email_verified: false,
       given_name: "",
       preferred_username: "",
-      sub: "",
+      userId: "",
     };
     return userRecovered;
   } else {
@@ -63,7 +63,7 @@ export const UserContextDefaultValues: UserContextType = {
     email_verified: false,
     given_name: "",
     preferred_username: "",
-    sub: "",
+    userId: "",
   },
   setUser: () => { },
 };

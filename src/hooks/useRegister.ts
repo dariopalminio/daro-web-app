@@ -1,7 +1,7 @@
-import { useCallback, useContext, useState } from 'react'
-import getAdminTokenService from '../services/user/GetAdminTokenService'
-import UserContext, { UserContextType, UserType, UserDefaultValue } from '../context/UserContext'
-import registerService from '../services/user/RegisterService'
+import { useCallback, useContext, useState } from 'react';
+import getAdminTokenService from '../services/user/GetAdminTokenService';
+import UserContext, { UserContextType, UserType, UserDefaultValue } from '../context/UserContext';
+import registerService from '../services/user/RegisterService';
 
 /**
  * cuseRegister Custom Hook
@@ -46,7 +46,7 @@ export default function useRegister() {
                     email_verified: false,
                     given_name: "",
                     preferred_username: "",
-                    sub: "",
+                    userId: "",
                 }
                 setUser(userValue)
             }).catch(err => {
