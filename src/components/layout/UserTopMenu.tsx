@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import UserContext, { UserContextType } from "../../context/UserContext";
+import SessionContext, { SessionContextType } from "../../context/SessionContext";
 
 //@material-ui
 import MenuItem from "@material-ui/core/MenuItem";
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const UserTopMenu: FunctionComponent = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { user } = useContext(UserContext) as UserContextType;
+  const { session } = useContext(SessionContext) as SessionContextType;
 
   const openAnchorEl = Boolean(anchorEl);
 
@@ -40,7 +40,7 @@ const UserTopMenu: FunctionComponent = () => {
   };
 
   const getLoginMenuText = () => {
-    if (user && !user?.isLogged) {
+    if (session && !session?.isLogged) {
       return "Login";
     } else return "Go to Logout";
   };
@@ -76,7 +76,7 @@ const UserTopMenu: FunctionComponent = () => {
           {getLoginMenuText()}
         </MenuItem>
 
-        {user && !user?.isRegistered && (
+        {session && !session?.isRegistered && (
           <MenuItem component={Link} to="/user/register" onClick={handleClose}>
             Register
           </MenuItem>

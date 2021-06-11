@@ -6,7 +6,7 @@ import {
   PasswordValidation,
 } from "../../helpers/userValidations";
 import useRegister from "../../hooks/useRegister";
-import UserContext, { UserContextType } from "../../context/UserContext";
+import SessionContext, { SessionContextType } from "../../context/SessionContext";
 import clsx from "clsx";
 
 //@material-ui
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName UserRegister View
  */
 export const UserRegister: FunctionComponent = () => {
-  const { user } = useContext(UserContext) as UserContextType;
+  const { session } = useContext(SessionContext) as SessionContextType;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -128,7 +128,7 @@ export const UserRegister: FunctionComponent = () => {
         </Alert>
       )}
 
-      {!user?.isRegistered && (
+      {!session?.isRegistered && (
         <form
           id="RegisterForm"
           data-testid="RegisterForm"

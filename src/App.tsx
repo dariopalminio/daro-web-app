@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
-import UserContextProvider from "./context/UserContextProvider"
+import SessionContextProvider from "./context/SessionContextProvider"
 import AppLayout from "./components/layout/AppLayout"
 
 /**
@@ -12,11 +12,11 @@ import AppLayout from "./components/layout/AppLayout"
  */
 const App: FunctionComponent = () => {
   return (
-    <UserContextProvider>
+    <SessionContextProvider>
       <Router>
         <AppLayout />
       </Router>
-    </UserContextProvider>
+    </SessionContextProvider>
   )
 }
 

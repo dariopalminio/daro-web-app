@@ -1,9 +1,10 @@
 import { useCallback, useContext, useState } from 'react';
-import UserContext, { UserContextType, UserType, UserDefaultValue } from '../context/UserContext';
+import SessionContext, { SessionContextType, SessionType, SessionDefaultValue } from '../context/SessionContext';
 import loginService from '../services/user/LoginService';
 import getAdminTokenService from '../services/user/GetAdminTokenService';
 import getUserInfoService from '../services/user/GetUserInfoService';
 import logoutService from '../services/user/LogoutService';
+import qs from 'querystring';
 
 /**
  * useUser Custom Hook
@@ -16,7 +17,7 @@ import logoutService from '../services/user/LogoutService';
  *      logout function
  */
 export default function useLogin() {
-    const { user, setUser } = useContext(UserContext) as UserContextType;
+    const { session, setSession } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
 
     /**
@@ -32,9 +33,9 @@ export default function useLogin() {
                 // Second: retrieve user information
                 getUserInfoService(jwt).then(userdata => {
                     // Authorized
-                    window.sessionStorage.setItem('jwt', jwt);
+                    window.sessionStorage.setItem('jwt', qs.stringify(jwt));
                     setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true });
-                    const userValue: UserType = {
+                    const userValue: SessionType = {
                         jwt: jwt,
                         isLogged: true,
                         isRegistered: true,
@@ -44,13 +45,13 @@ export default function useLogin() {
                         preferred_username: userdata.preferred_username,
                         userId: userdata.sub,
                     };
-                    setUser(userValue);
+                    setSession(userValue);
                 }).catch(err => {
                     // Unauthorized
                     window.sessionStorage.removeItem('jwt');
                     const errMsg = err.message;
                     setState({ loading: false, error: true, msg: errMsg, isLoggedOk: false });
-                    setUser(UserDefaultValue);
+                    setSession(SessionDefaultValue);
                 })
 
             })
@@ -58,14 +59,14 @@ export default function useLogin() {
                 // Unauthorized
                 window.sessionStorage.removeItem('jwt');
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false });
-                setUser(UserDefaultValue);
+                setSession(SessionDefaultValue);
             })
-    }, [setState, setUser])
+    }, [setState, setSession])
 
     /**
      * logout
      */
-    const logout = useCallback((loggedUser: UserType | undefined) => {
+    const logout = useCallback((loggedUser: SessionType | undefined) => {
         setState({ loading: true, error: false, msg: "Trying to logout!", isLoggedOk: true })
 
         const userId = loggedUser?.userId ? loggedUser?.userId : null;
@@ -99,8 +100,8 @@ export default function useLogin() {
 
         window.sessionStorage.removeItem('jwt');
         setState({ loading: false, error: thereWasError, msg: msg + "You are not logged in!", isLoggedOk: false });
-        setUser(UserDefaultValue);
-    }, [setState, setUser]);
+        setSession(SessionDefaultValue);
+    }, [setState, setSession]);
 
 
     return {

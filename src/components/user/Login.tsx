@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useContext } from "react";
 import useLogin from "../../hooks/useLogin";
 import { EmailValidation } from "../../helpers/userValidations";
-import UserContext, { UserContextType } from "../../context/UserContext";
+import SessionContext, { SessionContextType } from "../../context/SessionContext";
 import clsx from "clsx";
 
 //@material-ui
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
   const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState('Email inválido');
-  const { user } = useContext(UserContext) as UserContextType;
+  const { session } = useContext(SessionContext) as SessionContextType;
   const { isLoginLoading, hasLoginError, msg, login, logout } = useLogin();
   const classes = useStyles();
 
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
    * Logout
    */
   const onClickLogoutHandler = (): void => {
-    logout(user);
+    logout(session);
   };
 
   /**
@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
   return (
     <div id="LoginFormContainer" data-testid="LoginFormContainer">
-      {!user?.isLogged && !isLoginLoading && (
+      {!session?.isLogged && !isLoginLoading && (
         <form
           id="LoginForm"
           data-testid="LoginForm"
@@ -153,10 +153,10 @@ const useStyles = makeStyles((theme: Theme) =>
         </div>
       )}
 
-      {user?.isLogged && (
+      {session?.isLogged && (
         <div className="box">
           <Alert severity="success">
-          {user.given_name} You are already logged! Do you want to log out?{" "}
+          {session.given_name} You are already logged! Do you want to log out?{" "}
           </Alert>
           <br />
           <div className={clsx(classes.wrapperCenter)}>

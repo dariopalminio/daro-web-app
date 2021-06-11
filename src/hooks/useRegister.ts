@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
 import getAdminTokenService from '../services/user/GetAdminTokenService';
-import UserContext, { UserContextType, UserType, UserDefaultValue } from '../context/UserContext';
+import SessionContext, { SessionContextType, SessionType, SessionDefaultValue } from '../context/SessionContext';
 import registerService from '../services/user/RegisterService';
 
 /**
@@ -9,7 +9,7 @@ import registerService from '../services/user/RegisterService';
  */
 export default function useRegister() {
 
-    const { setUser } = useContext(UserContext) as UserContextType;
+    const { setSession } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false });
 
     /**
@@ -38,7 +38,7 @@ export default function useRegister() {
             resonseReg.then(statusText => {
                 const msgText = statusText + " Your account has been created successfully. Now you can log in.";
                 setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true });
-                const userValue: UserType = {
+                const userValue: SessionType = {
                     jwt: "",
                     isLogged: false,
                     isRegistered: true,
@@ -48,11 +48,11 @@ export default function useRegister() {
                     preferred_username: "",
                     userId: "",
                 };
-                setUser(userValue);
+                setSession(userValue);
             }).catch(err => {
                 // Request failed with status code 409 (Conflict) or 400 (Bad Request)
                 setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
-                setUser(UserDefaultValue);
+                setSession(SessionDefaultValue);
             })
 
         })
@@ -60,11 +60,11 @@ export default function useRegister() {
                 // Error Can not acquire Admin token from service
                 const errorText = err.message + " " + "Error Can not acquire Admin token from service."
                 setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false });
-                setUser(UserDefaultValue);
+                setSession(SessionDefaultValue);
 
             })
 
-    }, [setState, setUser])
+    }, [setState, setSession])
 
 
     return {

@@ -16,7 +16,7 @@ export type NewUserRepresentation = {
       temporary: string,
     },
   ],
-}
+};
 
 /**
  * registerService
@@ -56,7 +56,7 @@ export default async function registerService(
   };
 
   //User endpoint
-  const URL = GlobalConfig.URLPath.users
+  const URL = GlobalConfig.URLPath.users;
 
   try {
 
@@ -67,7 +67,7 @@ export default async function registerService(
       data: body
     });
 
-    return response.statusText
+    return response.statusText;
 
   } catch (error) {
     console.log("SI EXCEPTION")

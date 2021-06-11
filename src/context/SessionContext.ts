@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import { boolean, string } from 'yup/lib/locale'
 
 // Global user type
-export type UserType = {
+export type SessionType = {
   jwt: (string | null)
   isLogged: Boolean
   isRegistered: Boolean
@@ -14,7 +14,7 @@ export type UserType = {
 }
 
 // Global user default value
-export const UserDefaultValue: UserType = {
+export const SessionDefaultValue: SessionType = {
   jwt: null,
   isLogged: false,
   isRegistered: false,
@@ -26,17 +26,19 @@ export const UserDefaultValue: UserType = {
 }
 
 // Global user context type
-export type UserContextType = {
-  user: (UserType | undefined)
-  setUser: (newUser: UserType) => void
+export type SessionContextType = {
+  session: (SessionType | undefined)
+  setSession: (newSession: SessionType) => void
 }
 
 // Recovery data from web browser Storage
-export const RecoveryUserFromWebBrowser = (): UserType => {
+export const RecoveryUserFromWebBrowser = (): SessionType => {
+
   if (typeof Storage !== "undefined") {
     // Code when Storage is supported
     const jwtValue = window.sessionStorage.getItem("jwt");
-    const userRecovered: UserType = {
+
+    const userRecovered: SessionType = {
       jwt: jwtValue,
       isLogged: Boolean(jwtValue),
       isRegistered: Boolean(jwtValue),
@@ -46,16 +48,17 @@ export const RecoveryUserFromWebBrowser = (): UserType => {
       preferred_username: "",
       userId: "",
     };
+    
     return userRecovered;
   } else {
     //Code when Storage is NOT supported
-    return UserDefaultValue;
+    return SessionDefaultValue;
   }
 }
 
 // Initial values for global user context 
-export const UserContextDefaultValues: UserContextType = {
-  user: {
+export const SessionContextDefaultValues: SessionContextType = {
+  session: {
     jwt: null,
     isLogged: false,
     isRegistered: false,
@@ -65,10 +68,10 @@ export const UserContextDefaultValues: UserContextType = {
     preferred_username: "",
     userId: "",
   },
-  setUser: () => { },
+  setSession: () => { },
 };
 
 // Global user context
-const UserContext = createContext<UserContextType>(UserContextDefaultValues)
+const UserContext = createContext<SessionContextType>(SessionContextDefaultValues)
 
 export default UserContext

@@ -1,7 +1,7 @@
 
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
-import qs from 'querystring'
+import qs from 'querystring';
 import { handleAxiosError, AuthError } from '../../services/user/AuthError';
 
 export type LoginRequest = {
@@ -10,7 +10,7 @@ export type LoginRequest = {
   grant_type: string
   client_id: string
   client_secret: string
-}
+};
 
 /**
  * Consumer cliente for login on Keycloak Server & Bearer Token & with client secret
@@ -27,22 +27,22 @@ export default async function loginService(username: string, pass: string): Prom
     grant_type: 'password',
     client_id: GlobalConfig.Keycloak.client_id,
     client_secret: GlobalConfig.Keycloak.client_secret
-  }
+  };
 
   //Login endpoint
-  const URL = GlobalConfig.URLPath.token
+  const URL = GlobalConfig.URLPath.token;
 
   try {
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
-    const response: AxiosResponse = await axios.post(URL, qs.stringify(body))
+    const response: AxiosResponse = await axios.post(URL, qs.stringify(body));
 
-    const { access_token } = response.data
+    const { access_token } = response.data;
 
-    return access_token
+    return access_token;
 
   } catch (error) {
     // response.status !== 200
     const e: AuthError = handleAxiosError(error);
     throw e;
-  }
+  };
 };
