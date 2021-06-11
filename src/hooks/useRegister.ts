@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
 import getAdminTokenService from '../services/user/GetAdminTokenService';
-import SessionContext, { SessionContextType, SessionType, SessionDefaultValue } from '../context/SessionContext';
+import SessionContext, { SessionContextType, SessionType } from '../context/SessionContext';
 import registerService from '../services/user/RegisterService';
 
 /**
@@ -9,7 +9,7 @@ import registerService from '../services/user/RegisterService';
  */
 export default function useRegister() {
 
-    const { setSession } = useContext(SessionContext) as SessionContextType;
+    const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false });
 
     /**
@@ -48,11 +48,11 @@ export default function useRegister() {
                     preferred_username: "",
                     userId: "",
                 };
-                setSession(userValue);
+                setSessionValue(userValue);
             }).catch(err => {
                 // Request failed with status code 409 (Conflict) or 400 (Bad Request)
                 setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
-                setSession(SessionDefaultValue);
+                removeSessionValue();
             })
 
         })
@@ -60,11 +60,10 @@ export default function useRegister() {
                 // Error Can not acquire Admin token from service
                 const errorText = err.message + " " + "Error Can not acquire Admin token from service."
                 setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false });
-                setSession(SessionDefaultValue);
-
+                removeSessionValue();
             })
 
-    }, [setState, setSession])
+    }, [setState, setSessionValue])
 
 
     return {

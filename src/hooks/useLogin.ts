@@ -1,10 +1,9 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { SessionContextType, SessionType, SessionDefaultValue } from '../context/SessionContext';
+import SessionContext, { SessionContextType, SessionType } from '../context/SessionContext';
 import loginService from '../services/user/LoginService';
 import getAdminTokenService from '../services/user/GetAdminTokenService';
 import getUserInfoService from '../services/user/GetUserInfoService';
 import logoutService from '../services/user/LogoutService';
-import qs from 'querystring';
 
 /**
  * useUser Custom Hook
@@ -17,7 +16,7 @@ import qs from 'querystring';
  *      logout function
  */
 export default function useLogin() {
-    const { session, setSession } = useContext(SessionContext) as SessionContextType;
+    const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
 
     /**
@@ -33,7 +32,6 @@ export default function useLogin() {
                 // Second: retrieve user information
                 getUserInfoService(jwt).then(userdata => {
                     // Authorized
-                    window.sessionStorage.setItem('jwt', qs.stringify(jwt));
                     setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true });
                     const userValue: SessionType = {
                         jwt: jwt,
@@ -45,23 +43,21 @@ export default function useLogin() {
                         preferred_username: userdata.preferred_username,
                         userId: userdata.sub,
                     };
-                    setSession(userValue);
+                    setSessionValue(userValue);
                 }).catch(err => {
                     // Unauthorized
-                    window.sessionStorage.removeItem('jwt');
                     const errMsg = err.message;
                     setState({ loading: false, error: true, msg: errMsg, isLoggedOk: false });
-                    setSession(SessionDefaultValue);
+                    removeSessionValue();
                 })
 
             })
             .catch(err => {
                 // Unauthorized
-                window.sessionStorage.removeItem('jwt');
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false });
-                setSession(SessionDefaultValue);
+                removeSessionValue();
             })
-    }, [setState, setSession])
+    }, [setState, setSessionValue])
 
     /**
      * logout
@@ -98,10 +94,9 @@ export default function useLogin() {
             msg = "There was no user logged in. ";
         }
 
-        window.sessionStorage.removeItem('jwt');
         setState({ loading: false, error: thereWasError, msg: msg + "You are not logged in!", isLoggedOk: false });
-        setSession(SessionDefaultValue);
-    }, [setState, setSession]);
+        removeSessionValue();
+    }, [setState, setSessionValue]);
 
 
     return {
