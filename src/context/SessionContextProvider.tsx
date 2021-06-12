@@ -1,9 +1,9 @@
 import { FC, useEffect } from "react";
 import SessionContext, {
-  recoverySessionFromWebBrowser,
+  recoverySessionFromStorage,
   SessionDefaultValue,
   SessionType,
-  setSessionToWebBrowser,
+  setSessionToStorage,
 } from "./SessionContext";
 import { atom, useAtom } from "jotai";
 
@@ -14,16 +14,16 @@ const UserContextProvider: FC = ({ children }) => {
 
   useEffect(() => {
     // Recovery session when is rendered
-    setSession(recoverySessionFromWebBrowser);
+    setSession(recoverySessionFromStorage);
   }, [setSession]);
 
   function setSessionValue(s: SessionType) {
-    setSessionToWebBrowser(s);
+    setSessionToStorage(s);
     setSession(s);
   }
 
   function removeSessionValue() {
-    setSessionToWebBrowser(SessionDefaultValue);
+    setSessionToStorage(SessionDefaultValue);
     setSession(SessionDefaultValue);
   }
 

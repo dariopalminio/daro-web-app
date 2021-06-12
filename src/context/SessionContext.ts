@@ -37,7 +37,7 @@ export type SessionContextType = {
  * Function: Recovery session data from web browser Storage (storage)
  * @returns 
  */
-export const recoverySessionFromWebBrowser = (): SessionType => {
+export const recoverySessionFromStorage = (): SessionType => {
 
   if (typeof Storage !== "undefined") {
     // Code when Storage is supported
@@ -62,7 +62,7 @@ export const recoverySessionFromWebBrowser = (): SessionType => {
  * Function: set session data to web browser Storage in storage
  * @param sessionToLoad 
  */
-export const setSessionToWebBrowser = (sessionToLoad: SessionType): void => {
+export const setSessionToStorage = (sessionToLoad: SessionType): void => {
   if (typeof Storage !== "undefined") {
     // Code when Storage is supported
     const sessionStorageItem: string = JSON.stringify(sessionToLoad);
