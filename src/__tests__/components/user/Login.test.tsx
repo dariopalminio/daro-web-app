@@ -1,5 +1,5 @@
 import * as ReactDOM from "react-dom";
-import Login from "../../../components/user/Auth";
+import Login from "../../../components/user/Login";
 
 describe("Renders Login component", () => {
   let container: HTMLDivElement;

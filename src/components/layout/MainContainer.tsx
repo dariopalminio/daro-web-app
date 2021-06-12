@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { Route, Switch } from "react-router-dom";
-import { LoginPage } from "../pages/user/LoginPage";
+import { AuthPage } from "../pages/user/AuthPage";
 import { RegisterPage } from "../pages/user/RegisterPage";
 import { CartPage } from "../pages/cart/CartPage";
 import { Page03 } from "../pages/subpage01/Page03";
@@ -18,7 +18,7 @@ const MainContainer: FunctionComponent = () => {
     <div id="MainContainer" data-testid="MainContainer" className="MainContainer">
       <Switch>
         <Route path="/" component={Page01} exact></Route>
-        <Route path="/user/login" component={LoginPage} exact></Route>
+        <Route path="/user/auth" component={AuthPage} exact></Route>
         <Route path="/cart" component={CartPage} exact></Route>
         <Route path="/user/register" component={RegisterPage} exact></Route>
         <Route path="/subpage01/page03" component={Page03} exact></Route>

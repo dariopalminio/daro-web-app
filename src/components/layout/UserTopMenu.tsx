@@ -72,7 +72,7 @@ const UserTopMenu: FunctionComponent = () => {
         onClose={handleClose}
       >
         
-        <MenuItem component={Link} to="/user/login" onClick={handleClose}>
+        <MenuItem component={Link} to="/user/auth" onClick={handleClose}>
           {getLoginMenuText()}
         </MenuItem>
 
