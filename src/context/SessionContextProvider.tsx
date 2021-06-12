@@ -13,7 +13,7 @@ const UserContextProvider: FC = ({ children }) => {
   const [session, setSession] = useAtom(SessionAtom);
 
   useEffect(() => {
-    // Recovery session when is rendered
+    // Recovery session from storage when is rendered
     setSession(recoverySessionFromStorage);
   }, [setSession]);
 
