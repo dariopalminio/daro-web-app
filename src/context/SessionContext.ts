@@ -1,10 +1,12 @@
 import { createContext } from 'react';
 
+const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";
+
 // Global user type
 export type SessionType = {
   jwt: (string | null)
-  isLogged: Boolean
-  isRegistered: Boolean
+  isLogged: boolean
+  isRegistered: boolean
   email: string,
   email_verified: boolean,
   given_name: string,
@@ -31,60 +33,46 @@ export type SessionContextType = {
   removeSessionValue: () => void
 };
 
-// Function: Recovery session data from web browser Storage
+/**
+ * Function: Recovery session data from web browser Storage (storage)
+ * @returns 
+ */
 export const recoverySessionFromWebBrowser = (): SessionType => {
 
   if (typeof Storage !== "undefined") {
     // Code when Storage is supported
-    const jwtValue = window.sessionStorage.getItem("jwt");
-    const email = window.sessionStorage.getItem("email");
-    const given_name = window.sessionStorage.getItem("given_name");
-    const preferred_username = window.sessionStorage.getItem("preferred_username");
-    const userId = window.sessionStorage.getItem("user-id");
 
-    const userRecovered: SessionType = {
-      jwt: jwtValue,
-      isLogged: Boolean(jwtValue),
-      isRegistered: Boolean(jwtValue),
-      email: email ? email : "",
-      email_verified: false,
-      given_name: given_name ? given_name : "",
-      preferred_username: preferred_username ? preferred_username : "",
-      userId: userId ? userId : "",
-    };
+    const sessionStorageItem = window.sessionStorage.getItem(SESSION_ITEM_NAME);
+    const sessionJSONString: string = sessionStorageItem ? sessionStorageItem : "";
 
-    return userRecovered;
-  } else {
-    //Code when Storage is NOT supported
-    return SessionDefaultValue;
+    if (sessionJSONString && sessionJSONString !== "") {
+      try {
+        const mySessionRecovered: SessionType = JSON.parse(sessionJSONString);
+        return mySessionRecovered;
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
+  //Code when Storage is NOT supported
+  return SessionDefaultValue;
 };
 
-// Function: set session data to web browser Storage
-export const setSessionToWebBrowser = (s: SessionType): void => {
+/**
+ * Function: set session data to web browser Storage in storage
+ * @param sessionToLoad 
+ */
+export const setSessionToWebBrowser = (sessionToLoad: SessionType): void => {
   if (typeof Storage !== "undefined") {
     // Code when Storage is supported
-    const str = s.jwt ? s.jwt : "";
-    window.sessionStorage.setItem('jwt', str);
-    window.sessionStorage.setItem('email', s.email);
-    window.sessionStorage.setItem('given_name', s.given_name);
-    window.sessionStorage.setItem('preferred_username', s.preferred_username);
-    window.sessionStorage.setItem('user-id', s.userId);
+    const sessionStorageItem: string = JSON.stringify(sessionToLoad);
+    window.sessionStorage.setItem(SESSION_ITEM_NAME, sessionStorageItem);
   }
 };
 
 // Initial values for global user context 
 export const SessionContextDefaultValues: SessionContextType = {
-  session: {
-    jwt: null,
-    isLogged: false,
-    isRegistered: false,
-    email: "",
-    email_verified: false,
-    given_name: "",
-    preferred_username: "",
-    userId: "",
-  },
+  session: SessionDefaultValue,
   setSessionValue: () => { },
   removeSessionValue: () => { },
 };
