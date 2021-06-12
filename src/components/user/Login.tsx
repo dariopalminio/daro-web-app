@@ -11,6 +11,7 @@ import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -150,6 +151,7 @@ const useStyles = makeStyles((theme: Theme) =>
       {isLoginLoading && (
         <div className="box">
           <strong>Checking credentials...</strong>
+          <CircularProgress />
         </div>
       )}
 
