@@ -53,17 +53,16 @@ export default function useRegister() {
                 // Request failed with status code 409 (Conflict) or 400 (Bad Request)
                 setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
                 removeSessionValue();
-            })
+            });
 
-        })
-            .catch(err => {
-                // Error Can not acquire Admin token from service
-                const errorText = err.message + " " + "Error Can not acquire Admin token from service."
-                setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false });
-                removeSessionValue();
-            })
+        }).catch(err => {
+            // Error Can not acquire Admin token from service
+            const errorText = err.message + " " + "Error Can not acquire Admin token from service."
+            setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false });
+            removeSessionValue();
+        });
 
-    }, [setState, setSessionValue])
+    }, [setState, setSessionValue]);
 
 
     return {

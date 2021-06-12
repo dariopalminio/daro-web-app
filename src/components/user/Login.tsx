@@ -1,7 +1,10 @@
 import React, { FunctionComponent, useState, useContext } from "react";
 import useLogin from "../../hooks/useLogin";
 import { EmailValidation } from "../../helpers/userValidations";
-import SessionContext, { SessionContextType } from "../../context/SessionContext";
+import SessionContext, {
+  SessionContextType,
+} from "../../context/SessionContext";
+import AlertError from "./AlertError";
 import clsx from "clsx";
 
 //@material-ui
@@ -10,8 +13,7 @@ import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
-import Alert from "@material-ui/lab/Alert";
-import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "#525252",
       paddingLeft: "1rem",
     },
-  }),
+  })
 );
 
 /**
@@ -53,14 +55,13 @@ const useStyles = makeStyles((theme: Theme) =>
  *
  * @visibleName Login View
  */
- export const Login: FunctionComponent = () => {
-
+const Login: FunctionComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
-  const [emailErrorText] = useState('Email inválido');
+  const [emailErrorText] = useState("Email inválido");
   const { session } = useContext(SessionContext) as SessionContextType;
-  const { isLoginLoading, hasLoginError, msg, login, logout } = useLogin();
+  const { isLoginLoading, hasLoginError, msg, login } = useLogin();
   const classes = useStyles();
 
   /**
@@ -72,32 +73,26 @@ const useStyles = makeStyles((theme: Theme) =>
   };
 
   /**
-   * Logout
-   */
-  const onClickLogoutHandler = (): void => {
-    logout(session);
-  };
-
-  /**
    * Validate if the email is in the correct format
-   * @param emailValue 
+   * @param emailValue
    */
   const handleEmailChange = async (emailValue: string) => {
+    setEmail(emailValue);
 
-    setEmail(emailValue)
-
-    if (! await EmailValidation.isValid({
-      email: emailValue,
-    })) {
-      setEmailIsInvalid(true)
-    }else{
-      setEmailIsInvalid(false)
+    if (
+      !(await EmailValidation.isValid({
+        email: emailValue,
+      }))
+    ) {
+      setEmailIsInvalid(true);
+    } else {
+      setEmailIsInvalid(false);
     }
   };
 
   return (
-    <div id="LoginFormContainer" data-testid="LoginFormContainer">
-      {!session?.isLogged && !isLoginLoading && (
+    <div>
+      {!isLoginLoading && (
         <form
           id="LoginForm"
           data-testid="LoginForm"
@@ -116,7 +111,10 @@ const useStyles = makeStyles((theme: Theme) =>
                 placeholder="daro@email.com"
                 onChange={(e) => handleEmailChange(e.target.value)}
                 value={email}
-                {...(emailIsInvalid && { error: true, helperText: emailErrorText })}
+                {...(emailIsInvalid && {
+                  error: true,
+                  helperText: emailErrorText,
+                })}
               />
             </div>
             <div className={clsx(classes.wrapperCenter)}>
@@ -135,9 +133,8 @@ const useStyles = makeStyles((theme: Theme) =>
               <Link className={clsx(classes.linkClass)} href="/user/register">
                 Register
               </Link>
-              
             </div>
-            
+
             <div className={clsx(classes.wrapperCenterForButton)}>
               <Button variant="contained" color="primary" type="submit">
                 Login
@@ -146,6 +143,7 @@ const useStyles = makeStyles((theme: Theme) =>
           </Paper>
         </form>
       )}
+
       <br />
 
       {isLoginLoading && (
@@ -155,34 +153,9 @@ const useStyles = makeStyles((theme: Theme) =>
         </div>
       )}
 
-      {session?.isLogged && (
-        <div className="box">
-          <Alert severity="success">
-          {session.given_name} You are already logged! Do you want to log out?{" "}
-          </Alert>
-          <br />
-          <div className={clsx(classes.wrapperCenter)}>
-            <Button 
-              variant="contained"
-              color="primary"
-              onClick={() => onClickLogoutHandler()}
-            >
-              Logout
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {hasLoginError && (
-        <div className={clsx(classes.wrapperCenter)}>
-          <Alert severity="error">
-            Error: {msg}
-            <br />{" "}
-          </Alert>
-        </div>
-      )}
+      {hasLoginError && <AlertError msg={msg} />}
     </div>
   );
-}
+};
 
 export default Login;
