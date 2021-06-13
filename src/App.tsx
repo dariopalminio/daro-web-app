@@ -11,6 +11,7 @@ import AppLayout from "./components/layout/AppLayout"
  * @author [Dario Palminio](https://github.com/dariopalminio/tsx-web-shop.git)
  */
 const App: FunctionComponent = () => {
+
   return (
     <SessionContextProvider>
       <Router>

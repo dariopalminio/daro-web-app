@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import SessionContext, {
   recoverySessionFromStorage,
   SessionDefaultValue,
@@ -27,13 +27,17 @@ const UserContextProvider: FC = ({ children }) => {
     setSession(SessionDefaultValue);
   }
 
+  const value = useMemo(()=>{
+    return({
+      session,
+      setSessionValue,
+      removeSessionValue,
+    })
+  },[session]);
+
   return (
     <SessionContext.Provider
-      value={{
-        session,
-        setSessionValue,
-        removeSessionValue,
-      }}
+      value={value}
     >
       {children}
     </SessionContext.Provider>
