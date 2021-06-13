@@ -1,9 +1,6 @@
 import React, { FunctionComponent, useState, useContext } from "react";
 import useLogin from "../../hooks/useLogin";
 import { EmailValidation } from "../../helpers/userValidations";
-import SessionContext, {
-  SessionContextType,
-} from "../../context/SessionContext";
 import AlertError from "./AlertError";
 import clsx from "clsx";
 
@@ -60,7 +57,6 @@ const Login: FunctionComponent = () => {
   const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Email inválido");
-  const { session } = useContext(SessionContext) as SessionContextType;
   const { isLoginLoading, hasLoginError, msg, login } = useLogin();
   const classes = useStyles();
 

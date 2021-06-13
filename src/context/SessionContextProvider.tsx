@@ -27,7 +27,7 @@ const UserContextProvider: FC = ({ children }) => {
     setSession(SessionDefaultValue);
   }
 
-  const value = useMemo(()=>{
+  const sharedValue = useMemo(()=>{
     return({
       session,
       setSessionValue,
@@ -37,7 +37,7 @@ const UserContextProvider: FC = ({ children }) => {
 
   return (
     <SessionContext.Provider
-      value={value}
+      value={sharedValue}
     >
       {children}
     </SessionContext.Provider>

@@ -1,6 +1,19 @@
 import * as ReactDOM from "react-dom";
 import Login from "../../../components/user/Login";
 
+jest.mock("../../../hooks/useLogin", () => {
+  return function useLogin() {
+    console.log("MOCK...");
+    return {
+      isLoggedOk: false,
+      isLoginLoading: false,
+      hasLoginError: false,
+      msg: "",
+      login: () => {},
+    };
+  };
+});
+
 describe("Renders Login component", () => {
   let container: HTMLDivElement;
 
@@ -15,7 +28,7 @@ describe("Renders Login component", () => {
     container.remove();
   });
 
-  test("Renders correctly initial document", () => {
+  test("Renders correctly Login initial document", () => {
     const forms = container.querySelectorAll("form");
     const inputs = container.querySelectorAll("input");
     const buttons = container.querySelectorAll("button");
@@ -24,4 +37,5 @@ describe("Renders Login component", () => {
     expect(buttons).toHaveLength(1);
     expect(buttons[0].type).toBe("submit");
   });
+  
 });
