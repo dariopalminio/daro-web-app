@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useContext } from "react";
+import React, { FunctionComponent, useState } from "react";
 import useLogin from "../../hooks/useLogin";
 import { EmailValidation } from "../../helpers/userValidations";
 import AlertError from "./AlertError";

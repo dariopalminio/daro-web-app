@@ -3,7 +3,6 @@ import Login from "../../../components/user/Login";
 
 jest.mock("../../../hooks/useLogin", () => {
   return function useLogin() {
-    console.log("MOCK...");
     return {
       isLoggedOk: false,
       isLoginLoading: false,

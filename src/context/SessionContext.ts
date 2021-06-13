@@ -77,7 +77,7 @@ export const SessionContextDefaultValues: SessionContextType = {
   removeSessionValue: () => { },
 };
 
-// Global user context
-const UserContext = createContext<SessionContextType>(SessionContextDefaultValues);
+// Global session context
+const SessionContext = createContext<SessionContextType>(SessionContextDefaultValues);
 
-export default UserContext;
+export default SessionContext;
