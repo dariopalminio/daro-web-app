@@ -14,6 +14,7 @@ export const Keycloak = {
   client_secret: process.env.REACT_APP_AUTH_CLIENT_SECRET as string,
   username_admin: process.env.REACT_APP_AUTH_USERNAME_ADMIN as string,
   password_admin: process.env.REACT_APP_AUTH_PASSWORD_ADMIN as string,
+  verify_email: ((process.env.REACT_APP_AUTH_VERIFY_EMAIL === 'true') ? true : false) as boolean
 }
 
 //urlPath `${ENDPOINT}/auth/realms/${REALM}/protocol/openid-connect/userinfo`

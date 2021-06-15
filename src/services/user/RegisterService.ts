@@ -43,7 +43,7 @@ export default async function registerService(
     firstName: firstname,
     lastName: lastname,
     email: email,
-    emailVerified: "true",
+    emailVerified: GlobalConfig.Keycloak.verify_email ? "false" : "true",
     username: email,
     credentials: [
       {
