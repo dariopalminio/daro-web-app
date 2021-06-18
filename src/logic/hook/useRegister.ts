@@ -57,7 +57,7 @@ export default function useRegister() {
 
         }).catch(err => {
             // Error Can not acquire Admin token from service
-            const errorText = err.message + " " + "Error Can not acquire Admin token from service."
+            const errorText = err.message + " Error Can not acquire Admin token from service."
             setState({ loading: false, error: true, msg: errorText, wasCreatedOk: false });
             removeSessionValue();
         });

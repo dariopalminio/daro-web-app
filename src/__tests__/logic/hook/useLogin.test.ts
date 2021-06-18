@@ -22,6 +22,7 @@ jest.mock("../../../client/user/LoginService", () => {
     }
 });
 
+/*
 // Second: mock service for retrieve user information
 jest.mock("../../../client/user/GetUserInfoService", () => {
     return async function getUserInfoService(jwt: string): Promise<any> {
@@ -45,6 +46,7 @@ jest.mock("../../../client/user/GetUserInfoService", () => {
         );
     }
 });
+*/
 
 describe('Test useUser Hook', () => {
 

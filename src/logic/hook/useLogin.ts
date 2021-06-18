@@ -1,7 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { SessionContextType, SessionType } from '../context/SessionContext';
 import loginService from '../../client/user/LoginService';
-import getUserInfoService from '../../client/user/GetUserInfoService';
+
+var jws = require('jws');
 
 /**
  * useLogin Custom Hook
@@ -16,7 +17,7 @@ import getUserInfoService from '../../client/user/GetUserInfoService';
 export default function useLogin() {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
-
+    
     /**
      * login
      */
@@ -26,36 +27,49 @@ export default function useLogin() {
         // First: authenticate user and pass
         loginService(email, password)
             .then(jwt => {
-
                 // Second: retrieve user information
-                getUserInfoService(jwt).then(userdata => {
+                // Instead of making a new call to the api (with "getUserInfoService(jwt)"), 
+                // we decode the jason web token.
+                try {
+                    const userSessionValue: SessionType = convertJwtToSessionType(jwt);
                     // Authorized
                     setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true });
-                    const userValue: SessionType = {
-                        jwt: jwt,
-                        isLogged: true,
-                        isRegistered: true,
-                        email: userdata.email,
-                        email_verified: userdata.email_verified,
-                        given_name: userdata.given_name,
-                        preferred_username: userdata.preferred_username,
-                        userId: userdata.sub,
-                    };
-                    setSessionValue(userValue);
-                }).catch(err => {
-                    // Unauthorized
-                    const errMsg = err.message;
-                    setState({ loading: false, error: true, msg: errMsg, isLoggedOk: false });
+                    setSessionValue(userSessionValue);
+                } catch (e) {
+                    // Unauthorized by error in decoding JWT
+                    setState({ loading: false, error: true, msg: e.message, isLoggedOk: false });
                     removeSessionValue();
-                })
-
+                }
             })
             .catch(err => {
                 // Unauthorized
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false });
                 removeSessionValue();
             })
-    }, [setState, setSessionValue])
+    }, [setState, setSessionValue]);
+
+    /**
+     * Decode JWT and return data from payload in SessionType value.
+     * @param jwt Jason Web Token
+     * @returns SessionType object
+     */
+    const convertJwtToSessionType = (jwt: any) => {
+        const jwtDecoded = jws.decode(jwt);
+        if (!jwtDecoded) throw Error("Decoded JWT fail! JWT decoded is null.");
+        const payload = jwtDecoded.payload;
+        // Authorized
+        const userSessionData: SessionType = {
+            jwt: jwt,
+            isLogged: true,
+            isRegistered: true,
+            email: payload.email,
+            email_verified: payload.email_verified,
+            given_name: payload.given_name,
+            preferred_username: payload.preferred_username,
+            userId: payload.sub,
+        };
+        return userSessionData;
+    };
 
     return {
         isLoggedOk: state.isLoggedOk,
@@ -63,5 +77,5 @@ export default function useLogin() {
         hasLoginError: state.error,
         msg: state.msg,
         login,
-    }
-}
+    };
+};
