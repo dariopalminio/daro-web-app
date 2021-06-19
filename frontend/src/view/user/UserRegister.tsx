@@ -4,7 +4,7 @@ import {
   confirmPassIsValid,
   EmailValidation,
   PasswordValidation,
-} from "../../helper/userValidations";
+} from "../../logic/helper/userValidations";
 import useRegister from "../../logic/hook/useRegister";
 import SessionContext, { SessionContextType } from "../../logic/context/SessionContext";
 import clsx from "clsx";

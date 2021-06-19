@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 import SessionContextProvider from "./logic/context/SessionContextProvider"
-import AppLayout from "./component/layout/AppLayout"
+import AppLayout from "./view/layout/AppLayout"
 
 /**
  * tsx-web-shop App

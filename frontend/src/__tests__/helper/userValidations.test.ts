@@ -1,4 +1,4 @@
-import { emailIsValid, confirmPassIsValid, PasswordValidation, EmailValidation, LoginValidation } from "../../helper/userValidations";
+import { emailIsValid, confirmPassIsValid, PasswordValidation, EmailValidation, LoginValidation } from "../../logic/helper/userValidations";
 
 describe("Testin validations functions from userValidations", () => {
 

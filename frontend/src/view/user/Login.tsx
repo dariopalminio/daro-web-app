@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import useLogin from "../../logic/hook/useLogin";
-import { EmailValidation } from "../../helper/userValidations";
+import { EmailValidation } from "../../logic/helper/userValidations";
 import AlertError from "./AlertError";
 import clsx from "clsx";
 
