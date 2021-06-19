@@ -4,10 +4,9 @@ import { ContactDTO } from '../model/dto/ContactDTO.dto';
 
 const nodemailer = require("nodemailer");
 
-//import * as SMTPTransport from "nodemailer/lib/smtp-transport";
-
 @Injectable()
 export class NotificationService {
+
 
   /**
    * 
@@ -44,12 +43,12 @@ export class NotificationService {
   async sendEmail(subject: string, toEmail: string, contentHTML: string): Promise<any> {
 
     const smtpOptions = {
-      host: GlobalConfig.email.host,
-      port: GlobalConfig.email.port,
+      host: GlobalConfig.email.HOST,
+      port: GlobalConfig.email.PORT,
       secure: true,
       auth: {
-        user: GlobalConfig.email.user,
-        pass: GlobalConfig.email.pass
+        user: GlobalConfig.email.USER,
+        pass: GlobalConfig.email.PASS
       },
     };
 
@@ -59,7 +58,7 @@ export class NotificationService {
     try {
 
       const email = {
-        from: GlobalConfig.email.from, // sender address,
+        from: GlobalConfig.email.FROM, // sender address,
         to: toEmail,
         subject: subject,
         html: contentHTML

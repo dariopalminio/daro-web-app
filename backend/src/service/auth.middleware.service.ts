@@ -8,15 +8,19 @@ export class AuthMiddlewareService implements NestMiddleware {
 
     /**
      * In initialization phase microservice loads public key and signing algorithm
-     * from Keycloak’s well known config page. On each request microservice checks 
+     * from Auth server (Keycloak’s) well known config page. On each request microservice checks 
      * the signature of the bearer token. Token validation is done offline without 
-     * going to Keycloak.
+     * going to Auth server (Keycloak).
      * @param req 
      * @param res 
      * @param next 
      * @returns 
      */
     use(req: Request, res: Response, next: () => void) {
+
+        if (!GlobalConfig.AUTH_MIDDLEWARE_ON){
+            next();
+        }
 
         try {
             const userVerified = this.verifyRequest(req);
@@ -34,7 +38,8 @@ export class AuthMiddlewareService implements NestMiddleware {
      */
     private verifyRequest(req: Request): any {
         if (!req.headers || !req.headers.authorization) {
-            throw Error("Unauthorized! No authorization data in Header.");
+            const e = new Error("Unauthorized! No authorization data in Header.");
+            throw e;
         } else {
 
             var token = "";
@@ -42,7 +47,8 @@ export class AuthMiddlewareService implements NestMiddleware {
             if (req.headers.authorization.startsWith("Bearer ")) {
                 token = req.headers.authorization.substring(7, req.headers.authorization.length);
             } else {
-                throw Error("Can't extract token string from Bearer token!");
+                const e = new Error("Can't extract token string from Bearer token!");
+                throw e;
             }
 
             return jwt.verify(token, this.getPEMPublicKey(), { algorithms: ['RS256'] });
