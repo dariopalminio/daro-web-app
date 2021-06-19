@@ -10,15 +10,15 @@ import MailIcon from "@material-ui/icons/Mail";
 export const LeftMenuData: MenuItemType[] = [
   {
     key: "1",
-    title: "Page 3",
-    path: "/subpage01/page03",
+    title: "Home",
+    path: "/",
     icon: <InboxIcon />,
     divider: false,
   },
   {
     key: "2",
-    title: "Page 4",
-    path: "/subpage02/page04",
+    title: "Contact",
+    path: "/contact",
     icon: <MailIcon />,
     divider: false,
   },
