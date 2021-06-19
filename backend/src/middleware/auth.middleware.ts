@@ -4,7 +4,7 @@ import * as GlobalConfig from '../config/GlobalConfig';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
-export class AuthMiddlewareService implements NestMiddleware {
+export class AuthMiddleware implements NestMiddleware {
 
     /**
      * In initialization phase microservice loads public key and signing algorithm
@@ -18,7 +18,7 @@ export class AuthMiddlewareService implements NestMiddleware {
      */
     use(req: Request, res: Response, next: () => void) {
 
-        if (!GlobalConfig.AUTH_MIDDLEWARE_ON){
+        if (!GlobalConfig.AUTH_MIDDLEWARE_ON) {
             next();
         }
 
@@ -32,10 +32,10 @@ export class AuthMiddlewareService implements NestMiddleware {
     };
 
     /**
-     * Verify if Jason Web Token is OK.
-     * @param req 
-     * @returns 
-     */
+   * Verify if Jason Web Token is OK.
+   * @param req 
+   * @returns 
+   */
     private verifyRequest(req: Request): any {
         if (!req.headers || !req.headers.authorization) {
             const e = new Error("Unauthorized! No authorization data in Header.");

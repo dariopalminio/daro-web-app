@@ -3,7 +3,7 @@ import { AppController } from './controller/app.controller';
 import { AppService } from './service/app.service';
 import { NotificationController } from './controller/notification.controller';
 import { NotificationService } from './service/notification.service';
-import { AuthMiddlewareService } from './service/auth.middleware.service';
+import { AuthMiddleware } from './middleware/auth.middleware';
 
 @Module({
   imports: [],
@@ -12,7 +12,7 @@ import { AuthMiddlewareService } from './service/auth.middleware.service';
 })
 export class AppModule {
 configure(consumer: MiddlewareConsumer){
-  consumer.apply(AuthMiddlewareService)
+  consumer.apply(AuthMiddleware)
   .forRoutes(AppController, NotificationController);
 }
 
