@@ -1,15 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import * as GlobalConfig from '../config/GlobalConfig';
 import { ContactDTO } from '../model/dto/ContactDTO.dto';
+
 const nodemailer = require("nodemailer");
 
-
+//import * as SMTPTransport from "nodemailer/lib/smtp-transport";
 
 @Injectable()
 export class NotificationService {
-  //WebShopAPI=wmxhrhnmaiuzlgui
 
-  async sendContactEmail(contactDTO: ContactDTO): Promise<string> {
+  /**
+   * 
+   * @param contactDTO 
+   * @returns 
+   */
+  async sendContactEmail(contactDTO: ContactDTO): Promise<any> {
     const contentHTML = `
     We will contact you shortly...
     <h1>User Information</h1>
@@ -22,16 +27,23 @@ export class NotificationService {
     `;
 
     try {
-      //const r = this.sendEmail("Subject Test", contactDTO.email, contentHTML);
-      return "OK!!!!!!";
-    } catch (e) {
-      return "Bad";
+      return this.sendEmail("Subject Test", contactDTO.email, contentHTML);
+    } catch (error) {
+      throw error;
     };
   };
 
-  async sendEmail(subject: string, toEmail: string, contentHTML: string): Promise<string> {
+  /**
+   * Send email using external email provider and Simple Mail Transfer Protocol.
+   * 
+   * @param subject 
+   * @param toEmail 
+   * @param contentHTML 
+   * @returns 
+   */
+  async sendEmail(subject: string, toEmail: string, contentHTML: string): Promise<any> {
 
-    let transporter = nodemailer.createTransport({
+    const smtpOptions = {
       host: GlobalConfig.email.host,
       port: GlobalConfig.email.port,
       secure: true,
@@ -39,18 +51,28 @@ export class NotificationService {
         user: GlobalConfig.email.user,
         pass: GlobalConfig.email.pass
       },
-    });
+    };
+
+    // Configuración transportador NodeMailer
+    const smtpTransporter = nodemailer.createTransport(smtpOptions);
+
     try {
-      let info = await transporter.sendMail({
+
+      const email = {
         from: GlobalConfig.email.from, // sender address,
         to: toEmail,
         subject: subject,
         html: contentHTML
-      });
+      };
 
-      return 'OK!!!';
+      const sentInfo = await smtpTransporter.sendMail(email);
+      console.log("sentInfo:");
+      console.log(sentInfo);
+      return sentInfo;
+
     } catch (error) {
       throw error;
     };
   };
+
 };

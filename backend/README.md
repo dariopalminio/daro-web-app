@@ -28,10 +28,12 @@
 
 ## Installation from zero
 
-sudo npm i -g @nestjs/cli
-nest new daro-web-shop-backend
-npm install dotenv
-npm install nodemailer
+sudo npm i -g @nestjs/cli\
+nest new daro-web-shop-backend\
+npm install dotenv\
+npm install nodemailer\
+npm i --save-dev @types/nodemailer\
+npm i @types/nodemailer-smtp-transport --save
 
 ## Installation
 

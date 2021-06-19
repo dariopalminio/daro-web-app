@@ -8,15 +8,14 @@ export class NotificationController {
 
 
   @Post('sendContactEmail')
-  sendContactEmail(@Body() body: ContactDTO): string {
+  sendContactEmail(@Body() body: ContactDTO): any {
     console.log(body);
     
-
     try{
-      const r = this.notificationService.sendContactEmail(body);
-      return "OK!!!!!!";
+      const sentInfo = this.notificationService.sendContactEmail(body);
+      return sentInfo;
     }catch(e){
-      return "Bad";
+      return e.message;
     };
   }
 
