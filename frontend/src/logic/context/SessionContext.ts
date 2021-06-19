@@ -1,18 +1,8 @@
 import { createContext } from 'react';
+import { SessionType } from '../../model/user/SessionType';
 
 const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";
 
-// Global user type
-export type SessionType = {
-  jwt: (string | null)
-  isLogged: boolean
-  isRegistered: boolean
-  email: string,
-  email_verified: boolean,
-  given_name: string,
-  preferred_username: string,
-  userId: string,
-};
 
 // Global user default value
 export const SessionDefaultValue: SessionType = {

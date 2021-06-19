@@ -2,9 +2,9 @@ import { FC, useEffect, useMemo } from "react";
 import SessionContext, {
   recoverySessionFromStorage,
   SessionDefaultValue,
-  SessionType,
   setSessionToStorage,
 } from "./SessionContext";
+import { SessionType } from '../../model/user/SessionType';
 import { atom, useAtom } from "jotai";
 
 export const SessionAtom = atom(SessionDefaultValue);

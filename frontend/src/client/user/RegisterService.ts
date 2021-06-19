@@ -1,22 +1,7 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError } from '../../client/user/AuthError';
-
-export type NewUserRepresentation = {
-  username: string
-  enabled: string
-  emailVerified: string
-  firstName: string
-  lastName: string
-  email: string
-  credentials: [
-    {
-      type: string,
-      value: string,
-      temporary: string,
-    },
-  ],
-};
+import { NewUserRepresentationType } from '../../model/user/NewUserRepresentationType';
 
 /**
  * registerService
@@ -39,7 +24,7 @@ export default async function registerService(
   password: string,
   adminToken: string): Promise<any> {
 
-  const body: NewUserRepresentation = {
+  const body: NewUserRepresentationType = {
     firstName: firstname,
     lastName: lastname,
     email: email,

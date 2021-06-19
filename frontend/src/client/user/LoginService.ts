@@ -3,14 +3,7 @@ import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'querystring';
 import { handleAxiosError, AuthError } from '../../client/user/AuthError';
-
-export type LoginRequest = {
-  username: string
-  password: string
-  grant_type: string
-  client_id: string
-  client_secret: string
-};
+import { LoginRequestType } from '../../model/user/LoginRequestType';
 
 /**
  * Consumer cliente for login on Keycloak Server & Bearer Token & with client secret
@@ -21,7 +14,7 @@ export type LoginRequest = {
  */
 export default async function loginService(username: string, pass: string): Promise<any> {
 
-  const body: LoginRequest = {
+  const body: LoginRequestType = {
     username: username,
     password: pass,
     grant_type: 'password',

@@ -1,5 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { SessionContextType, SessionType } from '../context/SessionContext';
+import SessionContext, { SessionContextType } from '../context/SessionContext';
+import { SessionType } from '../../model/user/SessionType';
 import getAdminTokenService from '../../client/user/GetAdminTokenService';
 import logoutService from '../../client/user/LogoutService';
 

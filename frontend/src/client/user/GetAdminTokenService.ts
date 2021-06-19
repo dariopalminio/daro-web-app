@@ -2,15 +2,7 @@ import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError } from '../../client/user/AuthError';
 import qs from 'querystring'
-
-export type NewAdminTokenRequestBody = {
-  client_id: string,
-  grant_type: string,
-  username: string,
-  password: string,
-  scope: string,
-  client_secret: string,
-};
+import { NewAdminTokenRequestType } from '../../model/user/NewAdminTokenRequestType';
 
 /**
  * Generate a admin access token for create user
@@ -19,7 +11,7 @@ export type NewAdminTokenRequestBody = {
 */
 export default async function getAdminTokenService(): Promise<any> {
 
-  const body: NewAdminTokenRequestBody = {
+  const body: NewAdminTokenRequestType = {
     client_id: GlobalConfig.Keycloak.client_id,
     grant_type: 'password',
     username: GlobalConfig.Keycloak.username_admin,
