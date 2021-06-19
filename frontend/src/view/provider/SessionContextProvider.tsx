@@ -3,12 +3,17 @@ import SessionContext, {
   recoverySessionFromStorage,
   SessionDefaultValue,
   setSessionToStorage,
-} from "./SessionContext";
+} from "../../logic/context/SessionContext";
 import { SessionType } from '../../model/user/SessionType';
 import { atom, useAtom } from "jotai";
 
 export const SessionAtom = atom(SessionDefaultValue);
 
+/**
+ * UserContext Provider
+ * @param param0 
+ * @returns 
+ */
 const UserContextProvider: FC = ({ children }) => {
   const [session, setSession] = useAtom(SessionAtom);
 
