@@ -1,7 +1,7 @@
 import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   SessionContextType,
-} from "../../logic/context/SessionContext";
+} from "../../../logic/context/SessionContext";
 import Logout from "./Logout";
 import Login from "./Login";
 

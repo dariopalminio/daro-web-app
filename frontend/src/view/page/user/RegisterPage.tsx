@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import UserRegister from "../../user/UserRegister";
+import UserRegister from "../../component/user/UserRegister";
 
 export const RegisterPage: FunctionComponent = () => {
   return <>

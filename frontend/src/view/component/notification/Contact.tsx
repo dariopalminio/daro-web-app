@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
-import { EmailValidation } from "../../logic/helper/userValidations";
-import { ContactType } from "../../model/notification/ContactType";
+import { EmailValidation } from "../../../logic/helper/userValidations";
+import { ContactType } from "../../../model/notification/ContactType";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";

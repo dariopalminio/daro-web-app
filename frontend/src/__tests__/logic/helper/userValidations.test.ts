@@ -1,4 +1,11 @@
-import { emailIsValid, confirmPassIsValid, PasswordValidation, EmailValidation, LoginValidation } from "../../logic/helper/userValidations";
+import {
+  emailIsValid,
+  confirmPassIsValid,
+  PasswordValidation,
+  EmailValidation,
+  LoginValidation
+}
+  from "../../../logic/helper/userValidations";
 
 describe("Testin validations functions from userValidations", () => {
 
@@ -10,13 +17,13 @@ describe("Testin validations functions from userValidations", () => {
     expect(emailIsValid("bad.email")).toBe(false)
   })
 
-  
+
   test('I should answer that the pass is wrong', () => {
-    expect(confirmPassIsValid("aaaa","bbbbb")).toBe(false)
+    expect(confirmPassIsValid("aaaa", "bbbbb")).toBe(false)
   })
 
   test('I should answer that the pass is true', () => {
-    expect(confirmPassIsValid("abcde12345","abcde12345")).toBe(true)
+    expect(confirmPassIsValid("abcde12345", "abcde12345")).toBe(true)
   })
 
 });

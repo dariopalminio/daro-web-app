@@ -1,5 +1,5 @@
 import * as ReactDOM from "react-dom";
-import UserRegister from "../../../view/user/UserRegister";
+import UserRegister from "../../../../view/component/user/UserRegister";
 
 describe("Renders UserRegister component", () => {
   let container: HTMLDivElement;

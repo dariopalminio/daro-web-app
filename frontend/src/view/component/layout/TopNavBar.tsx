@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { useAtom } from "jotai";
 import clsx from "clsx";
-import logo from "../image/logo_app.png";
+import logo from "../../image/logo_app.png";
 import styled from "styled-components";
 import { openLeftStatus } from "./AppLayout";
 import UserTopMenu from "./UserTopMenu";

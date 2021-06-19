@@ -1,10 +1,10 @@
 import { FunctionComponent } from "react";
 import { Route, Switch } from "react-router-dom";
-import { AuthPage } from "../page/user/AuthPage";
-import { RegisterPage } from "../page/user/RegisterPage";
-import { CartPage } from "../page/cart/CartPage";
-import { HomePage } from "../page/subpage01/HomePage";
-import { ContactPage } from "../page/contact/ContactPage";
+import { AuthPage } from "../../page/user/AuthPage";
+import { RegisterPage } from "../../page/user/RegisterPage";
+import { CartPage } from "../../page/cart/CartPage";
+import { HomePage } from "../../page/subpage01/HomePage";
+import { ContactPage } from "../../page/contact/ContactPage";
 
 /**
  * MainContainer Function Component

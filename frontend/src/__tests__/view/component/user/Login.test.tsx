@@ -1,7 +1,7 @@
 import * as ReactDOM from "react-dom";
-import Login from "../../../view/user/Login";
+import Login from "../../../../view/component/user/Login";
 
-jest.mock("../../../logic/hook/useLogin", () => {
+jest.mock("../../../../logic/hook/useLogin", () => {
   return function useLogin() {
     return {
       isLoggedOk: false,
