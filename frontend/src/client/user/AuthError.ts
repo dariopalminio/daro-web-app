@@ -1,0 +1,91 @@
+import { AxiosError } from 'axios';
+
+// See https://es.wikipedia.org/wiki/Anexo:C%C3%B3digos_de_estado_HTTP
+export enum AuthStatusEnum {
+    UNKNOWN = 0,
+    UNAUTHORIZED = 401,
+    CONFLICT = 409, //CONFLICT: Username already exists!
+    BAD_REQUEST = 400,
+    ERR_CONNECTION_REFUSED = 102, //Network Error
+    FORBIDDEN = 403,
+    NOT_FOUND = 404,
+    REQUEST_TIMEOUT = 408,
+    UNSUPPORTED_MEDIA_TYPE = 415,
+    NO_CONTENT = 204,
+}
+
+/**
+ * Dictionary of customized messages for status errors
+ */
+export const AuthStatusText = {
+    'UNKNOWN': { status: 0, text: 'Unknown!' },
+    'UNAUTHORIZED': { status: 401, text: 'Unauthorized!' },
+    'CONFLICT': { status: 409, text: 'Conflict: username already exists!' },
+    'BAD_REQUEST': { status: 400, text: 'Bad Request!' },
+    'ERR_CONNECTION_REFUSED': { status: 102, text: 'Network Error!' },
+    'FORBIDDEN': { status: 403, text: 'Forbidden!' },
+    'NOT_FOUND': { status: 404, text: 'Not Found!' },
+    'REQUEST_TIMEOUT': { status: 408, text: 'Request Timeout.' },
+    'UNSUPPORTED_MEDIA_TYPE': { status: 415, text: 'Unsupported Media Type.' },
+    'NO_CONTENT': { status: 204, text: 'No content.' },
+};
+
+export interface IAuthError<T = any> extends Error {
+    status: number;
+    statusText: string;
+    customText: string;
+}
+
+/**
+ * AuthError is Error customized
+ */
+export class AuthError<T = any> extends Error {
+    status: number;
+    statusText: string;
+
+    constructor(message: string, stack: string, status: number, statusText: string) {
+        super(message);
+        this.stack = stack;
+        this.name = 'AuthError';
+        this.status = status;
+        this.statusText = statusText;
+    }
+}
+
+/**
+ * handleAxiosError 
+ * returns a Error customized from AxiosError or Error
+ * 
+ * @param e Error as any
+ * @returns AuthError
+ */
+export function handleAxiosError(e: any): AuthError {
+
+    if (e.isAxiosError) {
+        const axiosError: AxiosError = e;
+        if (e.response) {
+            const status: number = axiosError.response?.status ? axiosError.response?.status : 0
+            const txt: string = axiosError.response?.statusText ? axiosError.response?.statusText : "Unknown"
+
+            switch (status) {
+                case AuthStatusEnum.UNAUTHORIZED:
+                    return new AuthError(AuthStatusText.UNAUTHORIZED.text, e.stack, status, txt);
+
+                case AuthStatusEnum.CONFLICT:
+                    return new AuthError(AuthStatusText.CONFLICT.text, e.stack, status, txt);
+
+                case AuthStatusEnum.BAD_REQUEST:
+                    return new AuthError(AuthStatusText.BAD_REQUEST.text, e.stack, status, txt);
+
+                default:
+                    return new AuthError(AuthStatusText.UNKNOWN.text, e.stack, status, txt);
+            }
+        }
+    }
+
+    if (e.message === "Network Error") {
+        return new AuthError(AuthStatusText.ERR_CONNECTION_REFUSED.text, e.stack, AuthStatusEnum.ERR_CONNECTION_REFUSED, "Network Error");
+    }
+
+    return new AuthError(AuthStatusText.UNKNOWN.text, e.stack, AuthStatusEnum.UNKNOWN, e.message);
+}
