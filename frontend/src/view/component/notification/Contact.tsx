@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import { EmailValidation } from "../../../logic/helper/userValidations";
 import { ContactType } from "../../../model/notification/ContactType";
+import useNotification from "../../../logic/hook/useNotification";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -46,11 +47,10 @@ const defaultContact: ContactType = {
  * @visibleName Contact View
  */
 const Contact: FunctionComponent = () => {
+  const { sending, hasError, msg, wasSent, sendContactEmail } = useNotification();
   const [contact, setContact] = useState(defaultContact);
-
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Invalid Email");
-
   const classes = useStyles();
 
   /**
@@ -58,6 +58,7 @@ const Contact: FunctionComponent = () => {
    */
   const handleSendSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    sendContactEmail(contact);
   };
 
   const handleNameChange = (firstNameValue: string): void => {
