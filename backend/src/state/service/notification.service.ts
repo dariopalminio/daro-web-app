@@ -9,7 +9,7 @@ export class NotificationService {
 
 
   /**
-   * 
+   * Send contact email 
    * @param contactDTO 
    * @returns 
    */
@@ -44,7 +44,7 @@ export class NotificationService {
 
     try {
       const smtpOptions = this.getSmtpOptions();
-      console.log("smtpOptions:", smtpOptions);
+
       // Configuración transportador NodeMailer
       const smtpTransporter = nodemailer.createTransport(smtpOptions);
 
@@ -66,6 +66,10 @@ export class NotificationService {
     };
   };
 
+  /**
+   * Get Smtp Options for send email using nodemailer.
+   * @returns 
+   */
   private getSmtpOptions(){
     if (!GlobalConfig.email.USER ||
       !GlobalConfig.email.PASS ||
