@@ -2,7 +2,7 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'querystring';
-import { handleAxiosError, AuthError } from './AuthError';
+import { handleAxiosError, AuthError } from '../AuthError';
 import { LoginRequestType } from '../../../state/model/user/LoginRequestType';
 
 /**

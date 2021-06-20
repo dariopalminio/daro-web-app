@@ -1,7 +1,7 @@
 
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
-import { handleAxiosError, AuthError, AuthStatusEnum } from './AuthError';
+import { handleAxiosError, AuthError, AuthStatusEnum } from '../AuthError';
 
 export default async function logoutService(
     userId: string,

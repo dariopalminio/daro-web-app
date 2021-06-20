@@ -6,6 +6,7 @@ export const environment = process.env.REACT_APP_ENV
 
 export const APIEndpoints = {
   AUTH: process.env.REACT_APP_AUTH_API,
+  NOTIFICATION: process.env.REACT_APP_NOTIFICATION_API,
 }
 
 export const Keycloak = {
@@ -23,4 +24,6 @@ export const URLPath = {
   USER_INFO: `${APIEndpoints.AUTH}/auth/realms/${Keycloak.REALM}/protocol/openid-connect/userinfo`,
   USERS: `${APIEndpoints.AUTH}/auth/admin/realms/${Keycloak.REALM}/users`,
   TOKEN: `${APIEndpoints.AUTH}/auth/realms/${Keycloak.REALM}/protocol/openid-connect/token`,
+  NOTIFICATION: `${APIEndpoints.NOTIFICATION}/notification/sendContactEmail`,
 }
+

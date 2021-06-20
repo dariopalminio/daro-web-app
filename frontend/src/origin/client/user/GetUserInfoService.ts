@@ -1,7 +1,7 @@
 
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
-import { handleAxiosError, AuthError } from './AuthError';
+import { handleAxiosError, AuthError } from '../AuthError';
 
 /**
  * Get users Returns a list of users, filtered according to params.

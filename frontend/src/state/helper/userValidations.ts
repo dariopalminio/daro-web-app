@@ -16,7 +16,7 @@ export const emailIsValid = (emailValue: string): boolean => {
 };
 
 export const confirmPassIsValid = (pasOne: string, passTwo: string): boolean => {
-  if (pasOne!=passTwo) {
+  if (pasOne!==passTwo) {
     return false
   } else {
     return true

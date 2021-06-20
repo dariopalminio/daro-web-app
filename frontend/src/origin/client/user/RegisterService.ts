@@ -1,6 +1,6 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
-import { handleAxiosError, AuthError } from './AuthError';
+import { handleAxiosError, AuthError } from '../AuthError';
 import { NewUserRepresentationType } from '../../../state/model/user/NewUserRepresentationType';
 
 /**

@@ -46,7 +46,7 @@ export default function useLogin() {
                 // Unauthorized
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false });
                 removeSessionValue();
-            })
+            });
     }, [setState, setSessionValue]);
 
     /**

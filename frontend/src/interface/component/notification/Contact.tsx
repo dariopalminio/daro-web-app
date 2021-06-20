@@ -2,12 +2,15 @@ import React, { FunctionComponent, useState } from "react";
 import { EmailValidation } from "../../../state/helper/userValidations";
 import { ContactType } from "../../../state/model/notification/ContactType";
 import useNotification from "../../../state/hook/useNotification";
+import AlertError from "../user/AlertError";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
 import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -27,10 +30,10 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "0 auto auto auto",
     },
     wrapperCenterWithPaddingTop: {
-        display: "flex",
-        justifyContent: "center",
-        paddingTop: "20px",
-      },
+      display: "flex",
+      justifyContent: "center",
+      paddingTop: "20px",
+    },
   })
 );
 
@@ -47,7 +50,8 @@ const defaultContact: ContactType = {
  * @visibleName Contact View
  */
 const Contact: FunctionComponent = () => {
-  const { sending, hasError, msg, wasSent, sendContactEmail } = useNotification();
+  const { sending, hasError, msg, wasSent, sendContactEmail } =
+    useNotification();
   const [contact, setContact] = useState(defaultContact);
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Invalid Email");
@@ -96,66 +100,85 @@ const Contact: FunctionComponent = () => {
     }));
   };
 
+  const handleMessageChange = async (textValue: string) => {
+    setContact((prevState) => ({
+      ...prevState,
+      message: textValue,
+    }));
+  };
+
   return (
     <div>
-      <form
-        id="ContactForm"
-        data-testid="ContactForm"
-        action="#"
-        onSubmit={handleSendSubmit}
-      >
-        <Paper className={clsx(classes.paperLoginForm)}>
-        Drop us a line:
-          <TextField
-            id="standard-basic-1"
-            className={clsx(classes.textfieldCustom)}
-            label="Full Name"
-            placeholder=""
-            onChange={(e) => handleNameChange(e.target.value)}
-            value={contact.name}
-            {...(false && { error: true, helperText: "Requerido" })}
-          />
-          <TextField
-            id="standard-basic"
-            className={clsx(classes.textfieldCustom)}
-            label="Email"
-            placeholder="daro@email.com"
-            onChange={(e) => handleEmailChange(e.target.value)}
-            value={contact.email}
-            {...(emailIsInvalid && {
-              error: true,
-              helperText: emailErrorText,
-            })}
-          />
-          <TextField
-            id="standard-basic"
-            className={clsx(classes.textfieldCustom)}
-            label="Phone"
-            placeholder="0000000000"
-            onChange={(e) => handlePhoneChange(e.target.value)}
-            value={contact.phone}
-          />
-          <TextField
-            id="outlined-textarea"
-            className={clsx(classes.multilineCustom)}
-            label="Message"
-            placeholder="Placeholder"
-            multiline
-            rows={4}
-            variant="outlined"
-          />
-          <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
-          <Button
-            className={clsx(classes.buttonCustom)}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
-            Send
-          </Button>
-          </div>
-        </Paper>
-      </form>
+      {!sending && (
+        <form
+          id="ContactForm"
+          data-testid="ContactForm"
+          action="#"
+          onSubmit={handleSendSubmit}
+        >
+          <Paper className={clsx(classes.paperLoginForm)}>
+            Drop us a line:
+            <TextField
+              id="standard-basic-1"
+              className={clsx(classes.textfieldCustom)}
+              label="Full Name"
+              placeholder=""
+              onChange={(e) => handleNameChange(e.target.value)}
+              value={contact.name}
+              {...(false && { error: true, helperText: "Requerido" })}
+            />
+            <TextField
+              id="standard-basic"
+              className={clsx(classes.textfieldCustom)}
+              label="Email"
+              placeholder="daro@email.com"
+              onChange={(e) => handleEmailChange(e.target.value)}
+              value={contact.email}
+              {...(emailIsInvalid && {
+                error: true,
+                helperText: emailErrorText,
+              })}
+            />
+            <TextField
+              id="standard-basic"
+              className={clsx(classes.textfieldCustom)}
+              label="Phone"
+              placeholder="0000000000"
+              onChange={(e) => handlePhoneChange(e.target.value)}
+              value={contact.phone}
+            />
+            <TextField
+              id="outlined-textarea"
+              className={clsx(classes.multilineCustom)}
+              label="Message"
+              placeholder="Placeholder"
+              onChange={(e) => handleMessageChange(e.target.value)}
+              multiline
+              rows={4}
+              variant="outlined"
+            />
+            <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
+              <Button
+                className={clsx(classes.buttonCustom)}
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
+                Send
+              </Button>
+            </div>
+          </Paper>
+        </form>
+      )}
+      ;
+      {sending && (
+        <div className="box">
+          <strong>Sending email...</strong>
+          <CircularProgress />
+        </div>
+      )}
+      {hasError && <AlertError msg={msg} />}
+      {wasSent && <Alert severity="success">Message sent!</Alert>}
     </div>
   );
 };
