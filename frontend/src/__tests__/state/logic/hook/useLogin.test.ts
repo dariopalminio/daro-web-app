@@ -1,12 +1,12 @@
 require('@testing-library/react');
 import { renderHook, act } from '@testing-library/react-hooks';
-import useLogin from "../../../logic/hook/useLogin";
+import useLogin from "../../../../state/logic/hook/useLogin";
 
 const userOk = "ok";
 const passOk = "ok";
 
 // First: mock service for authenticate user and pass
-jest.mock("../../../client/user/LoginService", () => {
+jest.mock("../../../../source/client/user/LoginService", () => {
     return async function loginService(user: string, pass: string): Promise<any> {
         return await new Promise<any>(
             function (resolve, reject) {

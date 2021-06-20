@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react';
 import axios , { AxiosResponse } from 'axios';
-import loginService from '../../../client/user/LoginService';
+import loginService from '../../../../source/client/user/LoginService';
 
 describe('Test UserService service', () => {
 

@@ -4,9 +4,9 @@ import {
   confirmPassIsValid,
   EmailValidation,
   PasswordValidation,
-} from "../../../logic/helper/userValidations";
-import useRegister from "../../../logic/hook/useRegister";
-import SessionContext, { SessionContextType } from "../../../logic/context/SessionContext";
+} from "../../../state/logic/helper/userValidations";
+import useRegister from "../../../state/logic/hook/useRegister";
+import SessionContext, { SessionContextType } from "../../../state/logic/context/SessionContext";
 import clsx from "clsx";
 
 //@material-ui

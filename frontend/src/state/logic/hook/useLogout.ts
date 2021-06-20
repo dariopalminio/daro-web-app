@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../../model/user/SessionType';
-import getAdminTokenService from '../../client/user/GetAdminTokenService';
-import logoutService from '../../client/user/LogoutService';
+import getAdminTokenService from '../../../source/client/user/GetAdminTokenService';
+import logoutService from '../../../source/client/user/LogoutService';
 
 /**
  * useLogout Custom Hook

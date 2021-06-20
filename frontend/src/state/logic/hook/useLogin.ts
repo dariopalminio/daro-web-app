@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../../model/user/SessionType';
-import loginService from '../../client/user/LoginService';
+import loginService from '../../../source/client/user/LoginService';
 
 var jws = require('jws');
 

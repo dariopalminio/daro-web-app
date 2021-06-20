@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react';
 import axios, { AxiosResponse } from 'axios';
-import getAdminTokenService from '../../../client/user/GetAdminTokenService';
+import getAdminTokenService from '../../../../source/client/user/GetAdminTokenService';
 
 describe('Test UserService service', () => {
 

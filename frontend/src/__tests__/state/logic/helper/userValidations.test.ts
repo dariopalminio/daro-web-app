@@ -5,7 +5,7 @@ import {
   EmailValidation,
   LoginValidation
 }
-  from "../../../logic/helper/userValidations";
+  from "../../../../state/logic/helper/userValidations";
 
 describe("Testin validations functions from userValidations", () => {
 

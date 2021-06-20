@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
-import getAdminTokenService from '../../client/user/GetAdminTokenService';
+import getAdminTokenService from '../../../source/client/user/GetAdminTokenService';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../../model/user/SessionType';
-import registerService from '../../client/user/RegisterService';
+import registerService from '../../../source/client/user/RegisterService';
 
 /**
  * cuseRegister Custom Hook
