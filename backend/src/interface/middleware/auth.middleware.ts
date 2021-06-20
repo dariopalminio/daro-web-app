@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import * as GlobalConfig from '../config/GlobalConfig';
+import * as GlobalConfig from '../../state/config/GlobalConfig';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
