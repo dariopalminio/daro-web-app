@@ -4,6 +4,12 @@ import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
 import qs from 'querystring'
 
+export type RequesAppToken = {
+  client_id: string
+  grant_type: string
+  client_secret: string
+};
+
 /**
  * Get Access Token for application from auth server.
  * Obtain SAT (service account token).
@@ -13,7 +19,7 @@ import qs from 'querystring'
 */
 export default async function getAppTokenService(): Promise<any> {
 
-  const body = {
+  const body: RequesAppToken = {
     client_id: GlobalConfig.Keycloak.CLIENT_ID,
     grant_type: 'client_credentials',
     client_secret: GlobalConfig.Keycloak.CLIENT_SECRET,
@@ -32,8 +38,8 @@ export default async function getAppTokenService(): Promise<any> {
     
   } catch (error) {
     // response.status !== 200
-    const e: AuthError = handleAxiosError(error);
-    throw e;
+    const authError: AuthError = handleAxiosError(error);
+    throw authError;
   };
 };
 

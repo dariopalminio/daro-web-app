@@ -1,7 +1,22 @@
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
-import { NewUserRepresentationType } from '../../../state/model/user/NewUserRepresentationType';
+
+export type NewUserRepresentationType = {
+  username: string
+  enabled: string
+  emailVerified: string
+  firstName: string
+  lastName: string
+  email: string
+  credentials: [
+    {
+      type: string,
+      value: string,
+      temporary: string,
+    },
+  ],
+};
 
 /**
  * registerService
@@ -59,7 +74,7 @@ export default async function registerService(
     // response.status !== 201
     // CONFLICT: error.message="Request failed with status code 409"
     // BAD_REQUEST: error.message="Request failed with status code 400"
-    const e: AuthError = handleAxiosError(error);
-    throw e;
+    const authError: AuthError = handleAxiosError(error);
+    throw authError;
   }
 }

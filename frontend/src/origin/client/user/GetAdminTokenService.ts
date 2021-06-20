@@ -2,11 +2,19 @@ import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
 import qs from 'querystring'
-import { NewAdminTokenRequestType } from '../../../state/model/user/NewAdminTokenRequestType';
+
+export type NewAdminTokenRequestType = {
+  client_id: string,
+  grant_type: string,
+  username: string,
+  password: string,
+  scope: string,
+  client_secret: string,
+};
 
 /**
  * Generate a admin access token for create user
- * same login url: `/auth/realms/my-realm-test/protocol/openid-connect/token`,
+ * same login url: `/auth/realms/${your-realm}/protocol/openid-connect/token`,
  * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 */
 export default async function getAdminTokenService(): Promise<any> {
@@ -33,7 +41,7 @@ export default async function getAdminTokenService(): Promise<any> {
     
   } catch (error) {
     // response.status !== 200
-    const e: AuthError = handleAxiosError(error);
-    throw e;
+    const authError: AuthError = handleAxiosError(error);
+    throw authError;
   }
 }

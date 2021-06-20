@@ -3,7 +3,14 @@ import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import qs from 'querystring';
 import { handleAxiosError, AuthError } from '../AuthError';
-import { LoginRequestType } from '../../../state/model/user/LoginRequestType';
+
+export type LoginRequestType = {
+  username: string
+  password: string
+  grant_type: string
+  client_id: string
+  client_secret: string
+};
 
 /**
  * Consumer cliente for login on Keycloak Server & Bearer Token & with client secret
@@ -35,7 +42,7 @@ export default async function loginService(username: string, pass: string): Prom
 
   } catch (error) {
     // response.status !== 200
-    const e: AuthError = handleAxiosError(error);
-    throw e;
+    const authError: AuthError = handleAxiosError(error);
+    throw authError;
   };
 };

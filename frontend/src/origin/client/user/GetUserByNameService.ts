@@ -35,7 +35,7 @@ export default async function getUserByNameService(username: string, adminToken:
 
   } catch (error) {
     // response.status !== 200
-    const e: AuthError = handleAxiosError(error);
-    throw e;
+    const authError: AuthError = handleAxiosError(error);
+    throw authError;
   }
 };

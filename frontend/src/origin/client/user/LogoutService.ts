@@ -3,6 +3,18 @@ import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError, AuthStatusEnum } from '../AuthError';
 
+/**
+ * Remove all user sessions associated with the user in auth server. 
+ * Also send notification to all clients that have an admin URL to invalidate the 
+ * sessions for the particular user.
+ * URL FORMAT: http://127.0.0.1:8180/auth/admin/realms/${your-realm}/users/${user-id}/logout
+ * POST Logout user [SAT].
+ * Authorization: Bearer Token.
+ * Headers: Content-Type application/json.
+ * @param userId 
+ * @param adminToken 
+ * @returns 
+ */
 export default async function logoutService(
     userId: string,
     adminToken: string): Promise<any> {
@@ -28,9 +40,7 @@ export default async function logoutService(
 
     } catch (error) {
         // response.status !== 201
-        // CONFLICT: error.message="Request failed with status code 409"
-        // BAD_REQUEST: error.message="Request failed with status code 400"
-        const e: AuthError = handleAxiosError(error);
-        throw e;
+        const authError: AuthError = handleAxiosError(error);
+        throw authError;
     }
 };

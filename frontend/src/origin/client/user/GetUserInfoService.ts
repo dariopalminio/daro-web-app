@@ -26,7 +26,7 @@ export default async function getUserInfoService(jwt: string): Promise<any> {
 
     } catch (error) {
         // response.status !== 200
-        const e: AuthError = handleAxiosError(error);
-        throw e;
+        const authError: AuthError = handleAxiosError(error);
+        throw authError;
     }
 };

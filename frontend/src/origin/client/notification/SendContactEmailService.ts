@@ -1,10 +1,16 @@
 
 import * as GlobalConfig from '../../config/GlobalConfig';
 import axios, { AxiosResponse } from 'axios';
-import qs from 'querystring';
 import { handleAxiosError, AuthError } from '../AuthError';
 import { ContactType } from '../../../state/model/notification/ContactType';
 
+/**
+ * Send Contact Email using notification service.
+ * 
+ * @param contactData ContactType
+ * @param token Valid access token
+ * @returns any
+ */
 export default async function sendContactEmailService(contactData: ContactType, token: string): Promise<any> {
 
   //Notification endpoint
@@ -27,7 +33,7 @@ export default async function sendContactEmailService(contactData: ContactType, 
   } catch (error) {
     // response.status !== 200
     console.log(error.message);
-    const e: AuthError = handleAxiosError(error);
-    throw e;
+    const authError: AuthError = handleAxiosError(error);
+    throw authError;
   };
 };
