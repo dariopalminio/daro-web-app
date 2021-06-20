@@ -8,7 +8,7 @@ export default async function logoutService(
     adminToken: string): Promise<any> {
 
     //User endpoint
-    const URL = `${GlobalConfig.URLPath.users}/${userId}/logout`;
+    const URL = `${GlobalConfig.URLPath.USERS}/${userId}/logout`;
 
     try {
 

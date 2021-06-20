@@ -13,7 +13,7 @@ import { handleAxiosError, AuthError } from './AuthError';
 export default async function getUserByNameService(username: string, adminToken: string): Promise<any> {
 
   //User endpoint
-  const URL = GlobalConfig.URLPath.users
+  const URL = GlobalConfig.URLPath.USERS
 
   //If username = email
   const config = {
