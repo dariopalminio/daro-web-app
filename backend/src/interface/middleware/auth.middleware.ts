@@ -17,15 +17,14 @@ export class AuthMiddleware implements NestMiddleware {
      * @returns 
      */
     use(req: Request, res: Response, next: () => void) {
+        console.log("AUTH_MIDDLEWARE_ON=", GlobalConfig.AUTH_MIDDLEWARE_ON);
 
-        if (!GlobalConfig.AUTH_MIDDLEWARE_ON) {
-            next();
-        }
-
-        try {
-            const userVerified = this.verifyRequest(req);
-        } catch (error) {
-            return res.status(403).send({ message: error.message })
+        if (GlobalConfig.AUTH_MIDDLEWARE_ON) {
+            try {
+                const userVerified = this.verifyRequest(req);
+            } catch (error) {
+                return res.status(403).send({ message: error.message })
+            };
         };
 
         next();

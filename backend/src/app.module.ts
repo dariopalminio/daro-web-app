@@ -13,7 +13,7 @@ import { AuthMiddleware } from './interface/middleware/auth.middleware';
 export class AppModule {
 configure(consumer: MiddlewareConsumer){
   consumer.apply(AuthMiddleware)
-  .forRoutes(AppController, NotificationController);
+  .forRoutes(NotificationController);
 }
 
 }

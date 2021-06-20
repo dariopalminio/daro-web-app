@@ -42,20 +42,11 @@ export class NotificationService {
    */
   async sendEmail(subject: string, toEmail: string, contentHTML: string): Promise<any> {
 
-    const smtpOptions = {
-      host: GlobalConfig.email.HOST,
-      port: GlobalConfig.email.PORT,
-      secure: true,
-      auth: {
-        user: GlobalConfig.email.USER,
-        pass: GlobalConfig.email.PASS
-      },
-    };
-
-    // Configuración transportador NodeMailer
-    const smtpTransporter = nodemailer.createTransport(smtpOptions);
-
     try {
+      const smtpOptions = this.getSmtpOptions();
+      console.log("smtpOptions:", smtpOptions);
+      // Configuración transportador NodeMailer
+      const smtpTransporter = nodemailer.createTransport(smtpOptions);
 
       const email = {
         from: GlobalConfig.email.FROM, // sender address,
@@ -70,7 +61,26 @@ export class NotificationService {
       return sentInfo;
 
     } catch (error) {
+      console.log("nodemailer error!!");
       throw error;
+    };
+  };
+
+  private getSmtpOptions(){
+    if (!GlobalConfig.email.USER ||
+      !GlobalConfig.email.PASS ||
+      !GlobalConfig.email.HOST ||
+      !GlobalConfig.email.PORT
+      ) 
+    throw Error("SmtpOptions param is empty!");
+    return {
+      host: GlobalConfig.email.HOST,
+      port: GlobalConfig.email.PORT,
+      secure: true,
+      auth: {
+        user: GlobalConfig.email.USER,
+        pass: GlobalConfig.email.PASS
+      },
     };
   };
 
