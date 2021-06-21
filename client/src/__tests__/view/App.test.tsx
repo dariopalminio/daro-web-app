@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import App from '../../interface/App'
+import App from '../../view/App'
 
 test('App should renders layout divs', () => {
   render(<App />)

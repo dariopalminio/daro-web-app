@@ -3,7 +3,7 @@ import { useContext } from "react";
 import SessionContext, {
   SessionContextType,
 } from "../../../state/context/SessionContext";
-import SessionContextProvider from "../../../interface/provider/SessionContextProvider";
+import SessionContextProvider from "../../../view/provider/SessionContextProvider";
 
 
 describe("Test SessionContext & SessionContextProvider", () => {
