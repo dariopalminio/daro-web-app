@@ -1,72 +1,64 @@
-import {
-  emailIsValid,
-  confirmPassIsValid,
-  PasswordValidation,
-  EmailValidation,
-  LoginValidation
-}
-  from "../../../state/helper/userValidations";
+import IUserValidator from '../../../state/helper/IUserValidator';
+import { UserValidatorFactory } from "../../../state/helper/UserValidatorFactory";
 
-describe("Testin validations functions from userValidations", () => {
+describe("Testing validations functions from userValidations", () => {
 
-  test('It should answer that the email format is correct', () => {
-    expect(emailIsValid("test@email.com")).toBe(true)
+  const validator: IUserValidator = UserValidatorFactory.create();
+
+  test('It should answer that the email format is correct', async () => {
+    expect(await validator.emailIsValid("test@email.com")).toBe(true)
   })
 
-  test('I should answer that the email format is wrong', () => {
-    expect(emailIsValid("bad.email")).toBe(false)
+  test('I should answer that the email format is wrong', async () => {
+    expect(await validator.emailIsValid("bad.email")).toBe(false)
   })
 
 
-  test('I should answer that the pass is wrong', () => {
-    expect(confirmPassIsValid("aaaa", "bbbbb")).toBe(false)
+  test('I should answer that the pass is wrong', async () => {
+    expect(await validator.confirmPassIsValid("aaaa", "bbbbb")).toBe(false)
   })
 
-  test('I should answer that the pass is true', () => {
-    expect(confirmPassIsValid("abcde12345", "abcde12345")).toBe(true)
+  test('I should answer that the pass is true', async () => {
+    expect(await validator.confirmPassIsValid("abcde12345", "abcde12345")).toBe(true)
   })
 
 });
 
 describe("Testin validations functions from userValidations using async/await", () => {
 
+  const validator: IUserValidator = UserValidatorFactory.create();
+
   //Login validation
   test('validate login awell formated email', async () => {
-    const result = await LoginValidation.isValid({
-      email: 'test@daro.com',
-      password: 'abcde12345',
-    });
+    const result = await validator.loginFormIsValid(
+      'test@daro.com',
+      'abcde12345',
+    );
     expect(result).toBeTruthy();
   });
 
   //Email validation
   test('validate well formated email', async () => {
-    const result = await EmailValidation.isValid({
-      email: 'test@daro.com',
-    });
+    const result = await validator.emailIsValid(
+      'test@daro.com',
+    );
     expect(result).toBeTruthy();
   });
 
   test('validate bad formated email', async () => {
-    const result = await EmailValidation.isValid({ email: 'bad.email' });
-    expect(result).toBeFalsy();
-  });
-
-  //Password validation
-  test('validate password to be required', async () => {
-    const result = await PasswordValidation.isValid({ password: null });
+    const result = await validator.emailIsValid('bad.email');
     expect(result).toBeFalsy();
   });
 
   test('validate short password to be false', async () => {
-    const result = await PasswordValidation.isValid({ password: 'b9' });
+    const result = await validator.passIsValid('b9');
     expect(result).toBeFalsy();
   });
 
   test('validate well fomated password', async () => {
-    const result = await PasswordValidation.isValid({
-      password: 'abcde12345',
-    });
+    const result = await validator.passIsValid(
+    'abcde12345',
+    );
     expect(result).toBeTruthy();
   });
 

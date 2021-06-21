@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
-import { EmailValidation } from "../../../state/helper/userValidations";
+import IUserValidator from '../../../state/helper/IUserValidator';
+import { UserValidatorFactory } from "../../../state/helper/UserValidatorFactory";
 import { ContactType } from "../../../state/model/notification/ContactType";
 import useNotification from "../../../state/hook/useNotification";
 import AlertError from "../user/AlertError";
@@ -56,6 +57,7 @@ const Contact: FunctionComponent = () => {
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Invalid Email");
   const classes = useStyles();
+  const validator: IUserValidator = UserValidatorFactory.create();
 
   /**
    * send Submit
@@ -82,11 +84,7 @@ const Contact: FunctionComponent = () => {
       email: emailValue,
     }));
 
-    if (
-      !(await EmailValidation.isValid({
-        email: emailValue,
-      }))
-    ) {
+    if (!(await validator.emailIsValid(emailValue))) {
       setEmailIsInvalid(true);
     } else {
       setEmailIsInvalid(false);

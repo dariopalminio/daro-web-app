@@ -1,10 +1,7 @@
 import React, { useState, useContext } from "react";
 import { FunctionComponent } from "react";
-import {
-  confirmPassIsValid,
-  EmailValidation,
-  PasswordValidation,
-} from "../../../state/helper/userValidations";
+import IUserValidator from '../../../state/helper/IUserValidator';
+import { UserValidatorFactory } from "../../../state/helper/UserValidatorFactory";
 import useRegister from "../../../state/hook/useRegister";
 import SessionContext, { SessionContextType } from "../../../state/context/SessionContext";
 import clsx from "clsx";
@@ -78,6 +75,7 @@ export const UserRegister: FunctionComponent = () => {
   const classes = useStyles();
   const { wasCreatedOk, isRegisterLoading, hasRegisterError, msg, register } =
     useRegister();
+  const validator: IUserValidator = UserValidatorFactory.create();
 
   /**
    * Register
@@ -90,26 +88,20 @@ export const UserRegister: FunctionComponent = () => {
 
   const handleEmailChange = async (emailValue: string) => {
     setEmail(emailValue);
-    setEmailValid(
-      await EmailValidation.isValid({
-        email: emailValue,
-      })
-    );
+    setEmailValid(await validator.emailIsValid(emailValue));
   };
 
   const handlePasswordChange = async (passOne: string) => {
     setPassword(passOne);
     setPassValid(
-      await PasswordValidation.isValid({
-        password: passOne,
-      })
+      await validator.passIsValid(passOne)
     );
   };
 
   const handleConfirmPassChange = (passTwo: string): void => {
     setConfirmPassword(passTwo);
     const passOne = password;
-    setConfirmPassValid(confirmPassIsValid(passOne, passTwo));
+    setConfirmPassValid(validator.confirmPassIsValid(passOne, passTwo));
   };
 
   const handleFirstNameChange = (firstNameValue: string): void => {

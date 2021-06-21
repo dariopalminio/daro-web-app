@@ -1,5 +1,7 @@
 
+
 require('dotenv').config();
+
 
 // CLIENT_WEB_APP_ENV: prod | dev | qa
 export const environment = process.env.CLIENT_WEB_APP_ENV
@@ -24,4 +26,5 @@ export const URLPath = {
   TOKEN: `${APIEndpoints.AUTH}/auth/realms/${Keycloak.REALM}/protocol/openid-connect/token`,
   NOTIFICATION: `${APIEndpoints.NOTIFICATION}/notification/sendContactEmail`,
 }
+
 

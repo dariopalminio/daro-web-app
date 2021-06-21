@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import useLogin from "../../../state/hook/useLogin";
-import { EmailValidation } from "../../../state/helper/userValidations";
+import IUserValidator from '../../../state/helper/IUserValidator';
+import { UserValidatorFactory } from "../../../state/helper/UserValidatorFactory";
 import AlertError from "./AlertError";
 import clsx from "clsx";
 
@@ -59,6 +60,7 @@ const Login: FunctionComponent = () => {
   const [emailErrorText] = useState("Email inválido");
   const { isLoginLoading, hasLoginError, msg, login } = useLogin();
   const classes = useStyles();
+  const validator: IUserValidator = UserValidatorFactory.create();
 
   /**
    * Login
@@ -75,11 +77,7 @@ const Login: FunctionComponent = () => {
   const handleEmailChange = async (emailValue: string) => {
     setEmail(emailValue);
 
-    if (
-      !(await EmailValidation.isValid({
-        email: emailValue,
-      }))
-    ) {
+    if (!(await validator.emailIsValid(emailValue))) {
       setEmailIsInvalid(true);
     } else {
       setEmailIsInvalid(false);
