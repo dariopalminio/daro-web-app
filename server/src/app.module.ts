@@ -1,9 +1,9 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { AppController } from './interface/controller/app.controller';
+import { AppController } from './view/controller/app.controller';
 import { AppService } from './state/service/app.service';
-import { NotificationController } from './interface/controller/notification.controller';
+import { NotificationController } from './view/controller/notification.controller';
 import { NotificationService } from './state/service/notification.service';
-import { AuthMiddleware } from './interface/middleware/auth.middleware';
+import { AuthMiddleware } from './view/middleware/auth.middleware';
 
 @Module({
   imports: [],
