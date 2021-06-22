@@ -1,7 +1,9 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../model/user/SessionType';
-import loginService from '../../origin/client/user/LoginService';
+//import loginService from '../../origin/client/user/LoginService';
+import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
+import { IAuthService } from '../../state/client/IAuthService';
 
 var jws = require('jws');
 
@@ -18,15 +20,16 @@ var jws = require('jws');
 export default function useLogin() {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
-    
+    const authService: IAuthService = AuthServiceFactory.create();
+
     /**
      * login
      */
     const login = useCallback((email: string, password: string) => {
         setState({ loading: true, error: false, msg: "Trying to login!", isLoggedOk: false });
-
+console.log("useLogin -> login");
         // First: authenticate user and pass
-        loginService(email, password)
+        authService.loginService(email, password)
             .then(jwt => {
                 // Second: retrieve user information
                 // Instead of making a new call to the api (with "getUserInfoService(jwt)"), 
@@ -47,7 +50,7 @@ export default function useLogin() {
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false });
                 removeSessionValue();
             });
-    }, [setState, setSessionValue]);
+    }, [setState, setSessionValue, authService]);
 
     /**
      * Decode JWT and return data from payload in SessionType value.

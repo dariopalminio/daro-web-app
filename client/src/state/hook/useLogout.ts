@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../model/user/SessionType';
-import getAdminTokenService from '../../origin/client/user/GetAdminTokenService';
-import logoutService from '../../origin/client/user/LogoutService';
+import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
+import { IAuthService } from '../../state/client/IAuthService';
 
 /**
  * useLogout Custom Hook
@@ -17,7 +17,7 @@ import logoutService from '../../origin/client/user/LogoutService';
 export default function useLogout() {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
-
+    const authService: IAuthService = AuthServiceFactory.create();
 
     /**
      * logout
@@ -32,13 +32,14 @@ export default function useLogout() {
         if (userId !== null) {
 
             // First: obtains admin access token
-            const responseAdminToken: Promise<any> = getAdminTokenService();
+            const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
             responseAdminToken.then(jwtAdminToken => {
                 // Second: logoutService
-                const responseLogout = logoutService(userId, jwtAdminToken);
+                const responseLogout = authService.logoutService(userId, jwtAdminToken);
 
-                responseLogout.then(ok => {
+                responseLogout.then(status => {
+                    console.log("Logout status response:", status);
                     msg = "Closed session. ";
                 }).catch(err => {
                     thereWasError = true;
@@ -57,7 +58,7 @@ export default function useLogout() {
 
         setState({ loading: false, error: thereWasError, msg: msg + "You are not logged in!", isLoggedOk: false });
         removeSessionValue();
-    }, [setState, setSessionValue]);
+    }, [setState, setSessionValue, authService]);
 
 
     return {

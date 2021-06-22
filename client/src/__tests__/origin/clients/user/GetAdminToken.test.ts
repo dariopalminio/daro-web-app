@@ -1,13 +1,17 @@
 import { cleanup } from '@testing-library/react';
 import axios, { AxiosResponse } from 'axios';
-import getAdminTokenService from '../../../../origin/client/user/GetAdminTokenService';
+//import getAdminTokenService from '../../../../origin/client/user/GetAdminTokenService';
+
+import { AuthServiceFactory } from '../../../../origin/client/user/AuthServiceFactory';
+import { IAuthService } from '../../../../state/client/IAuthService';
+//const authService: IAuthService = AuthServiceFactory.create();
 
 describe('Test UserService service', () => {
 
     afterEach(cleanup);
 
     test('Acquire Admin Access Token with Client Credentials Grant, mocking axios OK request, should be SUCCESSFUL and responses a JWT', async () => {
-
+        const authService: IAuthService = AuthServiceFactory.create();
         const jwtExample = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw';
 
         const responseOKMocked: AxiosResponse = {
@@ -27,7 +31,7 @@ describe('Test UserService service', () => {
         let jwtResult = "";
         let error = null;
 
-        await getAdminTokenService().then(jwt => {
+        await authService.getAdminTokenService().then(jwt => {
             authorized = true;
             jwtResult = jwt;
         }).catch(err => {

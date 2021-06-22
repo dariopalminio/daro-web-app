@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
-import getAdminTokenService from '../../origin/client/user/GetAdminTokenService';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../model/user/SessionType';
-import registerService from '../../origin/client/user/RegisterService';
+import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
+import { IAuthService } from '../../state/client/IAuthService';
 
 /**
  * cuseRegister Custom Hook
@@ -12,7 +12,8 @@ export default function useRegister() {
 
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false });
-
+    const authService: IAuthService = AuthServiceFactory.create();
+    
     /**
      * Register
      */
@@ -25,12 +26,12 @@ export default function useRegister() {
         setState({ loading: true, error: false, msg: "Trying to Register!", wasCreatedOk: false });
 
         // First: obtains admin access token
-        const responseAdminToken: Promise<any> = getAdminTokenService();
+        const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
         // Second: creates a new user with authorization using admin access token
         responseAdminToken.then(jwtAdminToken => {
 
-            const resonseReg = registerService(
+            const resonseReg = authService.registerService(
                 firstname,
                 lastname,
                 email,
