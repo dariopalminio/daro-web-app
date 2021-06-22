@@ -5,9 +5,14 @@ import { handleAxiosError, AuthError } from '../AuthError';
 import { ContactType } from '../../../state/model/notification/ContactType';
 import { INotificationService } from '../../../state/client/INotificationService';
 
-
-//Service as factory function that return an interface
-export default function NotificationServiceApiImpl(): INotificationService {
+/**
+ * NotificationApiService implementation 
+ * Service as factory function that return an interface.
+ * A factory function is any function which is not a class or constructor that returns 
+ * a (presumably new) object. In JavaScript, any function can return an object.
+ * @returns 
+ */
+export default function NotificationApiServiceImpl(): INotificationService {
 
 /**
  * Send Contact Email using notification service.

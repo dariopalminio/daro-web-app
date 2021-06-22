@@ -1,12 +1,13 @@
 
-import  NotificationServiceApiImpl from './NotificationServiceApiImpl';
+import  NotificationApiServiceImpl from './NotificationApiServiceImpl';
 import { INotificationService } from '../../../state/client/INotificationService';
 
 /**
- * Factory of UserValidation implementation for dependency injection
+ * Factory of INotificationService implementation for dependency injection
  */
 export class NotificationServiceFactory {
     static create(): INotificationService{
-        return NotificationServiceApiImpl();
+        //Return a factory function
+        return NotificationApiServiceImpl();
     }
 };
