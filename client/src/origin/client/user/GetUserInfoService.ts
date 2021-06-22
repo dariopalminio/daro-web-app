@@ -12,7 +12,7 @@ import { handleAxiosError, AuthError } from '../AuthError';
  */
 export default async function getUserInfoService(jwt: string): Promise<any> {
 
-    const URL = GlobalConfig.URLPath.USER_INFO
+    const URL = GlobalConfig.URLPath.user_info
 
     const config = {
         headers: { Authorization: `Bearer ${jwt}` }

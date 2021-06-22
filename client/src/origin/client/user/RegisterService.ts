@@ -43,7 +43,7 @@ export default async function registerService(
     firstName: firstname,
     lastName: lastname,
     email: email,
-    emailVerified: GlobalConfig.Keycloak.VERIFY_EMAIL ? "false" : "true",
+    emailVerified: GlobalConfig.Keycloak.verify_email ? "false" : "true",
     username: email,
     credentials: [
       {
@@ -56,7 +56,7 @@ export default async function registerService(
   };
 
   //User endpoint
-  const URL = GlobalConfig.URLPath.USERS;
+  const URL = GlobalConfig.URLPath.users;
 
   try {
 

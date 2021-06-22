@@ -20,14 +20,15 @@ export type RequesAppToken = {
 export default async function getAppTokenService(): Promise<any> {
 
   const body: RequesAppToken = {
-    client_id: GlobalConfig.Keycloak.CLIENT_ID,
+    client_id: GlobalConfig.Keycloak.client_id,
     grant_type: 'client_credentials',
-    client_secret: GlobalConfig.Keycloak.CLIENT_SECRET,
+    client_secret: GlobalConfig.Keycloak.client_secret,
   };
 
   // Token endpoint
-  const URL = GlobalConfig.URLPath.TOKEN
-
+  const URL = GlobalConfig.URLPath.token
+  console.log("GlobalConfig.URLPath.TOKEN:");
+console.log(GlobalConfig.URLPath.token);
   try {
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const response: AxiosResponse = await axios.post(URL, qs.stringify(body));

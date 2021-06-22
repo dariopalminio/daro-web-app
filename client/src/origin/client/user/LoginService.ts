@@ -25,12 +25,12 @@ export default async function loginService(username: string, pass: string): Prom
     username: username,
     password: pass,
     grant_type: 'password',
-    client_id: GlobalConfig.Keycloak.CLIENT_ID,
-    client_secret: GlobalConfig.Keycloak.CLIENT_SECRET
+    client_id: GlobalConfig.Keycloak.client_id,
+    client_secret: GlobalConfig.Keycloak.client_secret
   };
 
   //Login endpoint
-  const URL = GlobalConfig.URLPath.TOKEN;
+  const URL = GlobalConfig.URLPath.token;
 
   try {
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;

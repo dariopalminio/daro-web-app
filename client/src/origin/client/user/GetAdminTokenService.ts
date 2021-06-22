@@ -20,16 +20,16 @@ export type NewAdminTokenRequestType = {
 export default async function getAdminTokenService(): Promise<any> {
 
   const body: NewAdminTokenRequestType = {
-    client_id: GlobalConfig.Keycloak.CLIENT_ID,
+    client_id: GlobalConfig.Keycloak.client_id,
     grant_type: 'password',
-    username: GlobalConfig.Keycloak.USERNAME_ADMIN,
-    password: GlobalConfig.Keycloak.PASSWORD_ADMIN,
+    username: GlobalConfig.Keycloak.username_admin,
+    password: GlobalConfig.Keycloak.password_admin,
     scope: 'openid roles',
-    client_secret: GlobalConfig.Keycloak.CLIENT_SECRET,
+    client_secret: GlobalConfig.Keycloak.client_secret,
   };
 
   // Token endpoint
-  const URL = GlobalConfig.URLPath.TOKEN
+  const URL = GlobalConfig.URLPath.token
 
   try {
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;

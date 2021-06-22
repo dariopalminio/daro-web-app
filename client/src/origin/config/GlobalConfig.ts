@@ -1,30 +1,46 @@
+//require('dotenv').config();
+//require('dotenv').load();
+import dotenv from 'dotenv';
+const result = dotenv.config();
 
-
-require('dotenv').config();
-
+//require('dotenv').config({ path: '/full/custom/path/to/your/env/vars' })
 
 // CLIENT_WEB_APP_ENV: prod | dev | qa
-export const environment = process.env.CLIENT_WEB_APP_ENV
+export const environment = process.env.CLIENT_WEB_APP_ENV;
 
 export const APIEndpoints = {
-  AUTH: process.env.CLIENT_WEB_APP_AUTH_API,
-  NOTIFICATION: process.env.CLIENT_WEB_APP_NOTIFICATION_API,
-}
+  auth: 'http://localhost:8080', //process.env.CLIENT_WEB_APP_AUTH_API,
+  notifications: 'http://localhost:3001', //process.env.CLIENT_WEB_APP_NOTIFICATION_API,
+};
 
+/**
+CLIENT_WEB_APP_AUTH_REALM=my-realm-test
+CLIENT_WEB_APP_AUTH_CLIENT_ID=rest-client-test
+CLIENT_WEB_APP_AUTH_CLIENT_SECRET=2b525aa8-315c-4782-8e78-8b0da22c47f9
+CLIENT_WEB_APP_AUTH_USERNAME_ADMIN=dachoy@stefanini.com
+CLIENT_WEB_APP_AUTH_PASSWORD_ADMIN=12345asdfg
+CLIENT_WEB_APP_AUTH_VERIFY_EMAIL=false
+ */
 export const Keycloak = {
-  REALM: process.env.CLIENT_WEB_APP_AUTH_REALM as string,
-  CLIENT_ID: process.env.CLIENT_WEB_APP_AUTH_CLIENT_ID as string,
-  CLIENT_SECRET: process.env.CLIENT_WEB_APP_AUTH_CLIENT_SECRET as string,
-  USERNAME_ADMIN: process.env.CLIENT_WEB_APP_AUTH_USERNAME_ADMIN as string,
-  PASSWORD_ADMIN: process.env.CLIENT_WEB_APP_AUTH_PASSWORD_ADMIN as string,
-  VERIFY_EMAIL: ((process.env.CLIENT_WEB_APP_AUTH_VERIFY_EMAIL === 'true') ? true : false) as boolean
-}
+  realm: 'my-realm-test', // process.env.CLIENT_WEB_APP_AUTH_REALM as string,
+  client_id: 'rest-client-test', // process.env.CLIENT_WEB_APP_AUTH_CLIENT_ID as string,
+  client_secret: '2b525aa8-315c-4782-8e78-8b0da22c47f9', // process.env.CLIENT_WEB_APP_AUTH_CLIENT_SECRET as string,
+  username_admin: 'dachoy@stefanini.com', // process.env.CLIENT_WEB_APP_AUTH_USERNAME_ADMIN as string,
+  password_admin:  '12345asdfg', //process.env.CLIENT_WEB_APP_AUTH_PASSWORD_ADMIN as string,
+  verify_email:  false, //((process.env.CLIENT_WEB_APP_AUTH_VERIFY_EMAIL === 'true') ? true : false) as boolean,
+};
 
 export const URLPath = {
-  USER_INFO: `${APIEndpoints.AUTH}/auth/realms/${Keycloak.REALM}/protocol/openid-connect/userinfo`,
-  USERS: `${APIEndpoints.AUTH}/auth/admin/realms/${Keycloak.REALM}/users`,
-  TOKEN: `${APIEndpoints.AUTH}/auth/realms/${Keycloak.REALM}/protocol/openid-connect/token`,
-  NOTIFICATION: `${APIEndpoints.NOTIFICATION}/notification/sendContactEmail`,
-}
-
+  user_info: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/userinfo`,
+  users: `${APIEndpoints.auth}/auth/admin/realms/${Keycloak.realm}/users`,
+  token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
+  notifications: `${APIEndpoints.notifications}/notification/sendContactEmail`,
+};
+console.log("Config result: ", result);
+console.log(`${__dirname}.env`);
+console.log("Config:");
+console.log("Environment:", process.env.CLIENT_WEB_APP_ENV);
+console.log(APIEndpoints);
+console.log(Keycloak);
+console.log(URLPath);
 

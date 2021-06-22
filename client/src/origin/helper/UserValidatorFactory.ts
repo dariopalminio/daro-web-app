@@ -1,5 +1,5 @@
 
-import { UserValidatorsImpl } from '../../origin/helper/UserValidatorImpl';
+import { UserValidatorsImpl } from './UserValidatorImpl';
 
 /**
  * Factory of UserValidation implementation for dependency injection

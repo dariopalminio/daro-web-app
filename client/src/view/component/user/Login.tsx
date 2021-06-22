@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import useLogin from "../../../state/hook/useLogin";
 import IUserValidator from '../../../state/helper/IUserValidator';
-import { UserValidatorFactory } from "../../../state/helper/UserValidatorFactory";
+import { UserValidatorFactory } from "../../../origin/helper/UserValidatorFactory";
 import AlertError from "./AlertError";
 import clsx from "clsx";
 

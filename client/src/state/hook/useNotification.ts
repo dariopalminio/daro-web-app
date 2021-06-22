@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { ContactType } from '../model/notification/ContactType';
-import sendContactEmailSevice from '../../origin/client/notification/SendContactEmailService';
+import { NotificationServiceFactory } from '../../origin/client/notification/NotificationServiceFactory';
+import { INotificationService } from '../../state/client/INotificationService'; 
 import getAppTokenService from '../../origin/client/user/GetAppTokenService';
 
 /**
@@ -32,8 +33,8 @@ export default function useNotification() {
 
         // Second: send email with authorization using app access token
         responseAdminToken.then(jwtAppToken => {
-
-            sendContactEmailSevice(contact, jwtAppToken).then(info => {
+const servicio: INotificationService = NotificationServiceFactory.create();
+servicio.sendContactEmailService(contact, jwtAppToken).then(info => {
                 console.log("Response sent info...");
                 console.log(info);
                 setState({ sending: false, hasError: false, msg: "Sent email!", wasSent: true })
