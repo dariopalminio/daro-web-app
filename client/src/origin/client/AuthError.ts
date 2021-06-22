@@ -30,7 +30,7 @@ export const AuthStatusText = {
     'NO_CONTENT': { status: 204, text: 'No content.' },
 };
 
-export interface IAuthError<T = any> extends Error {
+export interface IAuthError extends Error {
     status: number;
     statusText: string;
     customText: string;
@@ -39,7 +39,7 @@ export interface IAuthError<T = any> extends Error {
 /**
  * AuthError is Error customized
  */
-export class AuthError<T = any> extends Error {
+export class AuthError extends Error {
     status: number;
     statusText: string;
 

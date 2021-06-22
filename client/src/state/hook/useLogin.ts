@@ -50,7 +50,7 @@ console.log("useLogin -> login");
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false });
                 removeSessionValue();
             });
-    }, [setState, setSessionValue, authService]);
+    }, [setState, setSessionValue, authService, removeSessionValue]);
 
     /**
      * Decode JWT and return data from payload in SessionType value.

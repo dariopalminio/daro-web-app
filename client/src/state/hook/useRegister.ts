@@ -64,7 +64,7 @@ export default function useRegister() {
             removeSessionValue();
         });
 
-    }, [setState, setSessionValue]);
+    }, [setState, setSessionValue, removeSessionValue, authService]);
 
 
     return {

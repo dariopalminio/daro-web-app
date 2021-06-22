@@ -52,7 +52,7 @@ export default function useNotification() {
             setState({ sending: false, hasError: true, msg: errorText, wasSent: false });
         });
 
-    }, [state, setState]);
+    }, [setState, notifService, authService]);
 
 
     return {

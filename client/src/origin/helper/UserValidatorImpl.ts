@@ -6,7 +6,7 @@ import IUserValidators from '../../state/helper/IUserValidator';
  */
 export class UserValidatorsImpl implements IUserValidators {
 
-  constructor() {}
+  //constructor() {}
 
 /**
  * Validate if the email is in the correct format

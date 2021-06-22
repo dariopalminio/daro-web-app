@@ -57,7 +57,7 @@ export default function AuthServiceImpl(): IAuthService {
    * same login url: `/auth/realms/${your-realm}/protocol/openid-connect/token`,
    * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   */
-  function getAdminTokenService(): Promise<any> {
+  function getAdminTokenService(): Promise<string> {
     const body: NewAdminTokenRequestType = {
       client_id: GlobalConfig.Keycloak.client_id,
       grant_type: 'password',
@@ -93,7 +93,7 @@ export default function AuthServiceImpl(): IAuthService {
    * Content-Type: application/x-www-form-urlencoded.
    * Body with client_id, client_secret and grant_type.
   */
-  function getAppTokenService(): Promise<any> {
+  function getAppTokenService(): Promise<string> {
 
     const body: RequesAppToken = {
       client_id: GlobalConfig.Keycloak.client_id,
@@ -128,7 +128,7 @@ export default function AuthServiceImpl(): IAuthService {
    * @returns access_token JWT 
    * const showDrawer = () => {
    */
-  function loginService(username: string, pass: string): Promise<any> {
+  function loginService(username: string, pass: string): Promise<string> {
 
     const body: LoginRequestType = {
       username: username,
@@ -168,7 +168,7 @@ export default function AuthServiceImpl(): IAuthService {
    * @param adminToken 
    * @returns 
    */
-  function logoutService(userId: string, adminToken: string): Promise<any> {
+  function logoutService(userId: string, adminToken: string): Promise<number> {
 
     //User endpoint
     const URL = `${GlobalConfig.URLPath.users}/${userId}/logout`;
@@ -188,6 +188,7 @@ export default function AuthServiceImpl(): IAuthService {
       const authError: AuthError = handleAxiosError(error);
       throw authError;
     });
+  
     console.log("logoutService status promise result:", status);
     return status;
   };
@@ -211,7 +212,7 @@ export default function AuthServiceImpl(): IAuthService {
     lastname: string,
     email: string,
     password: string,
-    adminToken: string): Promise<any> {
+    adminToken: string): Promise<number> {
 
     const body: NewUserRepresentationType = {
       firstName: firstname,
@@ -241,7 +242,7 @@ export default function AuthServiceImpl(): IAuthService {
 
     // using .then, create a new promise which extracts the data
     const status = promise.then((response) =>
-      response.statusText
+      response.status
     ).catch((error) => {
       // response.status !== 200
       const authError: AuthError = handleAxiosError(error);

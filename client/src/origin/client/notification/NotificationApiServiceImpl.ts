@@ -1,6 +1,6 @@
 
 import * as GlobalConfig from '../../config/GlobalConfig';
-import axios, { AxiosPromise, AxiosResponse } from 'axios';
+import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
 import { ContactType } from '../../../state/model/notification/ContactType';
 import { INotificationService } from '../../../state/client/INotificationService';

@@ -6,7 +6,7 @@ const result = dotenv.config();
 //require('dotenv').config({ path: '/full/custom/path/to/your/env/vars' })
 
 // CLIENT_WEB_APP_ENV: prod | dev | qa
-export const environment = process.env.CLIENT_WEB_APP_ENV;
+export const environment = process.env.CLIENT_APP_ENV;
 
 export const APIEndpoints = {
   auth: 'http://localhost:8080', //process.env.CLIENT_WEB_APP_AUTH_API,

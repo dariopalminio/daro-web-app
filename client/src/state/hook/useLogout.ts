@@ -15,7 +15,7 @@ import { IAuthService } from '../../state/client/IAuthService';
  *      logout function
  */
 export default function useLogout() {
-    const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
+    const { removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
     const authService: IAuthService = AuthServiceFactory.create();
 
@@ -58,8 +58,7 @@ export default function useLogout() {
 
         setState({ loading: false, error: thereWasError, msg: msg + "You are not logged in!", isLoggedOk: false });
         removeSessionValue();
-    }, [setState, setSessionValue, authService]);
-
+    }, [setState, removeSessionValue, authService]);
 
     return {
         isLoggedOk: state.isLoggedOk,
