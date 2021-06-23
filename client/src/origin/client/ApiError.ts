@@ -39,7 +39,7 @@ export interface IAuthError extends Error {
 /**
  * AuthError is Error customized
  */
-export class AuthError extends Error {
+export class ApiError extends Error {
     status: number;
     statusText: string;
 
@@ -59,7 +59,7 @@ export class AuthError extends Error {
  * @param e Error as any
  * @returns AuthError
  */
-export function handleAxiosError(e: any): AuthError {
+export function handleAxiosError(e: any): ApiError {
 
     if (e.isAxiosError) {
         const axiosError: AxiosError = e;
@@ -69,23 +69,23 @@ export function handleAxiosError(e: any): AuthError {
 
             switch (status) {
                 case AuthStatusEnum.UNAUTHORIZED:
-                    return new AuthError(AuthStatusText.UNAUTHORIZED.text, e.stack, status, txt);
+                    return new ApiError(AuthStatusText.UNAUTHORIZED.text, e.stack, status, txt);
 
                 case AuthStatusEnum.CONFLICT:
-                    return new AuthError(AuthStatusText.CONFLICT.text, e.stack, status, txt);
+                    return new ApiError(AuthStatusText.CONFLICT.text, e.stack, status, txt);
 
                 case AuthStatusEnum.BAD_REQUEST:
-                    return new AuthError(AuthStatusText.BAD_REQUEST.text, e.stack, status, txt);
+                    return new ApiError(AuthStatusText.BAD_REQUEST.text, e.stack, status, txt);
 
                 default:
-                    return new AuthError(AuthStatusText.UNKNOWN.text, e.stack, status, txt);
+                    return new ApiError(AuthStatusText.UNKNOWN.text, e.stack, status, txt);
             }
         }
     }
 
     if (e.message === "Network Error") {
-        return new AuthError(AuthStatusText.ERR_CONNECTION_REFUSED.text, e.stack, AuthStatusEnum.ERR_CONNECTION_REFUSED, "Network Error");
+        return new ApiError(AuthStatusText.ERR_CONNECTION_REFUSED.text, e.stack, AuthStatusEnum.ERR_CONNECTION_REFUSED, "Network Error");
     }
 
-    return new AuthError(AuthStatusText.UNKNOWN.text, e.stack, AuthStatusEnum.UNKNOWN, e.message);
+    return new ApiError(AuthStatusText.UNKNOWN.text, e.stack, AuthStatusEnum.UNKNOWN, e.message);
 }

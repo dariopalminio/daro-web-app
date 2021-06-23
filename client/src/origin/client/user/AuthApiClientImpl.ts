@@ -1,6 +1,6 @@
 import * as OriginConfig from '../../OriginConfig';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, AuthError } from '../AuthError';
+import { handleAxiosError, ApiError } from '../ApiError';
 import qs from 'querystring';
 import { IAuthClient } from '../../../state/client/IAuthClient';
 
@@ -78,7 +78,7 @@ export default function AuthApiClientImpl(): IAuthClient {
       response.data.access_token
     ).catch((error) => {
       // response.status !== 200
-      const authError: AuthError = handleAxiosError(error);
+      const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
 
@@ -113,7 +113,7 @@ export default function AuthApiClientImpl(): IAuthClient {
       response.data.access_token
     ).catch((error) => {
       // response.status !== 200
-      const authError: AuthError = handleAxiosError(error);
+      const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
     
@@ -148,7 +148,7 @@ export default function AuthApiClientImpl(): IAuthClient {
       response.data.access_token
     ).catch((error) => {
       // response.status !== 200
-      const authError: AuthError = handleAxiosError(error);
+      const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
 
@@ -184,7 +184,7 @@ export default function AuthApiClientImpl(): IAuthClient {
       response.status
     ).catch((error) => {
       // response.status !== 200
-      const authError: AuthError = handleAxiosError(error);
+      const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
   
@@ -243,7 +243,7 @@ export default function AuthApiClientImpl(): IAuthClient {
       response.status
     ).catch((error) => {
       // response.status !== 200
-      const authError: AuthError = handleAxiosError(error);
+      const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
 

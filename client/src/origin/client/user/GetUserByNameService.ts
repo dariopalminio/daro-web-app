@@ -1,7 +1,7 @@
 
 import * as OriginConfig from '../../OriginConfig';
 import axios, { AxiosResponse } from 'axios';
-import { handleAxiosError, AuthError } from '../AuthError';
+import { handleAxiosError, ApiError } from '../ApiError';
 
 /**
  * Get users Returns a list of users, filtered according to params.
@@ -35,7 +35,7 @@ export default async function getUserByNameService(username: string, adminToken:
 
   } catch (error) {
     // response.status !== 200
-    const authError: AuthError = handleAxiosError(error);
+    const authError: ApiError = handleAxiosError(error);
     throw authError;
   }
 };

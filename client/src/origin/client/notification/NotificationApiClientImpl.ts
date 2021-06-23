@@ -1,7 +1,7 @@
 
 import * as OriginConfig from '../../OriginConfig';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, AuthError } from '../AuthError';
+import { handleAxiosError, ApiError } from '../ApiError';
 import { ContactType } from '../../../state/model/notification/ContactType';
 import { INotificationClient } from '../../../state/client/INotificationClient';
 
@@ -38,7 +38,7 @@ function sendContactEmailService(contactData: ContactType, token: string): Promi
     // using .then, create a new promise which extracts the data
     const info: Promise<any> = promise.then((response) => response.data).catch((error) =>{
 
-      const authError: AuthError = handleAxiosError(error);
+      const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
 

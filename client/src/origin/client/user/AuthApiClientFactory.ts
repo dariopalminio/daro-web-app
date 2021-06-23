@@ -6,7 +6,7 @@ import { IAuthClient } from '../../../state/client/IAuthClient';
 /**
  * Factory of IAuthService implementation for dependency injection
  */
-export class AuthClientFactory {
+export class AuthApiClientFactory {
     static create(fake: boolean): IAuthClient{
         //Return a factory function
         if (fake) return AuthApiOkFakeServiceImpl(); //Fake for testing
