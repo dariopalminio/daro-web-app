@@ -1,11 +1,11 @@
 
-import { UserValidatorsImpl } from './UserValidatorImpl';
+import { UserValidatorsYupImpl } from './UserValidatorsYupImpl';
 
 /**
  * Factory of UserValidation implementation for dependency injection
  */
 export class UserValidatorFactory {
     static create(){
-        return new UserValidatorsImpl();
+        return new UserValidatorsYupImpl();
     }
 }

@@ -1,5 +1,5 @@
 import IUserValidator from '../../../state/helper/IUserValidator';
-import { UserValidatorFactory } from "../../../origin/helper/UserValidatorFactory";
+import { UserValidatorFactory } from "../../../state/helper/UserValidatorFactory";
 
 describe("Testing validations functions from userValidations", () => {
 

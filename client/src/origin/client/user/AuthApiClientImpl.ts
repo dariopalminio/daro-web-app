@@ -1,8 +1,8 @@
-import * as GlobalConfig from '../../config/GlobalConfig';
+import * as OriginConfig from '../../OriginConfig';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
 import qs from 'querystring';
-import { IAuthService } from '../../../state/client/IAuthService';
+import { IAuthClient } from '../../../state/client/IAuthClient';
 
 type NewUserRepresentationType = {
   username: string
@@ -50,7 +50,7 @@ type RequesAppToken = {
  * a (presumably new) object. In JavaScript, any function can return an object.
  * @returns 
  */
-export default function AuthApiServiceImpl(): IAuthService {
+export default function AuthApiClientImpl(): IAuthClient {
 
   /**
    * Generate a admin access token for create user
@@ -59,16 +59,16 @@ export default function AuthApiServiceImpl(): IAuthService {
   */
   function getAdminTokenService(): Promise<string> {
     const body: NewAdminTokenRequestType = {
-      client_id: GlobalConfig.Keycloak.client_id,
+      client_id: OriginConfig.Keycloak.client_id,
       grant_type: 'password',
-      username: GlobalConfig.Keycloak.username_admin,
-      password: GlobalConfig.Keycloak.password_admin,
+      username: OriginConfig.Keycloak.username_admin,
+      password: OriginConfig.Keycloak.password_admin,
       scope: 'openid roles',
-      client_secret: GlobalConfig.Keycloak.client_secret,
+      client_secret: OriginConfig.Keycloak.client_secret,
     };
 
     // Token endpoint
-    const URL = GlobalConfig.URLPath.token
+    const URL = OriginConfig.URLPath.token
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body))
@@ -81,7 +81,6 @@ export default function AuthApiServiceImpl(): IAuthService {
       const authError: AuthError = handleAxiosError(error);
       throw authError;
     });
-    console.log("adminToken", adminToken);
 
     return adminToken;
   };
@@ -96,15 +95,15 @@ export default function AuthApiServiceImpl(): IAuthService {
   function getAppTokenService(): Promise<string> {
 
     const body: RequesAppToken = {
-      client_id: GlobalConfig.Keycloak.client_id,
+      client_id: OriginConfig.Keycloak.client_id,
       grant_type: 'client_credentials',
-      client_secret: GlobalConfig.Keycloak.client_secret,
+      client_secret: OriginConfig.Keycloak.client_secret,
     };
 
     // Token endpoint
-    const URL = GlobalConfig.URLPath.token
+    const URL = OriginConfig.URLPath.token
     console.log("GlobalConfig.URLPath.TOKEN:");
-    console.log(GlobalConfig.URLPath.token);
+    console.log(OriginConfig.URLPath.token);
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
@@ -134,12 +133,12 @@ export default function AuthApiServiceImpl(): IAuthService {
       username: username,
       password: pass,
       grant_type: 'password',
-      client_id: GlobalConfig.Keycloak.client_id,
-      client_secret: GlobalConfig.Keycloak.client_secret
+      client_id: OriginConfig.Keycloak.client_id,
+      client_secret: OriginConfig.Keycloak.client_secret
     };
 
     //Login endpoint
-    const URL = GlobalConfig.URLPath.token;
+    const URL = OriginConfig.URLPath.token;
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
@@ -171,7 +170,7 @@ export default function AuthApiServiceImpl(): IAuthService {
   function logoutService(userId: string, adminToken: string): Promise<number> {
 
     //User endpoint
-    const URL = `${GlobalConfig.URLPath.users}/${userId}/logout`;
+    const URL = `${OriginConfig.URLPath.users}/${userId}/logout`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -217,7 +216,7 @@ export default function AuthApiServiceImpl(): IAuthService {
       firstName: firstname,
       lastName: lastname,
       email: email,
-      emailVerified: GlobalConfig.Keycloak.verify_email ? "false" : "true",
+      emailVerified: OriginConfig.Keycloak.verify_email ? "false" : "true",
       username: email,
       credentials: [
         {
@@ -230,7 +229,7 @@ export default function AuthApiServiceImpl(): IAuthService {
     };
 
     //User endpoint
-    const URL = GlobalConfig.URLPath.users;
+    const URL = OriginConfig.URLPath.users;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',

@@ -1,9 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../model/user/SessionType';
-import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
-import { IAuthService } from '../../state/client/IAuthService';
-import * as GlobalConfig from '../../origin/config/GlobalConfig';
+import * as StateConfig from '../StateConfig';
+import { IAuthClient } from '../client/IAuthClient';
 
 var jws = require('jws');
 
@@ -17,10 +16,11 @@ var jws = require('jws');
  *      login function
  *      logout function
  */
-export default function useLogin() {
+export default function useLogin(authServiceInjected: IAuthClient | null = null) {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
-    const authService: IAuthService = AuthServiceFactory.create(GlobalConfig.is_fake_mode);
+    
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
 
     /**
      * login

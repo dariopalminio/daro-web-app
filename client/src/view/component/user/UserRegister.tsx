@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { FunctionComponent } from "react";
 import IUserValidator from '../../../state/helper/IUserValidator';
-import { UserValidatorFactory } from "../../../origin/helper/UserValidatorFactory";
+import { UserValidatorFactory } from "../../../state/helper/UserValidatorFactory";
 import useRegister from "../../../state/hook/useRegister";
 import SessionContext, { SessionContextType } from "../../../state/context/SessionContext";
 import clsx from "clsx";

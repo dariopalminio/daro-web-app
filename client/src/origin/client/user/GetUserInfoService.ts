@@ -1,5 +1,5 @@
 
-import * as GlobalConfig from '../../config/GlobalConfig';
+import * as OriginConfig from '../../OriginConfig';
 import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
 
@@ -12,7 +12,7 @@ import { handleAxiosError, AuthError } from '../AuthError';
  */
 export default async function getUserInfoService(jwt: string): Promise<any> {
 
-    const URL = GlobalConfig.URLPath.user_info
+    const URL = OriginConfig.URLPath.user_info
 
     const config = {
         headers: { Authorization: `Bearer ${jwt}` }

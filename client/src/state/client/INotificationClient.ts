@@ -1,7 +1,7 @@
-import { ContactType } from '../../state/model/notification/ContactType';
+import { ContactType } from '../model/notification/ContactType';
 
 //Interface to do dependency inversion
-export interface INotificationService {
+export interface INotificationClient {
     sendContactEmailService: (contactData: ContactType, token: string) => Promise<any>;
   };
 

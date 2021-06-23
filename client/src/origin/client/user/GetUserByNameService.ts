@@ -1,5 +1,5 @@
 
-import * as GlobalConfig from '../../config/GlobalConfig';
+import * as OriginConfig from '../../OriginConfig';
 import axios, { AxiosResponse } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
 
@@ -13,7 +13,7 @@ import { handleAxiosError, AuthError } from '../AuthError';
 export default async function getUserByNameService(username: string, adminToken: string): Promise<any> {
 
   //User endpoint
-  const URL = GlobalConfig.URLPath.users
+  const URL = OriginConfig.URLPath.users
 
   //If username = email
   const config = {

@@ -1,12 +1,10 @@
 import * as yup from 'yup';
-import IUserValidators from '../../state/helper/IUserValidator';
+import IUserValidators from './IUserValidator';
 
 /**
  * Implementation of IUserValidators interface
  */
-export class UserValidatorsImpl implements IUserValidators {
-
-  //constructor() {}
+export class UserValidatorsYupImpl implements IUserValidators {
 
 /**
  * Validate if the email is in the correct format

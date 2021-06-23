@@ -1,8 +1,8 @@
-import { IAuthService } from '../../../state/client/IAuthService';
+import { IAuthClient } from '../../../../state/client/IAuthClient';
 
 
 // Fake factory function
-export default function AuthFakeServiceImpl(): IAuthService {
+export default function AuthApiOkFakeClientImpl(): IAuthClient {
 
 // Fake function
   function getAdminTokenService(): Promise<string> {

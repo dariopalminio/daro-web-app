@@ -1,21 +1,20 @@
 import { useCallback, useState } from 'react';
 import { ContactType } from '../model/notification/ContactType';
-import { NotificationServiceFactory } from '../../origin/client/notification/NotificationServiceFactory';
-import { INotificationService } from '../../state/client/INotificationService';
-//import getAppTokenService from '../../origin/client/user/GetAppTokenService';
-import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
-import { IAuthService } from '../../state/client/IAuthService';
-import * as GlobalConfig from '../../origin/config/GlobalConfig';
+import { INotificationClient } from '../client/INotificationClient';
+import * as StateConfig from '../StateConfig';
+import { IAuthClient } from '../client/IAuthClient';
 
 /**
  * useNotification custom hook
  * @returns 
  */
-export default function useNotification() {
+export default function useNotification(
+    authServiceInjected: IAuthClient | null = null, 
+    notifServiceInjected: INotificationClient | null = null) {
 
     const [state, setState] = useState({ sending: false, hasError: false, msg: '', wasSent: false });
-    const notifService: INotificationService = NotificationServiceFactory.create(GlobalConfig.is_fake_mode);
-    const authService: IAuthService = AuthServiceFactory.create(GlobalConfig.is_fake_mode);
+    const notifService: INotificationClient = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
 
     /**
      * sendContactEmail

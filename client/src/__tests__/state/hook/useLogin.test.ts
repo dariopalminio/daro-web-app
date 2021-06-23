@@ -1,20 +1,8 @@
 require('@testing-library/react');
 import { renderHook, act } from '@testing-library/react-hooks';
 import useLogin from "../../../state/hook/useLogin";
-import { AuthServiceFactory } from '../../../origin/client/user/AuthServiceFactory';
-import  AuthFakeServiceImpl  from '../../../origin/client/user/AuthFakeServiceImpl';
-import { IAuthService } from '../../../state/client/IAuthService';
-
-
-const userOk = "ok";
-const passOk = "ok";
-
-export class AuthServiceFactoryForTest {
-    static create(fake: boolean): IAuthService{
-        //Return a factory function
-        return AuthFakeServiceImpl(); // Fake
-    }
-};
+import  AuthApiOkFakeServiceImpl  from '../../../origin/client/user/fake/AuthApiOkFakeClientImpl';
+import  AuthApiFailFakeServiceImpl  from '../../../origin/client/user/fake/AuthApiFailFakeClientImpl';
 
 // First: mock service for authenticate user and pass
 //jest.mock("../../../origin/client/user/AuthServiceFactory", () => {
@@ -49,30 +37,26 @@ jest.mock("../../../client/user/GetUserInfoService", () => {
 
 describe('Test useUser Hook', () => {
 
-    //const authService: IAuthService = AuthServiceFactory.create();
-
     test('login with BAD credentials should to FAIL', async () => {
-       // const { result, waitForNextUpdate } = renderHook(() => useLogin());
+        const { result, waitForNextUpdate } = renderHook(() => useLogin(AuthApiFailFakeServiceImpl()));
 
-        //act(() => {
-        //    result.current.login("bad", "bad");
-       // })
+        act(() => {
+            result.current.login("user_bad", "pass_bad");
+        })
 
-        //await waitForNextUpdate();
-        //expect(result.current.isLoggedOk).toBe(false);
-        expect(1).toBe(1);
+        await waitForNextUpdate();
+        expect(result.current.isLoggedOk).toBe(false);
     });
 
     test('login with credentials OK should be SUCCESSFUL', async () => {
-        //const { result, waitForNextUpdate } = renderHook(() => useLogin());
+        const { result, waitForNextUpdate } = renderHook(() => useLogin(AuthApiOkFakeServiceImpl()));
 
-       // act(() => {
-        //    result.current.login(userOk, passOk);
-       // })
+        act(() => {
+            result.current.login("user_ok", "pass_ok");
+        })
 
-        //await waitForNextUpdate();
-        //expect(result.current.isLoggedOk).toBe(true);
-        expect(1).toBe(1);
+        await waitForNextUpdate();
+        expect(result.current.isLoggedOk).toBe(true);
     });
 
 });

@@ -1,8 +1,8 @@
-import { ContactType } from '../../../state/model/notification/ContactType';
-import { INotificationService } from '../../../state/client/INotificationService';
+import { ContactType } from '../../../../state/model/notification/ContactType';
+import { INotificationClient } from '../../../../state/client/INotificationClient';
 
 
-export default function NotificationFakeServiceImpl(): INotificationService {
+export default function NotificationFakeServiceImpl(): INotificationClient {
 
 /**
  * Fake function

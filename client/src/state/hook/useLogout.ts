@@ -1,9 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../model/user/SessionType';
-import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
-import { IAuthService } from '../../state/client/IAuthService';
-import * as GlobalConfig from '../../origin/config/GlobalConfig';
+import * as StateConfig from '../StateConfig';
+import { IAuthClient } from '../client/IAuthClient';
 
 /**
  * useLogout Custom Hook
@@ -15,10 +14,10 @@ import * as GlobalConfig from '../../origin/config/GlobalConfig';
  *      login function
  *      logout function
  */
-export default function useLogout() {
+export default function useLogout(authServiceInjected: IAuthClient | null = null) {
     const { removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
-    const authService: IAuthService = AuthServiceFactory.create(GlobalConfig.is_fake_mode);
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
 
     /**
      * logout

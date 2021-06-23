@@ -1,4 +1,7 @@
 
+/**
+ * UserValidator Interface
+ */
 export default interface IUserValidator{
     emailIsValid (emailValue: string): Promise<boolean>;
     passIsValid (pass: string): Promise<boolean>;

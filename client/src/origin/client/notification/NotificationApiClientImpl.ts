@@ -1,9 +1,9 @@
 
-import * as GlobalConfig from '../../config/GlobalConfig';
+import * as OriginConfig from '../../OriginConfig';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, AuthError } from '../AuthError';
 import { ContactType } from '../../../state/model/notification/ContactType';
-import { INotificationService } from '../../../state/client/INotificationService';
+import { INotificationClient } from '../../../state/client/INotificationClient';
 
 /**
  * NotificationApiService implementation 
@@ -12,7 +12,7 @@ import { INotificationService } from '../../../state/client/INotificationService
  * a (presumably new) object. In JavaScript, any function can return an object.
  * @returns 
  */
-export default function NotificationApiServiceImpl(): INotificationService {
+export default function NotificationApiClientImpl(): INotificationClient {
 
 /**
  * Send Contact Email using notification service.
@@ -24,7 +24,7 @@ export default function NotificationApiServiceImpl(): INotificationService {
 function sendContactEmailService(contactData: ContactType, token: string): Promise<any>{
 
   //Notification endpoint
-  const URL = GlobalConfig.URLPath.notifications;
+  const URL = OriginConfig.URLPath.notifications;
 
   //try {
     const promise: AxiosPromise<any> = axios({
@@ -37,7 +37,7 @@ function sendContactEmailService(contactData: ContactType, token: string): Promi
     });
     // using .then, create a new promise which extracts the data
     const info: Promise<any> = promise.then((response) => response.data).catch((error) =>{
-      console.log(error.message);
+
       const authError: AuthError = handleAxiosError(error);
       throw authError;
     });

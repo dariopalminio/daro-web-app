@@ -1,7 +1,7 @@
 
 
 //Interface to do dependency inversion
-export interface IAuthService {
+export interface IAuthClient {
   getAdminTokenService: () => Promise<string>;
   getAppTokenService: () => Promise<string>;
   loginService: (username: string, pass: string) => Promise<string>;
