@@ -27,7 +27,7 @@ export default function useLogin() {
      */
     const login = useCallback((email: string, password: string) => {
         setState({ loading: true, error: false, msg: "Trying to login!", isLoggedOk: false });
-console.log("useLogin -> login");
+
         // First: authenticate user and pass
         authService.loginService(email, password)
             .then(jwt => {

@@ -74,7 +74,7 @@ export default function AuthServiceImpl(): IAuthService {
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body))
 
     // using .then, create a new promise which extracts the data
-    const adminToken = promise.then((response) =>
+    const adminToken: Promise<string> = promise.then((response) =>
       response.data.access_token
     ).catch((error) => {
       // response.status !== 200
@@ -110,15 +110,15 @@ export default function AuthServiceImpl(): IAuthService {
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
 
     // using .then, create a new promise which extracts the data
-    const adminToken = promise.then((response) =>
+    const appToken: Promise<string> = promise.then((response) =>
       response.data.access_token
     ).catch((error) => {
       // response.status !== 200
       const authError: AuthError = handleAxiosError(error);
       throw authError;
     });
-    console.log("adminToken promise result:", adminToken);
-    return adminToken;
+    
+    return appToken;
   };
 
   /**
@@ -145,14 +145,14 @@ export default function AuthServiceImpl(): IAuthService {
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
 
     // using .then, create a new promise which extracts the data
-    const accessToken = promise.then((response) =>
+    const accessToken: Promise<string> = promise.then((response) =>
       response.data.access_token
     ).catch((error) => {
       // response.status !== 200
       const authError: AuthError = handleAxiosError(error);
       throw authError;
     });
-    console.log("Login accessToken promise result:", accessToken);
+
     return accessToken;
   };
 
@@ -181,7 +181,7 @@ export default function AuthServiceImpl(): IAuthService {
     });
 
     // using .then, create a new promise which extracts the data
-    const status = promise.then((response) =>
+    const status: Promise<number> = promise.then((response) =>
       response.status
     ).catch((error) => {
       // response.status !== 200
@@ -189,7 +189,6 @@ export default function AuthServiceImpl(): IAuthService {
       throw authError;
     });
   
-    console.log("logoutService status promise result:", status);
     return status;
   };
 
@@ -241,14 +240,14 @@ export default function AuthServiceImpl(): IAuthService {
     });
 
     // using .then, create a new promise which extracts the data
-    const status = promise.then((response) =>
+    const status: Promise<number> = promise.then((response) =>
       response.status
     ).catch((error) => {
       // response.status !== 200
       const authError: AuthError = handleAxiosError(error);
       throw authError;
     });
-    console.log("Register accessToken promise result:", status);
+
     return status;
   };
 

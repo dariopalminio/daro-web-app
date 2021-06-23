@@ -1,9 +1,11 @@
-//require('dotenv').config();
-//require('dotenv').load();
 import dotenv from 'dotenv';
+
 const result = dotenv.config();
 
-//require('dotenv').config({ path: '/full/custom/path/to/your/env/vars' })
+if (result.error) {
+  console.log(result.error);
+};
+console.log(result.parsed);
 
 // REACT_APP_ENV: prod | dev | qa
 export const environment = process.env.REACT_APP_ENV;
@@ -14,7 +16,7 @@ export const APIEndpoints = {
 };
 
 export const Keycloak = {
-  realm: process.env.REACT_APP as string,
+  realm: process.env.REACT_APP_AUTH_REALM as string,
   client_id: process.env.REACT_APP_AUTH_CLIENT_ID as string,
   client_secret: process.env.REACT_APP_AUTH_CLIENT_SECRET as string,
   username_admin: process.env.REACT_APP_AUTH_USERNAME_ADMIN as string,
@@ -28,11 +30,3 @@ export const URLPath = {
   token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
   notifications: `${APIEndpoints.notifications}/notification/sendContactEmail`,
 };
-console.log("Config result: ", result);
-console.log(`${__dirname}.env`);
-console.log("Config:");
-console.log("Environment:", process.env.REACT_APP_ENV);
-console.log(APIEndpoints);
-console.log(Keycloak);
-console.log(URLPath);
-

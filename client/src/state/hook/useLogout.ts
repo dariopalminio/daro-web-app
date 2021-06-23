@@ -39,7 +39,7 @@ export default function useLogout() {
                 const responseLogout = authService.logoutService(userId, jwtAdminToken);
 
                 responseLogout.then(status => {
-                    console.log("Logout status response:", status);
+
                     msg = "Closed session. ";
                 }).catch(err => {
                     thereWasError = true;
