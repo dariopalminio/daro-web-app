@@ -36,7 +36,7 @@ function sendContactEmailService(contactData: ContactType, token: string): Promi
       data: contactData
     });
     // using .then, create a new promise which extracts the data
-    const info = promise.then((response) => response.data).catch((error) =>{
+    const info: Promise<any> = promise.then((response) => response.data).catch((error) =>{
       console.log(error.message);
       const authError: AuthError = handleAxiosError(error);
       throw authError;

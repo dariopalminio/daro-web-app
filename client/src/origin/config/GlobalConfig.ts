@@ -10,6 +10,8 @@ console.log(result.parsed);
 // REACT_APP_ENV: prod | dev | qa
 export const environment = process.env.REACT_APP_ENV;
 
+export const is_fake_mode = ((process.env.REACT_APP_FAKE === 'true') ? true : false) as boolean;
+
 export const APIEndpoints = {
   auth: 'http://localhost:8080', //process.env.REACT_APP_AUTH_API,
   notifications: 'http://localhost:3001', //process.env.REACT_APP_NOTIFICATION_API,

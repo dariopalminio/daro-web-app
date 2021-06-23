@@ -4,3 +4,5 @@ import { ContactType } from '../../state/model/notification/ContactType';
 export interface INotificationService {
     sendContactEmailService: (contactData: ContactType, token: string) => Promise<any>;
   };
+
+  

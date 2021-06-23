@@ -3,6 +3,7 @@ import SessionContext, { SessionContextType } from '../context/SessionContext';
 import { SessionType } from '../model/user/SessionType';
 import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
 import { IAuthService } from '../../state/client/IAuthService';
+import * as GlobalConfig from '../../origin/config/GlobalConfig';
 
 /**
  * useLogout Custom Hook
@@ -17,7 +18,7 @@ import { IAuthService } from '../../state/client/IAuthService';
 export default function useLogout() {
     const { removeSessionValue } = useContext(SessionContext) as SessionContextType;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
-    const authService: IAuthService = AuthServiceFactory.create();
+    const authService: IAuthService = AuthServiceFactory.create(GlobalConfig.is_fake_mode);
 
     /**
      * logout

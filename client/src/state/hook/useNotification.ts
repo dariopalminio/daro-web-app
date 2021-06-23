@@ -5,6 +5,7 @@ import { INotificationService } from '../../state/client/INotificationService';
 //import getAppTokenService from '../../origin/client/user/GetAppTokenService';
 import { AuthServiceFactory } from '../../origin/client/user/AuthServiceFactory';
 import { IAuthService } from '../../state/client/IAuthService';
+import * as GlobalConfig from '../../origin/config/GlobalConfig';
 
 /**
  * useNotification custom hook
@@ -13,8 +14,8 @@ import { IAuthService } from '../../state/client/IAuthService';
 export default function useNotification() {
 
     const [state, setState] = useState({ sending: false, hasError: false, msg: '', wasSent: false });
-    const notifService: INotificationService = NotificationServiceFactory.create();
-    const authService: IAuthService = AuthServiceFactory.create();
+    const notifService: INotificationService = NotificationServiceFactory.create(GlobalConfig.is_fake_mode);
+    const authService: IAuthService = AuthServiceFactory.create(GlobalConfig.is_fake_mode);
 
     /**
      * sendContactEmail

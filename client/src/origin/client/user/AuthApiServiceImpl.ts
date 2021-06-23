@@ -50,7 +50,7 @@ type RequesAppToken = {
  * a (presumably new) object. In JavaScript, any function can return an object.
  * @returns 
  */
-export default function AuthServiceImpl(): IAuthService {
+export default function AuthApiServiceImpl(): IAuthService {
 
   /**
    * Generate a admin access token for create user
