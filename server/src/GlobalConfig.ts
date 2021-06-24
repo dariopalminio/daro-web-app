@@ -15,4 +15,4 @@ export const email = {
 }
 
 
-export const PUBLIC_KEY = process.env.SERVER_WEB_APP_KEYCLOAK_PUBLIC_KEY as string
+export const PUBLIC_KEY = process.env.SERVER_WEB_APP_KEYCLOAK_PUBLIC_KEY as string;

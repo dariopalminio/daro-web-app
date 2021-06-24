@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { NotificationService } from '../../state/service/notification.service';
-import { ContactDTO } from '../../state/model/notification/ContactDTO.dto';
+import { NotificationService } from '../../domain/service/notification.service';
+import { ContactDTO } from '../../domain/entity/notification/ContactDTO.dto';
 
 @Controller('notification')
 export class NotificationController {

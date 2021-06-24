@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import * as GlobalConfig from '../config/GlobalConfig';
-import { ContactDTO } from '../model/notification/ContactDTO.dto';
+import * as GlobalConfig from '../../GlobalConfig';
+import { ContactDTO } from '../entity/notification/ContactDTO.dto';
 
 const nodemailer = require("nodemailer");
 
