@@ -1,4 +1,4 @@
-export class ContactDTO {
+export class ContactMessage {
     name: string;
     email: string;
     phone: string;
