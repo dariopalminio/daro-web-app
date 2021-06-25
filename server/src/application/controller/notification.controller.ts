@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Inject } from '@nestjs/common';
-import { INotificationService } from '../../domain/service/interface/INotificationService';
-import { ContactMessage } from '../../domain/model/valueo_bject/ContactMessage';
+import { INotificationService } from '../../domain/input/port/INotificationService';
+import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
 
 export const NOTIFICATION_SERVICE = 'NotificationService';
 

@@ -1,4 +1,4 @@
-import { ContactMessage } from '../../model/valueo_bject/ContactMessage';
+import { ContactMessage } from '../../model/value_object/ContactMessage';
 
 
 export interface INotificationService {

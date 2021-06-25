@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Inject} from '@nestjs/common';
-import { IAppService } from '../../domain/service/interface/IAppService';
+import { IAppService } from '../../domain/input/port/IAppService';
 
 export const APP_SERVICE = 'AppService';
 

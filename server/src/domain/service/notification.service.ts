@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ContactMessage } from '../model/valueo_bject/ContactMessage';
-import { INotificationService } from '../../domain/service/interface/INotificationService';
+import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
+import { INotificationService } from '../input/port/INotificationService';
 import { EmailSmtpSenderAdapter} from '../../infrastructure/notification/EmailSmtpSenderAdapter';
-import IEmailSender from '../adapter/interface/IEmailSender';
+import IEmailSender from '../output/port/IEmailSender';
 
 @Injectable()
 export class NotificationService implements INotificationService{
