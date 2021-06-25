@@ -19,7 +19,6 @@ export class UserValidatorsYupImpl implements IUserValidators {
   return false;
 };
 
-
 public confirmPassIsValid = (pasOne: string, passTwo: string): boolean => {
   if (pasOne!==passTwo) {
     return false
@@ -48,8 +47,12 @@ private EmailValidation = yup.object().shape({
   email: yup.string().email().required(),
 });
 
+//Formatt: number + char + Uppercase + min 10 chars
 private PasswordValidation = yup.object().shape({
-  password: yup.string().required().min(10),
+  password: yup.string()
+    .required()
+    .min(10)
+    .matches(/^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[A-Z]).{10,}$/gs),
 });
 
 private LoginValidation = yup.object().shape({
