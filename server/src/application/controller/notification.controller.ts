@@ -13,11 +13,11 @@ export class NotificationController {
 
 
   @Post('sendContactEmail')
-  sendContactEmail(@Body() body: ContactMessage): any {
-    console.log(body);
+  sendContactEmail(@Body() contactMessage: ContactMessage): any {
+    console.log(contactMessage);
     
     try{
-      const sentInfo = this.notificationService.sendContactEmail(body);
+      const sentInfo = this.notificationService.sendContactEmail(contactMessage);
       return sentInfo;
     }catch(e){
       return e.message;
