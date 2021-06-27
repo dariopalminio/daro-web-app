@@ -3,12 +3,12 @@ import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
 import { INotificationService } from '../input/port/INotificationService';
 import IEmailSender from '../output/port/IEmailSender';
 
-export const EMAIL_SENDER_INJECTED='EmailSender_Implementation';
+export const EMAIL_SENDER_TOKEN='EmailSender_Implementation';
 
 @Injectable()
 export class NotificationService implements INotificationService{
   constructor(
-    @Inject(EMAIL_SENDER_INJECTED)
+    @Inject(EMAIL_SENDER_TOKEN)
       readonly sender: IEmailSender){
     }
 

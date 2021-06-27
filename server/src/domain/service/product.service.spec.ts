@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService, PRODUCT_MODEL_INJECTED } from './product.service';
+import { ProductService, PRODUCT_MODEL_TOKEN } from './product.service';
 import { getModelToken } from '@nestjs/mongoose';
 //import { IProduct } from '../../domain/model/entity/product.interface';
 import { ProductDTO } from '../../domain/model/entity/product.dto';
@@ -65,7 +65,10 @@ describe('ProductService', () => {
             providers: [
                 ProductService,
                 {
-                    provide: getModelToken(PRODUCT_MODEL_INJECTED),
+                    //getModelToken() function returns a prepared injection token based on a token name. 
+                    //Using this token, you can easily provide a mock implementation using any of the standard 
+                    //custom provider techniques, including useClass, useValue, and useFactory. 
+                    provide: getModelToken(PRODUCT_MODEL_TOKEN),
                     // notice that only the functions we call from the model are mocked
                     useValue: {
                         new: jest.fn().mockResolvedValue(new ProductDTO()),
@@ -75,6 +78,7 @@ describe('ProductService', () => {
                         findById: jest.fn(),
                         update: jest.fn(),
                         create: jest.fn(),
+                        save: jest.fn(),
                         remove: jest.fn(),
                         exec: jest.fn(),
                     },
@@ -83,7 +87,7 @@ describe('ProductService', () => {
         }).compile();
 
         service = module.get<ProductService>(ProductService);
-        model = module.get<Model<ProductDocument>>(getModelToken(PRODUCT_MODEL_INJECTED));
+        model = module.get<Model<ProductDocument>>(getModelToken(PRODUCT_MODEL_TOKEN));
     });
 
 
@@ -100,7 +104,6 @@ describe('ProductService', () => {
             exec: jest.fn().mockResolvedValueOnce(mockArrayResult),
         } as any);
         const products = await service.getAll();
-        console.log(products);
         expect(products).toEqual(mockArrayResult);
     });
 
@@ -115,6 +118,16 @@ describe('ProductService', () => {
         const findMockProdDoc = mockProductDoc(new ProductDTO());
         const response = await service.getById(mockProductDoc()._id);
         expect(response).toEqual(findMockProdDoc);
+      });
+
+      it.skip('productService.updateProduct should update a product successfully', async () => {
+        jest.spyOn(model, 'findOneAndUpdate').mockReturnValueOnce(
+           createMock<Query<ProductDocument, ProductDocument>>({
+            exec: jest.fn().mockResolvedValueOnce(mockProd),
+          }),
+         );
+        const updatedCat = await service.updateProduct(mockProductDoc()._id, new ProductDTO());
+         expect(updatedCat).toEqual(mockProd);
       });
 
 });

@@ -1,9 +1,9 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './application/controller/app.controller';
-import { NotificationController, NOTIFICATION_SERVICE_INJECTED } from './application/controller/notification.controller';
-import { ProductController, PRODUCT_SERVICE_INJECTED } from './application/controller/product.controller';
-import { NotificationService, EMAIL_SENDER_INJECTED } from './domain/service/notification.service';
-import { ProductService, PRODUCT_MODEL_INJECTED } from './domain/service/product.service';
+import { NotificationController, NOTIFICATION_SERVICE_TOKEN } from './application/controller/notification.controller';
+import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
+import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
+import { ProductService, PRODUCT_MODEL_TOKEN } from './domain/service/product.service';
 import { EmailSmtpSenderAdapter } from './infrastructure/notification/EmailSmtpSenderAdapter';
 import { AuthMiddleware } from './application/middleware/auth.middleware';
 import { ProductSchema } from './infrastructure/database/schema/product.schema';
@@ -18,20 +18,20 @@ console.log(DB_CONNECTION);
 @Module({
   imports: [
     MongooseModule.forRoot(DB_CONNECTION),
-    MongooseModule.forFeature([{ name: PRODUCT_MODEL_INJECTED, schema: ProductSchema }])
+    MongooseModule.forFeature([{ name: PRODUCT_MODEL_TOKEN, schema: ProductSchema }])
   ],
   controllers: [AppController, NotificationController, ProductController],
   providers: [
     {
-      provide: NOTIFICATION_SERVICE_INJECTED,
+      provide: NOTIFICATION_SERVICE_TOKEN,
       useClass: NotificationService,
     },
     {
-      provide: PRODUCT_SERVICE_INJECTED,
+      provide: PRODUCT_SERVICE_TOKEN,
       useClass: ProductService,
     },
     {
-      provide: EMAIL_SENDER_INJECTED,
+      provide: EMAIL_SENDER_TOKEN,
       useClass: EmailSmtpSenderAdapter,
     }
   ],
