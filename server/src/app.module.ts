@@ -1,6 +1,5 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { AppController, APP_SERVICE_INJECTED } from './application/controller/app.controller';
-import { AppService } from './domain/service/app.service';
+import { AppController } from './application/controller/app.controller';
 import { NotificationController, NOTIFICATION_SERVICE_INJECTED } from './application/controller/notification.controller';
 import { ProductController, PRODUCT_SERVICE_INJECTED } from './application/controller/product.controller';
 import { NotificationService, EMAIL_SENDER_INJECTED } from './domain/service/notification.service';
@@ -23,10 +22,6 @@ console.log(DB_CONNECTION);
   ],
   controllers: [AppController, NotificationController, ProductController],
   providers: [
-    {
-      provide: APP_SERVICE_INJECTED,
-      useClass: AppService,
-    },
     {
       provide: NOTIFICATION_SERVICE_INJECTED,
       useClass: NotificationService,

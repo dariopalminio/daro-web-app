@@ -7,7 +7,7 @@ import { ProductDTO } from '../../domain/model/entity/product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-export const PRODUCT_MODEL_INJECTED='Product_Implementation';
+export const PRODUCT_MODEL_INJECTED='Product_Implementation'; //ModelToken
 
 @Injectable()
 export class ProductService implements IProductService{
@@ -18,7 +18,7 @@ export class ProductService implements IProductService{
 
   // Get all products
   async getAll(): Promise<IProduct[]> {
-    const products: IProduct[] = await this.productModel.find();
+    const products: IProduct[] = await this.productModel.find().exec();
     return products;
   };
 
