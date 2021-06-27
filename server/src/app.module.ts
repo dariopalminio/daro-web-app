@@ -4,33 +4,20 @@ import { AppService } from './domain/service/app.service';
 import { NotificationController, NOTIFICATION_SERVICE } from './application/controller/notification.controller';
 import { ProductController, PRODUCT_SERVICE } from './application/controller/product.controller';
 import { NotificationService } from './domain/service/notification.service';
-import { ProductService } from './domain/service/product.service';
+import { ProductService, PRODUCT_MODEL_NAME } from './domain/service/product.service';
 import { AuthMiddleware } from './application/middleware/auth.middleware';
-import { ProductSchema, Product } from './infrastructure/database/schema/product.schema';
-import { DB_CONNECTION } from './infrastructure/database/db.connection.string';
+import { ProductSchema } from './infrastructure/database/schema/product.schema';
+import DB_CONNECTION from './infrastructure/database/db.connection.string';
 
 //Mongo
 import { MongooseModule } from '@nestjs/mongoose';
-
-/**
-const { MongoClient } = require('mongodb');
-const uri = "mongodb+srv://daro:<password>@clusterdaro.zjmdi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
-
-mongodb+srv://daro:<password>@clusterdaro.zjmdi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
- */
 
 console.log (DB_CONNECTION);
 
 @Module({
   imports: [
     MongooseModule.forRoot(DB_CONNECTION),
-    MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }])
+    MongooseModule.forFeature([{ name: PRODUCT_MODEL_NAME, schema: ProductSchema }])
     ],
   controllers: [AppController, NotificationController, ProductController],
   providers: [

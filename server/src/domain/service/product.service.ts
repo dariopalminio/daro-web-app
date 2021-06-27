@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
 import { IProductService } from '../input/port/IProductService';
 import { Product } from '../../domain/model/entity/product.interface';
 import { CreateProductDTO } from '../../application/dto/create.product.dto';
@@ -9,10 +8,12 @@ import { CreateProductDTO } from '../../application/dto/create.product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
+export const PRODUCT_MODEL_NAME='Product';
+
 @Injectable()
 export class ProductService implements IProductService{
 
-  constructor(@InjectModel('Product') readonly productModel: Model<Product>){}
+  constructor(@InjectModel(PRODUCT_MODEL_NAME) readonly productModel: Model<Product>){}
 
   // Get all products
   async getAll(): Promise<Product[]> {

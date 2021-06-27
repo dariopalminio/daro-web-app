@@ -18,6 +18,15 @@ export class Product {
     @Prop()
     price: Number;
 
+    @Prop()
+    sku:  String;
+    
+    @Prop()
+    barcode:  String;
+
+    @Prop() 
+    stock: number;
+
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

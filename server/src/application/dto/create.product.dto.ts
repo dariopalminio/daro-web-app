@@ -5,5 +5,7 @@ export class CreateProductDTO{
     readonly description: string;
     readonly imageURL: string;
     readonly price: number;
-    //readonly countInStock: number;
+    readonly sku:  String;
+    readonly barcode:  String;
+    readonly stock: number;
 };
