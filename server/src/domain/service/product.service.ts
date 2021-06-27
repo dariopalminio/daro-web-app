@@ -24,7 +24,7 @@ export class ProductService implements IProductService{
 
   // Get a single Product
   async getById(productId: string): Promise<IProduct> {
-    const product: IProduct = await this.productModel.findById(productId);
+    const product: IProduct = await this.productModel.findById(productId).exec();
     return product;
   };
 
