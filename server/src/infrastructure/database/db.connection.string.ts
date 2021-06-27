@@ -10,7 +10,8 @@ if (process.env.SERVER_BFF_MONGO_ON_SERVER === 'false') {
     //Example: mongodb://127.0.0.1:27017/test?readPreference=primary&appname=MongoDB%20Compass&ssl=false
     DB_CONNECTION = `mongodb://`;
     DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_USERNAME}:`;
-    DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_USERPASSWORD}@`;
+    //password encoded as a connection string URI
+    DB_CONNECTION += `${encodeURIComponent(process.env.SERVER_BFF_MONGO_USERPASSWORD)}@`;
     DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_HOST}/`;
     DB_CONNECTION += `?authSource=${process.env.SERVER_BFF_MONGO_DB}`;
 } else {
@@ -22,10 +23,12 @@ if (process.env.SERVER_BFF_MONGO_ON_SERVER === 'false') {
     //SERVER_BFF_MONGO_USERPASSWORD="Daroandres12345"
     DB_CONNECTION = `mongodb+srv://`;
     DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_USERNAME}:`;
-    DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_USERPASSWORD}@`;
+    //password encoded as a connection string URI
+    DB_CONNECTION += `${encodeURIComponent(process.env.SERVER_BFF_MONGO_USERPASSWORD)}@`;
     DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_HOST}/`;
     DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_DB}?retryWrites=true&w=majority`;
 }
+
 
 export default DB_CONNECTION;
 
