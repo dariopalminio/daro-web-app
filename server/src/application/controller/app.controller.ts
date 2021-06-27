@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Inject} from '@nestjs/common';
 import { IAppService } from '../../domain/input/port/IAppService';
 
-export const APP_SERVICE = 'AppService';
+export const APP_SERVICE_INJECTED = 'AppService_Implementation';
 
 @Controller()
 export class AppController {
   
   constructor(
-    @Inject("AppService")
+    @Inject(APP_SERVICE_INJECTED)
     private readonly appService: IAppService) {}
 
   @Get()

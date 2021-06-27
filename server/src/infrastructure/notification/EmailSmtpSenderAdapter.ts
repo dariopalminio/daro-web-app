@@ -4,6 +4,7 @@ import IEmailSender from '../../domain/output/port/IEmailSender';
 
 const nodemailer = require("nodemailer");
 
+@Injectable()
 export class EmailSmtpSenderAdapter implements IEmailSender{
 
 

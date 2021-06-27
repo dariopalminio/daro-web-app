@@ -7,12 +7,14 @@ import { ProductDTO } from '../../domain/model/entity/product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-export const PRODUCT_MODEL_NAME='Product';
+export const PRODUCT_MODEL_INJECTED='Product_Implementation';
 
 @Injectable()
 export class ProductService implements IProductService{
 
-  constructor(@InjectModel(PRODUCT_MODEL_NAME) readonly productModel: Model<IProduct>){}
+  constructor(
+    @InjectModel(PRODUCT_MODEL_INJECTED) 
+    readonly productModel: Model<IProduct>){}
 
   // Get all products
   async getAll(): Promise<IProduct[]> {

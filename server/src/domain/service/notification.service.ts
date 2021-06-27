@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
 import { INotificationService } from '../input/port/INotificationService';
-import { EmailSmtpSenderAdapter} from '../../infrastructure/notification/EmailSmtpSenderAdapter';
 import IEmailSender from '../output/port/IEmailSender';
+
+export const EMAIL_SENDER_INJECTED='EmailSender_Implementation';
 
 @Injectable()
 export class NotificationService implements INotificationService{
-
+  constructor(
+    @Inject(EMAIL_SENDER_INJECTED)
+      readonly sender: IEmailSender){
+    }
 
   /**
    * Send contact email 
@@ -25,10 +29,10 @@ export class NotificationService implements INotificationService{
     <p>Message: ${contactMessage.message}</p>
     `;
 
-    const sender: IEmailSender = new EmailSmtpSenderAdapter();
+    //const sender: IEmailSender = new EmailSmtpSenderAdapter();
     
     try {
-      return sender.sendEmail("Subject Test", contactMessage.email, contentHTML);
+      return this.sender.sendEmail("Subject Test", contactMessage.email, contentHTML);
     } catch (error) {
       throw error;
     };

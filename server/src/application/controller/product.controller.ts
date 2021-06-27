@@ -2,12 +2,12 @@ import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundEx
 import { IProductService } from '../../domain/input/port/IProductService';
 import { ProductDTO } from '../../domain/model/entity/product.dto';
 
-export const PRODUCT_SERVICE = 'ProductService';
+export const PRODUCT_SERVICE_INJECTED = 'ProductService_Implementation';
 
 @Controller('product')
 export class ProductController {
   constructor(
-    @Inject(PRODUCT_SERVICE)
+    @Inject(PRODUCT_SERVICE_INJECTED)
     private readonly productService: IProductService
     ) {}
 
