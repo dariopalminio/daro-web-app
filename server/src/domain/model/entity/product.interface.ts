@@ -1,4 +1,5 @@
-import { Document } from 'mongoose';
+
+import { Document } from 'mongoose'; //Mongo
 
 export interface IProduct extends Document{
     readonly name: string;

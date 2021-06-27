@@ -1,4 +1,6 @@
-export class ProductDTO{
+
+
+export class ProductDTO {
     readonly name: string;
     readonly description: string;
     readonly imageURL: string;

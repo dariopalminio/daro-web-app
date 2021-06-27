@@ -30,7 +30,7 @@ export class ProductController {
     }
 
     // GET single product: /product/5c9d46100e2e5c44c444b2d1
-    @Get('/:productID')
+    @Get('/id/:productID')
     async getProduct(@Res() res, @Param('productID') productID) {
         const product = await this.productService.getById(productID);
         if (!product) throw new NotFoundException('Product does not exist!');
@@ -39,7 +39,7 @@ export class ProductController {
 
     // Delete Product: /delete?productID=5c9d45e705ea4843c8d0e8f7
     @Delete('delete')
-    async deleteProduct(@Res() res, @Query('productID') productID) {
+    async deleteProduct(@Res() res, @Query('id') productID) {
         const productDeleted = await this.productService.deleteProduct(productID);
         if (!productDeleted) throw new NotFoundException('Product does not exist!');
         return res.status(HttpStatus.OK).json({

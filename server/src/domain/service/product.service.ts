@@ -22,26 +22,26 @@ export class ProductService implements IProductService{
 
   // Get a single Product
   async getById(productId: string): Promise<IProduct> {
-    const product = await this.productModel.findById(productId);
+    const product: IProduct = await this.productModel.findById(productId);
     return product;
   };
 
 // Post a single product
-async create(createProductDTO: ProductDTO): Promise<IProduct> {
-  const newProduct = new this.productModel(createProductDTO);
+async create(productDTO: ProductDTO): Promise<IProduct> {
+  const newProduct: IProduct = new this.productModel(productDTO);
   return newProduct.save();
 }
 
 // Delete Product return this.labelModel.deleteOne({ osCode }).exec();
 async deleteProduct(productID: string): Promise<any> {
-  const deletedProduct = await this.productModel.findByIdAndDelete(productID).exec();
+  const deletedProduct: any = await this.productModel.findByIdAndDelete(productID).exec();
   return deletedProduct;
 }
 
 // Put a single product
-async updateProduct(productID: string, createProductDTO: ProductDTO): Promise<IProduct> {
-  const updatedProduct = await this.productModel
-                      .findByIdAndUpdate(productID, createProductDTO, {new: true});
+async updateProduct(productID: string, productDTO: ProductDTO): Promise<IProduct> {
+  const updatedProduct: IProduct = await this.productModel
+                      .findByIdAndUpdate(productID, productDTO, {new: true});
   return updatedProduct;
 }
 
