@@ -1,7 +1,6 @@
 import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put } from '@nestjs/common';
 import { IProductService } from '../../domain/input/port/IProductService';
-import { CreateProductDTO } from '../dto/create.product.dto';
-import { Product } from '../../domain/model/entity/product.interface';
+import { ProductDTO } from '../../domain/model/entity/product.dto';
 
 export const PRODUCT_SERVICE = 'ProductService';
 
@@ -15,7 +14,7 @@ export class ProductController {
 
     // Add Product: /product/create
     @Post('create')
-    async createProduct(@Res() res, @Body() createProductDTO: CreateProductDTO) {
+    async createProduct(@Res() res, @Body() createProductDTO: ProductDTO) {
         const product = await this.productService.create(createProductDTO);
         return res.status(HttpStatus.OK).json({
             message: 'Product Successfully Created',
@@ -23,9 +22,8 @@ export class ProductController {
         });
     }
 
-    // Get Products /product
-    // @Get('/list')
-    @Get('/')
+    // Get Products /product/all
+    @Get('all')
     async getProducts(@Res() res) {
         const products = await this.productService.getAll();
         return res.status(HttpStatus.OK).json(products);
@@ -40,7 +38,7 @@ export class ProductController {
     }
 
     // Delete Product: /delete?productID=5c9d45e705ea4843c8d0e8f7
-    @Delete('/delete')
+    @Delete('delete')
     async deleteProduct(@Res() res, @Query('productID') productID) {
         const productDeleted = await this.productService.deleteProduct(productID);
         if (!productDeleted) throw new NotFoundException('Product does not exist!');
@@ -51,8 +49,8 @@ export class ProductController {
     }
 
     // Update Product: /update?productID=5c9d45e705ea4843c8d0e8f7
-    @Put('/update')
-    async updateProduct(@Res() res, @Body() createProductDTO: CreateProductDTO, @Query('productID') productID) {
+    @Put('update')
+    async updateProduct(@Res() res, @Body() createProductDTO: ProductDTO, @Query('productID') productID) {
         const updatedProduct = await this.productService.updateProduct(productID, createProductDTO);
         if (!updatedProduct) throw new NotFoundException('Product does not exist!');
         return res.status(HttpStatus.OK).json({

@@ -1,6 +1,4 @@
-import { Product } from "src/domain/model/entity/product.interface";
-
-export class CreateProductDTO{
+export class ProductDTO{
     readonly name: string;
     readonly description: string;
     readonly imageURL: string;
