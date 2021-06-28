@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
-import { INotificationService } from '../input/port/INotificationService';
-import IEmailSender from '../output/port/IEmailSender';
+import { INotificationService } from '../input/port/notification.service.interface';
+import IEmailSender from '../output/port/email.sender.interface';
 
 export const EMAIL_SENDER_TOKEN='EmailSender_Implementation';
 

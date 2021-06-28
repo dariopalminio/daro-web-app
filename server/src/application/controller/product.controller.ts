@@ -1,17 +1,23 @@
 import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put } from '@nestjs/common';
-import { IProductService } from '../../domain/input/port/IProductService';
-import { ProductDTO } from '../../domain/model/entity/product.dto';
+import { IProductService } from '../../domain/input/port/product.service.interface';
+import { ProductDTO } from '../../domain/model/value_object/product.dto';
 
 export const PRODUCT_SERVICE_TOKEN = 'ProductService_Implementation';
 
 @Controller('product')
 export class ProductController {
+    
   constructor(
     @Inject(PRODUCT_SERVICE_TOKEN)
     private readonly productService: IProductService
     ) {}
 
 
+    @Get()
+    getHello(): string {
+      return "Hello World! I'm Product Service...";
+    };
+    
     // Add Product: /product/create
     @Post('create')
     async createProduct(@Res() res, @Body() createProductDTO: ProductDTO) {
@@ -20,7 +26,7 @@ export class ProductController {
             message: 'Product Successfully Created',
             product
         });
-    }
+    };
 
     // Get Products /product/all
     @Get('all')
@@ -35,7 +41,7 @@ export class ProductController {
         const product = await this.productService.getById(productID);
         if (!product) throw new NotFoundException('Product does not exist!');
         return res.status(HttpStatus.OK).json(product);
-    }
+    };
 
     // Delete Product: /delete?productID=5c9d45e705ea4843c8d0e8f7
     @Delete('delete')
@@ -46,7 +52,7 @@ export class ProductController {
             message: 'Product Deleted Successfully',
             productDeleted
         });
-    }
+    };
 
     // Update Product: /update?productID=5c9d45e705ea4843c8d0e8f7
     @Put('update')
@@ -57,7 +63,7 @@ export class ProductController {
             message: 'Product Updated Successfully',
             updatedProduct 
         });
-    }
+    };
 
 
 }

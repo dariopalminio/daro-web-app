@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService, PRODUCT_MODEL_TOKEN } from './product.service';
+import { ProductService, PRODUCT_COLLECTION_TOKEN } from './product.service';
 import { getModelToken } from '@nestjs/mongoose';
 //import { IProduct } from '../../domain/model/entity/product.interface';
-import { ProductDTO } from '../../domain/model/entity/product.dto';
+import { ProductDTO } from '../model/value_object/product.dto';
 import { createMock } from '@golevelup/nestjs-testing';
 import { Model, Query } from 'mongoose';
 import { Product, ProductDocument } from '../../infrastructure/database/schema/product.schema';
@@ -80,7 +80,7 @@ describe('ProductService', () => {
                     //getModelToken() function returns a prepared injection token based on a token name. 
                     //Using this token, you can easily provide a mock implementation using any of the standard 
                     //custom provider techniques, including useClass, useValue, and useFactory. 
-                    provide: getModelToken(PRODUCT_MODEL_TOKEN),
+                    provide: getModelToken(PRODUCT_COLLECTION_TOKEN),
                     // notice that only the functions we call from the model are mocked
                     useValue: {
                         new: jest.fn().mockResolvedValue(new ProductDTO()),
@@ -99,7 +99,7 @@ describe('ProductService', () => {
         }).compile();
 
         service = module.get<ProductService>(ProductService);
-        model = module.get<Model<ProductDocument>>(getModelToken(PRODUCT_MODEL_TOKEN));
+        model = module.get<Model<ProductDocument>>(getModelToken(PRODUCT_COLLECTION_TOKEN));
     });
 
 

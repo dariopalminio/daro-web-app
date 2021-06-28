@@ -2,12 +2,18 @@ import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './application/controller/app.controller';
 import { NotificationController, NOTIFICATION_SERVICE_TOKEN } from './application/controller/notification.controller';
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
+import { CategoryController, CATEGORY_SERVICE_TOKEN } from './application/controller/category.controller';
 import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
-import { ProductService, PRODUCT_MODEL_TOKEN } from './domain/service/product.service';
-import { EmailSmtpSenderAdapter } from './infrastructure/notification/EmailSmtpSenderAdapter';
+import { ProductService, PRODUCT_COLLECTION_TOKEN } from './domain/service/product.service';
+import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
+import { EmailSmtpSenderAdapter } from './infrastructure/notification/email.sender.adapter';
 import { AuthMiddleware } from './application/middleware/auth.middleware';
 import { ProductSchema } from './infrastructure/database/schema/product.schema';
+import { CategorySchema } from './infrastructure/database/schema/category.schema';
 import DB_CONNECTION from './infrastructure/database/db.connection.string';
+import { CategoryRepository, CATEGORY_COLLECTION_TOKEN } from './infrastructure/database/repository/category.repository';
+
+
 
 //Mongo
 import { MongooseModule } from '@nestjs/mongoose';
@@ -18,9 +24,12 @@ console.log(DB_CONNECTION);
 @Module({
   imports: [
     MongooseModule.forRoot(DB_CONNECTION),
-    MongooseModule.forFeature([{ name: PRODUCT_MODEL_TOKEN, schema: ProductSchema }])
+    MongooseModule.forFeature([
+      { name: PRODUCT_COLLECTION_TOKEN, schema: ProductSchema },
+      { name: CATEGORY_COLLECTION_TOKEN, schema: CategorySchema },
+    ])
   ],
-  controllers: [AppController, NotificationController, ProductController],
+  controllers: [AppController, NotificationController, ProductController, CategoryController],
   providers: [
     {
       provide: NOTIFICATION_SERVICE_TOKEN,
@@ -33,7 +42,15 @@ console.log(DB_CONNECTION);
     {
       provide: EMAIL_SENDER_TOKEN,
       useClass: EmailSmtpSenderAdapter,
-    }
+    },
+    {
+      provide: CATEGORY_SERVICE_TOKEN,
+      useClass: CategoryService,
+    },
+    {
+      provide: CATEGORY_REPOSITORY_TOKEN,
+      useClass: CategoryRepository,
+    },
   ],
 })
 export class AppModule {

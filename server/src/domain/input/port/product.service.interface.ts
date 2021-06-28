@@ -1,5 +1,5 @@
 import { IProduct } from '../../model/entity/product.interface';
-import { ProductDTO } from '../../model/entity/product.dto';
+import { ProductDTO } from '../../model/value_object/product.dto';
 
 export interface IProductService {
   getAll(): Promise<IProduct[]>;
