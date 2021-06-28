@@ -32,7 +32,7 @@ const mockArrayResult = [
     }
 ];
 
-const mockProd =  {
+const mockProd = {
     "_id": "60d8f09711d897f930de4d55",
     "name": "Laptop",
     "description": "MacBook Air",
@@ -45,6 +45,18 @@ const mockProd =  {
 };
 
 const mockProductDoc = (mock?: Partial<ProductDTO>): Partial<ProductDocument> => ({
+    "_id": "60d8f09711d897f930de4d55",
+    "name": "Laptop",
+    "description": "MacBook Air",
+    "imageURL": "https://images2.png",
+    "price": 23000,
+    "sku": "LAP-MAC-WHI-COT",
+    "barcode": "LAP-MAC-1234",
+    "stock": 2,
+    "__v": 0
+});
+
+const mockProductDocDeleted = (): Partial<ProductDocument> => ({
     "_id": "60d8f09711d897f930de4d55",
     "name": "Laptop",
     "description": "MacBook Air",
@@ -79,7 +91,7 @@ describe('ProductService', () => {
                         update: jest.fn(),
                         create: jest.fn(),
                         save: jest.fn(),
-                        remove: jest.fn(),
+                        findByIdAndDelete: jest.fn(),
                         exec: jest.fn(),
                     },
                 },
@@ -100,34 +112,70 @@ describe('ProductService', () => {
     });
 
     it('productService.getAll should return all products', async () => {
+
         jest.spyOn(model, 'find').mockReturnValue({
             exec: jest.fn().mockResolvedValueOnce(mockArrayResult),
         } as any);
+
         const products = await service.getAll();
         expect(products).toEqual(mockArrayResult);
     });
 
     it('productService.getById should getOne by id', async () => {
+
         jest.spyOn(model, 'findById').mockReturnValueOnce(
-          createMock<Query<ProductDocument, ProductDocument>>({
-            exec: jest
-              .fn()
-              .mockResolvedValueOnce(mockProductDoc(new ProductDTO())),
-          }),
+            createMock<Query<ProductDocument, ProductDocument>>({
+                exec: jest
+                    .fn()
+                    .mockResolvedValueOnce(mockProductDoc(new ProductDTO())),
+            }),
         );
+
         const findMockProdDoc = mockProductDoc(new ProductDTO());
         const response = await service.getById(mockProductDoc()._id);
         expect(response).toEqual(findMockProdDoc);
-      });
+    });
 
-      it.skip('productService.updateProduct should update a product successfully', async () => {
+    it.skip('productService.updateProduct should update a product successfully', async () => {
+
         jest.spyOn(model, 'findOneAndUpdate').mockReturnValueOnce(
-           createMock<Query<ProductDocument, ProductDocument>>({
-            exec: jest.fn().mockResolvedValueOnce(mockProd),
-          }),
-         );
+            createMock<Query<ProductDocument, ProductDocument>>({
+                exec: jest.fn().mockResolvedValueOnce(mockProd),
+            }),
+        );
+
         const updatedCat = await service.updateProduct(mockProductDoc()._id, new ProductDTO());
-         expect(updatedCat).toEqual(mockProd);
-      });
+        expect(updatedCat).toEqual(mockProd);
+    });
+
+
+    /**
+     * productService.deleteProduct...
+         Controller return:
+       "productDeleted": {
+        "_id": "60d90e99575a0cfff55a315f",
+        "name": "Mesa",
+        "description": "MacBook Air",
+        "imageURL": "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=658&q=80",
+        "price": 23000,
+        "sku": "312312342342",
+        "barcode": "312312342342",
+        "stock": 2,
+        "__v": 0
+    }
+    */
+
+    it('productService.deleteProduct should return that it did delete a Product', async () => {
+
+        jest.spyOn(model, 'findByIdAndDelete').mockReturnValueOnce(
+            createMock<Query<ProductDocument, ProductDocument>>({
+                exec: jest.fn().mockResolvedValueOnce(mockProductDocDeleted()),
+            }),
+        );
+
+        const productDeleted = await service.deleteProduct(mockProductDoc()._id);
+        expect(productDeleted).toEqual(mockProductDocDeleted());
+    });
+
 
 });
