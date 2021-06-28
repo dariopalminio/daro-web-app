@@ -2,6 +2,7 @@
 import { Document } from 'mongoose'; //Mongo
 
 export interface IProduct extends Document{
+    //_id: holds an ObjectId.
     readonly name: string;
     readonly description: string;
     readonly imageURL: string;

@@ -1,6 +1,7 @@
 
 
 export class ProductDTO {
+    //_id: holds an ObjectId.
     readonly name: string;
     readonly description: string;
     readonly imageURL: string;
