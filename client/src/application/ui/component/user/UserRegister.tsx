@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { FunctionComponent } from "react";
-import IUserValidator from '../../../../domain/helper/IUserValidator';
-import { UserValidatorFactory } from "../../../../domain/helper/UserValidatorFactory";
-import useRegister from "../../../../domain/hook/useRegister";
-import SessionContext, { SessionContextType } from "../../../../domain/context/SessionContext";
+import IUserValidator from '../../../../domain/helper/user.validator.interface';
+import { UserValidatorFactory } from "../../../../domain/helper/user.validator.factory";
+import useRegister from "../../../../domain/hook/register.hook";
+import SessionContext, { SessionContextType } from "../../../../domain/context/session.context";
 import clsx from "clsx";
 
 //@material-ui

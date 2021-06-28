@@ -3,8 +3,8 @@ import SessionContext, {
   recoverySessionFromStorage,
   SessionDefaultValue,
   setSessionToStorage,
-} from "../../../domain/context/SessionContext";
-import { SessionType } from '../../../domain/model/user/SessionType';
+} from "../../../domain/context/session.context";
+import { SessionType } from '../../../domain/model/user/session.type';
 import { atom, useAtom } from "jotai";
 
 export const SessionAtom = atom(SessionDefaultValue);

@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { SessionType } from '../model/user/SessionType';
+import { SessionType } from '../model/user/session.type';
 
 const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";
 

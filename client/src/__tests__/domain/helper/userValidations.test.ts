@@ -1,5 +1,5 @@
-import IUserValidator from '../../../domain/helper/IUserValidator';
-import { UserValidatorFactory } from "../../../domain/helper/UserValidatorFactory";
+import IUserValidator from '../../../domain/helper/user.validator.interface';
+import { UserValidatorFactory } from "../../../domain/helper/user.validator.factory";
 
 describe("Testing validations functions from userValidations", () => {
 
@@ -57,7 +57,7 @@ describe("Testin validations functions from userValidations using async/await", 
 
   test('validate well fomated password', async () => {
     const result = await validator.passIsValid(
-    'abcde12345',
+    'Abcde12345',
     );
     expect(result).toBeTruthy();
   });

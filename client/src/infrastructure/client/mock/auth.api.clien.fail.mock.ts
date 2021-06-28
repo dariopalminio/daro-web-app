@@ -1,4 +1,4 @@
-import { IAuthService } from '../../../domain/service/IAuthService';
+import { IAuthService } from '../../../domain/service/auth.service.interface';
 
 
 // Fake factory function

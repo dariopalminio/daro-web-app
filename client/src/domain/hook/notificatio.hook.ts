@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
-import { ContactType } from '../model/notification/ContactType';
-import { INotificationClient } from '../service/INotificationClient';
-import * as StateConfig from '../StateConfig';
-import { IAuthService } from '../service/IAuthService';
+import { ContactType } from '../model/notification/contact.type';
+import { INotificationClient } from '../service/notification.service.interface';
+import * as StateConfig from '../domain.config';
+import { IAuthService } from '../service/auth.service.interface';
 
 /**
  * useNotification custom hook

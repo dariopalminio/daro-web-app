@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
-import IUserValidator from '../../../../domain/helper/IUserValidator';
-import { UserValidatorFactory } from "../../../../domain/helper/UserValidatorFactory";
-import { ContactType } from "../../../../domain/model/notification/ContactType";
-import useNotification from "../../../../domain/hook/useNotification";
+import IUserValidator from '../../../../domain/helper/user.validator.interface';
+import { UserValidatorFactory } from "../../../../domain/helper/user.validator.factory";
+import { ContactType } from "../../../../domain/model/notification/contact.type";
+import useNotification from "../../../../domain/hook/notificatio.hook";
 import AlertError from "../user/AlertError";
 
 //@material-ui

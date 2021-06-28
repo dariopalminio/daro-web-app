@@ -1,7 +1,7 @@
 import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   SessionContextType,
-} from "../../../../domain/context/SessionContext";
+} from "../../../../domain/context/session.context";
 import Logout from "./Logout";
 import Login from "./Login";
 

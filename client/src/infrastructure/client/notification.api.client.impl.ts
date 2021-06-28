@@ -1,9 +1,9 @@
 
-import * as OriginConfig from '../OriginConfig';
+import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError } from './ApiError';
-import { ContactType } from '../../domain/model/notification/ContactType';
-import { INotificationClient } from '../../domain/service/INotificationClient';
+import { handleAxiosError, ApiError } from './api.client.error';
+import { ContactType } from '../../domain/model/notification/contact.type';
+import { INotificationService } from '../../domain/service/notification.service.interface';
 
 /**
  * NotificationApiService implementation 
@@ -12,7 +12,7 @@ import { INotificationClient } from '../../domain/service/INotificationClient';
  * a (presumably new) object. In JavaScript, any function can return an object.
  * @returns 
  */
-export default function NotificationApiClientImpl(): INotificationClient {
+export default function NotificationApiClientImpl(): INotificationService {
 
   /**
    * Send Contact Email using notification service.

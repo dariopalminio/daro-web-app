@@ -1,8 +1,8 @@
 import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   SessionContextType,
-} from "../../../../domain/context/SessionContext";
-import useLogout from "../../../../domain/hook/useLogout";
+} from "../../../../domain/context/session.context";
+import useLogout from "../../../../domain/hook/logout.hook";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";

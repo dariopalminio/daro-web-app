@@ -1,5 +1,5 @@
 
-import { UserValidatorsYupImpl } from './UserValidatorsYupImpl';
+import { UserValidatorsYupImpl } from './user.validators.yup.impl';
 
 /**
  * Factory of UserValidation implementation for dependency injection

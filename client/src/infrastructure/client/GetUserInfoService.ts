@@ -1,7 +1,7 @@
 
-import * as OriginConfig from '../OriginConfig';
+import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosResponse } from 'axios';
-import { handleAxiosError, ApiError } from './ApiError';
+import { handleAxiosError, ApiError } from './api.client.error';
 
 /**
  * Get users Returns a list of users, filtered according to params.

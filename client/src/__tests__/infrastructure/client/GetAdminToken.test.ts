@@ -2,8 +2,8 @@ import { cleanup } from '@testing-library/react';
 import axios, { AxiosResponse } from 'axios';
 //import getAdminTokenService from '../../../../origin/client/user/GetAdminTokenService';
 
-import { AuthApiClientFactory } from '../../../infrastructure/client/factory/AuthApiClientFactory';
-import { IAuthService } from '../../../domain/service/IAuthService';
+import { AuthApiClientFactory } from '../../../infrastructure/client/factory/auth.api.client.factory';
+import { IAuthService } from '../../../domain/service/auth.service.interface';
 //const authService: IAuthService = AuthServiceFactory.create();
 
 describe('Test UserService service', () => {

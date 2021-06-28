@@ -1,8 +1,8 @@
-import { ContactType } from '../../../domain/model/notification/ContactType';
-import { INotificationClient } from '../../../domain/service/INotificationClient';
+import { ContactType } from '../../../domain/model/notification/contact.type';
+import { INotificationService } from '../../../domain/service/notification.service.interface';
 
 
-export default function NotificationClientMock(): INotificationClient {
+export default function NotificationClientMock(): INotificationService {
 
 /**
  * Fake function

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import SessionContext, { SessionContextType } from "../../../../domain/context/SessionContext";
+import SessionContext, { SessionContextType } from "../../../../domain/context/session.context";
 
 //@material-ui
 import MenuItem from "@material-ui/core/MenuItem";

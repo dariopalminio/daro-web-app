@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { SessionContextType } from '../context/SessionContext';
-import { SessionType } from '../model/user/SessionType';
-import * as StateConfig from '../StateConfig';
-import { IAuthService } from '../service/IAuthService';
+import SessionContext, { SessionContextType } from '../context/session.context';
+import { SessionType } from '../model/user/session.type';
+import * as StateConfig from '../domain.config';
+import { IAuthService } from '../service/auth.service.interface';
 
 /**
  * cuseRegister Custom Hook
