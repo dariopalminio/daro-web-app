@@ -29,6 +29,8 @@ export class CategoryRepository implements IRepository<ICategory> {
 
     async getById(id: string): Promise<ICategory> {
         const catDoc: CategoryDocument = await this.categoryModel.findById(id).exec();
+        //Doc has id name "_id"
+        //const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
         return this.conversorDocToCategory(catDoc);
     };
 
@@ -48,7 +50,8 @@ export class CategoryRepository implements IRepository<ICategory> {
     };
 
     /**
-    * Convert from Mongo CategoryDocument to Category class
+    * Convert from Mongo CategoryDocument to Category class. 
+    * This is a Casting function.
     * @param categoryDoc 
     * @returns 
     */
@@ -60,7 +63,8 @@ export class CategoryRepository implements IRepository<ICategory> {
     };
 
     /**
-     * Convert from Mongo CategoryDocument array to Category class array
+     * Convert from Mongo CategoryDocument array to Category class array.
+     *  This is a Casting function.
      * @param categoryDocArray 
      * @returns 
      */
