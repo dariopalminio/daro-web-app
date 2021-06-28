@@ -20,6 +20,29 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 console.log(DB_CONNECTION);
 
+/**
+ * 
+ 
+export default () => ({
+  mongoConnection: `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_USERPASSWORD}@${process.env.MONGO_HOST}/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+  test: process.env.TEST,
+  redirectUri: process.env.REDIRECT_URI,
+});
+
+
+
+MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get('mongoConnection'),
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+      }),
+      inject: [ConfigService],
+    })
+ */
+
 //Dependency Injector
 @Module({
   imports: [
