@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { ContactType } from '../model/notification/contact.type';
-import { INotificationClient } from '../service/notification.service.interface';
+import { INotificationService } from '../service/notification.service.interface';
 import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 
@@ -10,10 +10,10 @@ import { IAuthService } from '../service/auth.service.interface';
  */
 export default function useNotification(
     authServiceInjected: IAuthService | null = null, 
-    notifServiceInjected: INotificationClient | null = null) {
+    notifServiceInjected: INotificationService | null = null) {
 
     const [state, setState] = useState({ sending: false, hasError: false, msg: '', wasSent: false });
-    const notifService: INotificationClient = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
+    const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
 
     /**
