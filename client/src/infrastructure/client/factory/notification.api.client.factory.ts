@@ -1,6 +1,6 @@
 
 import  NotificationApiServiceImpl from '../notification.api.client.impl';
-import  NotificationClientMock from '../mock/notification.api.client.mock';
+import  NotificationClientStub from '../stub/notification.api.client.stub';
 import { INotificationService } from '../../../domain/service/notification.service.interface';
 
 /**
@@ -9,7 +9,7 @@ import { INotificationService } from '../../../domain/service/notification.servi
 export class NotificationApiClientFactory {
     static create(fake: boolean): INotificationService{
         //Return a factory function
-        if (fake) return NotificationClientMock(); //fake for test
+        if (fake) return NotificationClientStub(); //fake for test
         return NotificationApiServiceImpl(); //Real api
     }
 };

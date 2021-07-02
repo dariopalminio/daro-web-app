@@ -1,8 +1,8 @@
 require('@testing-library/react');
 import { renderHook, act } from '@testing-library/react-hooks';
 import useLogin from "../../../domain/hook/login.hook";
-import  AuthApiClienOkMock  from '../../../infrastructure/client/mock/auth.api.clien.ok.mock';
-import  AuthApiClientFailMock  from '../../../infrastructure/client/mock/auth.api.clien.fail.mock';
+import  AuthApiClienOkMock  from '../../../infrastructure/client/stub/auth.api.client.ok.stub';
+import  AuthApiClientFailMock  from '../../../infrastructure/client/stub/auth.api.client.fail.stub';
 
 // First: mock service for authenticate user and pass
 //jest.mock("../../../origin/client/user/AuthServiceFactory", () => {

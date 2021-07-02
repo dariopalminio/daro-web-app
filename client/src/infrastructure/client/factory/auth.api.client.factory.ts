@@ -1,6 +1,6 @@
 
 import  AuthApiClientImpl from '../auth.api.client.impl';
-import  AuthApiClienOkMock from '../mock/auth.api.clien.ok.mock';
+import  AuthApiClienOkStub from '../stub/auth.api.client.ok.stub';
 import { IAuthService } from '../../../domain/service/auth.service.interface';
 
 /**
@@ -9,7 +9,7 @@ import { IAuthService } from '../../../domain/service/auth.service.interface';
 export class AuthApiClientFactory {
     static create(fake: boolean): IAuthService{
         //Return a factory function
-        if (fake) return AuthApiClienOkMock(); //Fake for testing
+        if (fake) return AuthApiClienOkStub(); //Fake for testing
         return AuthApiClientImpl(); // Real API
     }
 };

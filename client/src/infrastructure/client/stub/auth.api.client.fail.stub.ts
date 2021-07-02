@@ -1,38 +1,42 @@
 import { IAuthService } from '../../../domain/service/auth.service.interface';
 
 
-// Fake factory function
-export default function AuthApiClientFailMock(): IAuthService {
+/**
+ * Stub factory function
+ * This simulates a AuthApiClient with fail responses
+ * @returns 
+ */
+export default function AuthApiClientFailStub(): IAuthService {
 
-// Fake function
+// Stub function
   function getAdminTokenService(): Promise<string> {
     return new Promise<string>( (resolve, reject) => {
       reject(new Error("General error!"));
      });
   };
 
-// Fake function
+// Stub function
   function getAppTokenService(): Promise<string> {
     return new Promise<string>( (resolve, reject) => {
       reject(new Error("General error!"));
      });
   };
 
-// Fake function
+// Stub function
   function loginService(username: string, pass: string): Promise<string> {
     return new Promise<string>( (resolve, reject) => {
       reject(new Error("General error!"));
      });
   };
 
-// Fake function
+// Stub function
   function logoutService(userId: string, adminToken: string): Promise<number> {
     return new Promise<number>( (resolve, reject) => {
       reject(new Error("General error!"));
      });
   };
 
-// Fake function
+// Stub function
   function registerService(
     firstname: string,
     lastname: string,
