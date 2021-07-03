@@ -1,3 +1,8 @@
+export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
+mongod --dbpath /Users/dariopalminio/data/db
+
+export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
+mongo
 Mongo running in http://127.0.0.1:27017/
 
 > show databases

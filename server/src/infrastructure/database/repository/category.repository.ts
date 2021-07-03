@@ -24,14 +24,16 @@ export class CategoryRepository implements IRepository<ICategory> {
 
     async getAll(): Promise<ICategory[]> {
         const arrayDoc: CategoryDocument[] = await this.categoryModel.find({}).exec();
-        return this.conversorArrayDocToCategory(arrayDoc);
+        return this.castArrayDocToCategory(arrayDoc);
+        //return this.conversorArrayDocToCategory(arrayDoc);
     };
 
     async getById(id: string): Promise<ICategory> {
         const catDoc: CategoryDocument = await this.categoryModel.findById(id).exec();
         //Doc has id name "_id"
-        //const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
-        return this.conversorDocToCategory(catDoc);
+        const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
+        return objCasted;
+        //return this.conversorDocToCategory(catDoc);
     };
 
     async create<CategoryDTO>(doc: CategoryDTO): Promise<boolean> {
@@ -73,6 +75,16 @@ export class CategoryRepository implements IRepository<ICategory> {
 
         categoryDocArray.forEach(element => arrayCategory.push(
             new Category(String(element._id), String(element.name), String(element.description))
+        ));
+
+        return arrayCategory;
+    };
+
+    castArrayDocToCategory(categoryDocArray: CategoryDocument[]): ICategory[] {
+        let arrayCategory: Category[] = [];
+
+        categoryDocArray.forEach(element => arrayCategory.push(
+            JSON.parse(JSON.stringify(element))
         ));
 
         return arrayCategory;

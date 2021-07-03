@@ -4,15 +4,21 @@ import { NotificationController, NOTIFICATION_SERVICE_TOKEN } from './applicatio
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
 import { CategoryController, CATEGORY_SERVICE_TOKEN } from './application/controller/category.controller';
 import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
-import { ProductService, PRODUCT_COLLECTION_TOKEN } from './domain/service/product.service';
+import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
 import { EmailSmtpSenderAdapter } from './infrastructure/notification/email.sender.adapter';
 import { AuthMiddleware } from './application/middleware/auth.middleware';
 import { ProductSchema } from './infrastructure/database/schema/product.schema';
 import { CategorySchema } from './infrastructure/database/schema/category.schema';
 import DB_CONNECTION from './infrastructure/database/db.connection.string';
-import { CategoryRepository, CATEGORY_COLLECTION_TOKEN } from './infrastructure/database/repository/category.repository';
-
+import {
+  CategoryRepository,
+  CATEGORY_COLLECTION_TOKEN
+} from './infrastructure/database/repository/category.repository';
+import {
+  ProductRepository,
+  PRODUCT_COLLECTION_TOKEN
+} from './infrastructure/database/repository/product.repository';
 
 
 //Mongo
@@ -73,6 +79,10 @@ MongooseModule.forRootAsync({
     {
       provide: CATEGORY_REPOSITORY_TOKEN,
       useClass: CategoryRepository,
+    },
+    {
+      provide: PRODUCT_REPOSITORY_TOKEN,
+      useClass: ProductRepository,
     },
   ],
 })

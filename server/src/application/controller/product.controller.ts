@@ -17,16 +17,6 @@ export class ProductController {
     getHello(): string {
       return "Hello World! I'm Product Service...";
     };
-    
-    // Add Product: /product/create
-    @Post('create')
-    async createProduct(@Res() res, @Body() createProductDTO: ProductDTO) {
-        const product = await this.productService.create(createProductDTO);
-        return res.status(HttpStatus.OK).json({
-            message: 'Product Successfully Created',
-            product
-        });
-    };
 
     // Get Products /product/all
     @Get('all')
@@ -43,10 +33,21 @@ export class ProductController {
         return res.status(HttpStatus.OK).json(product);
     };
 
+        // Add Product: /product/create
+    @Post('create')
+    async createProduct(@Res() res, @Body() createProductDTO: ProductDTO) {
+            const productCreated = await this.productService.create(createProductDTO);
+            if (!productCreated) throw new NotFoundException('Product does not exist or canot delete category!');
+            return res.status(HttpStatus.OK).json({
+                message: 'Product Successfully Created',
+                productCreated
+            });
+    };
+
     // Delete Product: /delete?productID=5c9d45e705ea4843c8d0e8f7
     @Delete('delete')
     async deleteProduct(@Res() res, @Query('id') productID) {
-        const productDeleted = await this.productService.deleteProduct(productID);
+        const productDeleted = await this.productService.delete(productID);
         if (!productDeleted) throw new NotFoundException('Product does not exist!');
         return res.status(HttpStatus.OK).json({
             message: 'Product Deleted Successfully',
@@ -57,7 +58,7 @@ export class ProductController {
     // Update Product: /update?productID=5c9d45e705ea4843c8d0e8f7
     @Put('update')
     async updateProduct(@Res() res, @Body() createProductDTO: ProductDTO, @Query('productID') productID) {
-        const updatedProduct = await this.productService.updateProduct(productID, createProductDTO);
+        const updatedProduct = await this.productService.update(productID, createProductDTO);
         if (!updatedProduct) throw new NotFoundException('Product does not exist!');
         return res.status(HttpStatus.OK).json({
             message: 'Product Updated Successfully',

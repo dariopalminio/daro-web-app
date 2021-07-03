@@ -33,17 +33,17 @@ export class CategoryService implements ICategoryService {
     console.log(newCat);
     return newCat;
   };
-  
-  // Delete category return this.labelModel.deleteOne({ osCode }).exec();
-async delete(id: string): Promise<boolean> {
-  const deleted: boolean = await this.categoryRepository.delete(id);
-  return deleted;
-};
 
-// Put a single category
-async update(id: string, category: ICategory): Promise<boolean> {
-  const updatedProduct: boolean = await this.categoryRepository.update(id, category);
-  return updatedProduct;
-};
+  // Delete category return this.labelModel.deleteOne({ osCode }).exec();
+  async delete(id: string): Promise<boolean> {
+    const deleted: boolean = await this.categoryRepository.delete(id);
+    return deleted;
+  };
+
+  // Put a single category
+  async update(id: string, category: ICategory): Promise<boolean> {
+    const updatedProduct: boolean = await this.categoryRepository.update(id, category);
+    return updatedProduct;
+  };
 
 };

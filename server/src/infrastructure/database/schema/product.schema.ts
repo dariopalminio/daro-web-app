@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type ProductDocument = Product & Document;
 
 @Schema()
-export class Product {
+export class ProductDocument extends Document{
 
     //_id: holds an ObjectId.
 
@@ -31,4 +30,5 @@ export class Product {
 
 }
 
-export const ProductSchema = SchemaFactory.createForClass(Product);
+export const ProductSchema = SchemaFactory.createForClass(ProductDocument);
+

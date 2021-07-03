@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService, PRODUCT_COLLECTION_TOKEN } from './product.service';
+import { ProductService } from './product.service';
 import { getModelToken } from '@nestjs/mongoose';
 //import { IProduct } from '../../domain/model/entity/product.interface';
 import { ProductDTO } from '../model/value_object/product.dto';
 import { createMock } from '@golevelup/nestjs-testing';
 import { Model, Query } from 'mongoose';
-import { Product, ProductDocument } from '../../infrastructure/database/schema/product.schema';
+import { ProductDocument } from '../../infrastructure/database/schema/product.schema';
+
+const PRODUCT_COLLECTION_TOKEN="";
 
 const mockArrayResult = [
     {
@@ -144,7 +146,7 @@ describe('ProductService', () => {
             }),
         );
 
-        const updatedCat = await service.updateProduct(mockProductDoc()._id, new ProductDTO());
+        const updatedCat = await service.update(mockProductDoc()._id, new ProductDTO());
         expect(updatedCat).toEqual(mockProd);
     });
 
@@ -173,7 +175,7 @@ describe('ProductService', () => {
             }),
         );
 
-        const productDeleted = await service.deleteProduct(mockProductDoc()._id);
+        const productDeleted = await service.delete(mockProductDoc()._id);
         expect(productDeleted).toEqual(mockProductDocDeleted());
     });
 

@@ -1,7 +1,5 @@
 
-import { Document } from 'mongoose'; //Mongo
-
-export interface IProduct extends Document{
+export interface IProduct{
     //_id: holds an ObjectId.
     readonly name: string;
     readonly description: string;

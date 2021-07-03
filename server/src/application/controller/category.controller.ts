@@ -33,16 +33,16 @@ export class CategoryController {
     return res.status(HttpStatus.OK).json(category);
   };
 
-    // Add Category: /category/create
-    @Post('create')
-    async createCategory(@Res() res, @Body() createCategoryDTO: ICategory) {
-      const categoryCreated = await this.categoryService.create(createCategoryDTO);
-      if (!categoryCreated) throw new NotFoundException('Category does not exist or canot delete category!');
-      return res.status(HttpStatus.OK).json({
-        message: 'Category Created Successfully',
-        categoryCreated
-      });
-    };
+  // Add Category: /category/create
+  @Post('create')
+  async createCategory(@Res() res, @Body() createCategoryDTO: ICategory) {
+    const categoryCreated = await this.categoryService.create(createCategoryDTO);
+    if (!categoryCreated) throw new NotFoundException('Category does not exist or canot delete category!');
+    return res.status(HttpStatus.OK).json({
+      message: 'Category Created Successfully',
+      categoryCreated
+    });
+  };
 
   // Delete Category: /delete?productID=5c9d45e705ea4843c8d0e8f7
   @Delete('delete')
@@ -55,7 +55,7 @@ export class CategoryController {
     });
   };
 
-  // Update Category: /update?categoryID=5c9d45e705ea4843c8d0e8f7
+  // Update Category: /update?id=5c9d45e705ea4843c8d0e8f7
   @Put('update')
   async updateProduct(@Res() res, @Body() categoryDTO: ICategory, @Query('id') categoryID) {
     const updatedCategory = await this.categoryService.update(categoryID, categoryDTO);

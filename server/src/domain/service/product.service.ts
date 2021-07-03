@@ -1,50 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { IProductService } from '../input/port/product.service.interface';
 import { IProduct } from '../../domain/model/entity/product.interface';
 import { ProductDTO } from '../model/value_object/product.dto';
+import { IRepository } from '../../domain/output/port/repository.interface';
 
-//Mongo
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 
-export const PRODUCT_COLLECTION_TOKEN = 'products'; //ModelToken
+//export const PRODUCT_COLLECTION_TOKEN = 'products'; //ModelToken
+
+export const PRODUCT_REPOSITORY_TOKEN = 'ProductRepository_Implementation'; //ModelToken
 
 @Injectable()
-export class ProductService implements IProductService{
+export class ProductService implements IProductService {
 
   constructor(
-    @InjectModel(PRODUCT_COLLECTION_TOKEN) 
-    readonly productModel: Model<IProduct>){}
+    @Inject(PRODUCT_REPOSITORY_TOKEN)
+    private readonly productRepository: IRepository<IProduct>,
+  ) { }
 
-  // Get all products
+
+  // Get all category
   async getAll(): Promise<IProduct[]> {
-    const products: IProduct[] = await this.productModel.find().exec();
-    return products;
+    const cats: IProduct[] = await this.productRepository.getAll();
+    console.log(cats);
+    return cats;
   };
 
-  // Get a single Product
-  async getById(productId: string): Promise<IProduct> {
-    const product: IProduct = await this.productModel.findById(productId).exec();
+  // Get a single category
+  async getById(id: string): Promise<IProduct> {
+    const product: IProduct = await this.productRepository.getById(id);
     return product;
   };
 
-// Post a single product
-async create(productDTO: ProductDTO): Promise<IProduct> {
-  const newProduct: IProduct = new this.productModel(productDTO);
-  return newProduct.save();
-};
+  async create(product: IProduct): Promise<boolean> {
+    const newProducto: Promise<boolean> = this.productRepository.create(product);
+    console.log(newProducto);
+    return newProducto;
+  };
 
-// Delete Product return this.labelModel.deleteOne({ osCode }).exec();
-async deleteProduct(productID: string): Promise<any> {
-  const deletedProduct: any = await this.productModel.findByIdAndDelete(productID).exec();
-  return deletedProduct;
-};
+  // Delete category return this.labelModel.deleteOne({ osCode }).exec();
+  async delete(id: string): Promise<boolean> {
+    const deleted: boolean = await this.productRepository.delete(id);
+    return deleted;
+  };
 
-// Put a single product
-async updateProduct(productID: string, productDTO: ProductDTO): Promise<IProduct> {
-  const updatedProduct: IProduct = await this.productModel
-                      .findByIdAndUpdate(productID, productDTO, {new: true});
-  return updatedProduct;
-};
+  // Put a single category
+  async update(id: string, category: IProduct): Promise<boolean> {
+    const updatedProduct: boolean = await this.productRepository.update(id, category);
+    return updatedProduct;
+  };
 
 };
