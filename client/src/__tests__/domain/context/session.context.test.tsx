@@ -1,7 +1,7 @@
 import * as ReactDOM from "react-dom";
 import { useContext } from "react";
 import SessionContext, {
-  SessionContextType,
+  ISessionContext,
 } from "../../../domain/context/session.context";
 import SessionContextProvider from "../../../application/ui/provider/SessionContextProvider";
 
@@ -14,7 +14,7 @@ describe("Test SessionContext & SessionContextProvider", () => {
     const TestNotLoggedComponent = () => {
       const { session, removeSessionValue } = useContext(
         SessionContext
-      ) as SessionContextType;
+      ) as ISessionContext;
 
       return (
         <SessionContextProvider>

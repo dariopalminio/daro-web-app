@@ -1,13 +1,13 @@
 import { FC, useEffect, useMemo } from "react";
+import { useAtom } from "jotai";
 import SessionContext, {
   recoverySessionFromStorage,
   SessionDefaultValue,
   setSessionToStorage,
+  SessionAtom,
 } from "../../../domain/context/session.context";
 import { SessionType } from '../../../domain/model/user/session.type';
-import { atom, useAtom } from "jotai";
 
-export const SessionAtom = atom(SessionDefaultValue);
 
 /**
  * UserContext Provider

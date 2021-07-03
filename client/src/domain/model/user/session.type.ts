@@ -1,5 +1,5 @@
 // Global user type
-export type SessionType = {
+export interface SessionType {
     jwt: (string | null)
     isLogged: boolean
     isRegistered: boolean

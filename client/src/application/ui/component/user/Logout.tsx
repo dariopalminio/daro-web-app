@@ -1,6 +1,6 @@
 import { FunctionComponent, useContext } from "react";
 import SessionContext, {
-  SessionContextType,
+  ISessionContext,
 } from "../../../../domain/context/session.context";
 import useLogout from "../../../../domain/hook/logout.hook";
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName Login View
  */
 const Logout: FunctionComponent = () => {
-  const { session } = useContext(SessionContext) as SessionContextType;
+  const { session } = useContext(SessionContext) as ISessionContext;
   const { logout } = useLogout();
   const classes = useStyles();
 

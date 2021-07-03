@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 import IUserValidator from '../../../../domain/helper/user.validator.interface';
 import { UserValidatorFactory } from "../../../../domain/helper/user.validator.factory";
 import useRegister from "../../../../domain/hook/register.hook";
-import SessionContext, { SessionContextType } from "../../../../domain/context/session.context";
+import SessionContext, { ISessionContext } from "../../../../domain/context/session.context";
 import clsx from "clsx";
 
 //@material-ui
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName UserRegister View
  */
 export const UserRegister: FunctionComponent = () => {
-  const { session } = useContext(SessionContext) as SessionContextType;
+  const { session } = useContext(SessionContext) as ISessionContext;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

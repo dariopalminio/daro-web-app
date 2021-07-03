@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { SessionContextType } from '../context/session.context';
+import SessionContext, { ISessionContext } from '../context/session.context';
 import { SessionType } from '../model/user/session.type';
 import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
@@ -15,7 +15,7 @@ import { IAuthService } from '../service/auth.service.interface';
  *      logout function
  */
 export default function useLogout(authServiceInjected: IAuthService | null = null) {
-    const { removeSessionValue } = useContext(SessionContext) as SessionContextType;
+    const { removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
 

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import SessionContext, { SessionContextType } from "../../../../domain/context/session.context";
+import SessionContext, { ISessionContext } from "../../../../domain/context/session.context";
 
 //@material-ui
 import MenuItem from "@material-ui/core/MenuItem";
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const UserTopMenu: FunctionComponent = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const { session } = useContext(SessionContext) as SessionContextType;
+  const { session } = useContext(SessionContext) as ISessionContext;
 
   const openAnchorEl = Boolean(anchorEl);
 

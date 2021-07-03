@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { SessionContextType } from '../context/session.context';
+import SessionContext, { ISessionContext } from '../context/session.context';
 import { SessionType } from '../model/user/session.type';
 import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
@@ -10,7 +10,7 @@ import { IAuthService } from '../service/auth.service.interface';
  */
 export default function useRegister(authServiceInjected: IAuthService | null = null) {
 
-    const { setSessionValue, removeSessionValue } = useContext(SessionContext) as SessionContextType;
+    const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false });
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
     
