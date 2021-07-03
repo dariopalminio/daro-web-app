@@ -5,6 +5,7 @@ import { IRepository } from '../../../domain/output/port/repository.interface';
 import { IProduct } from '../../../domain/model/entity/product.interface';
 import { Product } from '../../../domain/model/entity/product';
 import { ProductDocument } from '../../../infrastructure/database/schema/product.schema';
+import { Console } from 'console';
 
 
 export const PRODUCT_COLLECTION_TOKEN = 'products'; //ModelToken
@@ -26,6 +27,10 @@ export class ProductRepository implements IRepository<IProduct> {
         //return this.conversorArrayDocToCategory(arrayDoc);
     };
 
+    /**
+     * getById
+     * If it does not find it, it returns null
+     */
     async getById(id: string): Promise<IProduct> {
         const catDoc: ProductDocument = await this.productModel.findById(id).exec();
         //Doc has id name "_id"
