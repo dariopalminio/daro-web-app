@@ -1,5 +1,13 @@
 import dotenv from 'dotenv';
 
+/**
+ * Config file for infrastructure layer
+ * 
+ * Having a separate configuration file allows you to access variables instantly and
+ * improves the maintainability of the codebase since all the variables are in the 
+ * same file. 
+ */
+
 const result = dotenv.config();
 
 if (result.error) {
