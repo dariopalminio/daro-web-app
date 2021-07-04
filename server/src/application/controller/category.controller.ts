@@ -21,7 +21,6 @@ export class CategoryController {
   @Get('all')
   async getAll(@Res() res) {
     const products = await this.categoryService.getAll();
-    console.log(products);
     return res.status(HttpStatus.OK).json(products);
   };
 
@@ -44,7 +43,7 @@ export class CategoryController {
     });
   };
 
-  // Delete Category: /delete?productID=5c9d45e705ea4843c8d0e8f7
+  // Delete Category: /delete?id=5c9d45e705ea4843c8d0e8f7
   @Delete('delete')
   async deleteProduct(@Res() res, @Query('id') id) {
     const categoryDeleted = await this.categoryService.delete(id);

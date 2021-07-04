@@ -1,14 +1,14 @@
+import { ICategory } from '../../../domain/model/entity/category.interface';
 
 export interface IProduct{
-    //_id: holds an ObjectId.
-    readonly name: string;
-    readonly description: string;
-    readonly imageURL: string;
-    readonly price: number;
-    readonly sku:  String;
-    readonly barcode:  String;
-    readonly stock: number;
-    //@Prop({type: [{ type: MongoSchema.Types.ObjectId, ref: 'Category'}] })
-    //categories: Category[];
+    _id: string; //_id: holds an ObjectId.
+    name: string;
+    description: string;
+    imageURL: string;
+    price: number;
+    sku:  string;
+    barcode:  string;
+    stock: number;
+    categories: ICategory[];
 };
 

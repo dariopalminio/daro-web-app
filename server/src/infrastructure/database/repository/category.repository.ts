@@ -6,10 +6,8 @@ import { IRepository } from '../../../domain/output/port/repository.interface';
 import { ICategory } from '../../../domain/model/entity/category.interface';
 import { Category } from '../../../domain/model/entity/category';
 import { CategoryDTO } from '../../../domain/model/value_object/category.dto';
-import { CategoryDocument } from '../../../infrastructure/database/schema/category.schema';
+import { CategoryDocument, CATEGORY_COLLECTION_TOKEN } from '../../../infrastructure/database/schema/category.schema';
 
-
-export const CATEGORY_COLLECTION_TOKEN = 'categories'; //ModelToken
 
 /**
  * Mongo repository implementation

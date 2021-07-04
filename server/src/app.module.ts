@@ -8,16 +8,17 @@ import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/produ
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
 import { EmailSmtpSenderAdapter } from './infrastructure/notification/email.sender.adapter';
 import { AuthMiddleware } from './application/middleware/auth.middleware';
-import { ProductSchema } from './infrastructure/database/schema/product.schema';
-import { CategorySchema } from './infrastructure/database/schema/category.schema';
+import { ProductSchema, 
+  PRODUCT_COLLECTION_TOKEN } from './infrastructure/database/schema/product.schema';
+import { CategorySchema, 
+  CATEGORY_COLLECTION_TOKEN } from './infrastructure/database/schema/category.schema';
 import DB_CONNECTION from './infrastructure/database/db.connection.string';
 import {
-  CategoryRepository,
-  CATEGORY_COLLECTION_TOKEN
+  CategoryRepository
 } from './infrastructure/database/repository/category.repository';
 import {
-  ProductRepository,
-  PRODUCT_COLLECTION_TOKEN
+  ProductRepository, 
+  CATEGORY_REPO_TOKEN
 } from './infrastructure/database/repository/product.repository';
 
 

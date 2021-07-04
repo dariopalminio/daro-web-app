@@ -1,6 +1,6 @@
 import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put } from '@nestjs/common';
 import { IProductService } from '../../domain/input/port/product.service.interface';
-import { ProductDTO } from '../../domain/model/value_object/product.dto';
+import { Product } from '../../domain/model/entity/product';
 
 export const PRODUCT_SERVICE_TOKEN = 'ProductService_Implementation';
 
@@ -35,7 +35,7 @@ export class ProductController {
 
         // Add Product: /product/create
     @Post('create')
-    async createProduct(@Res() res, @Body() createProductDTO: ProductDTO) {
+    async createProduct(@Res() res, @Body() createProductDTO: Product) {
             const productCreated = await this.productService.create(createProductDTO);
             if (!productCreated) throw new NotFoundException('Product does not exist or canot delete category!');
             return res.status(HttpStatus.OK).json({
@@ -55,10 +55,10 @@ export class ProductController {
         });
     };
 
-    // Update Product: /update?productID=5c9d45e705ea4843c8d0e8f7
+    // Update Product: /update?id=5c9d45e705ea4843c8d0e8f7
     @Put('update')
-    async updateProduct(@Res() res, @Body() createProductDTO: ProductDTO, @Query('productID') productID) {
-        const updatedProduct = await this.productService.update(productID, createProductDTO);
+    async updateProduct(@Res() res, @Body() createProductDTO: Product, @Query('id') id) {
+        const updatedProduct = await this.productService.update(id, createProductDTO);
         if (!updatedProduct) throw new NotFoundException('Product does not exist!');
         return res.status(HttpStatus.OK).json({
             message: 'Product Updated Successfully',
@@ -67,4 +67,4 @@ export class ProductController {
     };
 
 
-}
+};

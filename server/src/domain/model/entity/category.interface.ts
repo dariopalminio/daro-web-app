@@ -2,7 +2,7 @@
 
 
 export interface ICategory{
-    //_id: holds an ObjectId.
+     _id: string; //_id: holds an ObjectId.
      name: string;
      description: string;
 };

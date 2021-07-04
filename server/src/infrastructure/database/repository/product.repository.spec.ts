@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import {
     ProductRepository,
-    PRODUCT_COLLECTION_TOKEN
   } from './product.repository';
   
 import { getModelToken } from '@nestjs/mongoose';
 import { ProductDTO } from '../../../domain/model/value_object/product.dto';
+import { Product } from '../../../domain/model/entity/product';
 import { createMock } from '@golevelup/nestjs-testing';
 import { Model, Query } from 'mongoose';
-import { ProductDocument } from '../schema/product.schema';
+import { ProductDocument, PRODUCT_COLLECTION_TOKEN } from '../schema/product.schema';
 
 
 const mockArrayResult = [
@@ -148,7 +148,18 @@ describe('ProductRepository', () => {
             }),
         );
 
-        const updatedCat = await repository.update(mockProductDoc()._id, new ProductDTO());
+       const prod: Product = new Product(
+            "",
+            "",
+            "",
+            "",
+            Number(12),
+            "",
+            Number(12),
+            []
+            );
+
+        const updatedCat = await repository.update(mockProductDoc()._id, prod);
         expect(updatedCat).toEqual(mockProd);
     });
 

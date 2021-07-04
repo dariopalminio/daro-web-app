@@ -18,14 +18,13 @@ export class CategoryService implements ICategoryService {
   // Get all category
   async getAll(): Promise<ICategory[]> {
     const cats: ICategory[] = await this.categoryRepository.getAll();
-    console.log(cats);
     return cats;
   };
 
   // Get a single category
   async getById(id: string): Promise<ICategory> {
-    const product: ICategory = await this.categoryRepository.getById(id);
-    return product;
+    const category: ICategory = await this.categoryRepository.getById(id);
+    return category;
   };
 
   async create(categoryDTO: CategoryDTO): Promise<boolean> {

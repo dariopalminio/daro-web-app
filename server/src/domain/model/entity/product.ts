@@ -1,9 +1,10 @@
 import { IProduct } from '../../../domain/model/entity/product.interface';
+import { ICategory } from '../../../domain/model/entity/category.interface';
 
 export class Product implements IProduct {
 
     constructor(id: string, name: string, description: string,
-        imageURL: string, price: number, barcode: string, stock: number) {
+        imageURL: string, price: number, barcode: string, stock: number, categories: ICategory[]) {
         this._id = id;
         this.name = name;
         this.description = description;
@@ -11,6 +12,7 @@ export class Product implements IProduct {
         this.price = price;
         this.barcode = barcode;
         this.stock = stock;
+        this.categories = categories;
     };
 
     _id: string; //_id: holds an ObjectId.
@@ -18,10 +20,10 @@ export class Product implements IProduct {
     description: string;
     imageURL: string;
     price: number;
-    sku:  String;
-    barcode:  String;
+    sku:  string;
+    barcode:  string;
     stock: number;
-
+    categories: ICategory[];
 };
 
 

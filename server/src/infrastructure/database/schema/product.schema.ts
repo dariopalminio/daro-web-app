@@ -30,10 +30,11 @@ export class Product {
     @Prop() 
     stock: number;
 
-    //@Prop({type: [{ type: MongoSchema.Types.ObjectId, ref: 'Category'}] })
-    //categories: Category[];
+    @Prop({type: [{ type: MongoSchema.Types.ObjectId, ref: 'Category'}] })
+    categories: Category[];
 
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
 
+export const PRODUCT_COLLECTION_TOKEN = Product.name; //'products'; //ModelToken

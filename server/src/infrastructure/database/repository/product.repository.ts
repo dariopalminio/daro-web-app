@@ -1,15 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IRepository } from '../../../domain/output/port/repository.interface';
 import { IProduct } from '../../../domain/model/entity/product.interface';
 import { Product } from '../../../domain/model/entity/product';
-import { ProductDocument } from '../../../infrastructure/database/schema/product.schema';
-import { Console } from 'console';
+import { ProductDocument, PRODUCT_COLLECTION_TOKEN } from '../../../infrastructure/database/schema/product.schema';
 
 
-export const PRODUCT_COLLECTION_TOKEN = 'products'; //ModelToken
-
+export const CATEGORY_REPO_TOKEN = 'CategoryRepositoryImplementation'; //ModelToken
 /**
  * Mongo repository implementation
  */
@@ -32,20 +30,19 @@ export class ProductRepository implements IRepository<IProduct> {
      * If it does not find it, it returns null
      */
     async getById(id: string): Promise<IProduct> {
-        const catDoc: ProductDocument = await this.productModel.findById(id).exec();
-        //Doc has id name "_id"
-        const objCasted: IProduct = JSON.parse(JSON.stringify(catDoc));
+        const prodDoc: ProductDocument = await this.productModel.findById(id).exec();
+        const objCasted: IProduct = JSON.parse(JSON.stringify(prodDoc));
         return objCasted;
         //return this.conversorDocToCategory(catDoc);
     };
 
-    async create<IProduct>(doc: IProduct): Promise<boolean> {
-        const docCreated: ProductDocument = await this.productModel.create(doc);
+    async create<IProduct>(prod: Product): Promise<boolean> {
+        const docCreated: ProductDocument = await this.productModel.create(prod);
         return !!docCreated;
     };
 
-    async update(id: string, doc: any): Promise<boolean> {
-        const docUpdated: ProductDocument = await this.productModel.findByIdAndUpdate(id, doc).exec();
+    async update(id: string, prod: Product): Promise<boolean> {
+        const docUpdated: ProductDocument = await this.productModel.findByIdAndUpdate(id, prod).exec();
         return !!docUpdated;
     };
 
@@ -68,7 +65,8 @@ export class ProductRepository implements IRepository<IProduct> {
             String(Doc.imageURL),
             Number(Doc.price),
             String(Doc.barcode),
-            Number(Doc.stock)
+            Number(Doc.stock),
+            []
             );
     };
 

@@ -19,9 +19,9 @@ export class ProductService implements IProductService {
 
   // Get all category
   async getAll(): Promise<IProduct[]> {
-    const cats: IProduct[] = await this.productRepository.getAll();
-    console.log(cats);
-    return cats;
+    const products: IProduct[] = await this.productRepository.getAll();
+    //console.log(cats);
+    return products;
   };
 
   // Get a single category
@@ -31,9 +31,10 @@ export class ProductService implements IProductService {
   };
 
   async create(product: IProduct): Promise<boolean> {
-    const newProducto: Promise<boolean> = this.productRepository.create(product);
-    console.log(newProducto);
-    return newProducto;
+    //console.log("product to create:",product);
+    const newProduct: Promise<boolean> = this.productRepository.create(product);
+    //console.log("product created:",newProducto);
+    return newProduct;
   };
 
   // Delete category return this.labelModel.deleteOne({ osCode }).exec();
@@ -43,8 +44,8 @@ export class ProductService implements IProductService {
   };
 
   // Put a single category
-  async update(id: string, category: IProduct): Promise<boolean> {
-    const updatedProduct: boolean = await this.productRepository.update(id, category);
+  async update(id: string, product: IProduct): Promise<boolean> {
+    const updatedProduct: boolean = await this.productRepository.update(id, product);
     return updatedProduct;
   };
 
