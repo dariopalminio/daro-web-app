@@ -36,7 +36,7 @@ export class CategoryRepository implements IRepository<ICategory> {
         //return this.conversorDocToCategory(catDoc);
     };
 
-    async create<CategoryDTO>(doc: CategoryDTO): Promise<boolean> {
+    async create<ICategory>(doc: ICategory): Promise<boolean> {
         const docCreated: CategoryDocument = await this.categoryModel.create(doc);
         return !!docCreated;
     };

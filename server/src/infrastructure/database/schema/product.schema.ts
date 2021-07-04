@@ -1,11 +1,11 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { Document, Schema as MongoSchema } from 'mongoose';
-import { CategoryDocument } from '../../../infrastructure/database/schema/category.schema';
+import { Category } from '../../../infrastructure/database/schema/category.schema';
 
 export type ProductDocument = Product & Document;
 
 @Schema()
-export class Product extends Document{
+export class Product {
 
     //_id: holds an ObjectId.
 
@@ -30,8 +30,8 @@ export class Product extends Document{
     @Prop() 
     stock: number;
 
-    //@Prop([{type: MongoSchema.Types.ObjectId, ref: 'Category'}])
-    //categories: CategoryDocument[];
+    //@Prop({type: [{ type: MongoSchema.Types.ObjectId, ref: 'Category'}] })
+    //categories: Category[];
 
 }
 

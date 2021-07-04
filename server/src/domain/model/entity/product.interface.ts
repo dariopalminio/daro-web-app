@@ -8,5 +8,7 @@ export interface IProduct{
     readonly sku:  String;
     readonly barcode:  String;
     readonly stock: number;
+    //@Prop({type: [{ type: MongoSchema.Types.ObjectId, ref: 'Category'}] })
+    //categories: Category[];
 };
 

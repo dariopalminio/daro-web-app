@@ -39,7 +39,7 @@ export class ProductRepository implements IRepository<IProduct> {
         //return this.conversorDocToCategory(catDoc);
     };
 
-    async create<CategoryDTO>(doc: CategoryDTO): Promise<boolean> {
+    async create<IProduct>(doc: IProduct): Promise<boolean> {
         const docCreated: ProductDocument = await this.productModel.create(doc);
         return !!docCreated;
     };
