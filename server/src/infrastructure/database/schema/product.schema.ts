@@ -1,9 +1,11 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
+import { Document, Schema as MongoSchema } from 'mongoose';
+import { CategoryDocument } from '../../../infrastructure/database/schema/category.schema';
 
+export type ProductDocument = Product & Document;
 
 @Schema()
-export class ProductDocument extends Document{
+export class Product extends Document{
 
     //_id: holds an ObjectId.
 
@@ -28,7 +30,10 @@ export class ProductDocument extends Document{
     @Prop() 
     stock: number;
 
+    //@Prop([{type: MongoSchema.Types.ObjectId, ref: 'Category'}])
+    //categories: CategoryDocument[];
+
 }
 
-export const ProductSchema = SchemaFactory.createForClass(ProductDocument);
+export const ProductSchema = SchemaFactory.createForClass(Product);
 
