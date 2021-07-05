@@ -42,12 +42,12 @@ export class ProductRepository implements IRepository<IProduct> {
     };
 
     async update(id: string, prod: Product): Promise<boolean> {
-        const docUpdated: ProductDocument = await this.productModel.findByIdAndUpdate(id, prod).exec();
+        const docUpdated: ProductDocument = await this.productModel.findByIdAndUpdate(id, prod, {useFindAndModify: false}).exec();
         return !!docUpdated;
     };
 
     async delete(id: string): Promise<boolean> {
-        const docDeleted = await this.productModel.findByIdAndDelete(id).exec();
+        const docDeleted = await this.productModel.findByIdAndDelete(id, {useFindAndModify: false}).exec();
         return !!docDeleted; //doc is not null
     };
 

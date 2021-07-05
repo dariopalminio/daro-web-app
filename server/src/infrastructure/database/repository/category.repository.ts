@@ -40,12 +40,12 @@ export class CategoryRepository implements IRepository<ICategory> {
     };
 
     async update(id: string, doc: any): Promise<boolean> {
-        const docUpdated: CategoryDocument = await this.categoryModel.findByIdAndUpdate(id, doc).exec();
+        const docUpdated: CategoryDocument = await this.categoryModel.findByIdAndUpdate(id, doc, {useFindAndModify: false}).exec();
         return !!docUpdated;
     };
 
     async delete(id: string): Promise<boolean> {
-        const docDeleted = await this.categoryModel.findByIdAndDelete(id).exec();
+        const docDeleted = await this.categoryModel.findByIdAndDelete(id, {useFindAndModify: false}).exec();
         return !!docDeleted; //doc is not null
     };
 

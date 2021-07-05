@@ -4,7 +4,7 @@ import { ICategory } from '../../domain/model/entity/category.interface';
 
 export const CATEGORY_SERVICE_TOKEN = 'CategoryService_Implementation';
 
-@Controller('category')
+@Controller('catalog/category')
 export class CategoryController {
 
   constructor(

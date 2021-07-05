@@ -4,7 +4,7 @@ import { Product } from '../../domain/model/entity/product';
 
 export const PRODUCT_SERVICE_TOKEN = 'ProductService_Implementation';
 
-@Controller('product')
+@Controller('catalog/product')
 export class ProductController {
     
   constructor(
