@@ -1,9 +1,9 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './application/controller/app.controller';
-import { NotificationController, NOTIFICATION_SERVICE_TOKEN } from './application/controller/notification.controller';
+import { SupportController, SUPPORT_SERVICE_TOKEN } from './application/controller/support.controller';
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
 import { CategoryController, CATEGORY_SERVICE_TOKEN } from './application/controller/category.controller';
-import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
+import { SupportService, EMAIL_SENDER_TOKEN } from './domain/service/support.service';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
 import { EmailSmtpSenderAdapter } from './infrastructure/notification/email.sender.adapter';
@@ -59,11 +59,11 @@ MongooseModule.forRootAsync({
       { name: CATEGORY_COLLECTION_TOKEN, schema: CategorySchema },
     ])
   ],
-  controllers: [AppController, NotificationController, ProductController, CategoryController],
+  controllers: [AppController, SupportController, ProductController, CategoryController],
   providers: [
     {
-      provide: NOTIFICATION_SERVICE_TOKEN,
-      useClass: NotificationService,
+      provide: SUPPORT_SERVICE_TOKEN,
+      useClass: SupportService,
     },
     {
       provide: PRODUCT_SERVICE_TOKEN,
@@ -90,7 +90,7 @@ MongooseModule.forRootAsync({
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware)
-      .forRoutes(NotificationController);
+      .forRoutes(SupportController);
   };
 
 };

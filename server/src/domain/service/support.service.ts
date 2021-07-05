@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
-import { INotificationService } from '../input/port/notification.service.interface';
+import { ContactMessage } from '../model/value_object/ContactMessage';
+import { ISupportService } from '../input/port/support.service.interface';
 import IEmailSender from '../output/port/email.sender.interface';
 
 export const EMAIL_SENDER_TOKEN='EmailSender_Implementation';
 
 @Injectable()
-export class NotificationService implements INotificationService{
+export class SupportService implements ISupportService{
   constructor(
     @Inject(EMAIL_SENDER_TOKEN)
       readonly sender: IEmailSender){
