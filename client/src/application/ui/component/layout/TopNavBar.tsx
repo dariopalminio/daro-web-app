@@ -47,6 +47,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 100,
       justifyContent: "flex-end",
     },
+    logo: {
+      width: "34",
+      height: "34",
+    },
   })
 );
 
@@ -72,6 +76,9 @@ const TopNavBar: FunctionComponent = () => {
       })}
     >
       <Toolbar className={clsx(classes.toolBar)}>
+      
+      
+
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -82,7 +89,7 @@ const TopNavBar: FunctionComponent = () => {
           <MenuIcon />
         </IconButton>
 
-        <LogoImg className="Logo" src={logo} />
+        <LogoImg className={clsx(classes.logo)} src={logo} />
 
         <div className={clsx(classes.containerTopMenu)}>
           <UserTopMenu />
