@@ -1,4 +1,4 @@
-import { LoggerService as ILoggerService } from '@nestjs/common';
+import { Injectable, LoggerService as ILoggerService } from '@nestjs/common';
 import { createLogger, format, transports, Logger, addColors } from 'winston';
 
 const colors = {
@@ -16,6 +16,7 @@ addColors(colors);
  * Nest comes with a built-in text-based logger which is used during application 
  * bootstrapping and several other circumstances such as displaying caught exceptions.
  */
+ @Injectable()
 class LoggerHelper implements ILoggerService {
 
   private logger: Logger;

@@ -1,6 +1,6 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { ExceptionsAllFilter } from './application/filter/exception.filter';
+import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from './application/filter/exception.filter';
 import { AppController } from './application/controller/app.controller';
 import { SupportController, SUPPORT_SERVICE_TOKEN } from './application/controller/support.controller';
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
@@ -21,7 +21,7 @@ import {
 import {
   ProductRepository
 } from './infrastructure/database/repository/product.repository';
-
+import LoggerHelper from './infrastructure/logger/logger.helper';
 
 //Mongo
 import { MongooseModule } from '@nestjs/mongoose';
@@ -89,6 +89,10 @@ MongooseModule.forRootAsync({
     {
       provide: APP_FILTER,
       useClass: ExceptionsAllFilter,
+    },
+    {
+      provide: LOGGER_HELPER_TOKEN,
+      useClass: LoggerHelper,
     },
   ],
 })
