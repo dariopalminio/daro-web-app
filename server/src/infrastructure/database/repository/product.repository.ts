@@ -2,8 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IRepository } from '../../../domain/output/port/repository.interface';
-import { IProduct } from '../../../domain/model/entity/product.interface';
-import { Product } from '../../../domain/model/entity/product';
+import { IProduct } from '../../../domain/model/product.interface';
+import { Product } from '../../../domain/model/product';
 import { ProductDocument, PRODUCT_COLLECTION_TOKEN } from '../../../infrastructure/database/schema/product.schema';
 
 

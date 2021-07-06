@@ -1,4 +1,4 @@
-import { ICategory } from '../../../domain/model/entity/category.interface';
+import { ICategory } from './category.interface';
 
 export interface IProduct{
     _id: string; //_id: holds an ObjectId.

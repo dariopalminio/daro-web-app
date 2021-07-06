@@ -1,4 +1,4 @@
-import { ContactMessage } from '../../model/value_object/ContactMessage';
+import { ContactMessage } from '../../model/contact.message';
 
 
 export interface ISupportService {

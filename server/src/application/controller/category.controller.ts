@@ -1,6 +1,6 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
 import { ICategoryService } from '../../domain/input/port/category.service.interface';
-import { ICategory } from '../../domain/model/entity/category.interface';
+import { ICategory } from '../../domain/model/category.interface';
 
 export const CATEGORY_SERVICE_TOKEN = 'CategoryService_Implementation';
 

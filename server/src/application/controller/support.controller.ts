@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Inject } from '@nestjs/common';
 import { ISupportService } from '../../domain/input/port/support.service.interface';
-import { ContactMessage } from '../../domain/model/value_object/ContactMessage';
+import { ContactMessage } from '../../domain/model/contact.message';
 
 export const SUPPORT_SERVICE_TOKEN = 'SupportService_Implementation';
 

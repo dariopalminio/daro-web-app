@@ -1,4 +1,4 @@
-import { ICategory } from '../entity/category.interface';
+import { ICategory } from './category.interface';
 
 export class CategoryDTO implements ICategory{
     //_id: holds an ObjectId.

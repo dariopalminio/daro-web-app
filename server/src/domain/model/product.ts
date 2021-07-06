@@ -1,5 +1,5 @@
-import { IProduct } from '../../../domain/model/entity/product.interface';
-import { ICategory } from '../../../domain/model/entity/category.interface';
+import { IProduct } from './product.interface';
+import { ICategory } from './category.interface';
 
 export class Product implements IProduct {
 

@@ -4,8 +4,8 @@ import {
   } from './product.repository';
   
 import { getModelToken } from '@nestjs/mongoose';
-import { ProductDTO } from '../../../domain/model/value_object/product.dto';
-import { Product } from '../../../domain/model/entity/product';
+import { ProductDTO } from '../../../domain/model/product.dto';
+import { Product } from '../../../domain/model/product';
 import { createMock } from '@golevelup/nestjs-testing';
 import { Model, Query } from 'mongoose';
 import { ProductDocument, PRODUCT_COLLECTION_TOKEN } from '../schema/product.schema';

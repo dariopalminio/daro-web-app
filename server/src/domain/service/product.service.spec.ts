@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './product.service';
 import { IRepository } from '../../domain/output/port/repository.interface';
-import { IProduct } from '../../domain/model/entity/product.interface';
+import { IProduct } from '../model/product.interface';
 
 
 class ProductRepositoryNegativeStub implements IRepository<IProduct> {

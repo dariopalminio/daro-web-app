@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ContactMessage } from '../model/value_object/ContactMessage';
+import { ContactMessage } from '../model/contact.message';
 import { ISupportService } from '../input/port/support.service.interface';
 import IEmailSender from '../output/port/email.sender.interface';
 
