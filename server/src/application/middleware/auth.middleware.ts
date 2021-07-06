@@ -3,6 +3,10 @@ import { Request, Response } from 'express';
 import * as GlobalConfig from '../../GlobalConfig';
 import * as jwt from 'jsonwebtoken';
 
+/**
+ * Middleware is called only before the route handler is called. You have access to the response object, 
+ * but you don't have the result of the route handler. They are basically express middleware functions.
+ */
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
 

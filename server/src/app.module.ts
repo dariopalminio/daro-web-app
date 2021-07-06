@@ -1,4 +1,6 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
+import { ExceptionsAllFilter } from './application/filter/exception.filter';
 import { AppController } from './application/controller/app.controller';
 import { SupportController, SUPPORT_SERVICE_TOKEN } from './application/controller/support.controller';
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
@@ -84,6 +86,10 @@ MongooseModule.forRootAsync({
     {
       provide: PRODUCT_REPOSITORY_TOKEN,
       useClass: ProductRepository,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionsAllFilter,
     },
   ],
 })
