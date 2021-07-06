@@ -1,4 +1,4 @@
-import { Injectable, LoggerService as ILoggerService } from '@nestjs/common';
+import { LoggerService as ILoggerService } from '@nestjs/common';
 import { createLogger, format, transports, Logger, addColors } from 'winston';
 
 const colors = {
@@ -9,9 +9,17 @@ const colors = {
 
 addColors(colors);
 
-@Injectable()
-class LoggerService implements ILoggerService {
+/**
+ * LoggerHelper
+ * 
+ * Implement nestjs LoggerService using Winston library.
+ * Nest comes with a built-in text-based logger which is used during application 
+ * bootstrapping and several other circumstances such as displaying caught exceptions.
+ */
+class LoggerHelper implements ILoggerService {
+
   private logger: Logger;
+
   constructor() {
     this.logger = createLogger({
       level: 'info',
@@ -22,8 +30,8 @@ class LoggerService implements ILoggerService {
         }),
       ),
       transports: [
-        new transports.File({ filename: 'stderr.log', level: 'error' }),
-        new transports.File({ filename: 'stdout.log' }),
+        new transports.File({ filename: 'logs/server_err.log', level: 'error' }),
+        new transports.File({ filename: 'logs/server_out.log' }),
       ],
     });
 
@@ -43,7 +51,8 @@ class LoggerService implements ILoggerService {
     context
       ? this.logger.info(`{${context}} ->`, { message: message })
       : this.logger.info(message);
-  }
+  };
+
   error(message: any, trace?: string, context?: string) {
     context
       ? this.logger.error(`{${context}} ->`, { message: message })
@@ -52,23 +61,27 @@ class LoggerService implements ILoggerService {
       context
         ? this.logger.error(`{${context}} ->`, { message: trace })
         : this.logger.error(trace);
-    }
-  }
+    };
+  };
+
   warn(message: any, context?: string) {
     context
       ? this.logger.warn(`{${context}} ->`, { message: message })
       : this.logger.warn(message);
-  }
+  };
+
   debug?(message: any, context?: string) {
     context
       ? this.logger.debug(`{${context}} ->`, { message: message })
       : this.logger.debug(message);
-  }
+  };
+
   verbose?(message: any, context?: string) {
     context
       ? this.logger.verbose(`{${context}} ->`, { message: message })
       : this.logger.verbose(message);
-  }
-}
+  };
 
-export default LoggerService;
+};
+
+export default LoggerHelper;

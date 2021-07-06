@@ -4,9 +4,13 @@ import {
     ArgumentsHost,
     HttpException,
     HttpStatus,
+    Inject,
   } from '@nestjs/common';
-  import LoggerService from '../../domain/service/logger.service';
+  import {LoggerService as ILoggerService } from '@nestjs/common';
+  import LoggerHelper from './logger.helper';
 
+  export const LOGGER_TOKEN = "LoggerService";
+  
   /**
    * Filter for all exceptions.
    * Exception Filters are called after the route handler and after the interceptors. 
@@ -15,7 +19,11 @@ import {
   @Catch()
   export class ExceptionsAllFilter implements ExceptionFilter {
 
-    constructor(private readonly logger: LoggerService) { }
+    private readonly logger: ILoggerService
+
+    constructor() { 
+      this.logger = new LoggerHelper();
+    }
 
     catch(exception: unknown, host: ArgumentsHost) {
       const ctx = host.switchToHttp();
