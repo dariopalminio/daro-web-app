@@ -5,7 +5,8 @@ import {
     HttpException,
     HttpStatus,
   } from '@nestjs/common';
- 
+  import LoggerService from '../../domain/service/logger.service';
+
   /**
    * Filter for all exceptions.
    * Exception Filters are called after the route handler and after the interceptors. 
@@ -14,7 +15,7 @@ import {
   @Catch()
   export class ExceptionsAllFilter implements ExceptionFilter {
 
-    //constructor(private readonly logger: LoggerService) { }
+    constructor(private readonly logger: LoggerService) { }
 
     catch(exception: unknown, host: ArgumentsHost) {
       const ctx = host.switchToHttp();
@@ -31,11 +32,11 @@ import {
       const payloadMessage =
         exception instanceof HttpException && exception.getResponse();
   
-      exception instanceof HttpException &&
-        exception.getStatus() >= 500 && console.log(exception.message, exception.stack, exception.name);
+        exception instanceof HttpException &&
+        exception.getStatus() >= 500 && this.logger.error(exception.message, exception.stack, exception.name);
   
       exception instanceof Error &&
-      console.log(exception.message, exception.stack, exception.name);
+        this.logger.error(exception.message, exception.stack, exception.name);
   
       const errorMsg = ((exception instanceof Error) || (exception instanceof HttpException)) ? exception.message : payloadMessage;
 
