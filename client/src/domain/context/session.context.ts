@@ -5,9 +5,11 @@ import { atom } from "jotai";
 //name in session/local storage
 const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";
 
+
 // Global user default value
 export const SessionDefaultValue: SessionType = {
-  jwt: null,
+  access_token: null,
+  refresh_token: null,
   isLogged: false,
   isRegistered: false,
   email: "",
@@ -16,6 +18,19 @@ export const SessionDefaultValue: SessionType = {
   preferred_username: "",
   userId: "", // sub is the ID userId
 };
+
+/**
+ export type KeycloackType = {
+  access_token: string;
+  expires_in: number;
+  refresh_expires_in: number;
+  refresh_token: string;
+  token_type: string;
+  'not-before-policy': number;
+  session_state: string;
+  scope: string;
+};
+ */
 
 // Global user session context interface
 export interface ISessionContext {

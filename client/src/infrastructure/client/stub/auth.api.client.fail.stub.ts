@@ -1,4 +1,4 @@
-import { IAuthService } from '../../../domain/service/auth.service.interface';
+import { IAuthService, Tokens } from '../../../domain/service/auth.service.interface';
 
 
 /**
@@ -23,8 +23,8 @@ export default function AuthApiClientFailStub(): IAuthService {
   };
 
 // Stub function
-  function loginService(username: string, pass: string): Promise<string> {
-    return new Promise<string>( (resolve, reject) => {
+  function loginService(username: string, pass: string): Promise<Tokens> {
+    return new Promise<Tokens>( (resolve, reject) => {
       reject(new Error("General error!"));
      });
   };

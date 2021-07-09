@@ -2,7 +2,7 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError } from './api.client.error';
 import qs from 'querystring';
-import { IAuthService } from '../../domain/service/auth.service.interface';
+import { IAuthService, Tokens } from '../../domain/service/auth.service.interface';
 
 type NewUserRepresentationType = {
   username: string
@@ -42,6 +42,7 @@ type RequesAppToken = {
   grant_type: string
   client_secret: string
 };
+
 
 /**
  * NotificationApiService implementation 
@@ -116,7 +117,7 @@ export default function AuthApiClientImpl(): IAuthService {
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
-    
+
     return appToken;
   };
 
@@ -127,7 +128,7 @@ export default function AuthApiClientImpl(): IAuthService {
    * @returns access_token JWT 
    * const showDrawer = () => {
    */
-  function loginService(username: string, pass: string): Promise<string> {
+  function loginService(username: string, pass: string): Promise<Tokens> {
 
     const body: LoginRequestType = {
       username: username,
@@ -144,15 +145,21 @@ export default function AuthApiClientImpl(): IAuthService {
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
 
     // using .then, create a new promise which extracts the data
-    const accessToken: Promise<string> = promise.then((response) =>
-      response.data.access_token
+    const tokens: Promise<Tokens> = promise.then((response) => {
+      return {
+        access_token: response.data.access_token,
+        refresh_token: response.data.access_token
+      }
+    }
     ).catch((error) => {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
 
-    return accessToken;
+    //esponse.data.refresh_toke
+    console.log(tokens);
+    return tokens;
   };
 
   /**
@@ -187,7 +194,7 @@ export default function AuthApiClientImpl(): IAuthService {
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
-  
+
     return status;
   };
 

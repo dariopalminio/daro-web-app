@@ -41,7 +41,8 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                 const msgText = statusText + " Your account has been created successfully. Now you can log in.";
                 setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true });
                 const userValue: SessionType = {
-                    jwt: "",
+                    access_token: null,
+                    refresh_token: null,
                     isLogged: false,
                     isRegistered: true,
                     email: "",

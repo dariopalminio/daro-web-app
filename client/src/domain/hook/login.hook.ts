@@ -2,7 +2,7 @@ import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../context/session.context';
 import { SessionType } from '../model/user/session.type';
 import * as StateConfig from '../domain.config';
-import { IAuthService } from '../service/auth.service.interface';
+import { IAuthService, Tokens } from '../service/auth.service.interface';
 
 var jws = require('jws');
 
@@ -57,13 +57,17 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
      * @param jwt Jason Web Token
      * @returns SessionType object
      */
-    const convertJwtToSessionType = (jwt: any) => {
-        const jwtDecoded = jws.decode(jwt);
+    const convertJwtToSessionType = (tokens: Tokens) => {
+        const jwtDecoded = jws.decode(tokens.access_token);
+        console.log("refresh_toke:",tokens.refresh_token);
         if (!jwtDecoded) throw Error("Decoded JWT fail! JWT decoded is null.");
+        console.log("jwtDecoded:",jwtDecoded);
         const payload = jwtDecoded.payload;
-        // Authorized
+        console.log("payload:",payload);
+        // Authorizedaccess_token: (string | null),
         const userSessionData: SessionType = {
-            jwt: jwt,
+            access_token: tokens.access_token,
+            refresh_token: tokens.refresh_token,
             isLogged: true,
             isRegistered: true,
             email: payload.email,

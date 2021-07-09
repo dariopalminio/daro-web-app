@@ -30,3 +30,4 @@ export default async function getUserInfoService(jwt: string): Promise<any> {
         throw authError;
     }
 };
+

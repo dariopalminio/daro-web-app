@@ -1,10 +1,15 @@
 
+//Auth tokens
+export type Tokens = {
+  access_token: string //JWT
+  refresh_token: string
+};
 
 //Interface to do dependency inversion
 export interface IAuthService {
   getAdminTokenService: () => Promise<string>;
   getAppTokenService: () => Promise<string>;
-  loginService: (username: string, pass: string) => Promise<string>;
+  loginService: (username: string, pass: string) => Promise<Tokens>;
   logoutService: (userId: string, adminToken: string) => Promise<number>;
   registerService: (
     firstname: string,
