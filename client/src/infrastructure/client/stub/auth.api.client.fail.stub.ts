@@ -22,6 +22,13 @@ export default function AuthApiClientFailStub(): IAuthService {
      });
   };
 
+  // Stub function
+  function getRefreshTokenService(refreshToken: string): Promise<Tokens> {
+    return new Promise<Tokens>( (resolve, reject) => {
+      reject(new Error("General error!"));
+     });
+  };
+
 // Stub function
   function loginService(username: string, pass: string): Promise<Tokens> {
     return new Promise<Tokens>( (resolve, reject) => {
@@ -51,6 +58,7 @@ export default function AuthApiClientFailStub(): IAuthService {
   return {
     getAdminTokenService,
     getAppTokenService,
+    getRefreshTokenService,
     loginService,
     logoutService,
     registerService,

@@ -25,6 +25,17 @@ export default function AuthApiClienOkStub(): IAuthService {
      });
   };
 
+  // Stub function
+  function getRefreshTokenService(refreshToken: string): Promise<Tokens> {
+    return new Promise<Tokens>( (resolve, reject) => {
+        const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw';
+           resolve({
+            access_token: jwt,
+            refresh_token: jwt
+          });
+     });
+  };
+
 // Fake function
   function loginService(username: string, pass: string): Promise<Tokens> {
     return new Promise<Tokens>( (resolve, reject) => {
@@ -57,6 +68,7 @@ export default function AuthApiClienOkStub(): IAuthService {
   return {
     getAdminTokenService,
     getAppTokenService,
+    getRefreshTokenService,
     loginService,
     logoutService,
     registerService,
