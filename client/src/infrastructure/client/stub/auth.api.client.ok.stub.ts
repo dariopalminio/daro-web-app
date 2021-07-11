@@ -31,7 +31,10 @@ export default function AuthApiClienOkStub(): IAuthService {
         const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw';
            resolve({
             access_token: jwt,
-            refresh_token: jwt
+            refresh_token: jwt,
+            expires_in: 60,
+            refresh_expires_in: 10800,
+            date: new Date()
           });
      });
   };
@@ -42,7 +45,11 @@ export default function AuthApiClienOkStub(): IAuthService {
         const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw';
            
         resolve({access_token: jwt,
-          refresh_token: jwt});
+          refresh_token: jwt,
+          expires_in: 60,
+          refresh_expires_in: 10800,
+          date: new Date()
+        });
      });
   };
 

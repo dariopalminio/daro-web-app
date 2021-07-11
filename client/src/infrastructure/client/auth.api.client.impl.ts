@@ -165,7 +165,10 @@ export default function AuthApiClientImpl(): IAuthService {
     const tokens: Promise<Tokens> = promise.then((response) => {
       return {
         access_token: response.data.access_token,
-        refresh_token: response.data.refresh_token
+        refresh_token: response.data.refresh_token,
+        expires_in: response.data.expires_in,
+        refresh_expires_in: response.data.refresh_expires_in,
+        date: new Date()
       }
     }
     ).catch((error) => {
@@ -222,7 +225,10 @@ export default function AuthApiClientImpl(): IAuthService {
     const tokens: Promise<Tokens> = promise.then((response) => {
       return {
         access_token: response.data.access_token,
-        refresh_token: response.data.refresh_token
+        refresh_token: response.data.refresh_token,
+        expires_in: response.data.expires_in,
+        refresh_expires_in: response.data.refresh_expires_in,
+        date: new Date()
       }
     }
     ).catch((error) => {

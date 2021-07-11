@@ -2,6 +2,9 @@
 export interface SessionType {
     access_token: (string | null);
     refresh_token: (string | null);
+    expires_in: number;
+    refresh_expires_in: number;
+    date: Date;
     isLogged: boolean;
     isRegistered: boolean;
     email: string;
@@ -10,3 +13,4 @@ export interface SessionType {
     preferred_username: string;
     userId: string;
   };
+

@@ -43,6 +43,9 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                 const userValue: SessionType = {
                     access_token: null,
                     refresh_token: null,
+                    expires_in: 0,
+                    refresh_expires_in: 0,
+                    date: new Date(),
                     isLogged: false,
                     isRegistered: true,
                     email: "",

@@ -68,6 +68,9 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
         const userSessionData: SessionType = {
             access_token: tokens.access_token,
             refresh_token: tokens.refresh_token,
+            expires_in: tokens.expires_in,
+            refresh_expires_in: tokens.refresh_expires_in,
+            date: tokens.date,
             isLogged: true,
             isRegistered: true,
             email: payload.email,

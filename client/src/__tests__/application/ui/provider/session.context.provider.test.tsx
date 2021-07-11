@@ -2,8 +2,8 @@ import * as ReactDOM from "react-dom";
 import { useContext } from "react";
 import SessionContext, {
   ISessionContext,
-} from "../../../domain/context/session.context";
-import SessionContextProvider from "../../../application/ui/provider/SessionContextProvider";
+} from "../../../../domain/context/session.context";
+import SessionContextProvider from "../../../../application/ui/provider/SessionContextProvider";
 
 
 describe("Test SessionContext & SessionContextProvider", () => {

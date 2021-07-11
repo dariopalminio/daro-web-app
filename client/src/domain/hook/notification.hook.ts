@@ -3,7 +3,7 @@ import SessionContext, { ISessionContext } from '../context/session.context';
 import { ContactType } from '../model/notification/contact.type';
 import { INotificationService } from '../service/notification.service.interface';
 import * as StateConfig from '../domain.config';
-import { IAuthService } from '../service/auth.service.interface';
+import { IAuthService, Tokens } from '../service/auth.service.interface';
 import { SessionType } from '../model/user/session.type';
 
 /**
@@ -14,7 +14,7 @@ export default function useNotification(
     authServiceInjected: IAuthService | null = null,
     notifServiceInjected: INotificationService | null = null) {
 
-    const { session } = useContext(SessionContext) as ISessionContext;
+    const { session, isTokenExpired, setSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ sending: false, hasError: false, msg: '', wasSent: false });
     const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
@@ -64,22 +64,44 @@ export default function useNotification(
         });
 
 
-    }, [setState, notifService, authService]);
+    }, [setState, notifService, authService, getToken, session]);
 
+    /**
+     * Gets the acces token of the logged session (if user is already logged) or 
+     * requests an application token from the authentication server.
+     * @param session 
+     * @returns 
+     */
     async function getToken(session: SessionType | undefined) {
         let token: string = '';
         if (session && session?.isLogged) {
-            console.log("Session OK!!!");
+            console.log("Acces token OK (if user is already logged)!!!");
+            // Obtains access token from session local data
             token = session.access_token ? session.access_token : '';
 
+            const expired: boolean = isTokenExpired(session.expires_in, session.date, new Date());
+            
+            if (expired) {
+                console.log("EXPIRED!!!");
+                //getRefreshTokenService: (refreshToken: string) => Promise<Tokens>;
+             const refreshToken: string = session.refresh_token ? session.refresh_token : '';
+                const result: Tokens = await authService.getRefreshTokenService(refreshToken);
+                token = result.access_token;
+                let newSession = {...session};
+                newSession.access_token = token;
+                setSessionValue(newSession);
+            }
+
         } else {
-            console.log("responseAdminToken!!!");
-            // First: obtains app access token
+            console.log("Requests an application token from the authentication server!");
+            // Obtains app access token from authentication server
             token = await authService.getAppTokenService();
         };
         return token;
-    }
+    };
 
+
+      
     return {
         sending: state.sending,
         hasError: state.hasError,

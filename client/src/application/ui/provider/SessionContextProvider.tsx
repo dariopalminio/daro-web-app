@@ -5,6 +5,7 @@ import SessionContext, {
   SessionDefaultValue,
   setSessionToStorage,
   SessionAtom,
+  isTokenExpired,
 } from "../../../domain/context/session.context";
 import { SessionType } from '../../../domain/model/user/session.type';
 
@@ -37,6 +38,7 @@ const UserContextProvider: FC = ({ children }) => {
       session,
       setSessionValue,
       removeSessionValue,
+      isTokenExpired,
     })
   },[session]);
 

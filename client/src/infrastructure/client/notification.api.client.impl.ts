@@ -37,16 +37,24 @@ export default function NotificationApiClientImpl(): INotificationService {
       data: contactData
     });
 
-    // using .then, create a new promise which extracts the data
+    // Using .then, create a new promise which extracts the data
     const info: Promise<any> = promise
       .then((response) => response.data)
       .catch((error) => {
         const authError: ApiError = handleAxiosError(error);
-        if (authError.status === AuthStatusEnum.UNAUTHORIZED){
+        if (authError.status === AuthStatusEnum.UNAUTHORIZED ){
           console.log("sendContactEmailService-->UNAUTHORIZED!!!");
-        }
-        throw authError;
+          // Request a new token
+          //const newAccessToken = accessToken;
+          // Do a retry with a new token
+          //return sendContactEmailService(contactData, newAccessToken, false);
+          throw authError;
+        }else{
+          console.log("sendContactEmailService-->throw authError!!!");
+          throw authError;
+        };
       });
+
       console.log(info);
       
     return info;

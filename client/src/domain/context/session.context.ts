@@ -10,6 +10,9 @@ const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";
 export const SessionDefaultValue: SessionType = {
   access_token: null,
   refresh_token: null,
+  expires_in: 0,
+  refresh_expires_in: 0,
+  date: new Date(),
   isLogged: false,
   isRegistered: false,
   email: "",
@@ -19,24 +22,13 @@ export const SessionDefaultValue: SessionType = {
   userId: "", // sub is the ID userId
 };
 
-/**
- export type KeycloackType = {
-  access_token: string;
-  expires_in: number;
-  refresh_expires_in: number;
-  refresh_token: string;
-  token_type: string;
-  'not-before-policy': number;
-  session_state: string;
-  scope: string;
-};
- */
 
 // Global user session context interface
 export interface ISessionContext {
   session: (SessionType | undefined)
   setSessionValue: (newSession: SessionType) => void
   removeSessionValue: () => void
+  isTokenExpired: (expires_in: number, firstDate: Date, today: Date) => boolean
 };
 
 /**
@@ -89,6 +81,26 @@ export const SessionContextDefaultValues: ISessionContext = {
   session: SessionDefaultValue,
   setSessionValue: () => { },
   removeSessionValue: () => { },
+  isTokenExpired: (expires_in: number, firstDate: Date, today: Date) => false
+};
+
+export function isTokenExpired(expires_in: number, firstDate: Date, today: Date): boolean {
+  const secondsDiff = getSecondsBetweenTwoDates(firstDate,today);
+  const expireIn = (expires_in > 10) ? expires_in - 10 : expires_in;
+  const expired: boolean = (( expireIn - secondsDiff ) <= 0);
+  return expired; 
+};
+
+export function getSecondsBetweenTwoDates( date1: Date, date2: Date ) {
+  // Convert both dates to milliseconds
+  var date1_ms = date1.getTime();
+  var date2_ms = date2.getTime();
+
+  // Calculate the difference in milliseconds
+  var difference_ms = date2_ms - date1_ms;
+    
+  // Convert back to days and return
+  return Math.round(difference_ms/1000); 
 };
 
 // Global session context
