@@ -5,7 +5,7 @@ import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 
 /**
- * cuseRegister Custom Hook
+ * useRegister Custom Hook
  * Custom Hook for create new user
  */
 export default function useRegister(authServiceInjected: IAuthService | null = null) {
@@ -31,30 +31,53 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
         // Second: creates a new user with authorization using admin access token
         responseAdminToken.then(jwtAdminToken => {
 
-            const resonseReg = authService.registerService(
+            const responseReg = authService.registerService(
                 firstname,
                 lastname,
                 email,
                 password, jwtAdminToken);
+            // Third: verifies that the user was created, asking for the information of the created user
+            responseReg.then(statusNumber => {
 
-            resonseReg.then(statusText => {
-                const msgText = statusText + " Your account has been created successfully. Now you can log in.";
-                setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true });
-                const userValue: SessionType = {
-                    access_token: null,
-                    refresh_token: null,
-                    expires_in: 0,
-                    refresh_expires_in: 0,
-                    date: new Date(),
-                    isLogged: false,
-                    isRegistered: true,
-                    email: "",
-                    email_verified: false,
-                    given_name: "",
-                    preferred_username: "",
-                    userId: "",
-                };
-                setSessionValue(userValue);
+                const responseGetUser = authService.getUserByEmailService(
+                    email,
+                    jwtAdminToken);
+                
+                responseGetUser.then(data => {
+
+                    if (!data[0]) {
+                        // keycloak.error.user-not-exist
+                        setState({ loading: false, error: true, msg: "keycloak.error.user-not-exist!", wasCreatedOk: false });
+                        removeSessionValue();
+                    }else{ // keycloak ok because user-exist
+
+                        console.log("Result data from register:", data[0]);
+                        const msgText = " Your account has been created successfully. Now you can log in.";
+                        setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true });
+                        const userValue: SessionType = {
+                            access_token: null,
+                            refresh_token: null,
+                            expires_in: 0,
+                            refresh_expires_in: 0,
+                            date: new Date(),
+                            isLogged: false,
+                            isRegistered: true,
+                            email: email,
+                            email_verified: data[0].emailVerified,
+                            given_name: "",
+                            preferred_username: "",
+                            userId: data[0].id,
+                        };
+                        console.log("userValue:", userValue);
+                        setSessionValue(userValue);
+                    }
+                }).catch(err => {
+                    // Error when get user
+                    setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
+                    removeSessionValue();
+                });
+
+
             }).catch(err => {
                 // Request failed with status code 409 (Conflict) or 400 (Bad Request)
                 setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });

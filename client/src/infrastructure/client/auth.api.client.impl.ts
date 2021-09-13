@@ -20,6 +20,13 @@ type NewUserRepresentationType = {
   ],
 };
 
+type ConfirmEmailType = {
+  username: string
+  enabled: string
+  emailVerified: string
+  email: string
+};
+
 type LoginRequestType = {
   username: string
   password: string
@@ -109,8 +116,8 @@ export default function AuthApiClientImpl(): IAuthService {
 
     // Token endpoint
     const URL = OriginConfig.URLPath.token
-    console.log("GlobalConfig.URLPath.TOKEN:");
-    console.log(OriginConfig.URLPath.token);
+    //console.log("GlobalConfig.URLPath.TOKEN:");
+    //console.log(OriginConfig.URLPath.token);
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
@@ -155,8 +162,8 @@ export default function AuthApiClientImpl(): IAuthService {
 
     // Token endpoint
     const URL = OriginConfig.URLPath.token
-    console.log("GlobalConfig.URLPath.TOKEN:");
-    console.log(OriginConfig.URLPath.token);
+    //console.log("GlobalConfig.URLPath.TOKEN:");
+    //console.log(OriginConfig.URLPath.token);
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
@@ -238,7 +245,7 @@ export default function AuthApiClientImpl(): IAuthService {
     });
 
     //esponse.data.refresh_toke
-    console.log(tokens);
+    //console.log(tokens);
     return tokens;
   };
 
@@ -333,9 +340,112 @@ export default function AuthApiClientImpl(): IAuthService {
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
-
+console.log(status);
     return status;
   };
+
+  /**
+ * Get users Returns a list of users, filtered according to params.
+ * 
+ * @param username 
+ * @param adminToken 
+ * @returns 
+ */
+function getUserByEmailService(userEmail: string, adminToken: string): Promise<any> {
+
+  //User endpoint
+  const URL = OriginConfig.URLPath.users
+
+  //If username = email
+  const config = {
+    headers: { Authorization: `Bearer ${adminToken}` },
+    params: {
+      email: userEmail
+    },
+  }
+
+  //get<T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig): Promise<R>;
+  const promise: AxiosPromise<any> = axios.get(URL, config)
+
+  // using .then, create a new promise which extracts the data
+  const data: Promise<any> = promise.then((response) =>
+      response.data
+      ).catch((error) => {
+        // response.status !== 200
+        const authError: ApiError = handleAxiosError(error);
+        throw authError;
+      });
+  
+      return data;
+   // if (!response.data[0]) {
+   //   throw new Error('keycloak.error.user-not-exist');
+   // }
+    //return response.data[0];
+};
+
+/**
+ * PUT Update the user [SAT]
+ * Example: http://127.0.0.1:8180/auth/admin/realms/heroes/users/83c72e88-7ac9-4fc7-a7fb-97736d67d261
+
+curl --location --request PUT 'http://127.0.0.1:8180/auth/admin/realms/heroes/users/83c72e88-7ac9-4fc7-a7fb-97736d67d261' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": "56f6c53f-5150-4b42-9757-4c3dd4e7d947",
+    "createdTimestamp": 1588881160516,
+    "username": "Superman",
+    "enabled": true,
+    "totp": false,
+    "emailVerified": true,
+    "firstName": "Clark",
+    "lastName": "Kent",
+    "email": "superman@kael.com",
+    "disableableCredentialTypes": [],
+    "requiredActions": [],
+    "federatedIdentities": [],
+    "notBefore": 0,
+    "access": {
+        "manageGroupMembership": true,
+        "view": true,
+        "mapRoles": true,
+        "impersonate": true,
+        "manage": true
+    }
+}'
+
+ * @param userId 
+ * @param adminToken 
+ */
+  function confirmEmailService(userId: string, userEmail: string, adminToken: string): Promise<number> {
+
+    const body: ConfirmEmailType = {
+      email: userEmail,
+      emailVerified: "true",
+      username: userEmail,
+      enabled: "true",
+    };
+
+    //User endpoint
+    const URL = `${OriginConfig.URLPath.users}/${userId}`;
+
+    const promise: AxiosPromise<any> = axios({
+      method: 'put',
+      url: URL,
+      headers: { 'Authorization': `Bearer ${adminToken}` },
+      data: body
+    });
+
+    // using .then, create a new promise which extracts the data
+    const status: Promise<number> = promise.then((response) =>
+      response.status
+    ).catch((error) => {
+      // response.status !== 200
+      const authError: ApiError = handleAxiosError(error);
+      throw authError;
+    });
+
+    return status;
+    };
+
 
   return {
     getAdminTokenService,
@@ -344,5 +454,7 @@ export default function AuthApiClientImpl(): IAuthService {
     loginService,
     logoutService,
     registerService,
+    getUserByEmailService,
+    confirmEmailService,
   };
 };

@@ -5,6 +5,7 @@ import { UserValidatorFactory } from "../../../../domain/helper/user.validator.f
 import useRegister from "../../../../domain/hook/register.hook";
 import SessionContext, { ISessionContext } from "../../../../domain/context/session.context";
 import clsx from "clsx";
+import { Redirect } from 'react-router';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -84,6 +85,7 @@ export const UserRegister: FunctionComponent = () => {
     e.preventDefault();
 
     register(firstName, lastName, email, password);
+    //Redirect to Verify
   };
 
   const handleEmailChange = async (emailValue: string) => {
@@ -115,9 +117,7 @@ export const UserRegister: FunctionComponent = () => {
   return (
     <div>
       {wasCreatedOk && (
-        <Alert severity="success">
-          Your account has been created successfully. Now you can log in.
-        </Alert>
+        <Redirect to='/user/confirm' />
       )}
 
       {!session?.isRegistered && (
