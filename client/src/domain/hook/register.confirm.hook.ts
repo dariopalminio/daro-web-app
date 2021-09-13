@@ -5,8 +5,8 @@ import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 
 /**
- * useRegisterConfirm Custom Hook
- * Custom Hook for create new user
+ * use Register Confirm
+ * Custom Hook to confirm email and to close the registration process
  */
 export default function useRegisterConfirm(authServiceInjected: IAuthService | null = null) {
 
@@ -15,7 +15,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
     
     /**
-     * Register
+     * Confirm Email function
      */
     const confirmEmail = useCallback(() => {
 

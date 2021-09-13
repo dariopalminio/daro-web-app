@@ -58,7 +58,8 @@ type RequesRefreshToken = {
 };
 
 /**
- * NotificationApiService implementation 
+ * Auth Api Client Implementation
+ * 
  * Service as factory function that return an interface.
  * A factory function is any function which is not a class or constructor that returns 
  * a (presumably new) object. In JavaScript, any function can return an object.
@@ -67,7 +68,9 @@ type RequesRefreshToken = {
 export default function AuthApiClientImpl(): IAuthService {
 
   /**
-   * Generate a admin access token for create user
+   * Get Admin Token
+   * 
+   * Get a admin access token (from auth server) for next time can create user or update user.
    * same login url: `/auth/realms/${your-realm}/protocol/openid-connect/token`,
    * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   */
@@ -100,7 +103,10 @@ export default function AuthApiClientImpl(): IAuthService {
   };
 
   /**
+   * Get App Token
+   * 
    * Get Access Token for application from auth server.
+   * 
    * Obtain SAT (service account token).
    * Method POST[SAT] Obtain accsess token from a service account. 
    * Content-Type: application/x-www-form-urlencoded.
@@ -136,6 +142,8 @@ export default function AuthApiClientImpl(): IAuthService {
 
 
   /**
+   * Get Refresh Token
+   * 
    * getRefreshTokenService is used when you need to make the user keep login in the system 
    * if the user's access_token get expired and user want to keep login. How can I get newly 
    * updated access_token with this function.
@@ -188,6 +196,8 @@ export default function AuthApiClientImpl(): IAuthService {
   };
 
   /**
+   * Login
+   * 
    * Consumer cliente for login on Keycloak Server & Bearer Token & with client secret
    * configured with OpenID Endpoint configuration, Login with email = true and Access Type = public
    * @param param0 loginRequestData LoginRequest
@@ -250,6 +260,8 @@ export default function AuthApiClientImpl(): IAuthService {
   };
 
   /**
+   * Logout
+   * 
    * Remove all user sessions associated with the user in auth server. 
    * Also send notification to all clients that have an admin URL to invalidate the 
    * sessions for the particular user.
@@ -285,10 +297,11 @@ export default function AuthApiClientImpl(): IAuthService {
     return status;
   };
 
-  /**
- * registerService
+/**
+ * Register 
  * 
- * Keycloak POST Create user [SAT]. Create a new user Username must be unique.
+ * Create a new user and email must be unique.
+ * Keycloak POST Create user [SAT]. 
  * POST 'http://127.0.0.1:8180/auth/admin/realms/my-realm-test/users'
  * AUTHORIZATION: Bearer Token (Token is Admin Token)
  * HEADERS: Content-Type application/json
@@ -333,20 +346,21 @@ export default function AuthApiClientImpl(): IAuthService {
     });
 
     // using .then, create a new promise which extracts the data
-    const status: Promise<number> = promise.then((response) =>
+    const statusNumber: Promise<number> = promise.then((response) =>
       response.status
     ).catch((error) => {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
-console.log(status);
-    return status;
+    //console.log(statusNumber);
+    return statusNumber;
   };
 
-  /**
- * Get users Returns a list of users, filtered according to params.
+/**
+ * Get User By Email
  * 
+ * Get users returns a list of users, filtered according to userEmail params.
  * @param username 
  * @param adminToken 
  * @returns 
@@ -368,50 +382,49 @@ function getUserByEmailService(userEmail: string, adminToken: string): Promise<a
   const promise: AxiosPromise<any> = axios.get(URL, config)
 
   // using .then, create a new promise which extracts the data
-  const data: Promise<any> = promise.then((response) =>
+  const dataArray: Promise<any> = promise.then((response) =>
       response.data
       ).catch((error) => {
         // response.status !== 200
         const authError: ApiError = handleAxiosError(error);
         throw authError;
       });
-  
-      return data;
-   // if (!response.data[0]) {
-   //   throw new Error('keycloak.error.user-not-exist');
-   // }
-    //return response.data[0];
+  // If (!response.data[0]) then keycloak.error.user-not-exist else response.data[0] contains user data.
+  // If the user with that email exists, the function will return the user's data 
+  // in the first position of a data array.
+  return dataArray;
 };
 
 /**
- * PUT Update the user [SAT]
- * Example: http://127.0.0.1:8180/auth/admin/realms/heroes/users/83c72e88-7ac9-4fc7-a7fb-97736d67d261
-
-curl --location --request PUT 'http://127.0.0.1:8180/auth/admin/realms/heroes/users/83c72e88-7ac9-4fc7-a7fb-97736d67d261' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "id": "56f6c53f-5150-4b42-9757-4c3dd4e7d947",
-    "createdTimestamp": 1588881160516,
-    "username": "Superman",
-    "enabled": true,
-    "totp": false,
-    "emailVerified": true,
-    "firstName": "Clark",
-    "lastName": "Kent",
-    "email": "superman@kael.com",
-    "disableableCredentialTypes": [],
-    "requiredActions": [],
-    "federatedIdentities": [],
-    "notBefore": 0,
-    "access": {
-        "manageGroupMembership": true,
-        "view": true,
-        "mapRoles": true,
-        "impersonate": true,
-        "manage": true
-    }
-}'
-
+ * Confirm Email
+ * 
+ * It asks the auth server to update the verification field of the email to true.
+ * Keycloak: PUT Update the user [SAT]
+ * call to: <http://keycloak-IP:port>/auth/admin/realms/heroes/users/<userId>
+ * with PUT command 
+ * and with header 'Content-Type: application/json' \
+ * and --data-raw in body with data emailVerified=true in next json structure: '{
+ *    "id": "56f6c53f-5150-4b42-9757-4c3dd4e7d947",
+ *    "createdTimestamp": 1588881160516,
+ *    "username": "Superman",
+ *    "enabled": true,
+ *    "totp": false,
+ *    "emailVerified": true,
+ *    "firstName": "Clark",
+ *    "lastName": "Kent",
+ *    "email": "superman@kael.com",
+ *    "disableableCredentialTypes": [],
+ *    "requiredActions": [],
+ *    "federatedIdentities": [],
+ *    "notBefore": 0,
+ *    "access": {
+ *        "manageGroupMembership": true,
+ *        "view": true,
+ *        "mapRoles": true,
+ *        "impersonate": true,
+ *        "manage": true
+ *    }
+ *}'
  * @param userId 
  * @param adminToken 
  */

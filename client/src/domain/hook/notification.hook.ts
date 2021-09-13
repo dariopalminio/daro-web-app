@@ -7,7 +7,9 @@ import { IAuthService, Tokens } from '../service/auth.service.interface';
 import { SessionType } from '../model/user/session.type';
 
 /**
- * useNotification custom hook
+ * use Notification 
+ * Custom hook
+ * 
  * @returns 
  */
 export default function useNotification(

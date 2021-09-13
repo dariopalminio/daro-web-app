@@ -5,7 +5,7 @@ import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 
 /**
- * useRegister Custom Hook
+ * use Register
  * Custom Hook for create new user
  */
 export default function useRegister(authServiceInjected: IAuthService | null = null) {
@@ -15,7 +15,7 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
     
     /**
-     * Register
+     * Register function
      */
     const register = useCallback((
         firstname: string,

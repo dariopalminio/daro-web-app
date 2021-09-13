@@ -5,7 +5,9 @@ import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 
 /**
- * useLogout Custom Hook
+ * use Logout 
+ * 
+ * Custom Hook
  * 
  * @returns 
  *      isLogged: Boolean
@@ -20,7 +22,7 @@ export default function useLogout(authServiceInjected: IAuthService | null = nul
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
 
     /**
-     * logout
+     * logout function
      */
     const logout = useCallback((loggedUser: SessionType | undefined) => {
         setState({ loading: true, error: false, msg: "Trying to logout!", isLoggedOk: true })
