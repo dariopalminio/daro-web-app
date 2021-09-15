@@ -1,7 +1,9 @@
 import { Controller, Get, Post, Body, Inject } from '@nestjs/common';
 import { INotificationService } from '../../domain/input/port/notification.service.interface';
 import { ContactMessage } from '../../domain/model/contact.message';
-import { StartConfirmEmailMessage } from '../../domain/model/start.confirm.email.message';
+import { StartConfirmEmailData } from '../../domain/model/register/start.confirm.email.data';
+import { EndConfirmEmailData } from '../../domain/model/register/end.confirm.email.data';
+
 
 export const SUPPORT_SERVICE_TOKEN = 'SupportService_Implementation';
 
@@ -32,11 +34,23 @@ export class NotificationController {
   }
 
   @Post('sendStartEmailConfirm')
-  sendStartEmailConfirm(@Body() startConfirmEmailData: StartConfirmEmailMessage): any {
+  sendStartEmailConfirm(@Body() startConfirmEmailData: StartConfirmEmailData): any {
     console.log(startConfirmEmailData);
 
     try {
       const sentInfo = this.supportService.sendStartEmailConfirm(startConfirmEmailData);
+      return sentInfo;
+    } catch (e) {
+      return e.message;
+    };
+  }
+
+  @Post('sendEndEmailConfirm')
+  sendEndEmailConfirm(@Body() endConfirmEmailData: EndConfirmEmailData): any {
+    console.log(endConfirmEmailData);
+
+    try {
+      const sentInfo = this.supportService.sendEndEmailConfirm(endConfirmEmailData);
       return sentInfo;
     } catch (e) {
       return e.message;

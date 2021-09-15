@@ -1,4 +1,4 @@
-import { ICategory } from './category.interface';
+import { ICategory } from '../category/category.interface';
 
 export interface IProduct{
     _id: string; //_id: holds an ObjectId.

@@ -1,4 +1,4 @@
-import { IProduct } from '../../model/product.interface';
+import { IProduct } from '../../model/product/product.interface';
 
 export interface IProductService {
   getAll(): Promise<IProduct[]>;

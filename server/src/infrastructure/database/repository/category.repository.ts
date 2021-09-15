@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { IRepository } from '../../../domain/output/port/repository.interface';
-import { ICategory } from '../../../domain/model/category.interface';
-import { Category } from '../../../domain/model/category';
-import { CategoryDTO } from '../../../domain/model/category.dto';
+import { ICategory } from '../../../domain/model/category/category.interface';
+import { Category } from '../../../domain/model/category/category';
+import { CategoryDTO } from '../../../domain/model/category/category.dto';
 import { CategoryDocument, CATEGORY_COLLECTION_TOKEN } from '../../../infrastructure/database/schema/category.schema';
 
 

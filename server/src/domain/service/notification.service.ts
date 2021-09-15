@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ContactMessage } from '../model/contact.message';
-import { StartConfirmEmailMessage } from '../model/start.confirm.email.message';
+import { StartConfirmEmailData } from '../model/register/start.confirm.email.data';
+import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { INotificationService } from '../input/port/notification.service.interface';
 import IEmailSender from '../output/port/email.sender.interface';
 
@@ -45,7 +46,10 @@ export class NotificationService implements INotificationService{
    * @param contactMessage 
    * @returns 
    */
-  async sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailMessage): Promise<any> {
+  async sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailData): Promise<any> {
+
+    //Verify endConfirmEmailData TODO!
+
     const contentHTML = `
     <p>Hey ${startConfirmEmailMessage.name}!</p>
     <p>To complete the sign up, enter the verification code on the app.</p>
@@ -60,4 +64,26 @@ export class NotificationService implements INotificationService{
     };
   };
   
+  /**
+   * sendStartEmailConfirm
+   * @param contactMessage 
+   * @returns 
+   */
+     async sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any> {
+       
+      //Verify endConfirmEmailData TODO!
+
+      const contentHTML = `
+      <p>Hey ${endConfirmEmailData.name}!</p>
+      <p>The registration was successful.</p>
+      <p>Thanks, The Team</p>
+      `;
+  
+      try {
+        return this.sender.sendEmail("[app] Registration successful", endConfirmEmailData.email, contentHTML);
+      } catch (error) {
+        throw error;
+      };
+    };
+
 };

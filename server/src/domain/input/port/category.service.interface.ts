@@ -1,4 +1,4 @@
-import { ICategory } from '../../model/category.interface';
+import { ICategory } from '../../model/category/category.interface';
 
 
 export interface ICategoryService {
