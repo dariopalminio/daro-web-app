@@ -107,7 +107,7 @@ const Contact: FunctionComponent = () => {
 
   return (
     <div>
-      {!sending && (
+      {(!sending && !wasSent)  && (
         <form
           id="ContactForm"
           data-testid="ContactForm"
@@ -168,7 +168,7 @@ const Contact: FunctionComponent = () => {
           </Paper>
         </form>
       )}
-      ;
+      
       {sending && (
         <div className="box">
           <strong>Sending email...</strong>

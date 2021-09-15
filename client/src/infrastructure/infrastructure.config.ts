@@ -38,5 +38,5 @@ export const URLPath = {
   user_info: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/userinfo`,
   users: `${APIEndpoints.auth}/auth/admin/realms/${Keycloak.realm}/users`,
   token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
-  notifications: `${APIEndpoints.notifications}/support/notification/sendContactEmail`,
+  notifications: `${APIEndpoints.notifications}/notification/sendContactEmail`,
 };
