@@ -64,8 +64,8 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                             isRegistered: true,
                             email: email,
                             email_verified: data[0].emailVerified,
-                            given_name: "",
-                            preferred_username: "",
+                            given_name: data[0].firstName,
+                            preferred_username: data[0].firstName,
                             userId: data[0].id,
                         };
                         console.log("userValue:", userValue);

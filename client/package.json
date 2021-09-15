@@ -50,7 +50,10 @@
     "rules": {
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "complexity": ["warn", 10]
+      "complexity": [
+        "warn",
+        10
+      ]
     }
   },
   "browserslist": {

@@ -2,7 +2,18 @@ import { ContactType } from '../model/notification/contact.type';
 
 //Interface to do dependency inversion
 export interface INotificationService {
-    sendContactEmailService: (contactData: ContactType, accessToken: string ) => Promise<any>;
-  };
 
-  
+  sendStartEmailConfirm: (
+    name: string,
+    email: string,
+    code: string,
+    accessToken: string
+  ) => Promise<any>;
+
+  sendContactEmailService: (
+    contactData: ContactType,
+    accessToken: string
+  ) => Promise<any>;
+
+};
+

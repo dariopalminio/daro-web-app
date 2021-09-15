@@ -5,10 +5,7 @@ import { SessionType } from '../../../domain/model/user/session.type';
 export default function NotificationClientStub(): INotificationService {
 
 /**
- * Fake function
- * @param contactData optional
- * @param token optional
- * @returns {}
+ * Stub function
  */
 function sendContactEmailService(contactData: ContactType, accessToken: string): Promise<any>{
     return new Promise<any>( (resolve, reject) => {
@@ -17,7 +14,22 @@ function sendContactEmailService(contactData: ContactType, accessToken: string):
      });
   };
 
+/**
+ * Stub function
+ */
+function sendStartEmailConfirm(
+  name: string,
+  email: string,
+  code: string, 
+  accessToken: string ): Promise<any>{
+    return new Promise<any>( (resolve, reject) => {
+           const resp: any = {};
+           resolve(resp);
+     });
+  };
+
 return {
+  sendStartEmailConfirm,
   sendContactEmailService,
 };
 };

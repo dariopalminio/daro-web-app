@@ -1,19 +1,20 @@
-import React, { FunctionComponent, useState, useContext } from "react";
-import useLogin from "../../../../domain/hook/login.hook";
-import IUserValidator from '../../../../domain/helper/user.validator.interface';
-import { UserValidatorFactory } from "../../../../domain/helper/user.validator.factory";
-import AlertError from "./AlertError";
+import React, {
+  FunctionComponent,
+  useState,
+  useContext,
+  useEffect,
+} from "react";
 import clsx from "clsx";
-import SessionContext, { ISessionContext } from "../../../../domain/context/session.context";
+import SessionContext, {
+  ISessionContext,
+} from "../../../../domain/context/session.context";
 import useRegisterConfirm from "../../../../domain/hook/register.confirm.hook";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -60,77 +61,120 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName VerifyRegister
  */
 const UserRegisterConfirm: FunctionComponent = () => {
-  const [code, setCode] = useState("");
+  const [codeEntered, setCodeEntered] = useState("");
+  const [masterCode, setMasterCode] = useState("");
   const { session } = useContext(SessionContext) as ISessionContext;
-  const { wasConfirmedOk, isRegisterLoading, hasRegisterError, msg, confirmEmail } =
-  useRegisterConfirm();
+  const {
+    validVerificationCode,
+    validVerificationCodeMsg,
+    wasConfirmedOk,
+    isRegisterLoading,
+    hasRegisterError,
+    msg,
+    validateVerificationCode,
+    startConfirmEmail,
+    endConfirmEmail,
+  } = useRegisterConfirm();
 
   const classes = useStyles();
 
 
   /**
-   * Verify
+   * End Confirm Email process
    */
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEndConfirmEmailSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("handleLoginSubmit clicked!");
-    confirmEmail();
+    console.log("codeEntered:", codeEntered);
+    console.log("masterCode:", masterCode);
+    if (validateVerificationCode(codeEntered, masterCode)) {
+      endConfirmEmail();
+    }
   };
 
+  /**
+   * Set code entered
+   */
+  const handleCodeEntered = async (code: string) => {
+    setCodeEntered(code);
+  };
+
+  /**
+   * send email with verification code
+   */
+  const handleSendEmail = async () => {
+    const userName = session?.given_name ? session?.given_name : "";
+    const userEmail = session?.email ? session?.email : "";
+    const codeReturned: string = startConfirmEmail(userName, userEmail);
+    setMasterCode(codeReturned);
+  };
 
   return (
     <div>
       {wasConfirmedOk && (
-                  <Alert severity="success">
-                  Your account has been confirmed successfully. 
-                  Now you must go to login.
-                  </Alert>
+        <Alert severity="success">
+          Your account has been confirmed successfully. Now you must go to
+          login.
+        </Alert>
       )}
-{!session?.email_verified && (
+      {!session?.email_verified && (
         <form
           id="LoginForm"
           data-testid="LoginForm"
           action="#"
-          onSubmit={handleLoginSubmit}
+          onSubmit={handleEndConfirmEmailSubmit}
         >
           <Paper className={clsx(classes.paperLoginForm)}>
-
-          <Alert severity="success">
-          Your account has been created successfully. 
-          Now you must verify your mail.
-          </Alert>
+            <Alert severity="success">
+              Your account has been temporarily created successfully. Now you
+              must verify your mail.
+            </Alert>
 
             <div className={clsx(classes.wrapperCenter)}>
-              <h1 className={clsx(classes.h1Custom)}>Code Form</h1>
+              <h1 className={clsx(classes.h1Custom)}>Code verification</h1>
             </div>
-            <div className={clsx(classes.wrapperCenter)}>
 
+            <div className={clsx(classes.wrapperCenter)}>
+              <Button
+                className={clsx(classes.buttonCustom)}
+                variant="contained"
+                color="primary"
+                onClick={() => handleSendEmail()}
+              >
+                Send code to your email
+              </Button>
+            </div>
+
+            <div className={clsx(classes.wrapperCenter)}>
+              Enter the code that we send you to your email:
+            </div>
+
+            <div className={clsx(classes.wrapperCenter)}>
               <TextField
                 id="standard-basic"
                 className="textfield-custom"
                 label="Code"
                 placeholder="12345"
-                value={code}
+                onChange={(e) => handleCodeEntered(e.target.value)}
+                value={codeEntered}
               />
             </div>
 
             <div className={clsx(classes.wrapperCenterForButton)}>
-            <Button
-                    className={clsx(classes.buttonCustom)}
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                  >
+              <Button
+                className={clsx(classes.buttonCustom)}
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
                 Verify
               </Button>
             </div>
           </Paper>
         </form>
-   )}
-        {hasRegisterError && <Alert severity="error">{msg}</Alert>}
+      )}
+      {hasRegisterError && <Alert severity="error">{msg}</Alert>}
 
-        {isRegisterLoading && <Alert severity="info">{msg}</Alert>}
-        
+      {isRegisterLoading && <Alert severity="info">{msg}</Alert>}
     </div>
   );
 };
