@@ -1,12 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ContactMessage } from '../model/contact.message';
-import { ISupportService } from '../input/port/support.service.interface';
+import { StartConfirmEmailMessage } from '../model/start.confirm.email.message';
+import { INotificationService } from '../input/port/notification.service.interface';
 import IEmailSender from '../output/port/email.sender.interface';
+
 
 export const EMAIL_SENDER_TOKEN='EmailSender_Implementation';
 
 @Injectable()
-export class SupportService implements ISupportService{
+export class NotificationService implements INotificationService{
   constructor(
     @Inject(EMAIL_SENDER_TOKEN)
       readonly sender: IEmailSender){
@@ -38,4 +40,24 @@ export class SupportService implements ISupportService{
     };
   };
 
+  /**
+   * sendStartEmailConfirm
+   * @param contactMessage 
+   * @returns 
+   */
+  async sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailMessage): Promise<any> {
+    const contentHTML = `
+    <p>Hey ${startConfirmEmailMessage.name}!</p>
+    <p>To complete the sign up, enter the verification code on the app.</p>
+    <h1>Verification code: ${startConfirmEmailMessage.code}</h1>
+    <p>Thanks, The Team</p>
+    `;
+
+    try {
+      return this.sender.sendEmail("[app] Please verify your email", startConfirmEmailMessage.email, contentHTML);
+    } catch (error) {
+      throw error;
+    };
+  };
+  
 };

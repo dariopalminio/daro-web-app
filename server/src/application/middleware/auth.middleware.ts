@@ -27,7 +27,8 @@ export class AuthMiddleware implements NestMiddleware {
             try {
                 const userVerified = this.verifyRequest(req);
             } catch (error) {
-                return res.status(403).send({ message: error.message })
+                // Unauthorized
+                return res.status(401).send({ message: error.message });
             };
         };
 
@@ -35,10 +36,10 @@ export class AuthMiddleware implements NestMiddleware {
     };
 
     /**
-   * Verify if Jason Web Token is OK.
-   * @param req 
-   * @returns 
-   */
+     * Verify if Jason Web Token is OK.
+     * @param req 
+     * @returns 
+     */
     private verifyRequest(req: Request): any {
         if (!req.headers || !req.headers.authorization) {
             const e = new Error("Unauthorized! No authorization data in Header.");

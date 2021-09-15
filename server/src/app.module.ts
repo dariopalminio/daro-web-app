@@ -2,13 +2,13 @@ import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from './application/filter/exception.filter';
 import { AppController } from './application/controller/app.controller';
-import { SupportController, SUPPORT_SERVICE_TOKEN } from './application/controller/support.controller';
+import { NotificationController, SUPPORT_SERVICE_TOKEN } from './application/controller/notification.controller';
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
 import { CategoryController, CATEGORY_SERVICE_TOKEN } from './application/controller/category.controller';
-import { SupportService, EMAIL_SENDER_TOKEN } from './domain/service/support.service';
+import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
-import { EmailSmtpSenderAdapter } from './infrastructure/notification/email.sender.adapter';
+import { EmailSmtpSenderAdapter } from './infrastructure/email/email.sender.adapter';
 import { AuthMiddleware } from './application/middleware/auth.middleware';
 import { ProductSchema, 
   PRODUCT_COLLECTION_TOKEN } from './infrastructure/database/schema/product.schema';
@@ -60,11 +60,11 @@ MongooseModule.forRootAsync({
       { name: CATEGORY_COLLECTION_TOKEN, schema: CategorySchema },
     ])
   ],
-  controllers: [AppController, SupportController, ProductController, CategoryController],
+  controllers: [AppController, NotificationController, ProductController, CategoryController],
   providers: [
     {
       provide: SUPPORT_SERVICE_TOKEN,
-      useClass: SupportService,
+      useClass: NotificationService,
     },
     {
       provide: PRODUCT_SERVICE_TOKEN,
@@ -99,7 +99,7 @@ MongooseModule.forRootAsync({
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware)
-      .forRoutes(SupportController);
+      .forRoutes(NotificationController);
   };
 
 };
