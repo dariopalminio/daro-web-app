@@ -4,24 +4,29 @@ import { StartConfirmEmailData } from '../model/register/start.confirm.email.dat
 import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { INotificationService } from '../input/port/notification.service.interface';
 import IEmailSender from '../output/port/email.sender.interface';
+import { validEmail } from '../helper/validators';
+import * as GlobalConfig from '../../GlobalConfig';
 
-
-export const EMAIL_SENDER_TOKEN='EmailSender_Implementation';
+export const EMAIL_SENDER_TOKEN = 'EmailSender_Implementation';
 
 @Injectable()
-export class NotificationService implements INotificationService{
+export class NotificationService implements INotificationService {
   constructor(
     @Inject(EMAIL_SENDER_TOKEN)
-      readonly sender: IEmailSender){
-    }
+    readonly sender: IEmailSender) {
+  }
 
   /**
    * Send contact email 
-   * @param contactDTO 
+   * @param contactMessage 
    * @returns 
    */
   async sendContactEmail(contactMessage: ContactMessage): Promise<any> {
-    const contentHTML = `
+
+    if (!validEmail(contactMessage.email)) throw new Error("Invalid email!");
+
+    try {
+      const contentHTML = `
     We will contact you shortly...
     <h1>User Information</h1>
     <ul>
@@ -32,58 +37,61 @@ export class NotificationService implements INotificationService{
     <p>Message: ${contactMessage.message}</p>
     `;
 
-    //const sender: IEmailSender = new EmailSmtpSenderAdapter();
-    
-    try {
-      return this.sender.sendEmail("Subject Test", contactMessage.email, contentHTML);
+      //const sender: IEmailSender = new EmailSmtpSenderAdapter();
+
+      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Support`;
+      return this.sender.sendEmail(subject, contactMessage.email, contentHTML);
     } catch (error) {
       throw error;
     };
   };
 
   /**
-   * sendStartEmailConfirm
-   * @param contactMessage 
+   * Send Start Email Confirm
+   * Send email with verification code to registration process.
+   * @param startConfirmEmailData 
    * @returns 
    */
-  async sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailData): Promise<any> {
+  async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailData): Promise<any> {
 
-    //Verify endConfirmEmailData TODO!
-
-    const contentHTML = `
-    <p>Hey ${startConfirmEmailMessage.name}!</p>
+    if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
+    try {
+      const contentHTML = `
+    <p>Hey ${startConfirmEmailData.name}!</p>
     <p>To complete the sign up, enter the verification code on the app.</p>
-    <h1>Verification code: ${startConfirmEmailMessage.code}</h1>
-    <p>Thanks, The Team</p>
+    <h1>Verification code: ${startConfirmEmailData.code}</h1>
+    <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
     `;
 
-    try {
-      return this.sender.sendEmail("[app] Please verify your email", startConfirmEmailMessage.email, contentHTML);
+      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Please verify your email`;
+      return this.sender.sendEmail(subject, startConfirmEmailData.email, contentHTML);
     } catch (error) {
       throw error;
     };
   };
-  
+
   /**
-   * sendStartEmailConfirm
-   * @param contactMessage 
+   * Send Start Email Confirm
+   * Send email with welcome message to end registration process.
+   * @param endConfirmEmailData 
    * @returns 
    */
-     async sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any> {
-       
-      //Verify endConfirmEmailData TODO!
+  async sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any> {
 
+    if (!validEmail(endConfirmEmailData.email)) throw new Error("Invalid email!");
+    try {
       const contentHTML = `
       <p>Hey ${endConfirmEmailData.name}!</p>
-      <p>The registration was successful.</p>
-      <p>Thanks, The Team</p>
+      <p>Welcome to the team! The registration was successful.</p>
+      <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
       `;
-  
-      try {
-        return this.sender.sendEmail("[app] Registration successful", endConfirmEmailData.email, contentHTML);
-      } catch (error) {
-        throw error;
-      };
+
+      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Registration successful`;
+
+      return this.sender.sendEmail(subject, endConfirmEmailData.email, contentHTML);
+    } catch (error) {
+      throw error;
     };
+  };
 
 };

@@ -94,7 +94,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
 
         
         responseAdminToken.then(jwtAdminToken => {
-            // Second: update email confirmation field in user
+            // Second: update email confirmation field in user of auth server
             const responseConfirm = authService.confirmEmailService(
                 userId,
                 userEmail,

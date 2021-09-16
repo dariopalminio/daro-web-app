@@ -3,6 +3,8 @@ require('dotenv').config();
 
 export const PORT: number = Number(process.env.SERVER_BFF_PORT);
 
+export const COMPANY_NAME: string = process.env.SERVER_BFF_COMPANY_NAME;
+
 export const AUTH_MIDDLEWARE_ON = process.env.SERVER_BFF_AUTH_MIDDLEWARE_ON.toLowerCase() == 'true' ? true : false; 
 
 export const email = {
