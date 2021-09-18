@@ -62,12 +62,8 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName VerifyRegister
  */
 const UserRegisterConfirm: FunctionComponent = () => {
-  const [codeEntered, setCodeEntered] = useState("");
-  const [masterCode, setMasterCode] = useState("");
   const { session } = useContext(SessionContext) as ISessionContext;
   const {
-    validVerificationCode,
-    validVerificationCodeMsg,
     wasConfirmedOk,
     isRegisterLoading,
     hasRegisterError,
@@ -84,8 +80,7 @@ const UserRegisterConfirm: FunctionComponent = () => {
   const handleSendEmail = async () => {
     const userName = session?.given_name ? session?.given_name : "";
     const userEmail = session?.email ? session?.email : "";
-    const codeReturned: string = startConfirmEmail(userName, userEmail);
-    setMasterCode(codeReturned);
+    startConfirmEmail(userName, userEmail);
   };
 
   return (

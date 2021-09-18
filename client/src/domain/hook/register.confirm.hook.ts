@@ -55,18 +55,18 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
         }else{
             const errorText = "createdTimestamp does not exist!"
             setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false, redirect:false});
-            return ''; //TODO
+            return;
         }
 
         const token: string = encodeToken(userEmail, createdTimestamp);
-        const masterCode = encodeLink(token);
+        const verificationLink = encodeLink(token);
 
         // First: obtains admin access token
         const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
         responseAdminToken.then(jwtAdminToken => {
             // Second: send email
-            notifService.sendStartEmailConfirm(userName, userEmail, masterCode, jwtAdminToken).then(info => {
+            notifService.sendStartEmailConfirm(userName, userEmail, verificationLink, jwtAdminToken).then(info => {
                 console.log("Response sendStartEmailConfirm...", info);
                 setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: "Sent Email with verification code!", wasConfirmedOk: false, redirect: true });
              
@@ -81,8 +81,6 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
             setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false, redirect: false });
             //removeSessionValue();
         });
-
-        return masterCode;
     
         }, [session]);
 

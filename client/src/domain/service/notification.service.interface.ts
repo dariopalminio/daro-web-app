@@ -6,7 +6,7 @@ export interface INotificationService {
   sendStartEmailConfirm: (
     name: string,
     email: string,
-    code: string,
+    verificationLink: string,
     accessToken: string
   ) => Promise<any>;
 

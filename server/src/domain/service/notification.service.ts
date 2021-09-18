@@ -58,8 +58,8 @@ export class NotificationService implements INotificationService {
     try {
       const contentHTML = `
     <p>Hey ${startConfirmEmailData.name}!</p>
-    <p>To complete the sign up, enter the verification code on the app.</p>
-    <h1>Verification code: ${startConfirmEmailData.code}</h1>
+    <p>To complete the sign up, click on Verification link.</p>
+    <h1>Verification link: ${startConfirmEmailData.verificationLink}</h1>
     <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
     `;
 

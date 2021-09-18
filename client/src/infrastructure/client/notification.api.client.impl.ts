@@ -27,7 +27,7 @@ export default function NotificationApiClientImpl(): INotificationService {
   function sendStartEmailConfirm(
     name: string,
     email: string,
-    code: string, 
+    verificationLink: string, 
     accessToken: string ): Promise<any> {
 
     //Notification endpoint
@@ -43,7 +43,7 @@ export default function NotificationApiClientImpl(): INotificationService {
       data: {
         'name': name,
         'email': email,
-        'code': code,
+        'verificationLink': verificationLink,
       }
     });
 
