@@ -10,6 +10,7 @@ import SessionContext, {
 } from "../../../../domain/context/session.context";
 import useRegisterConfirm from "../../../../domain/hook/register.confirm.hook";
 import { Redirect } from 'react-router';
+import emailToConfirmImage from "../../../../application/ui/image/email_to_confirm.png";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -100,6 +101,9 @@ const UserRegisterConfirm: FunctionComponent = () => {
               Your account has been temporarily created successfully. Now you
               must verify your mail.
             </Alert>
+            <div className={clsx(classes.wrapperCenter)}>
+            <img src={String(emailToConfirmImage)} alt="emailToConfirmImage" style={{width:"45%", height:"45%"}}/>
+            </div>
 
             <div className={clsx(classes.wrapperCenter)}>
               <h1 className={clsx(classes.h1Custom)}>Email verification</h1>

@@ -1,5 +1,6 @@
 import useRegisterConfirmEmail from "../../../../domain/hook/register.confirm.email.hook";
-
+import emailOkImage from "../../../../application/ui/image/email_ok.png";
+        
 //@material-ui
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -22,7 +23,13 @@ function UserRegisterConfirmEmail({ token }: TParams) {
       {verified=='loading' && (
           <CircularProgress />
       )}
-      {verified=='true' && <Alert severity="success">{msg}</Alert>}
+      {verified=='true' && 
+      (<div>
+        <img src={String(emailOkImage)} alt="emailOkImage" style={{width:"25%", height:"25%"}}/>
+      <Alert severity="success">{msg}</Alert>
+      </div>
+      )
+      }
       {verified=='false' && <Alert severity="error">{msg}</Alert>}
     </div>
   );
