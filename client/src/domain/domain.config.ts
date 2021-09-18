@@ -16,6 +16,8 @@ export const environment = process.env.REACT_APP_ENV;
 
 export const is_fake_mode = ((process.env.REACT_APP_FAKE === 'true') ? true : false) as boolean;
 
+export const app_url = (process.env.REACT_APP_URL ? process.env.REACT_APP_URL : 'http://localhost:3000') as string;
+
 //Injection of services from origin
 export const authorizationService: IAuthService = AuthApiClientFactory.create(is_fake_mode);
 export const notificationService: INotificationService = NotificationApiClientFactory.create(is_fake_mode);

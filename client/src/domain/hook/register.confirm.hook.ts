@@ -1,28 +1,26 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../context/session.context';
-import { SessionType } from '../model/user/session.type';
 import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 import { INotificationService } from '../service/notification.service.interface';
 import { Base64 } from 'js-base64';
 
-
-
 /**
  * use Register Confirm
- * Custom Hook to confirm email and to close the registration process.
- * 
+ * Custom Hook to start the confirm email process.
  */
 export default function useRegisterConfirm(authServiceInjected: IAuthService | null = null,
     notifServiceInjected: INotificationService | null = null) {
 
-    const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
+    const { session } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: '', wasConfirmedOk: false, redirect: false });
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
     const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
 
     /**
-     * `user@domain|createdTimestamp` -> Base64 encoded
+     * Encode Token
+     * Encode the token for the email confirmation link
+     * as `email|createdTimestamp` -> Base64 encoded
      * @param token 
      * @returns 
      */
@@ -32,16 +30,21 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
         return encodedToken;
     };
 
-    //http://localhost:3000/confirm/ZGFyaW9wYWxtaW5pb0BnbWFpbC5jb218MTYzMTkzNDkxODgxNw==
-
-    const encodeLink = (token: string): string => {
-        const url = `http://localhost:3000/confirm/${token}`;
+    /**
+     * Encode Link
+     * Create a url made up of the union between the url of the confirmation page and the token.
+     * The result is similar to: 'http://localhost:3000/confirm/ZGFyaW9wYWxtaW5pb0BnbWFpbC5jb218MTYzMTkzNDkxODgxNw=='
+     * @param token 
+     * @returns string with formatt follow app_url/confirm/token
+     */
+    const createLink = (token: string): string => {
+        const url = `${StateConfig.app_url}/confirm/${token}`;
         return url;
     };
 
     /**
      * Start Confirm Email function
-     * Sent code notification by email
+     * Sent notification by email with verification link.
      */
     const startConfirmEmail = useCallback((userName: string, userEmail: string) => {
 
@@ -59,7 +62,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
         }
 
         const token: string = encodeToken(userEmail, createdTimestamp);
-        const verificationLink = encodeLink(token);
+        const verificationLink = createLink(token);
 
         // First: obtains admin access token
         const responseAdminToken: Promise<any> = authService.getAdminTokenService();

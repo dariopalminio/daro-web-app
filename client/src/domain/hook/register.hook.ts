@@ -16,6 +16,7 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
     
     /**
      * Register function
+     * Create new user in registration process.
      */
     const register = useCallback((
         firstname: string,
@@ -50,8 +51,7 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                         setState({ loading: false, error: true, msg: "keycloak.error.user-not-exist!", wasCreatedOk: false });
                         removeSessionValue();
                     }else{ // keycloak ok because user-exist
-
-                        console.log("Result data from register:", data[0]);
+                        //console.log("Result data from register:", data[0]);
                         const msgText = " Your account has been created successfully. Now you can log in.";
                         setState({ loading: false, error: false, msg: msgText, wasCreatedOk: true });
                         const userValue: SessionType = {
@@ -69,7 +69,7 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                             preferred_username: data[0].firstName,
                             userId: data[0].id,
                         };
-                        console.log("userValue:", userValue);
+                        //console.log("userValue:", userValue);
                         setSessionValue(userValue);
                     }
                 }).catch(err => {

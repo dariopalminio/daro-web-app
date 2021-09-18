@@ -20,9 +20,10 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
 
 
     /**
-     * `user@domain|createdTimestamp`
-     * @param token 
-     * @returns 
+     * Decode Token
+     * Decode process: Base64 encoded --> `email|createdTimestamp` --> [email,createdTimestamp]
+     * @param token Base64 encoded string
+     * @returns string[]
      */
     const decodeToken = (token: string): string[] => {
         const dencodedToken = Base64.decode(token);
@@ -35,6 +36,7 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
      * Validate Email
      * End Confirm Email function in registration process.
      * If the token is correct, then update email confirmation field in user to true.
+     * @param token Base64 encoded string
      */
     const validateEmail = useCallback((token: string) => {
 
@@ -47,9 +49,8 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
         // First: obtains admin access token
         const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
-        // Second: creates a new user with authorization using admin access token
         responseAdminToken.then(jwtAdminToken => {
-
+            // Second: get user by email from auth server
             const responseGetUser = authService.getUserByEmailService(
                 decodedEmail,
                 jwtAdminToken);
@@ -85,7 +86,6 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
 
 
                     } else {
-                        console.log("MAL!!!");
                         setState({ verified: 'false', loading: true, error: true, msg: "Dont exist!" });
                     }
                     console.log("data[0]:", data[0]);
