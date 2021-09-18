@@ -18,6 +18,9 @@ type NewUserRepresentationType = {
       temporary: string,
     },
   ],
+  //attributes: {
+  //  verificationCode: string,
+  //},
 };
 
 type ConfirmEmailType = {
@@ -25,6 +28,9 @@ type ConfirmEmailType = {
   enabled: string
   emailVerified: string
   email: string
+  //attributes: {
+  //  verificationCode: string,
+  //},
 };
 
 type LoginRequestType = {
@@ -306,6 +312,10 @@ export default function AuthApiClientImpl(): IAuthService {
  * AUTHORIZATION: Bearer Token (Token is Admin Token)
  * HEADERS: Content-Type application/json
  * BODY: UserRepresentation
+ * curl --location --request POST 'http://yourKeyclaokSSO.com/auth/admin/realms/YOUR-REALM/users' \
+ * --header 'Content-Type: application/json' \
+ * --header 'Authorization: Bearer <INSERT TOKEN HERE>' \
+ * --data-raw '{"firstName":"James","lastName":"West", "email":"jw@test.com", "username":"james.west", "attributes": {"SomeId":"123"}}'
  * @param name 
  * @param lastname 
  * @param email 

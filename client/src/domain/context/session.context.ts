@@ -8,6 +8,7 @@ const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";
 
 // Global user default value
 export const SessionDefaultValue: SessionType = {
+  createdTimestamp: '',
   access_token: null,
   refresh_token: null,
   expires_in: 0,

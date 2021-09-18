@@ -9,6 +9,7 @@ import SessionContext, {
   ISessionContext,
 } from "../../../../domain/context/session.context";
 import useRegisterConfirm from "../../../../domain/hook/register.confirm.hook";
+import { Redirect } from 'react-router';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -71,32 +72,11 @@ const UserRegisterConfirm: FunctionComponent = () => {
     isRegisterLoading,
     hasRegisterError,
     msg,
-    validateVerificationCode,
+    redirect,
     startConfirmEmail,
-    endConfirmEmail,
   } = useRegisterConfirm();
 
   const classes = useStyles();
-
-
-  /**
-   * End Confirm Email process
-   */
-  const handleEndConfirmEmailSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("codeEntered:", codeEntered);
-    console.log("masterCode:", masterCode);
-    if (validateVerificationCode(codeEntered, masterCode)) {
-      endConfirmEmail();
-    }
-  };
-
-  /**
-   * Set code entered
-   */
-  const handleCodeEntered = async (code: string) => {
-    setCodeEntered(code);
-  };
 
   /**
    * send email with verification code
@@ -110,6 +90,8 @@ const UserRegisterConfirm: FunctionComponent = () => {
 
   return (
     <div>
+      {redirect && (<Redirect to='/user/auth' />)}
+
       {wasConfirmedOk && (
         <Alert severity="success">
           Your account has been confirmed successfully. Now you must go to
@@ -117,12 +99,7 @@ const UserRegisterConfirm: FunctionComponent = () => {
         </Alert>
       )}
       {!session?.email_verified && (
-        <form
-          id="LoginForm"
-          data-testid="LoginForm"
-          action="#"
-          onSubmit={handleEndConfirmEmailSubmit}
-        >
+
           <Paper className={clsx(classes.paperLoginForm)}>
             <Alert severity="success">
               Your account has been temporarily created successfully. Now you
@@ -130,7 +107,7 @@ const UserRegisterConfirm: FunctionComponent = () => {
             </Alert>
 
             <div className={clsx(classes.wrapperCenter)}>
-              <h1 className={clsx(classes.h1Custom)}>Code verification</h1>
+              <h1 className={clsx(classes.h1Custom)}>Email verification</h1>
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
@@ -140,37 +117,15 @@ const UserRegisterConfirm: FunctionComponent = () => {
                 color="primary"
                 onClick={() => handleSendEmail()}
               >
-                Send code to your email
+                Send email and login
               </Button>
-            </div>
-
-            <div className={clsx(classes.wrapperCenter)}>
-              Enter the code that we send you to your email:
-            </div>
-
-            <div className={clsx(classes.wrapperCenter)}>
-              <TextField
-                id="standard-basic"
-                className="textfield-custom"
-                label="Code"
-                placeholder="12345"
-                onChange={(e) => handleCodeEntered(e.target.value)}
-                value={codeEntered}
-              />
             </div>
 
             <div className={clsx(classes.wrapperCenterForButton)}>
-              <Button
-                className={clsx(classes.buttonCustom)}
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Verify
-              </Button>
+     
             </div>
           </Paper>
-        </form>
+     
       )}
       {hasRegisterError && <Alert severity="error">{msg}</Alert>}
 

@@ -1,5 +1,6 @@
 // Global user type
 export interface SessionType {
+    createdTimestamp: string;
     // Access tokens are the thing that applications use to make API requests on behalf of a user.
     access_token: (string | null);
     // Refresh tokens are used to refresh the access token lifetime.

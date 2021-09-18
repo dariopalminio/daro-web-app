@@ -4,7 +4,7 @@ import { SessionType } from '../model/user/session.type';
 import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 import { INotificationService } from '../service/notification.service.interface';
-
+import { Base64 } from 'js-base64';
 
 
 
@@ -17,18 +17,26 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
     notifServiceInjected: INotificationService | null = null) {
 
     const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
-    const [state, setState] = useState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: '', wasConfirmedOk: false });
+    const [state, setState] = useState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: '', wasConfirmedOk: false, redirect: false });
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
     const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
 
     /**
-     * Returns a random 6-digit code as a string
+     * `user@domain|createdTimestamp` -> Base64 encoded
+     * @param token 
      * @returns 
      */
-    const getRandomMasterCode = () => {
-        const randomNumberAsString = (new String(Math.random())).replace('.', '0');
-        const sixDigits = randomNumberAsString.substring(randomNumberAsString.length, randomNumberAsString.length-6);
-        return sixDigits;
+    const encodeToken = (email: string, createdTimestamp: string): string => {
+        const concatenated =  email + '|' + createdTimestamp;
+        const encodedToken = Base64.encode(concatenated);
+        return encodedToken;
+    };
+
+    //http://localhost:3000/confirm/ZGFyaW9wYWxtaW5pb0BnbWFpbC5jb218MTYzMTkzNDkxODgxNw==
+
+    const encodeLink = (token: string): string => {
+        const url = `http://localhost:3000/confirm/${token}`;
+        return url;
     };
 
     /**
@@ -37,12 +45,21 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
      */
     const startConfirmEmail = useCallback((userName: string, userEmail: string) => {
 
-        setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: "Trying to send Email to Confirm!", wasConfirmedOk: false });console.log();
+        setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: "Trying to send Email to Confirm!", wasConfirmedOk: false , redirect:false});console.log();
         
         console.log("session:",session);
 
+        let createdTimestamp: string = "";
+        if (session?.createdTimestamp){
+            createdTimestamp = session?.createdTimestamp;
+        }else{
+            const errorText = "createdTimestamp does not exist!"
+            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false, redirect:false});
+            return ''; //TODO
+        }
 
-        const masterCode = getRandomMasterCode();
+        const token: string = encodeToken(userEmail, createdTimestamp);
+        const masterCode = encodeLink(token);
 
         // First: obtains admin access token
         const responseAdminToken: Promise<any> = authService.getAdminTokenService();
@@ -51,88 +68,23 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
             // Second: send email
             notifService.sendStartEmailConfirm(userName, userEmail, masterCode, jwtAdminToken).then(info => {
                 console.log("Response sendStartEmailConfirm...", info);
-                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: "Sent Email with verification code!", wasConfirmedOk: false });
+                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: "Sent Email with verification code!", wasConfirmedOk: false, redirect: true });
              
             })
                 .catch(err => {
-                    setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: "the email could not be sent with the verification code!", wasConfirmedOk: false });
+                    setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: "the email could not be sent with the verification code!", wasConfirmedOk: false, redirect: false });
                 });
 
         }).catch(err => {
             // Error Can not acquire Admin token from service
             const errorText = err.message + " Error Can not acquire Admin token from service."
-            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false });
+            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false, redirect: false });
             //removeSessionValue();
         });
 
         return masterCode;
     
         }, [session]);
-
-    const validateVerificationCode = useCallback((codeEntered: string, masterCode: string) => {
-        if (codeEntered == masterCode) {
-            setState({ validVerificationCode: true, validVerificationCodeMsg: 'Code verified!', loading: false, error: false, msg: '', wasConfirmedOk: false });
-            return true;
-          }
-        setState({ validVerificationCode: false, validVerificationCodeMsg: 'Invalid code!', loading: false, error: false, msg: '', wasConfirmedOk: false });
-        return false;
-    }, []);
-
-    /**
-     * End Confirm Email function
-     * Update email confirmation field in user to true
-     */
-    const endConfirmEmail = useCallback(() => {
-
-        setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: true, error: false, msg: "Trying to Email Confirm!", wasConfirmedOk: false });
-
-        const userId = (session?.userId)? (session?.userId) : '';
-        const userEmail = (session?.email)? (session?.email) : '';
-
-        // First: obtains admin access token
-        const responseAdminToken: Promise<any> = authService.getAdminTokenService();
-
-        
-        responseAdminToken.then(jwtAdminToken => {
-            // Second: update email confirmation field in user of auth server
-            const responseConfirm = authService.confirmEmailService(
-                userId,
-                userEmail,
-                jwtAdminToken);
-
-                responseConfirm.then(status => {
-                const msgText = status + " Your account has been created and confirm successfully. Now you can log in.";
-                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: msgText, wasConfirmedOk: true });
-                const userValue: SessionType = {
-                    access_token: null,
-                    refresh_token: null,
-                    expires_in: 0,
-                    refresh_expires_in: 0,
-                    date: new Date(),
-                    isLogged: false,
-                    isRegistered: true,
-                    email: userEmail,
-                    email_verified: true,
-                    given_name: "",
-                    preferred_username: "",
-                    userId: userId,
-                };
-                setSessionValue(userValue);
-            }).catch(err => {
-                // Request failed with status code 409 (Conflict) or 400 (Bad Request)
-                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: err.message, wasConfirmedOk: false });
-                removeSessionValue();
-            });
-
-        }).catch(err => {
-            // Error Can not acquire Admin token from service
-            const errorText = err.message + " Error Can not acquire Admin token from service."
-            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false });
-            removeSessionValue();
-        });
-
-    }, [setState, setSessionValue, removeSessionValue, authService]);
-
 
     return {
         validVerificationCode: state.validVerificationCode,
@@ -141,9 +93,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
         isRegisterLoading: state.loading,
         hasRegisterError: state.error,
         msg: state.msg,
-        validateVerificationCode,
+        redirect: state.redirect,
         startConfirmEmail,
-        endConfirmEmail,
-        getRandomMasterCode,
     };
 };
