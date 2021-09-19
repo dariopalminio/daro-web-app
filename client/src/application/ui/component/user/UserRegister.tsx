@@ -6,6 +6,8 @@ import useRegister from "../../../../domain/hook/register.hook";
 import SessionContext, { ISessionContext } from "../../../../domain/context/session.context";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
+import { useAtom } from "jotai";
+import { LoginPassAtom } from "../../../../domain/atom/login.pass.atom";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -65,7 +67,10 @@ export const UserRegister: FunctionComponent = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  //const [password, setPassword] = useState("");
+  const [password, setPassword] = useAtom(LoginPassAtom);
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailValid, setEmailValid] = useState(true);
   const [emailErrorText] = useState("Email inválido");
@@ -117,7 +122,7 @@ export const UserRegister: FunctionComponent = () => {
   return (
     <div>
       {wasCreatedOk && (
-        <Redirect to='/user/confirm' />
+        <Redirect to='/user/confirm'/>
       )}
 
       {!session?.isRegistered && (

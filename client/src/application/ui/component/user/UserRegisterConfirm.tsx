@@ -11,13 +11,16 @@ import SessionContext, {
 import useRegisterConfirm from "../../../../domain/hook/register.confirm.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../../application/ui/image/email_to_confirm.png";
+import { useAtom } from "jotai";
+import { LoginPassAtom } from "../../../../domain/atom/login.pass.atom";
+import useLogin from "../../../../domain/hook/login.hook";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,11 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
         justifyContent: "center",
         textAlign: "center",
       },
-    },
-    linkClass: {
-      paddingTop: "1.5em",
-      position: "relative",
-      rigt: "1em",
     },
     paperLoginForm: {
       width: "300px",
@@ -58,17 +56,20 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * Verify Register Component
- *
- * @visibleName VerifyRegister
+ * Verify Register Confirm Component
+ * View to send email and automatically login.
+ * @visibleName UserRegisterConfirm
  */
 const UserRegisterConfirm: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
+  const [password] = useAtom(LoginPassAtom);
+  const { isLoginLoading, hasLoginError, msg, login } = useLogin();
+
   const {
     wasConfirmedOk,
     isRegisterLoading,
     hasRegisterError,
-    msg,
+    confirmMsg,
     redirect,
     startConfirmEmail,
   } = useRegisterConfirm();
@@ -76,17 +77,30 @@ const UserRegisterConfirm: FunctionComponent = () => {
   const classes = useStyles();
 
   /**
-   * send email with verification code
+   * Handle send email with verification link.
    */
   const handleSendEmail = async () => {
-    const userName = session?.given_name ? session?.given_name : "";
-    const userEmail = session?.email ? session?.email : "";
-    startConfirmEmail(userName, userEmail);
+    if (session?.email) {
+      //first: send email
+      const userName = session?.given_name ? session?.given_name : "";
+      const userEmail = session?.email;
+      startConfirmEmail(userName, userEmail);
+      //second: login
+      handleAutomaticLogin(userEmail);
+    }
+  };
+
+  /**
+   * Handle Automatic login.
+   * @param email 
+   */
+  const handleAutomaticLogin = async (email: string) => {
+    login(email, password);
   };
 
   return (
     <div>
-      {redirect && (<Redirect to='/user/auth' />)}
+      {redirect && (<Redirect to='/' />)}
 
       {wasConfirmedOk && (
         <Alert severity="success">
@@ -126,9 +140,12 @@ const UserRegisterConfirm: FunctionComponent = () => {
           </Paper>
      
       )}
-      {hasRegisterError && <Alert severity="error">{msg}</Alert>}
+      {hasRegisterError && <Alert severity="error">{confirmMsg}</Alert>}
 
-      {isRegisterLoading && <Alert severity="info">{msg}</Alert>}
+      {isRegisterLoading && <Alert severity="info">{confirmMsg}</Alert>}
+
+      {(isLoginLoading || isRegisterLoading) && (<CircularProgress />)}
+
     </div>
   );
 };

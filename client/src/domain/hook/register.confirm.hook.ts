@@ -4,6 +4,7 @@ import * as StateConfig from '../domain.config';
 import { IAuthService } from '../service/auth.service.interface';
 import { INotificationService } from '../service/notification.service.interface';
 import { Base64 } from 'js-base64';
+import { truncate } from 'node:fs';
 
 /**
  * use Register Confirm
@@ -13,7 +14,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
     notifServiceInjected: INotificationService | null = null) {
 
     const { session } = useContext(SessionContext) as ISessionContext;
-    const [state, setState] = useState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: '', wasConfirmedOk: false, redirect: false });
+    const [state, setState] = useState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: '', wasConfirmedOk: false, redirect: false });
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
     const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
 
@@ -48,7 +49,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
      */
     const startConfirmEmail = useCallback((userName: string, userEmail: string) => {
 
-        setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: "Trying to send Email to Confirm!", wasConfirmedOk: false , redirect:false});console.log();
+        setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: true, error: false, confirmMsg: "Trying to send Email to Confirm!", wasConfirmedOk: false , redirect:false});console.log();
         
         console.log("session:",session);
 
@@ -57,7 +58,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
             createdTimestamp = session?.createdTimestamp;
         }else{
             const errorText = "createdTimestamp does not exist!"
-            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false, redirect:false});
+            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: errorText, wasConfirmedOk: false, redirect:false});
             return;
         }
 
@@ -71,17 +72,17 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
             // Second: send email
             notifService.sendStartEmailConfirm(userName, userEmail, verificationLink, jwtAdminToken).then(info => {
                 console.log("Response sendStartEmailConfirm...", info);
-                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, msg: "Sent Email with verification code!", wasConfirmedOk: false, redirect: true });
+                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: "Sent Email with verification code!", wasConfirmedOk: false, redirect: true });
              
             })
                 .catch(err => {
-                    setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: "the email could not be sent with the verification code!", wasConfirmedOk: false, redirect: false });
+                    setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: "the email could not be sent with the verification code!", wasConfirmedOk: false, redirect: false });
                 });
 
         }).catch(err => {
             // Error Can not acquire Admin token from service
             const errorText = err.message + " Error Can not acquire Admin token from service."
-            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, msg: errorText, wasConfirmedOk: false, redirect: false });
+            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: errorText, wasConfirmedOk: false, redirect: false });
             //removeSessionValue();
         });
     
@@ -93,7 +94,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
         wasConfirmedOk: state.wasConfirmedOk,
         isRegisterLoading: state.loading,
         hasRegisterError: state.error,
-        msg: state.msg,
+        confirmMsg: state.confirmMsg,
         redirect: state.redirect,
         startConfirmEmail,
     };
