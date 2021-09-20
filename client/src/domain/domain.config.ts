@@ -18,6 +18,9 @@ export const is_fake_mode = ((process.env.REACT_APP_FAKE === 'true') ? true : fa
 
 export const app_url = (process.env.REACT_APP_URL ? process.env.REACT_APP_URL : 'http://localhost:3000') as string;
 
+export const app_company_name = (process.env.REACT_APP_COMPANY_NAME ? process.env.REACT_APP_COMPANY_NAME : 'Daro 2021') as string;
+
+
 //Injection of services from origin
 export const authorizationService: IAuthService = AuthApiClientFactory.create(is_fake_mode);
 export const notificationService: INotificationService = NotificationApiClientFactory.create(is_fake_mode);

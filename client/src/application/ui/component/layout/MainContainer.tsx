@@ -7,6 +7,7 @@ import { RegisterConfirmEmailPage } from "../../page/user/RegisterConfirmEmailPa
 import { CartPage } from "../../page/cart/CartPage";
 import { HomePage } from "../../page/subpage01/HomePage";
 import { ContactPage } from "../../page/contact/ContactPage";
+import Footer from './Footer';
 
 /**
  * MainContainer Function Component
@@ -15,7 +16,8 @@ import { ContactPage } from "../../page/contact/ContactPage";
  */
 const MainContainer: FunctionComponent = () => {
   return (
-    <div id="MainContainer" data-testid="MainContainer" className="MainContainer">
+    <div>
+    <div id="MainContainer" data-testid="MainContainer" className="main-container">
       <Switch>
         <Route path="/" component={HomePage} exact></Route>
         <Route path="/user/auth" component={AuthPage} exact></Route>
@@ -25,6 +27,8 @@ const MainContainer: FunctionComponent = () => {
         <Route path="/contact" component={ContactPage} exact></Route>
         <Route path="/confirm/:token" component={RegisterConfirmEmailPage} />
       </Switch>
+    </div>
+    <Footer />
     </div>
   );
 };
