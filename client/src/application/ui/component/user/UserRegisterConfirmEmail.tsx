@@ -9,7 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 type TParams = { token: string };
 
 /**
- * UserRegisterConfirmEmail
+ * User Register Confirm Email.
  * @visibleName UserRegisterConfirmEmail
  */
 function UserRegisterConfirmEmail({ token }: TParams) {

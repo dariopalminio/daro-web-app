@@ -55,16 +55,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * TopNavBar Function Component
- * 
+ * TopNavBar Function Component.
+ * Header component.
  * @visibleName TopNavBar View
  */
 const TopNavBar: FunctionComponent = () => {
   const classes = useStyles();
-  const [openLeft, setOpenLeft] = useAtom(openLeftStatus);
+  const [openSideBar, setOpenSideBar] = useAtom(openLeftStatus);
 
   const handleDrawerOpen = () => {
-    setOpenLeft(true);
+    setOpenSideBar(true);
   };
 
   return (
@@ -72,7 +72,7 @@ const TopNavBar: FunctionComponent = () => {
       data-testid="AppBar"
       position="fixed"
       className={clsx(classes.appBar, {
-        [classes.appBarShift]: openLeft,
+        [classes.appBarShift]: openSideBar,
       })}
     >
       <Toolbar className={clsx(classes.toolBar)}>
@@ -84,15 +84,15 @@ const TopNavBar: FunctionComponent = () => {
           aria-label="open drawer"
           onClick={handleDrawerOpen}
           edge="start"
-          className={clsx(classes.menuButton, openLeft && classes.hide)}
+          className={clsx(classes.menuButton, openSideBar && classes.hide)}
         >
           <MenuIcon />
         </IconButton>
 
-        <LogoImg className={clsx(classes.logo)} src={logo} />
-
+    
+        <UserTopMenu />
         <div className={clsx(classes.containerTopMenu)}>
-          <UserTopMenu />
+        <LogoImg className={clsx(classes.logo)} src={logo} />
         </div>
       </Toolbar>
     </AppBar>

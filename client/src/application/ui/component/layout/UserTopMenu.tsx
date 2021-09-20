@@ -6,7 +6,12 @@ import SessionContext, { ISessionContext } from "../../../../domain/context/sess
 //@material-ui
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import AccountCircleOutlined from "@material-ui/icons/AccountCircleOutlined";
+//import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+//import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 
@@ -45,6 +50,12 @@ const UserTopMenu: FunctionComponent = () => {
     } else return "Go to Logout";
   };
 
+  const getUserProfileIcon = () => {
+    if (session && session?.isLogged) {
+      return <AccountCircle />;
+    } else return <AccountCircleOutlined />;
+  };
+
   return (
     <div className={clsx(classes.menuItem)}>
       <IconButton
@@ -54,7 +65,7 @@ const UserTopMenu: FunctionComponent = () => {
         onClick={handleMenu}
         color="inherit"
       >
-        <AccountCircle />
+        {getUserProfileIcon()}
       </IconButton>
       <Menu
         id="menu-appbar"
