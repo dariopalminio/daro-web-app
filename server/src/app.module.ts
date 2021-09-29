@@ -1,27 +1,27 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from './application/filter/exception.filter';
-import { AppController } from './application/controller/app.controller';
-import { NotificationController, SUPPORT_SERVICE_TOKEN } from './application/controller/notification.controller';
-import { ProductController, PRODUCT_SERVICE_TOKEN } from './application/controller/product.controller';
-import { CategoryController, CATEGORY_SERVICE_TOKEN } from './application/controller/category.controller';
+import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from './app/filter/exception.filter';
+import { AppController } from './app/controller/app.controller';
+import { NotificationController, SUPPORT_SERVICE_TOKEN } from './app/controller/notification.controller';
+import { ProductController, PRODUCT_SERVICE_TOKEN } from './app/controller/product.controller';
+import { CategoryController, CATEGORY_SERVICE_TOKEN } from './app/controller/category.controller';
 import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
-import { EmailSmtpSenderAdapter } from './infrastructure/email/email.sender.adapter';
-import { AuthMiddleware } from './application/middleware/auth.middleware';
+import { EmailSmtpSenderAdapter } from './infra/email/email.sender.adapter';
+import { AuthMiddleware } from './app/middleware/auth.middleware';
 import { ProductSchema, 
-  PRODUCT_COLLECTION_TOKEN } from './infrastructure/database/schema/product.schema';
+  PRODUCT_COLLECTION_TOKEN } from './infra/database/schema/product.schema';
 import { CategorySchema, 
-  CATEGORY_COLLECTION_TOKEN } from './infrastructure/database/schema/category.schema';
-import DB_CONNECTION from './infrastructure/database/db.connection.string';
+  CATEGORY_COLLECTION_TOKEN } from './infra/database/schema/category.schema';
+import DB_CONNECTION from './infra/database/db.connection.string';
 import {
   CategoryRepository
-} from './infrastructure/database/repository/category.repository';
+} from './infra/database/repository/category.repository';
 import {
   ProductRepository
-} from './infrastructure/database/repository/product.repository';
-import LoggerHelper from './infrastructure/logger/logger.helper';
+} from './infra/database/repository/product.repository';
+import LoggerHelper from './infra/logger/logger.helper';
 
 //Mongo
 import { MongooseModule } from '@nestjs/mongoose';

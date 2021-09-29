@@ -1,6 +1,6 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { Document, Schema as MongoSchema } from 'mongoose';
-import { Category } from '../../../infrastructure/database/schema/category.schema';
+import { Category } from './category.schema';
 
 export type ProductDocument = Product & Document;
 
