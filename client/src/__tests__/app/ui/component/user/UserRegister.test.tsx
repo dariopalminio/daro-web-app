@@ -1,25 +1,13 @@
 import * as ReactDOM from "react-dom";
-import Login from "../../../../../application/ui/component/user/Login";
+import UserRegister from "../../../../../app/ui/component/user/UserRegister";
 
-jest.mock("../../../../../domain/hook/login.hook", () => {
-  return function useLogin() {
-    return {
-      isLoggedOk: false,
-      isLoginLoading: false,
-      hasLoginError: false,
-      msg: "",
-      login: () => {},
-    };
-  };
-});
-
-describe("Renders Login component", () => {
+describe("Renders UserRegister component", () => {
   let container: HTMLDivElement;
 
   beforeEach(() => {
     container = document.createElement("div");
     document.body.appendChild(container);
-    ReactDOM.render(<Login />, container);
+    ReactDOM.render(<UserRegister />, container);
   });
 
   afterEach(() => {
@@ -27,14 +15,13 @@ describe("Renders Login component", () => {
     container.remove();
   });
 
-  test("Renders correctly Login initial document", () => {
+  test("Renders correctly initial document", () => {
     const forms = container.querySelectorAll("form");
     const inputs = container.querySelectorAll("input");
     const buttons = container.querySelectorAll("button");
     expect(forms).toHaveLength(1);
-    expect(inputs).toHaveLength(2);
+    expect(inputs).toHaveLength(5);
     expect(buttons).toHaveLength(1);
     expect(buttons[0].type).toBe("submit");
   });
-  
 });

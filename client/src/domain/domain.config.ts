@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-import { AuthApiClientFactory } from '../infrastructure/client/factory/auth.api.client.factory';
+import { AuthApiClientFactory } from '../infra/client/factory/auth.api.client.factory';
 import { IAuthService } from './service/auth.service.interface';
-import { NotificationApiClientFactory } from '../infrastructure/client/factory/notification.api.client.factory';
+import { NotificationApiClientFactory } from '../infra/client/factory/notification.api.client.factory';
 import { INotificationService } from './service/notification.service.interface';
 
 const result = dotenv.config();

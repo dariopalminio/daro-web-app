@@ -1,5 +1,5 @@
 import useRegisterConfirmEmail from "../../../../domain/hook/register.confirm.email.hook";
-import emailOkImage from "../../../../application/ui/image/email_ok.png";
+import emailOkImage from "../../image/email_ok.png";
         
 //@material-ui
 import Alert from "@material-ui/lab/Alert";

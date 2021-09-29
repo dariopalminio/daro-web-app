@@ -10,7 +10,7 @@ import SessionContext, {
 } from "../../../../domain/context/session.context";
 import useRegisterConfirm from "../../../../domain/hook/register.confirm.hook";
 import { Redirect } from 'react-router';
-import emailToConfirmImage from "../../../../application/ui/image/email_to_confirm.png";
+import emailToConfirmImage from "../../image/email_to_confirm.png";
 import { useAtom } from "jotai";
 import { LoginPassAtom } from "../../../../domain/atom/login.pass.atom";
 import useLogin from "../../../../domain/hook/login.hook";
