@@ -12,3 +12,6 @@ Nest is [MIT licensed](LICENSE).
 - Keycloak Admin REST API: https://www.keycloak.org/docs-api/10.0/rest-api/index.html
 - Keycloak with postman: https://documenter.getpostman.com/view/7294517/SzmfZHnd#intro
 - Envía emails desde Node.js con Nodemailer (Gmail) tutorial español: https://www.youtube.com/watch?v=KjheexBLY4A
+- Node shop api with stripe payment:  https://github.com/safak/youtube/tree/node-shop-api
+
+
