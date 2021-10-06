@@ -1,19 +1,18 @@
-import { ICart } from './cart.interface';
-import { ICartItem } from './cart.item.interface';
+import { IOrder } from './order.interface';
+import { IOrderItem } from './order.item.interface';
 
-export class Cart implements ICart {
+export class Order implements IOrder {
 
     constructor(id: string, userId: string) {
         this._id = id;
         this.userId = userId;
-        this.cartAmount = 0;
+        this.orderAmount = 0;
         this.status = "pending"; 
     }
 
     _id: string; //_id: holds an ObjectId.
     userId: string;
-    cartItems: ICartItem[];
-    cartAmount: number;
+    orderItems: IOrderItem[];
+    orderAmount: number;
     status: string;
 };
-

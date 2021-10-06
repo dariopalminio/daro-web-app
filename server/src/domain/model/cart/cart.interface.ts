@@ -5,5 +5,6 @@ export interface ICart{
     userId: string; //{ type: String, required: true },
     cartItems: ICartItem[]; 
     cartAmount: number;
+    status: string; // { type: String, default: "pending", options: "ordered",  },
 };
 
