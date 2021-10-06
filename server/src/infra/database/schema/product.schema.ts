@@ -27,8 +27,8 @@ export class Product {
     @Prop()
     barcode:  String;
 
-    @Prop() 
-    stock: number;
+    @Prop({ required: true })
+    stock: number; //{ type: Number, required: true },
 
     @Prop({type: [{ type: MongoSchema.Types.ObjectId, ref: 'Category'}] })
     categories: Category[];
