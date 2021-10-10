@@ -45,7 +45,7 @@ export default function useLogout(authServiceInjected: IAuthService | null = nul
                     msg = "Closed session. ";
                 }).catch(err => {
                     thereWasError = true;
-                    msg = "Falló logout in API." + err.message;
+                    msg = "Logout fail in API." + err.message;
                 });
 
             }).catch(err => {

@@ -59,13 +59,13 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
 
                 if (!data[0]) {
                     // keycloak.error.user-not-exist
-                    setState({ verified: 'false', loading: true, error: true, msg: "keycloak.error.user-not-exist" });
+                    const errorUserNotFound = "User not found."; //keycloak.error.user-not-exist
+                    setState({ verified: 'false', loading: true, error: true, msg: errorUserNotFound });
                     removeSessionValue();
                 } else { // keycloak ok because user-exist
                     const userId: string = data[0].id;
                     const masterCreatedTimestamp: string = data[0].createdTimestamp;
                     if (decodedCreatedTimestamp == String(masterCreatedTimestamp)) {
-                        const msgText = " Your account has been created successfully. Now you can log in.";
 
                         // Second: update email confirmation field in user of auth server
                         const responseConfirm = authService.confirmEmailService(
@@ -75,8 +75,8 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
 
                         responseConfirm.then(status => {
                             console.log("validateEmail, status:", status);
-                            const msgText = "Your account has been created and confirm successfully. Now you can log in.";
-                            setState({ verified: 'true', loading: true, error: false, msg: msgText });
+                            const infoConfirmedAccountSuccess = "Your account has been created and confirm successfully. Now you can log in.";
+                            setState({ verified: 'true', loading: true, error: false, msg: infoConfirmedAccountSuccess });
 
                         }).catch(err => {
                             // Error
@@ -86,21 +86,23 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
 
 
                     } else {
-                        setState({ verified: 'false', loading: true, error: true, msg: "Dont exist!" });
+                        const errorVerificationCodeIsWrong = "Dont exist! Codes do not match."; //decodedCreatedTimestamp not match
+                        setState({ verified: 'false', loading: true, error: true, msg: errorVerificationCodeIsWrong });
                     }
                     console.log("data[0]:", data[0]);
 
                 }
             }).catch(err => {
                 // Error when get user
-                setState({ verified: 'false', loading: true, error: true, msg: "Error when get user" });
+                const errorCannotGetUser = "Error when get user.";
+                setState({ verified: 'false', loading: true, error: true, msg: errorCannotGetUser });
             });
 
 
         }).catch(err => {
             // Error Can not acquire Admin token from service
-            const errorText = err.message + " Error Can not acquire Admin token from service."
-            setState({ verified: 'false', loading: true, error: true, msg: errorText });
+            const errorCannotGetAdminToken = err.message + " Error Can not acquire Admin token from service.";
+            setState({ verified: 'false', loading: true, error: true, msg: errorCannotGetAdminToken });
 
         });
 

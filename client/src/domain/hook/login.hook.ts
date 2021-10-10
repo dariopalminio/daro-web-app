@@ -26,7 +26,8 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
      * login
      */
     const login = useCallback((email: string, password: string) => {
-        setState({ loading: true, error: false, msg: "Trying to login!", isLoggedOk: false, isEmailVerified: false });
+        const infoTryingToLogin = "Trying to login!";
+        setState({ loading: true, error: false, msg: infoTryingToLogin, isLoggedOk: false, isEmailVerified: false });
 
         // First: authenticate user and pass
         authService.loginService(email, password)
@@ -39,11 +40,12 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
                     
                     if (userSessionValue && userSessionValue.email_verified == false) {
                         //Need to verify the email
-                        const verifyEmailMsg = "Unauthorized: Need to verify the email! See you email and verify it!";
-                        setState({ loading: false, error: true, msg: verifyEmailMsg, isLoggedOk: false, isEmailVerified: false });
+                        const errorUnconfirmedAccount = "Unauthorized: Need to verify the email! See you email and verify it!";
+                        setState({ loading: false, error: true, msg: errorUnconfirmedAccount, isLoggedOk: false, isEmailVerified: false });
                     }else{
                         // Authorized
-                        setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true, isEmailVerified: true });
+                        const infoAuthorized = "Authorized";
+                        setState({ loading: false, error: false, msg: infoAuthorized, isLoggedOk: true, isEmailVerified: true });
                     }
                     setSessionValue(userSessionValue);
                 } catch (e: any) {
@@ -67,7 +69,8 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
     const convertJwtToSessionType = (tokens: Tokens) => {
         const jwtDecoded = jws.decode(tokens.access_token);
         console.log("refresh_toke:",tokens.refresh_token);
-        if (!jwtDecoded) throw Error("Decoded JWT fail! JWT decoded is null.");
+        const errorJwtDecodedFail = "Decoded JWT fail! JWT decoded is null.";
+        if (!jwtDecoded) throw Error(errorJwtDecodedFail);
         console.log("jwtDecoded:",jwtDecoded);
         const payload = jwtDecoded.payload;
         console.log("payload:",payload);
