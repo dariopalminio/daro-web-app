@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import useLogin from "../../../../domain/hook/login.hook";
-import IUserValidator from '../../../../domain/helper/user.validator.interface';
+import IUserValidator from "../../../../domain/helper/user.validator.interface";
 import { UserValidatorFactory } from "../../../../domain/helper/user.validator.factory";
 import AlertError from "./AlertError";
 import clsx from "clsx";
@@ -12,6 +12,7 @@ import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,7 +59,14 @@ const Login: FunctionComponent = () => {
   const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Email inválido");
-  const { isLoginLoading, hasLoginError, msg, login } = useLogin();
+  const {
+    isLoginLoading,
+    hasLoginError,
+    msg,
+    isLoggedOk,
+    isEmailVerified,
+    login,
+  } = useLogin();
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
 
@@ -148,6 +156,7 @@ const Login: FunctionComponent = () => {
       )}
 
       {hasLoginError && <AlertError msg={msg} />}
+
     </div>
   );
 };

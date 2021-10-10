@@ -55,7 +55,8 @@ export default function useNotification(
                             console.log("rToken:", rToken);
                         });
                     }
-                    console.log("Have ERROR!!!");
+                    err.message = "Can not send email! " + err.message;
+                    console.log("Can not send email!!!", err.message);
                     setState({ sending: false, hasError: true, msg: err.message, wasSent: false });
                 });
         }).catch(err => {

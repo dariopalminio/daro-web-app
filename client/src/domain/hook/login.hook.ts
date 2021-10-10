@@ -18,7 +18,7 @@ var jws = require('jws');
  */
 export default function useLogin(authServiceInjected: IAuthService | null = null) {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
-    const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
+    const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false, isEmailVerified: false });
     
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
 
@@ -26,7 +26,7 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
      * login
      */
     const login = useCallback((email: string, password: string) => {
-        setState({ loading: true, error: false, msg: "Trying to login!", isLoggedOk: false });
+        setState({ loading: true, error: false, msg: "Trying to login!", isLoggedOk: false, isEmailVerified: false });
 
         // First: authenticate user and pass
         authService.loginService(email, password)
@@ -36,18 +36,25 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
                 // we decode the jason web token.
                 try {
                     const userSessionValue: SessionType = convertJwtToSessionType(jwt);
-                    // Authorized
-                    setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true });
+                    
+                    if (userSessionValue && userSessionValue.email_verified == false) {
+                        //Need to verify the email
+                        const verifyEmailMsg = "Unauthorized: Need to verify the email! See you email and verify it!";
+                        setState({ loading: false, error: true, msg: verifyEmailMsg, isLoggedOk: false, isEmailVerified: false });
+                    }else{
+                        // Authorized
+                        setState({ loading: false, error: false, msg: "Authorized", isLoggedOk: true, isEmailVerified: true });
+                    }
                     setSessionValue(userSessionValue);
-                } catch (e) {
+                } catch (e: any) {
                     // Unauthorized by error in decoding JWT
-                    setState({ loading: false, error: true, msg: e.message, isLoggedOk: false });
+                    setState({ loading: false, error: true, msg: e.message, isLoggedOk: false, isEmailVerified: false });
                     removeSessionValue();
                 }
             })
             .catch(err => {
                 // Unauthorized
-                setState({ loading: false, error: true, msg: err.message, isLoggedOk: false });
+                setState({ loading: false, error: true, msg: err.message, isLoggedOk: false, isEmailVerified: false });
                 removeSessionValue();
             });
     }, [setState, setSessionValue, authService, removeSessionValue]);
@@ -72,8 +79,8 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
             expires_in: tokens.expires_in,
             refresh_expires_in: tokens.refresh_expires_in,
             date: tokens.date,
-            isLogged: true,
-            isRegistered: true,
+            isLogged: payload.email_verified, //If email ferified is logged
+            isRegistered: payload.email_verified, //If email ferified is registered
             email: payload.email,
             email_verified: payload.email_verified,
             given_name: payload.given_name,
@@ -88,6 +95,7 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
         isLoginLoading: state.loading,
         hasLoginError: state.error,
         msg: state.msg,
+        isEmailVerified: state.isEmailVerified,
         login,
     };
 };

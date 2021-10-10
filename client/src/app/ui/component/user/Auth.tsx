@@ -4,6 +4,7 @@ import SessionContext, {
 } from "../../../../domain/context/session.context";
 import Logout from "./Logout";
 import Login from "./Login";
+import Alert from "@material-ui/lab/Alert";
 
 /**
  * Login Function Component
@@ -18,7 +19,15 @@ const Auth: FunctionComponent = () => {
 
       {!session?.isLogged && <Login />}
 
+      {session?.isLogged && !session?.email_verified && 
+        <Alert severity="warning">
+          Warning: {"You need verify the email!"}
+          <br />{" "}
+        </Alert>
+        }
+  
       {session?.isLogged && <Logout />}
+
 
     </div>
   );

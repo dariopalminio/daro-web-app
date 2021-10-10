@@ -100,7 +100,7 @@ const UserRegisterConfirm: FunctionComponent = () => {
 
   return (
     <div>
-      {redirect && (<Redirect to='/' />)}
+      {redirect && (<Redirect to='/user/auth' />)}
 
       {wasConfirmedOk && (
         <Alert severity="success">

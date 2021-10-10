@@ -108,6 +108,7 @@ export default function NotificationApiClientImpl(): INotificationService {
           throw authError;
         }else{
           console.log("sendContactEmailService-->throw authError!!!");
+          authError.message = "Can not send email. ";
           throw authError;
         };
       });

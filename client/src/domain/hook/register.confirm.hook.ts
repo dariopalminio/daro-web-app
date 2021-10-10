@@ -81,7 +81,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
 
         }).catch(err => {
             // Error Can not acquire Admin token from service
-            const errorText = err.message + " Error Can not acquire Admin token from service."
+            const errorText = err.message + " Error Can not acquire Admin token from service. Contact your site administrator."
             setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: errorText, wasConfirmedOk: false, redirect: false });
             //removeSessionValue();
         });

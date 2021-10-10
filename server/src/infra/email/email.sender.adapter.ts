@@ -49,7 +49,7 @@ sentInfo = {
       return sentInfo ? true : false;
 
     } catch (error) {
-      console.log("nodemailer error!!");
+      console.log("Nodemailer error!! Can not send email.");
       throw error;
     };
   };
