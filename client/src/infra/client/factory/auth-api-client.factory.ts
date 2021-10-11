@@ -1,6 +1,6 @@
 
-import  AuthApiClientImpl from '../auth-api-client-impl';
-import  AuthApiClienOkStub from '../stub/auth-api-client-ok-stub';
+import  AuthApiClientImpl from '../auth-api-client.impl';
+import  AuthApiClienOkStub from '../stub/auth-api-client-ok.stub';
 import { IAuthService } from '../../../domain/service/auth-service.interface';
 
 /**

@@ -12,7 +12,7 @@ import useRegisterConfirmStart from "../../../../../domain/hook/user/register-co
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useAtom } from "jotai";
-import { LoginPassAtom } from "../../../../../domain/atom/login-pass-atom";
+import { LoginPassAtom } from "../../../../../domain/atom/login-pass.atom";
 import useLogin from "../../../../../domain/hook/user/login.hook";
 
 //@material-ui

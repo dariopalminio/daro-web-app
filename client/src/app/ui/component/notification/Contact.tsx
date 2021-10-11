@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import IUserValidator from '../../../../domain/helper/user-validator.interface';
-import { UserValidatorFactory } from "../../../../domain/helper/user-validator-factory";
+import { UserValidatorFactory } from "../../../../domain/helper/user-validator.factory";
 import { ContactType } from "../../../../domain/model/notification/contact.type";
 import useNotification from "../../../../domain/hook/notification.hook";
 import AlertError from "../user/AlertError";

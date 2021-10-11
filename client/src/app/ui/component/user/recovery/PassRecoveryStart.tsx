@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
-import { UserValidatorFactory } from "../../../../../domain/helper/user-validator-factory";
+import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
 import emailToSendImage from "../../../image/email_to_send.png";
 import useRecoveryStart from "../../../../../domain/hook/user/recovery-start.hook";
