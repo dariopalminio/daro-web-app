@@ -1,4 +1,4 @@
-import { IAuthService, Tokens } from '../../../domain/service/auth.service.interface';
+import { IAuthService, Tokens } from '../../../domain/service/auth-service.interface';
 
 
 /**

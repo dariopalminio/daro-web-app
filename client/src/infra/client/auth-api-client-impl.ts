@@ -2,7 +2,7 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError } from './api.client.error';
 import qs from 'querystring';
-import { IAuthService, Tokens } from '../../domain/service/auth.service.interface';
+import { IAuthService, Tokens } from '../../domain/service/auth-service.interface';
 
 type NewUserRepresentationType = {
   username: string

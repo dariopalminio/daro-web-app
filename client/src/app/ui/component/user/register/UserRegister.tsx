@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 import { FunctionComponent } from "react";
-import IUserValidator from '../../../../../domain/helper/user.validator.interface';
-import { UserValidatorFactory } from "../../../../../domain/helper/user.validator.factory";
+import IUserValidator from '../../../../../domain/helper/user-validator.interface';
+import { UserValidatorFactory } from "../../../../../domain/helper/user-validator-factory";
 import useRegister from "../../../../../domain/hook/user/register.hook";
 import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
 import { useAtom } from "jotai";
-import { LoginPassAtom } from "../../../../../domain/atom/login.pass.atom";
+import { LoginPassAtom } from "../../../../../domain/atom/login-pass-atom";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";

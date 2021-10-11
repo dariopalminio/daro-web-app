@@ -1,7 +1,7 @@
 
-import  AuthApiClientImpl from '../auth.api.client.impl';
-import  AuthApiClienOkStub from '../stub/auth.api.client.ok.stub';
-import { IAuthService } from '../../../domain/service/auth.service.interface';
+import  AuthApiClientImpl from '../auth-api-client-impl';
+import  AuthApiClienOkStub from '../stub/auth-api-client-ok-stub';
+import { IAuthService } from '../../../domain/service/auth-service.interface';
 
 /**
  * Factory of IAuthService implementation for dependency injection

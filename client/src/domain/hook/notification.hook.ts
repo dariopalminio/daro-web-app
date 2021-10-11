@@ -1,9 +1,9 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../context/session.context';
 import { ContactType } from '../model/notification/contact.type';
-import { INotificationService } from '../service/notification.service.interface';
+import { INotificationService } from '../service/notification-service.interface';
 import * as StateConfig from '../domain.config';
-import { IAuthService, Tokens } from '../service/auth.service.interface';
+import { IAuthService, Tokens } from '../service/auth-service.interface';
 import { SessionType } from '../model/user/session.type';
 
 /**

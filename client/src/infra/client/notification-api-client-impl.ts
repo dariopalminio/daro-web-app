@@ -3,7 +3,7 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import { ContactType } from '../../domain/model/notification/contact.type';
-import { INotificationService } from '../../domain/service/notification.service.interface';
+import { INotificationService } from '../../domain/service/notification-service.interface';
 
 
 /**

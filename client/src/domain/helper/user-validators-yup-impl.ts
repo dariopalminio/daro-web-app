@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import IUserValidators from './user.validator.interface';
+import IUserValidators from './user-validator.interface';
 
 /**
  * Implementation of IUserValidators interface

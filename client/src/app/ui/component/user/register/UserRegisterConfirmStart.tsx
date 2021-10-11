@@ -8,11 +8,11 @@ import clsx from "clsx";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
-import useRegisterConfirmStart from "../../../../../domain/hook/user/register.confirm.start.hook";
+import useRegisterConfirmStart from "../../../../../domain/hook/user/register-confirm-start.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useAtom } from "jotai";
-import { LoginPassAtom } from "../../../../../domain/atom/login.pass.atom";
+import { LoginPassAtom } from "../../../../../domain/atom/login-pass-atom";
 import useLogin from "../../../../../domain/hook/user/login.hook";
 
 //@material-ui

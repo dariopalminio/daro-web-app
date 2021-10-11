@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import * as StateConfig from '../../domain.config';
-import { IAuthService } from '../../service/auth.service.interface';
-import { INotificationService } from '../../service/notification.service.interface';
+import { IAuthService } from '../../service/auth-service.interface';
+import { INotificationService } from '../../service/notification-service.interface';
 import { Base64 } from 'js-base64';
 
 
