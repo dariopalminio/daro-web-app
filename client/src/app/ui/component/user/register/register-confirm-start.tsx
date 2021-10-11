@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * View to send email and automatically login.
  * @visibleName UserRegisterConfirm
  */
-const UserRegisterConfirmStart: FunctionComponent = () => {
+const RegisterConfirmStart: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const [password] = useAtom(LoginPassAtom);
   const { isLoginLoading, hasLoginError, msg, login } = useLogin();
@@ -150,4 +150,4 @@ const UserRegisterConfirmStart: FunctionComponent = () => {
   );
 };
 
-export default UserRegisterConfirmStart;
+export default RegisterConfirmStart;

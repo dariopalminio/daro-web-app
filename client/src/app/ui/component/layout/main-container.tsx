@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { Route, Switch } from "react-router-dom";
 import { AuthPage } from "../../page/user/auth/auth.page";
-import { RegisterPage } from "../../page/user/register/register.page";
+import { RegisterPage } from "../../page/user/register/register-form.page";
 import { RegisterConfirmStartPage } from "../../page/user/register/register-confirm-start.page";
 import { RegisterConfirmEmailPage } from "../../page/user/register/register-confirm-email.page";
 import { PassRecoveryStartPage } from "../../page/user/recovery/pass-recovery-start.page";

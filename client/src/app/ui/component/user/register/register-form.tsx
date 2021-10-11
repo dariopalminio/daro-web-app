@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
  *
  * @visibleName UserRegister View
  */
-export const UserRegister: FunctionComponent = () => {
+export const RegisterForm: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -249,4 +249,4 @@ export const UserRegister: FunctionComponent = () => {
   );
 };
 
-export default UserRegister;
+export default RegisterForm;

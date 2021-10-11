@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import UserRegisterConfirmEmail from "../../../component/user/register/user-register-confirm-email";
+import RegisterConfirmEmail from "../../../component/user/register/register-confirm-email";
 import {
   BrowserRouter as Router,
   Route,
@@ -21,7 +21,7 @@ export function RegisterConfirmEmailPage({
   return (
     <>
       <br />
-      <UserRegisterConfirmEmail token={match.params.token} />
+      <RegisterConfirmEmail token={match.params.token} />
     </>
   );
 }

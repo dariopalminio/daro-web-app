@@ -1,11 +1,11 @@
 import { FunctionComponent } from "react";
-import UserRegister from "../../../component/user/register/user-register";
+import RegisterForm from "../../../component/user/register/register-form";
 
 export const RegisterPage: FunctionComponent = () => {
   return (
     <>
       <br />
-      <UserRegister />
+      <RegisterForm />
     </>
   );
 };

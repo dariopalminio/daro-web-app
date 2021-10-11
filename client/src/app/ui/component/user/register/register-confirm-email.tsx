@@ -12,7 +12,7 @@ type TParams = { token: string };
  * User Register Confirm Email.
  * @visibleName UserRegisterConfirmEmail
  */
-function UserRegisterConfirmEmail({ token }: TParams) {
+function RegisterConfirmEmail({ token }: TParams) {
   const { verified, loading, error, msg, validateEmail } =
     useRegisterConfirmEmail();
 
@@ -35,4 +35,4 @@ function UserRegisterConfirmEmail({ token }: TParams) {
   );
 }
 
-export default UserRegisterConfirmEmail;
+export default RegisterConfirmEmail;
