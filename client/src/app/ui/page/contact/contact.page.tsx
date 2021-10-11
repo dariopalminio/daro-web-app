@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import Contact from "../../component/notification/Contact";
+import Contact from "../../component/notification/contact";
 
 export const ContactPage: FunctionComponent = () => {
   return (

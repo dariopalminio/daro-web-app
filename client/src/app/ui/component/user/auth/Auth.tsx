@@ -2,8 +2,8 @@ import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
-import Logout from "./Logout";
-import Login from "./Login";
+import Logout from "./logout";
+import Login from "./login";
 import Alert from "@material-ui/lab/Alert";
 
 /**

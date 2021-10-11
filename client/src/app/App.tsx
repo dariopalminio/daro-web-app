@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
-import SessionContextProvider from "./ui/provider/SessionContextProvider"
-import AppLayout from "./ui/component/layout/AppLayout"
+import SessionContextProvider from "./ui/provider/session-context-provider"
+import AppLayout from "./ui/component/layout/app-layout"
 
 /**
  * Dario Palminio

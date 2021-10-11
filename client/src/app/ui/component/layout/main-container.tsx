@@ -1,15 +1,15 @@
 import { FunctionComponent } from "react";
 import { Route, Switch } from "react-router-dom";
-import { AuthPage } from "../../page/user/auth/AuthPage";
-import { RegisterPage } from "../../page/user/register/RegisterPage";
-import { RegisterConfirmStartPage } from "../../page/user/register/RegisterConfirmStartPage";
-import { RegisterConfirmEmailPage } from "../../page/user/register/RegisterConfirmEmailPage";
-import { PassRecoveryStartPage } from "../../page/user/recovery/PassRecoveryStartPage";
-import { PassRecoveryMsgPage } from "../../page/user/recovery/PassRecoveryMsgPage";
-import { CartPage } from "../../page/cart/CartPage";
-import { HomePage } from "../../page/subpage01/HomePage";
-import { ContactPage } from "../../page/contact/ContactPage";
-import Footer from './Footer';
+import { AuthPage } from "../../page/user/auth/auth.page";
+import { RegisterPage } from "../../page/user/register/register.page";
+import { RegisterConfirmStartPage } from "../../page/user/register/register-confirm-start.page";
+import { RegisterConfirmEmailPage } from "../../page/user/register/register-confirm-email.page";
+import { PassRecoveryStartPage } from "../../page/user/recovery/pass-recovery-start.page";
+import { PassRecoveryMsgPage } from "../../page/user/recovery/pass-recovery-msg.page";
+import { CartPage } from "../../page/cart/cart.page";
+import { HomePage } from "../../page/subpage01/home.page";
+import { ContactPage } from "../../page/contact/contact.page";
+import Footer from './footer';
 
 /**
  * MainContainer Function Component

@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import UserRegisterConfirmEmail from "../../../component/user/register/UserRegisterConfirmEmail";
+import UserRegisterConfirmEmail from "../../../component/user/register/user-register-confirm-email";
 import {
   BrowserRouter as Router,
   Route,

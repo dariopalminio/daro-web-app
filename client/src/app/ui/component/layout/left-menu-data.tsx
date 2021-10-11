@@ -1,4 +1,4 @@
-import { MenuItemType } from "./MenuItemType";
+import { MenuItemType } from "./menu-item.type";
 
 //@material-ui
 import InboxIcon from "@material-ui/icons/MoveToInbox";

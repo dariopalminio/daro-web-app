@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import UserRegisterConfirmStart from "../../../component/user/register/UserRegisterConfirmStart";
+import UserRegisterConfirmStart from "../../../component/user/register/user-register-confirm-start";
 
 
 export const RegisterConfirmStartPage: FunctionComponent = () => {

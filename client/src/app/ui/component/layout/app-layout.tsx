@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
 import { atom, useAtom } from "jotai";
 import clsx from "clsx";
-import MainContainer from "./MainContainer";
-import TopNavBar from "./TopNavBar";
-import LeftNavBar from "./LeftNavBar";
+import MainContainer from "./main-container";
+import TopNavBar from "./top-nav-bar";
+import LeftNavBar from "./left-nav-bar";
 
 //@material-ui
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
