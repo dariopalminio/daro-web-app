@@ -8,7 +8,7 @@ import clsx from "clsx";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
-import useRegisterConfirm from "../../../../../domain/hook/user/register.confirm.hook";
+import useRegisterConfirmStart from "../../../../../domain/hook/user/register.confirm.start.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useAtom } from "jotai";
@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * View to send email and automatically login.
  * @visibleName UserRegisterConfirm
  */
-const UserRegisterPreConfirmEmail: FunctionComponent = () => {
+const UserRegisterConfirmStart: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const [password] = useAtom(LoginPassAtom);
   const { isLoginLoading, hasLoginError, msg, login } = useLogin();
@@ -72,7 +72,7 @@ const UserRegisterPreConfirmEmail: FunctionComponent = () => {
     confirmMsg,
     redirect,
     startConfirmEmail,
-  } = useRegisterConfirm();
+  } = useRegisterConfirmStart();
 
   const classes = useStyles();
 
@@ -150,4 +150,4 @@ const UserRegisterPreConfirmEmail: FunctionComponent = () => {
   );
 };
 
-export default UserRegisterPreConfirmEmail;
+export default UserRegisterConfirmStart;

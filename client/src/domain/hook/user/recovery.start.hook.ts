@@ -9,7 +9,7 @@ import { Base64 } from 'js-base64';
 /**
  * 
  */
-export default function useRecoverySend(authServiceInjected: IAuthService | null = null,
+export default function useRecoveryStart(authServiceInjected: IAuthService | null = null,
     notifServiceInjected: INotificationService | null = null) {
 
     const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;

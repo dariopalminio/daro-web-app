@@ -2,9 +2,9 @@ import { FunctionComponent } from "react";
 import { Route, Switch } from "react-router-dom";
 import { AuthPage } from "../../page/user/auth/AuthPage";
 import { RegisterPage } from "../../page/user/register/RegisterPage";
-import { RegisterPreConfirmEmailPage } from "../../page/user/register/RegisterPreConfirmEmailPage";
+import { RegisterConfirmStartPage } from "../../page/user/register/RegisterConfirmStartPage";
 import { RegisterConfirmEmailPage } from "../../page/user/register/RegisterConfirmEmailPage";
-import { PassRecoverySendEmailPage } from "../../page/user/recovery/PassRecoverySendEmailPage";
+import { PassRecoveryStartPage } from "../../page/user/recovery/PassRecoveryStartPage";
 import { PassRecoveryMsgPage } from "../../page/user/recovery/PassRecoveryMsgPage";
 import { CartPage } from "../../page/cart/CartPage";
 import { HomePage } from "../../page/subpage01/HomePage";
@@ -26,9 +26,9 @@ const MainContainer: FunctionComponent = () => {
         <Route path="/cart" component={CartPage} exact></Route>
         <Route path="/contact" component={ContactPage} exact></Route>
         <Route path="/user/register/form" component={RegisterPage} exact></Route>
-        <Route path="/user/register/preconfirm" component={RegisterPreConfirmEmailPage} exact></Route>
+        <Route path="/user/register/confirm/start" component={RegisterConfirmStartPage} exact></Route>
         <Route path="/user/register/confirm/:token" component={RegisterConfirmEmailPage} />
-        <Route path="/user/recovery/email" component={PassRecoverySendEmailPage} exact></Route>
+        <Route path="/user/recovery/start" component={PassRecoveryStartPage} exact></Route>
         <Route path="/user/recovery/msg" component={PassRecoveryMsgPage} exact></Route>
       </Switch>
     </div>

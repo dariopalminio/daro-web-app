@@ -136,7 +136,7 @@ const Login: FunctionComponent = () => {
                 Register
               </Link>
               &nbsp;&nbsp;
-              <Link className={clsx(classes.linkClass)} href="/user/recovery/email">
+              <Link className={clsx(classes.linkClass)} href="/user/recovery/start">
                 Recovery
               </Link>
             </div>

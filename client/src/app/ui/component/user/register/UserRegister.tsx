@@ -122,7 +122,7 @@ export const UserRegister: FunctionComponent = () => {
   return (
     <div>
       {wasCreatedOk && (
-        <Redirect to='/user/register/preconfirm'/>
+        <Redirect to='/user/register/confirm/start'/>
       )}
 
       {!session?.isRegistered && (

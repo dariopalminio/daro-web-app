@@ -7,10 +7,10 @@ import { Base64 } from 'js-base64';
 import { truncate } from 'node:fs';
 
 /**
- * use Register Confirm
+ * use Register Confirm Start
  * Custom Hook to start the confirm email process.
  */
-export default function useRegisterConfirm(authServiceInjected: IAuthService | null = null,
+export default function useRegisterConfirmStart(authServiceInjected: IAuthService | null = null,
     notifServiceInjected: INotificationService | null = null) {
 
     const { session } = useContext(SessionContext) as ISessionContext;
