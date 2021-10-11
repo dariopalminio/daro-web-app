@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { FunctionComponent } from "react";
 import IUserValidator from '../../../../../domain/helper/user.validator.interface';
 import { UserValidatorFactory } from "../../../../../domain/helper/user.validator.factory";
-import useRegister from "../../../../../domain/hook/register.hook";
+import useRegister from "../../../../../domain/hook/user/register.hook";
 import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import clsx from "clsx";
 import { Redirect } from 'react-router';

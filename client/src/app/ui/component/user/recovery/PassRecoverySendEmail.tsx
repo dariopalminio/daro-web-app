@@ -3,7 +3,7 @@ import IUserValidator from "../../../../../domain/helper/user.validator.interfac
 import { UserValidatorFactory } from "../../../../../domain/helper/user.validator.factory";
 import clsx from "clsx";
 import emailToSendImage from "../../../image/email_to_send.png";
-import useRecoverySend from "../../../../../domain/hook/recovery.send.hook";
+import useRecoverySend from "../../../../../domain/hook/user/recovery.send.hook";
 import { Redirect } from 'react-router';
 
 //@material-ui

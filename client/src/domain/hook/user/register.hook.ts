@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { ISessionContext } from '../context/session.context';
-import { SessionType } from '../model/user/session.type';
-import * as StateConfig from '../domain.config';
-import { IAuthService } from '../service/auth.service.interface';
+import SessionContext, { ISessionContext } from '../../context/session.context';
+import { SessionType } from '../../model/user/session.type';
+import * as StateConfig from '../../domain.config';
+import { IAuthService } from '../../service/auth.service.interface';
 
 /**
  * use Register

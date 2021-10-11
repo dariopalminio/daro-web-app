@@ -8,12 +8,12 @@ import clsx from "clsx";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
-import useRegisterConfirm from "../../../../../domain/hook/register.confirm.hook";
+import useRegisterConfirm from "../../../../../domain/hook/user/register.confirm.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useAtom } from "jotai";
 import { LoginPassAtom } from "../../../../../domain/atom/login.pass.atom";
-import useLogin from "../../../../../domain/hook/login.hook";
+import useLogin from "../../../../../domain/hook/user/login.hook";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
