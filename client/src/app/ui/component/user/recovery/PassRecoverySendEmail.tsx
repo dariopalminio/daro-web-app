@@ -1,18 +1,17 @@
 import React, { FunctionComponent, useState } from "react";
-import useLogin from "../../../../domain/hook/login.hook";
-import IUserValidator from "../../../../domain/helper/user.validator.interface";
-import { UserValidatorFactory } from "../../../../domain/helper/user.validator.factory";
-import AlertError from "./AlertError";
+import IUserValidator from "../../../../../domain/helper/user.validator.interface";
+import { UserValidatorFactory } from "../../../../../domain/helper/user.validator.factory";
 import clsx from "clsx";
+import emailToSendImage from "../../../image/email_to_send.png";
+import useRecoverySend from "../../../../../domain/hook/recovery.send.hook";
+import { Redirect } from 'react-router';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Alert from "@material-ui/lab/Alert";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,32 +49,29 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * Login Function Component
+ * Pass Recovery Email
  *
- * @visibleName Login View
+ * @visibleName PassRecoverySendEmail
  */
-const Login: FunctionComponent = () => {
+const PassRecoverySendEmail: FunctionComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Email inválido");
-  const {
-    isLoginLoading,
-    hasLoginError,
-    msg,
-    isLoggedOk,
-    isEmailVerified,
-    login,
-  } = useLogin();
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
+  const { sending,
+    sent,
+    error,
+    msg,
+    sendEmailToRecovery } = useRecoverySend();
 
   /**
-   * Login
+   * Submit
    */
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login(email, password);
+    sendEmailToRecovery(email);
   };
 
   /**
@@ -94,23 +90,34 @@ const Login: FunctionComponent = () => {
 
   return (
     <div>
-      {!isLoginLoading && (
+
+        {sent && (<Redirect to='/user/recovery/msg' />)}
+
         <form
-          id="LoginForm"
-          data-testid="LoginForm"
+          id="SendEmailForm"
+          data-testid="SendEmailForm"
           action="#"
-          onSubmit={handleLoginSubmit}
+          onSubmit={handleSubmit}
         >
           <Paper className={clsx(classes.paperLoginForm)}>
             <div className={clsx(classes.wrapperCenter)}>
-              <h1 className={clsx(classes.h1Custom)}>Login Form</h1>
+              <h1 className={clsx(classes.h1Custom)}>Password Recovery</h1>
             </div>
+
+            <div className={clsx(classes.wrapperCenter)}>
+            Do not worry! Just enter the email address with which you have registered and you will receive an email where we will indicate the steps to follow.
+            </div>
+
+            <div className={clsx(classes.wrapperCenter)}>
+              <img src={String(emailToSendImage)} alt="emailSentImage" style={{width:"45%", height:"45%"}}/>
+            </div>
+
             <div className={clsx(classes.wrapperCenter)}>
               <TextField
                 id="standard-basic"
                 className="textfield-custom"
                 label="Email"
-                placeholder="daro@email.com"
+                placeholder="your@email.com"
                 onChange={(e) => handleEmailChange(e.target.value)}
                 value={email}
                 {...(emailIsInvalid && {
@@ -119,46 +126,20 @@ const Login: FunctionComponent = () => {
                 })}
               />
             </div>
-            <div className={clsx(classes.wrapperCenter)}>
-              <TextField
-                id="standard-basic-2"
-                className="textfield-custom"
-                label="Password"
-                type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-              />
-            </div>
-            <b />
-
-            <div className={clsx(classes.wrapperCenter)}>
-              <Link className={clsx(classes.linkClass)} href="/user/register">
-                Register
-              </Link>
-            </div>
 
             <div className={clsx(classes.wrapperCenterForButton)}>
               <Button variant="contained" color="primary" type="submit">
-                Login
+                Send recovery password
               </Button>
             </div>
           </Paper>
         </form>
-      )}
 
       <br />
 
-      {isLoginLoading && (
-        <div className="box">
-          <strong>Checking credentials...</strong>
-          <CircularProgress />
-        </div>
-      )}
-
-      {hasLoginError && <AlertError msg={msg} />}
 
     </div>
   );
 };
 
-export default Login;
+export default PassRecoverySendEmail;

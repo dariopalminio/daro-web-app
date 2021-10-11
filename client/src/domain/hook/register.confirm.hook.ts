@@ -39,7 +39,7 @@ export default function useRegisterConfirm(authServiceInjected: IAuthService | n
      * @returns string with formatt follow app_url/confirm/token
      */
     const createLink = (token: string): string => {
-        const url = `${StateConfig.app_url}/confirm/${token}`;
+        const url = `${StateConfig.app_url}/user/register/confirm/${token}`;
         return url;
     };
 

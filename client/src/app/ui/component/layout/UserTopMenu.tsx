@@ -88,7 +88,7 @@ const UserTopMenu: FunctionComponent = () => {
         </MenuItem>
 
         {session && !session?.isRegistered && (
-          <MenuItem component={Link} to="/user/register" onClick={handleClose}>
+          <MenuItem component={Link} to="/user/register/form" onClick={handleClose}>
             Register
           </MenuItem>
         )}

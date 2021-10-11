@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import Auth from "../../component/user/Auth";
+import Auth from "../../../component/user/auth/Auth";
 
 /**
  * 

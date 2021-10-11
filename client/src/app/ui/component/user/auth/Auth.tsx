@@ -1,7 +1,7 @@
 import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   ISessionContext,
-} from "../../../../domain/context/session.context";
+} from "../../../../../domain/context/session.context";
 import Logout from "./Logout";
 import Login from "./Login";
 import Alert from "@material-ui/lab/Alert";

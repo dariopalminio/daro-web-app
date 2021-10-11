@@ -7,13 +7,13 @@ import React, {
 import clsx from "clsx";
 import SessionContext, {
   ISessionContext,
-} from "../../../../domain/context/session.context";
-import useRegisterConfirm from "../../../../domain/hook/register.confirm.hook";
+} from "../../../../../domain/context/session.context";
+import useRegisterConfirm from "../../../../../domain/hook/register.confirm.hook";
 import { Redirect } from 'react-router';
-import emailToConfirmImage from "../../image/email_to_confirm.png";
+import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useAtom } from "jotai";
-import { LoginPassAtom } from "../../../../domain/atom/login.pass.atom";
-import useLogin from "../../../../domain/hook/login.hook";
+import { LoginPassAtom } from "../../../../../domain/atom/login.pass.atom";
+import useLogin from "../../../../../domain/hook/login.hook";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -86,7 +86,7 @@ const UserRegisterPreConfirmEmail: FunctionComponent = () => {
       const userEmail = session?.email;
       startConfirmEmail(userName, userEmail);
       //second: login
-      handleAutomaticLogin(userEmail);
+      //handleAutomaticLogin(userEmail);
     }
   };
 
