@@ -29,6 +29,10 @@ const Logout: FunctionComponent = () => {
   const { logout } = useLogout();
   const classes = useStyles();
 
+  //content text
+  const success_already_logged = "You are already logged! Do you want to log out?";
+  const command_logout = "Logout";
+
   /**
    * Logout
    */
@@ -39,8 +43,7 @@ const Logout: FunctionComponent = () => {
   return (
     <div >
       <Alert severity="success">
-        {session && session.given_name} You are already logged! Do you want to
-        log out?{" "}
+        {session && session.given_name}  {success_already_logged} {" "}
       </Alert>
       <br />
       <div className={clsx(classes.wrapperCenter)}>
@@ -49,7 +52,7 @@ const Logout: FunctionComponent = () => {
           color="primary"
           onClick={() => onClickLogoutHandler()}
         >
-          Logout
+          {command_logout}
         </Button>
       </div>
     </div>

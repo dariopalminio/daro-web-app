@@ -57,6 +57,10 @@ const PassRecoveryMsg: FunctionComponent = () => {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
 
+  //content text
+  const info_recovery_sent_pass = "We've sent password reset instructions to your email address.";
+  const info_recovery_check_email_is_correct = "If no email is received within ten minutes, check that the submitted address is correct.";
+
   /**
    * Submit
    */
@@ -89,7 +93,7 @@ const PassRecoveryMsg: FunctionComponent = () => {
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
-            We've sent password reset instructions to your email address. 
+            {info_recovery_sent_pass} 
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
@@ -97,7 +101,7 @@ const PassRecoveryMsg: FunctionComponent = () => {
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
-            If no email is received within ten minutes, check that the submitted address is correct.
+            {info_recovery_check_email_is_correct}
             </div>
 
 

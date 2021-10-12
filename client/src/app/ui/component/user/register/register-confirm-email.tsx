@@ -13,24 +13,28 @@ type TParams = { token: string };
  * @visibleName UserRegisterConfirmEmail
  */
 function RegisterConfirmEmail({ token }: TParams) {
-  const { verified, loading, error, msg, validateEmail } =
+  const { executed, loading, confirmed, error, msg, validateEmail } =
     useRegisterConfirmEmail();
-
 
   return (
     <div>
-      {!loading && validateEmail(token)}
-      {verified=='loading' && (
+
+      {!executed && validateEmail(token)}
+
+      {loading && (
           <CircularProgress />
       )}
-      {verified=='true' && 
+
+      {(confirmed && !loading) &&
       (<div>
         <img src={String(emailOkImage)} alt="emailOkImage" style={{width:"25%", height:"25%"}}/>
       <Alert severity="success">{msg}</Alert>
       </div>
       )
       }
-      {verified=='false' && <Alert severity="error">{msg}</Alert>}
+
+      {(!confirmed && !loading && error) && <Alert severity="error">{msg}</Alert>}
+
     </div>
   );
 }

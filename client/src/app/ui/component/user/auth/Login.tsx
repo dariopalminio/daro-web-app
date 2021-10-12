@@ -70,6 +70,13 @@ const Login: FunctionComponent = () => {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
 
+  //content text
+  const command_login = "Login";
+  const command_register_link = "Register";
+  const command_recovery_link = "Recovery";
+  const title_login = "Login Form";
+  const info_login_loading = "Checking credentials...";
+  
   /**
    * Login
    */
@@ -103,7 +110,9 @@ const Login: FunctionComponent = () => {
         >
           <Paper className={clsx(classes.paperLoginForm)}>
             <div className={clsx(classes.wrapperCenter)}>
-              <h1 className={clsx(classes.h1Custom)}>Login Form</h1>
+              <h1 className={clsx(classes.h1Custom)}>
+                {title_login}
+              </h1>
             </div>
             <div className={clsx(classes.wrapperCenter)}>
               <TextField
@@ -133,17 +142,17 @@ const Login: FunctionComponent = () => {
 
             <div className={clsx(classes.wrapperCenter)}>
               <Link className={clsx(classes.linkClass)} href="/user/register/form">
-                Register
+                {command_register_link}
               </Link>
               &nbsp;&nbsp;
               <Link className={clsx(classes.linkClass)} href="/user/recovery/start">
-                Recovery
+                {command_recovery_link}
               </Link>
             </div>
 
             <div className={clsx(classes.wrapperCenterForButton)}>
               <Button variant="contained" color="primary" type="submit">
-                Login
+                {command_login}
               </Button>
             </div>
           </Paper>
@@ -154,7 +163,7 @@ const Login: FunctionComponent = () => {
 
       {isLoginLoading && (
         <div className="box">
-          <strong>Checking credentials...</strong>
+          <strong>{info_login_loading}</strong>
           <CircularProgress />
         </div>
       )}

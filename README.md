@@ -14,4 +14,5 @@ Nest is [MIT licensed](LICENSE).
 - Envía emails desde Node.js con Nodemailer (Gmail) tutorial español: https://www.youtube.com/watch?v=KjheexBLY4A
 - Node shop api with stripe payment:  https://github.com/safak/youtube/tree/node-shop-api
 
+- Responsive testing tool: https://responsivedesignchecker.com/
 

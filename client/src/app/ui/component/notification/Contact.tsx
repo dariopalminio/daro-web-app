@@ -59,6 +59,13 @@ const Contact: FunctionComponent = () => {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
 
+  //content text
+  const info_contact_call_to_action = "Drop us a line:";
+  const command_send = "Send";
+  const success_sent_email_contact = "Message sent!"
+  const info_sending_email_contact = "Sending email..."
+  const info_helper_text_required = "Required";
+
   /**
    * send Submit
    */
@@ -115,7 +122,7 @@ const Contact: FunctionComponent = () => {
           onSubmit={handleSendSubmit}
         >
           <Paper className={clsx(classes.paperLoginForm)}>
-            Drop us a line:
+            {info_contact_call_to_action}
             <TextField
               id="standard-basic-1"
               className={clsx(classes.textfieldCustom)}
@@ -123,7 +130,7 @@ const Contact: FunctionComponent = () => {
               placeholder=""
               onChange={(e) => handleNameChange(e.target.value)}
               value={contact.name}
-              {...(false && { error: true, helperText: "Requerido" })}
+              {...(false && { error: true, helperText: {info_helper_text_required} })}
             />
             <TextField
               id="standard-basic"
@@ -162,7 +169,7 @@ const Contact: FunctionComponent = () => {
                 color="primary"
                 type="submit"
               >
-                Send
+                {command_send}
               </Button>
             </div>
           </Paper>
@@ -171,12 +178,12 @@ const Contact: FunctionComponent = () => {
       
       {sending && (
         <div className="box">
-          <strong>Sending email...</strong>
+          <strong>{info_sending_email_contact}</strong>
           <CircularProgress />
         </div>
       )}
       {hasError && <AlertError msg={msg} />}
-      {wasSent && <Alert severity="success">Message sent!</Alert>}
+      {wasSent && <Alert severity="success">{success_sent_email_contact}</Alert>}
     </div>
   );
 };

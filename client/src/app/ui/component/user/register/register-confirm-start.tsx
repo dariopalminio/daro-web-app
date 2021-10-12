@@ -76,6 +76,11 @@ const RegisterConfirmStart: FunctionComponent = () => {
 
   const classes = useStyles();
 
+  //content text
+  const success_register_temporarily_created = "Your account has been temporarily created successfully. Now you must verify your mail.";
+  const success_register_account_confirmed = "Your account has been confirmed successfully. Now you must go to login.";
+  const title_email_verirication_start = "Email verification";
+  
   /**
    * Handle send email with verification link.
    */
@@ -104,23 +109,23 @@ const RegisterConfirmStart: FunctionComponent = () => {
 
       {wasConfirmedOk && (
         <Alert severity="success">
-          Your account has been confirmed successfully. Now you must go to
-          login.
+          {success_register_account_confirmed}
         </Alert>
       )}
       {!session?.email_verified && (
 
           <Paper className={clsx(classes.paperLoginForm)}>
             <Alert severity="success">
-              Your account has been temporarily created successfully. Now you
-              must verify your mail.
+            {success_register_temporarily_created}
             </Alert>
             <div className={clsx(classes.wrapperCenter)}>
             <img src={String(emailToConfirmImage)} alt="emailToConfirmImage" style={{width:"45%", height:"45%"}}/>
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
-              <h1 className={clsx(classes.h1Custom)}>Email verification</h1>
+              <h1 className={clsx(classes.h1Custom)}>
+              {title_email_verirication_start}
+              </h1>
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>

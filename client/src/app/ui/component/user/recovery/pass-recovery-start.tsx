@@ -61,6 +61,12 @@ const PassRecoveryStart: FunctionComponent = () => {
   const validator: IUserValidator = UserValidatorFactory.create();
   const { sending, sent, error, msg, sendEmailToRecovery } = useRecoveryStart();
 
+  //content text
+  const info_recovery_enter_email = "Do not worry! Just enter the email address with which you have registered and you will receive an email where we will indicate the steps to follow.";
+  const command_send_recovery_pass = "Send recovery password";
+  const title_pass_recovery = "Password Recovery";
+
+
   /**
    * Submit
    */
@@ -95,13 +101,13 @@ const PassRecoveryStart: FunctionComponent = () => {
       >
         <Paper className={clsx(classes.paperLoginForm)}>
           <div className={clsx(classes.wrapperCenter)}>
-            <h1 className={clsx(classes.h1Custom)}>Password Recovery</h1>
+            <h1 className={clsx(classes.h1Custom)}>
+              {title_pass_recovery}
+            </h1>
           </div>
 
           <div className={clsx(classes.wrapperCenter)}>
-            Do not worry! Just enter the email address with which you have
-            registered and you will receive an email where we will indicate the
-            steps to follow.
+            {info_recovery_enter_email}
           </div>
 
           <div className={clsx(classes.wrapperCenter)}>
@@ -129,7 +135,7 @@ const PassRecoveryStart: FunctionComponent = () => {
 
           <div className={clsx(classes.wrapperCenterForButton)}>
             <Button variant="contained" color="primary" type="submit">
-              Send recovery password
+              {command_send_recovery_pass}
             </Button>
           </div>
         </Paper>

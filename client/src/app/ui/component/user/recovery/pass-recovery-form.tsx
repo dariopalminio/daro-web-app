@@ -2,12 +2,8 @@ import React, { useState, useContext } from "react";
 import { FunctionComponent } from "react";
 import IUserValidator from '../../../../../domain/helper/user-validator.interface';
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
-import useRegister from "../../../../../domain/hook/user/register.hook";
-import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
-import { useAtom } from "jotai";
-import { LoginPassAtom } from "../../../../../domain/atom/login-pass.atom";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -24,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     papperRegisterForm: {
       width: "400px",
-      height: "570px",
+      height: "370px",
       margin: "0 auto 0 auto",
       padding: theme.spacing(2),
       textAlign: "center",
@@ -57,20 +53,18 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+type TParams = { token: string };
+
 /**
- * UserRegister Function Component
+ * Pass Recovery Form
  *
- * @visibleName UserRegister View
+ * @visibleName PassRecoveryForm
  */
-export const RegisterForm: FunctionComponent = () => {
-  const { session } = useContext(SessionContext) as ISessionContext;
+ function PassRecoveryForm({ token }: TParams) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-
-  //const [password, setPassword] = useState("");
-  const [password, setPassword] = useAtom(LoginPassAtom);
-
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailValid, setEmailValid] = useState(true);
   const [emailErrorText] = useState("Email inválido");
@@ -79,30 +73,25 @@ export const RegisterForm: FunctionComponent = () => {
   const [confirmPassValid, setConfirmPassValid] = useState(true);
   const [confirmPassErrorText] = useState("Pasword does not match!");
   const classes = useStyles();
-  const { wasCreatedOk, isRegisterLoading, hasRegisterError, msg, register } =
-    useRegister();
   const validator: IUserValidator = UserValidatorFactory.create();
 
   //content text
+  const success_pass_recovery_sucess = "Success! Your password has been changed.";
+  const error_pass_recovery_time_expired = "Something went wrong! It looks like you clicked on an invalid password reset link. Please try again.";
   const info_password_pattern = "Enter a minimum of 10 characters with numbers and letters.";
-  const command_register = "Register";
-  const title_register = "Register";
-  const info_helper_text_required = "Required";
+  const command_change = "Change";
+  const title_register = "Change your password";
 
   /**
-   * Register
+   * 
    */
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    register(firstName, lastName, email, password);
+    //TODO
     //Redirect to Verify
   };
 
-  const handleEmailChange = async (emailValue: string) => {
-    setEmail(emailValue);
-    setEmailValid(await validator.emailIsValid(emailValue));
-  };
 
   const handlePasswordChange = async (passOne: string) => {
     setPassword(passOne);
@@ -117,26 +106,14 @@ export const RegisterForm: FunctionComponent = () => {
     setConfirmPassValid(validator.confirmPassIsValid(passOne, passTwo));
   };
 
-  const handleFirstNameChange = (firstNameValue: string): void => {
-    setFirstName(firstNameValue);
-  };
-
-  const handleLastNameChange = (lastNameValue: string): void => {
-    setLastName(lastNameValue);
-  };
-
   return (
     <div>
-      {wasCreatedOk && (
-        <Redirect to='/user/register/confirm/start'/>
-      )}
 
-      {!session?.isRegistered && (
         <form
           id="RegisterForm"
           data-testid="RegisterForm"
           action="#"
-          onSubmit={handleLoginSubmit}
+          onSubmit={handleSubmit}
         >
           <Paper className={clsx(classes.papperRegisterForm)}>
             <Grid
@@ -148,49 +125,8 @@ export const RegisterForm: FunctionComponent = () => {
             >
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenter)}>
-                  <h1 className={clsx(classes.h1Custom)}>
-                    {title_register}
-                  </h1>
+                  <h1 className={clsx(classes.h1Custom)}>{title_register}</h1>
                 </div>
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-basic-1"
-                  className={clsx(classes.textfieldCustom)}
-                  label="First Name"
-                  placeholder=""
-                  onChange={(e) => handleFirstNameChange(e.target.value)}
-                  value={firstName}
-                  {...(false && { error: true, helperText: {info_helper_text_required} })}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-basic-2"
-                  className={clsx(classes.textfieldCustom)}
-                  label="Last Name"
-                  placeholder=""
-                  onChange={(e) => handleLastNameChange(e.target.value)}
-                  value={lastName}
-                  {...(false && { error: true, helperText: {info_helper_text_required} })}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-basic-3"
-                  className={clsx(classes.textfieldCustom)}
-                  label="Email"
-                  placeholder="daro@email.com"
-                  onChange={(e) => handleEmailChange(e.target.value)}
-                  value={email}
-                  {...(!emailValid && {
-                    error: true,
-                    helperText: emailErrorText,
-                  })}
-                />
               </Grid>
 
               <Grid item xs={12}>
@@ -241,20 +177,16 @@ export const RegisterForm: FunctionComponent = () => {
                     color="primary"
                     type="submit"
                   >
-                    {command_register}
+                    {command_change}
                   </Button>
                 </div>
               </Grid>
             </Grid>
           </Paper>
         </form>
-      )}
-
-      {hasRegisterError && <Alert severity="error">{msg}</Alert>}
-
-      {isRegisterLoading && <Alert severity="info">{msg}</Alert>}
+   
     </div>
   );
 };
 
-export default RegisterForm;
+export default PassRecoveryForm;

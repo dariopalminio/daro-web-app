@@ -13,6 +13,7 @@ import Alert from "@material-ui/lab/Alert";
  */
 const Auth: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
+  const warning_need_verify_the_email = "You need verify the email!";
 
   return (
     <div id="LoginFormContainer" data-testid="LoginFormContainer">
@@ -21,7 +22,7 @@ const Auth: FunctionComponent = () => {
 
       {session?.isLogged && !session?.email_verified && 
         <Alert severity="warning">
-          Warning: {"You need verify the email!"}
+          Warning: {warning_need_verify_the_email}
           <br />{" "}
         </Alert>
         }

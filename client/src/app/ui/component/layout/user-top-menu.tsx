@@ -33,6 +33,12 @@ const UserTopMenu: FunctionComponent = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { session } = useContext(SessionContext) as ISessionContext;
+  
+  //content text
+  const command_login = "Login";
+  const command_logout = "Go to Logout";
+  const command_register = "Register";
+  const label_account_of_current_user = "account of current user";
 
   const openAnchorEl = Boolean(anchorEl);
 
@@ -46,8 +52,8 @@ const UserTopMenu: FunctionComponent = () => {
 
   const getLoginMenuText = () => {
     if (session && !session?.isLogged) {
-      return "Login";
-    } else return "Go to Logout";
+      return command_login;
+    } else return command_login;
   };
 
   const getUserProfileIcon = () => {
@@ -59,7 +65,7 @@ const UserTopMenu: FunctionComponent = () => {
   return (
     <div className={clsx(classes.menuItem)}>
       <IconButton
-        aria-label="account of current user"
+        aria-label={label_account_of_current_user}
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenu}
@@ -89,7 +95,7 @@ const UserTopMenu: FunctionComponent = () => {
 
         {session && !session?.isRegistered && (
           <MenuItem component={Link} to="/user/register/form" onClick={handleClose}>
-            Register
+            {command_register}
           </MenuItem>
         )}
       </Menu>
