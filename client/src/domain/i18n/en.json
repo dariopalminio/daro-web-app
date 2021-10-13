@@ -40,7 +40,7 @@
     "recovery.start.command.send": "Send recovery password",
     "recovery.start.title": "Password Recovery",
     "contact.title": "Contact us",
-    "contact.info.call.t.action": "Drop us a line:",
+    "contact.info.call.to.action": "Drop us a line:",
     "contact.command.send": "Send",
     "contact.success.sent.email": "Message sent!",
     "contact.info.sending.email": "Sending email...",

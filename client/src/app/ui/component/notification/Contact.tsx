@@ -134,7 +134,7 @@ const Contact: FunctionComponent = () => {
                   </h1>
                 </div>
                 
-            {t('contact.info.call.t.action')}
+            {t('contact.info.call.to.action')}
 
             <TextField
               id="standard-basic-1"

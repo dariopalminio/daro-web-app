@@ -40,7 +40,7 @@
     "recovery.start.command.send": "Enviar recuperación de contraseña",
     "recovery.start.title": "Recuperación de contraseña",
     "contact.title": "Contactanos",
-    "contact.info.call.t.action": "Dejanos un mensaje:",
+    "contact.info.call.to.action": "Dejanos un mensaje:",
     "contact.command.send": "Enviar mensaje",
     "contact.success.sent.email": "¡Mensaje enviado!",
     "contact.info.sending.email": "Enviando email...",
