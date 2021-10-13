@@ -26,8 +26,8 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
      * login
      */
     const login = useCallback((email: string, password: string) => {
-        const infoTryingToLogin = "Trying to login!";
-        setState({ loading: true, error: false, msg: infoTryingToLogin, isLoggedOk: false, isEmailVerified: false });
+        const infoKey = "login.info.loading";
+        setState({ loading: true, error: false, msg: infoKey, isLoggedOk: false, isEmailVerified: false });
 
         // First: authenticate user and pass
         authService.loginService(email, password)
@@ -40,12 +40,12 @@ export default function useLogin(authServiceInjected: IAuthService | null = null
                     
                     if (userSessionValue && userSessionValue.email_verified == false) {
                         //Need to verify the email
-                        const errorUnconfirmedAccount = "Unauthorized: Need to verify the email! See you email and verify it!";
-                        setState({ loading: false, error: true, msg: errorUnconfirmedAccount, isLoggedOk: false, isEmailVerified: false });
+                        const errorKey = "login.error.unconfirmed.account";
+                        setState({ loading: false, error: true, msg: errorKey, isLoggedOk: false, isEmailVerified: false });
                     }else{
                         // Authorized
-                        const infoAuthorized = "Authorized";
-                        setState({ loading: false, error: false, msg: infoAuthorized, isLoggedOk: true, isEmailVerified: true });
+                        const msgkey = "login.success.authorized";
+                        setState({ loading: false, error: false, msg: msgkey, isLoggedOk: true, isEmailVerified: true });
                     }
                     setSessionValue(userSessionValue);
                 } catch (e: any) {

@@ -24,8 +24,7 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
         email: string,
         password: string) => {
 
-        const infoTryingToRegister = "Trying to Register!";
-        setState({ loading: true, error: false, msg: infoTryingToRegister, wasCreatedOk: false });
+        setState({ loading: true, error: false, msg: "register.info.loading", wasCreatedOk: false });
 
         // First: obtains admin access token
         const responseAdminToken: Promise<any> = authService.getAdminTokenService();
@@ -49,13 +48,13 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
 
                     if (!data[0]) {
                         // keycloak.error.user-not-exist
-                        const errorUserNotFound = "User not found."; //keycloak.error.user-not-exist
-                        setState({ loading: false, error: true, msg: errorUserNotFound, wasCreatedOk: false });
+                        const errorKey = "register.error.user-not-exist"; //keycloak.error.user-not-exist
+                        setState({ loading: false, error: true, msg: errorKey, wasCreatedOk: false });
                         removeSessionValue();
                     }else{ // keycloak ok because user-exist
                         //console.log("Result data from register:", data[0]);
-                        const infoUserCreatedSuccess = "The user has been created successfully.";
-                        setState({ loading: false, error: false, msg: infoUserCreatedSuccess, wasCreatedOk: true });
+                        const successMsgKey = "register.start.success.temporarily.created";
+                        setState({ loading: false, error: false, msg: successMsgKey, wasCreatedOk: true });
                         const userValue: SessionType = {
                             createdTimestamp: data[0].createdTimestamp,
                             access_token: null,
@@ -89,8 +88,8 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
 
         }).catch(err => {
             // Error Can not acquire Admin token from service
-            const errorCannotGetAdminToken = err.message + " Error Can not acquire Admin token from service."
-            setState({ loading: false, error: true, msg: errorCannotGetAdminToken, wasCreatedOk: false });
+            const errorMsgKey = "register.error.cannot.acquire.token";
+            setState({ loading: false, error: true, msg: errorMsgKey, wasCreatedOk: false });
             removeSessionValue();
         });
 

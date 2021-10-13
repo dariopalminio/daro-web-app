@@ -23,7 +23,7 @@ const AlertError: FunctionComponent<{msg:string}> = ({msg}) => {
 
         <div className={clsx(classes.wrapperCenter)}>
         <Alert severity="error">
-          Error: {msg}
+          {msg}
           <br />{" "}
         </Alert>
       </div>

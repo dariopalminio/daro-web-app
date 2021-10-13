@@ -14,6 +14,7 @@ import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useAtom } from "jotai";
 import { LoginPassAtom } from "../../../../../domain/atom/login-pass.atom";
 import useLogin from "../../../../../domain/hook/user/login.hook";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -75,12 +76,9 @@ const RegisterConfirmStart: FunctionComponent = () => {
   } = useRegisterConfirmStart();
 
   const classes = useStyles();
+  const { t, i18n } = useTranslation();
 
-  //content text
-  const success_register_temporarily_created = "Your account has been temporarily created successfully. Now you must verify your mail.";
-  const success_register_account_confirmed = "Your account has been confirmed successfully. Now you must go to login.";
-  const title_email_verirication_start = "Email verification";
-  
+
   /**
    * Handle send email with verification link.
    */
@@ -109,14 +107,14 @@ const RegisterConfirmStart: FunctionComponent = () => {
 
       {wasConfirmedOk && (
         <Alert severity="success">
-          {success_register_account_confirmed}
+          {t('register.start.success.account.confirmed')}
         </Alert>
       )}
       {!session?.email_verified && (
 
           <Paper className={clsx(classes.paperLoginForm)}>
             <Alert severity="success">
-            {success_register_temporarily_created}
+              {t('register.start.success.temporarily.created')}
             </Alert>
             <div className={clsx(classes.wrapperCenter)}>
             <img src={String(emailToConfirmImage)} alt="emailToConfirmImage" style={{width:"45%", height:"45%"}}/>
@@ -124,7 +122,7 @@ const RegisterConfirmStart: FunctionComponent = () => {
 
             <div className={clsx(classes.wrapperCenter)}>
               <h1 className={clsx(classes.h1Custom)}>
-              {title_email_verirication_start}
+                {t('register.start.title.email.verirication')}
               </h1>
             </div>
 
@@ -145,9 +143,9 @@ const RegisterConfirmStart: FunctionComponent = () => {
           </Paper>
      
       )}
-      {hasRegisterError && <Alert severity="error">{confirmMsg}</Alert>}
+      {hasRegisterError && <Alert severity="error">{t(confirmMsg)}</Alert>}
 
-      {isRegisterLoading && <Alert severity="info">{confirmMsg}</Alert>}
+      {isRegisterLoading && <Alert severity="info">{t(confirmMsg)}</Alert>}
 
       {(isLoginLoading || isRegisterLoading) && (<CircularProgress />)}
 

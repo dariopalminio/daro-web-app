@@ -4,6 +4,7 @@ import IUserValidator from '../../../../../domain/helper/user-validator.interfac
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -74,13 +75,12 @@ type TParams = { token: string };
   const [confirmPassErrorText] = useState("Pasword does not match!");
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
+  const { t, i18n } = useTranslation();
 
   //content text
-  const success_pass_recovery_sucess = "Success! Your password has been changed.";
-  const error_pass_recovery_time_expired = "Something went wrong! It looks like you clicked on an invalid password reset link. Please try again.";
-  const info_password_pattern = "Enter a minimum of 10 characters with numbers and letters.";
-  const command_change = "Change";
-  const title_register = "Change your password";
+  //{t('recovery.form.success.pass.changed')}
+  //{t('recovery.form.error.pass.recovery.time.expired')}
+  
 
   /**
    * 
@@ -125,14 +125,14 @@ type TParams = { token: string };
             >
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenter)}>
-                  <h1 className={clsx(classes.h1Custom)}>{title_register}</h1>
+                  <h1 className={clsx(classes.h1Custom)}>{t('recovery.form.title')}</h1>
                 </div>
               </Grid>
 
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenter)}>
                   <label className={clsx(classes.labelForPass)}>
-                    {info_password_pattern}
+                    {t('register.info.password.pattern')}
                   </label>
                 </div>
               </Grid>
@@ -177,7 +177,7 @@ type TParams = { token: string };
                     color="primary"
                     type="submit"
                   >
-                    {command_change}
+                    {t('recovery.form.command.change')}
                   </Button>
                 </div>
               </Grid>

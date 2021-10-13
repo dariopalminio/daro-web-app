@@ -3,6 +3,7 @@ import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
 import useLogout from "../../../../../domain/hook/user/logout.hook";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -28,10 +29,8 @@ const Logout: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const { logout } = useLogout();
   const classes = useStyles();
+  const { t, i18n } = useTranslation();
 
-  //content text
-  const success_already_logged = "You are already logged! Do you want to log out?";
-  const command_logout = "Logout";
 
   /**
    * Logout
@@ -43,7 +42,7 @@ const Logout: FunctionComponent = () => {
   return (
     <div >
       <Alert severity="success">
-        {session && session.given_name}  {success_already_logged} {" "}
+        {session && session.given_name}  {t('logout.success.already.logged')} {" "}
       </Alert>
       <br />
       <div className={clsx(classes.wrapperCenter)}>
@@ -52,7 +51,7 @@ const Logout: FunctionComponent = () => {
           color="primary"
           onClick={() => onClickLogoutHandler()}
         >
-          {command_logout}
+          {t('logout.command')}
         </Button>
       </div>
     </div>

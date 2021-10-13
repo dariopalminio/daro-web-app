@@ -25,10 +25,10 @@ export default function useLogout(authServiceInjected: IAuthService | null = nul
      * logout function
      */
     const logout = useCallback((loggedUser: SessionType | undefined) => {
-        setState({ loading: true, error: false, msg: "Trying to logout!", isLoggedOk: true })
+        setState({ loading: true, error: false, msg: "logout.info.loading", isLoggedOk: true })
 
         const userId = loggedUser?.userId ? loggedUser?.userId : null;
-        let msg = "";
+        let msgKey = "";
         let thereWasError = false;
 
         if (userId !== null) {
@@ -42,23 +42,23 @@ export default function useLogout(authServiceInjected: IAuthService | null = nul
 
                 responseLogout.then(status => {
 
-                    msg = "Closed session. ";
+                    msgKey = "logout.success";
                 }).catch(err => {
                     thereWasError = true;
-                    msg = "Logout fail in API." + err.message;
+                    msgKey = err.message;
                 });
 
             }).catch(err => {
                 thereWasError = true;
-                msg = err.message;
+                msgKey = err.message;
             });
 
         } else {
             thereWasError = true;
-            msg = "There was no user logged in. ";
+            msgKey = "logout.error.not.logged";
         };
 
-        setState({ loading: false, error: thereWasError, msg: msg + "You are not logged in!", isLoggedOk: false });
+        setState({ loading: false, error: thereWasError, msg: msgKey , isLoggedOk: false });
         removeSessionValue();
     }, [setState, removeSessionValue, authService]);
 

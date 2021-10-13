@@ -5,6 +5,7 @@ import clsx from "clsx";
 import emailToSendImage from "../../../image/email_to_send.png";
 import useRecoveryStart from "../../../../../domain/hook/user/recovery-start.hook";
 import { Redirect } from "react-router";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -60,11 +61,7 @@ const PassRecoveryStart: FunctionComponent = () => {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { sending, sent, error, msg, sendEmailToRecovery } = useRecoveryStart();
-
-  //content text
-  const info_recovery_enter_email = "Do not worry! Just enter the email address with which you have registered and you will receive an email where we will indicate the steps to follow.";
-  const command_send_recovery_pass = "Send recovery password";
-  const title_pass_recovery = "Password Recovery";
+  const { t, i18n } = useTranslation();
 
 
   /**
@@ -102,12 +99,12 @@ const PassRecoveryStart: FunctionComponent = () => {
         <Paper className={clsx(classes.paperLoginForm)}>
           <div className={clsx(classes.wrapperCenter)}>
             <h1 className={clsx(classes.h1Custom)}>
-              {title_pass_recovery}
+              {t('recovery.start.title')}
             </h1>
           </div>
 
           <div className={clsx(classes.wrapperCenter)}>
-            {info_recovery_enter_email}
+          {t('recovery.start.info.enter.email')}
           </div>
 
           <div className={clsx(classes.wrapperCenter)}>
@@ -135,7 +132,7 @@ const PassRecoveryStart: FunctionComponent = () => {
 
           <div className={clsx(classes.wrapperCenterForButton)}>
             <Button variant="contained" color="primary" type="submit">
-              {command_send_recovery_pass}
+            {t('recovery.start.command.send')}
             </Button>
           </div>
         </Paper>

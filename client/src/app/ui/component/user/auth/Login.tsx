@@ -4,6 +4,7 @@ import IUserValidator from "../../../../../domain/helper/user-validator.interfac
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import AlertError from "../alert-error";
 import clsx from "clsx";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -69,14 +70,8 @@ const Login: FunctionComponent = () => {
   } = useLogin();
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
+  const { t, i18n } = useTranslation();
 
-  //content text
-  const command_login = "Login";
-  const command_register_link = "Register";
-  const command_recovery_link = "Recovery";
-  const title_login = "Login Form";
-  const info_login_loading = "Checking credentials...";
-  
   /**
    * Login
    */
@@ -111,7 +106,7 @@ const Login: FunctionComponent = () => {
           <Paper className={clsx(classes.paperLoginForm)}>
             <div className={clsx(classes.wrapperCenter)}>
               <h1 className={clsx(classes.h1Custom)}>
-                {title_login}
+              {t('login.title')}
               </h1>
             </div>
             <div className={clsx(classes.wrapperCenter)}>
@@ -119,7 +114,7 @@ const Login: FunctionComponent = () => {
                 id="standard-basic"
                 className="textfield-custom"
                 label="Email"
-                placeholder="daro@email.com"
+                placeholder="your@email.com"
                 onChange={(e) => handleEmailChange(e.target.value)}
                 value={email}
                 {...(emailIsInvalid && {
@@ -132,7 +127,7 @@ const Login: FunctionComponent = () => {
               <TextField
                 id="standard-basic-2"
                 className="textfield-custom"
-                label="Password"
+                label={t('login.label.password')}
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
@@ -142,17 +137,17 @@ const Login: FunctionComponent = () => {
 
             <div className={clsx(classes.wrapperCenter)}>
               <Link className={clsx(classes.linkClass)} href="/user/register/form">
-                {command_register_link}
+              {t('register.command.link')}
               </Link>
               &nbsp;&nbsp;
               <Link className={clsx(classes.linkClass)} href="/user/recovery/start">
-                {command_recovery_link}
+              {t('recovery.command.link')}
               </Link>
             </div>
 
             <div className={clsx(classes.wrapperCenterForButton)}>
               <Button variant="contained" color="primary" type="submit">
-                {command_login}
+              {t('login.command')}
               </Button>
             </div>
           </Paper>
@@ -163,12 +158,12 @@ const Login: FunctionComponent = () => {
 
       {isLoginLoading && (
         <div className="box">
-          <strong>{info_login_loading}</strong>
+          <strong>{t('login.info.loading')}</strong>
           <CircularProgress />
         </div>
       )}
 
-      {hasLoginError && <AlertError msg={msg} />}
+      {hasLoginError && <AlertError msg={t(msg)} />}
 
     </div>
   );

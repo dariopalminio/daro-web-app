@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { Redirect } from 'react-router';
 import { useAtom } from "jotai";
 import { LoginPassAtom } from "../../../../../domain/atom/login-pass.atom";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -82,12 +83,8 @@ export const RegisterForm: FunctionComponent = () => {
   const { wasCreatedOk, isRegisterLoading, hasRegisterError, msg, register } =
     useRegister();
   const validator: IUserValidator = UserValidatorFactory.create();
+  const { t, i18n } = useTranslation();
 
-  //content text
-  const info_password_pattern = "Enter a minimum of 10 characters with numbers and letters.";
-  const command_register = "Register";
-  const title_register = "Register";
-  const info_helper_text_required = "Required";
 
   /**
    * Register
@@ -149,7 +146,7 @@ export const RegisterForm: FunctionComponent = () => {
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenter)}>
                   <h1 className={clsx(classes.h1Custom)}>
-                    {title_register}
+                  {t('register.title')}
                   </h1>
                 </div>
               </Grid>
@@ -162,7 +159,7 @@ export const RegisterForm: FunctionComponent = () => {
                   placeholder=""
                   onChange={(e) => handleFirstNameChange(e.target.value)}
                   value={firstName}
-                  {...(false && { error: true, helperText: {info_helper_text_required} })}
+                  {...(false && { error: true, helperText: t('register.info.helper.text.required') })}
                 />
               </Grid>
 
@@ -174,7 +171,7 @@ export const RegisterForm: FunctionComponent = () => {
                   placeholder=""
                   onChange={(e) => handleLastNameChange(e.target.value)}
                   value={lastName}
-                  {...(false && { error: true, helperText: {info_helper_text_required} })}
+                  {...(false && { error: true, helperText: t('register.info.helper.text.required') })}
                 />
               </Grid>
 
@@ -183,7 +180,7 @@ export const RegisterForm: FunctionComponent = () => {
                   id="standard-basic-3"
                   className={clsx(classes.textfieldCustom)}
                   label="Email"
-                  placeholder="daro@email.com"
+                  placeholder="you@email.com"
                   onChange={(e) => handleEmailChange(e.target.value)}
                   value={email}
                   {...(!emailValid && {
@@ -196,7 +193,7 @@ export const RegisterForm: FunctionComponent = () => {
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenter)}>
                   <label className={clsx(classes.labelForPass)}>
-                    {info_password_pattern}
+                  {t('register.info.password.pattern')}
                   </label>
                 </div>
               </Grid>
@@ -241,7 +238,7 @@ export const RegisterForm: FunctionComponent = () => {
                     color="primary"
                     type="submit"
                   >
-                    {command_register}
+                    {t('register.command')}
                   </Button>
                 </div>
               </Grid>
@@ -250,9 +247,9 @@ export const RegisterForm: FunctionComponent = () => {
         </form>
       )}
 
-      {hasRegisterError && <Alert severity="error">{msg}</Alert>}
+      {hasRegisterError && <Alert severity="error">{t(msg)}</Alert>}
 
-      {isRegisterLoading && <Alert severity="info">{msg}</Alert>}
+      {isRegisterLoading && <Alert severity="info">{t(msg)}</Alert>}
     </div>
   );
 };

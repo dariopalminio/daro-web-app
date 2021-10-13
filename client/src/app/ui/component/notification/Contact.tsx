@@ -4,6 +4,7 @@ import { UserValidatorFactory } from "../../../../domain/helper/user-validator.f
 import { ContactType } from "../../../../domain/model/notification/contact.type";
 import useNotification from "../../../../domain/hook/notification.hook";
 import AlertError from "../user/alert-error";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -29,6 +30,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonCustom: {
       margin: "0 auto auto auto",
+    },
+    h1Custom: {
+      fontSize: "1.5em",
+      color: "#525252",
+      paddingLeft: "1rem",
+    },
+    wrapperCenter: {
+      display: "flex",
+      justifyContent: "center",
     },
     wrapperCenterWithPaddingTop: {
       display: "flex",
@@ -58,13 +68,8 @@ const Contact: FunctionComponent = () => {
   const [emailErrorText] = useState("Invalid Email");
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
+  const { t, i18n } = useTranslation();
 
-  //content text
-  const info_contact_call_to_action = "Drop us a line:";
-  const command_send = "Send";
-  const success_sent_email_contact = "Message sent!"
-  const info_sending_email_contact = "Sending email..."
-  const info_helper_text_required = "Required";
 
   /**
    * send Submit
@@ -122,7 +127,15 @@ const Contact: FunctionComponent = () => {
           onSubmit={handleSendSubmit}
         >
           <Paper className={clsx(classes.paperLoginForm)}>
-            {info_contact_call_to_action}
+
+          <div className={clsx(classes.wrapperCenter)}>
+                  <h1 className={clsx(classes.h1Custom)}>
+                  {t('contact.title')}
+                  </h1>
+                </div>
+                
+            {t('contact.info.call.t.action')}
+
             <TextField
               id="standard-basic-1"
               className={clsx(classes.textfieldCustom)}
@@ -130,7 +143,7 @@ const Contact: FunctionComponent = () => {
               placeholder=""
               onChange={(e) => handleNameChange(e.target.value)}
               value={contact.name}
-              {...(false && { error: true, helperText: {info_helper_text_required} })}
+              {...(false && { error: true, helperText: t('register.info.helper.text.required') })}
             />
             <TextField
               id="standard-basic"
@@ -169,7 +182,7 @@ const Contact: FunctionComponent = () => {
                 color="primary"
                 type="submit"
               >
-                {command_send}
+                {t('contact.command.send')}
               </Button>
             </div>
           </Paper>
@@ -178,12 +191,15 @@ const Contact: FunctionComponent = () => {
       
       {sending && (
         <div className="box">
-          <strong>{info_sending_email_contact}</strong>
+          <strong>
+            {t('contact.info.sending.email')}
+          </strong>
           <CircularProgress />
         </div>
       )}
-      {hasError && <AlertError msg={msg} />}
-      {wasSent && <Alert severity="success">{success_sent_email_contact}</Alert>}
+      
+      {hasError && <AlertError msg={t(msg)} />}
+      {wasSent && <Alert severity="success">{t('contact.success.sent.email')}</Alert>}
     </div>
   );
 };
