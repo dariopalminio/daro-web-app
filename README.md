@@ -13,6 +13,7 @@ Nest is [MIT licensed](LICENSE).
 - Keycloak with postman: https://documenter.getpostman.com/view/7294517/SzmfZHnd#intro
 - Envía emails desde Node.js con Nodemailer (Gmail) tutorial español: https://www.youtube.com/watch?v=KjheexBLY4A
 - Node shop api with stripe payment:  https://github.com/safak/youtube/tree/node-shop-api
-
+- Internationalization react-i18next: https://github.com/andretorres00123/react-i18n-tutorial
+- Internationalization i18next: https://www.i18next.com/overview/getting-started
 - Responsive testing tool: https://responsivedesignchecker.com/
 
