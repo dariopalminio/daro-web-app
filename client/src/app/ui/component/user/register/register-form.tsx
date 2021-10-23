@@ -6,8 +6,6 @@ import useRegister from "../../../../../domain/hook/user/register.hook";
 import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
-import { useAtom } from "jotai";
-import { LoginPassAtom } from "../../../../../domain/atom/login-pass.atom";
 import { useTranslation } from 'react-i18next';
 
 //@material-ui
@@ -68,10 +66,7 @@ export const RegisterForm: FunctionComponent = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-
-  //const [password, setPassword] = useState("");
-  const [password, setPassword] = useAtom(LoginPassAtom);
-
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [emailValid, setEmailValid] = useState(true);
   const [emailErrorText] = useState("Email inválido");
@@ -80,11 +75,11 @@ export const RegisterForm: FunctionComponent = () => {
   const [confirmPassValid, setConfirmPassValid] = useState(true);
   const [confirmPassErrorText] = useState("Pasword does not match!");
   const classes = useStyles();
-  const { wasCreatedOk, isRegisterLoading, hasRegisterError, msg, register } =
-    useRegister();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { t, i18n } = useTranslation();
-
+  
+  const { wasCreatedOk, isRegisterLoading, hasRegisterError, msg, register } =
+    useRegister();
 
   /**
    * Register

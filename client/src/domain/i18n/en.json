@@ -32,6 +32,7 @@
     "register.error.cannot.acquire.token": "Error: Can not acquire Admin token from service for register process.",
     "register.error.user-not-exist": "Error: user not exist!",
     "recovery.command.link": "Recovery",
+    "register.command.email.send": "Send email",
     "recovery.form.success.pass.changed": "Success! Your password has been changed.",
     "recovery.form.error.pass.recovery.time.expired": "Error: Something went wrong! It looks like you clicked on an invalid password reset link. Please try again.",
     "recovery.form.command.change": "Change",

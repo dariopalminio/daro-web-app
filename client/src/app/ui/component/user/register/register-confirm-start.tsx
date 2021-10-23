@@ -11,9 +11,6 @@ import SessionContext, {
 import useRegisterConfirmStart from "../../../../../domain/hook/user/register-confirm-start.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
-import { useAtom } from "jotai";
-import { LoginPassAtom } from "../../../../../domain/atom/login-pass.atom";
-import useLogin from "../../../../../domain/hook/user/login.hook";
 import { useTranslation } from 'react-i18next';
 
 //@material-ui
@@ -63,9 +60,9 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 const RegisterConfirmStart: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
-  const [password] = useAtom(LoginPassAtom);
-  const { isLoginLoading, hasLoginError, msg, login } = useLogin();
-
+  const classes = useStyles();
+  const { t, i18n } = useTranslation();
+  
   const {
     wasConfirmedOk,
     isRegisterLoading,
@@ -75,8 +72,6 @@ const RegisterConfirmStart: FunctionComponent = () => {
     startConfirmEmail,
   } = useRegisterConfirmStart();
 
-  const classes = useStyles();
-  const { t, i18n } = useTranslation();
 
 
   /**
@@ -84,12 +79,9 @@ const RegisterConfirmStart: FunctionComponent = () => {
    */
   const handleSendEmail = async () => {
     if (session?.email) {
-      //first: send email
       const userName = session?.given_name ? session?.given_name : "";
       const userEmail = session?.email;
       startConfirmEmail(userName, userEmail);
-      //second: login
-      //handleAutomaticLogin(userEmail);
     }
   };
 
@@ -98,7 +90,7 @@ const RegisterConfirmStart: FunctionComponent = () => {
    * @param email 
    */
   const handleAutomaticLogin = async (email: string) => {
-    login(email, password);
+    //login(email, password);
   };
 
   return (
@@ -133,7 +125,7 @@ const RegisterConfirmStart: FunctionComponent = () => {
                 color="primary"
                 onClick={() => handleSendEmail()}
               >
-                Send email and login
+                {t('register.command.email.send')}
               </Button>
             </div>
 
@@ -147,7 +139,7 @@ const RegisterConfirmStart: FunctionComponent = () => {
 
       {isRegisterLoading && <Alert severity="info">{t(confirmMsg)}</Alert>}
 
-      {(isLoginLoading || isRegisterLoading) && (<CircularProgress />)}
+      {isRegisterLoading && (<CircularProgress />)}
 
     </div>
   );
