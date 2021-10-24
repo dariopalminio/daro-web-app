@@ -33,28 +33,5 @@ export class NotificationController {
     };
   }
 
-  @Post('sendStartEmailConfirm')
-  sendStartEmailConfirm(@Body() startConfirmEmailData: StartConfirmEmailData): any {
-    console.log(startConfirmEmailData);
-
-    try {
-      const sentInfo = this.supportService.sendStartEmailConfirm(startConfirmEmailData);
-      return sentInfo;
-    } catch (e) {
-      return e.message;
-    };
-  }
-
-  @Post('sendEndEmailConfirm')
-  sendEndEmailConfirm(@Body() endConfirmEmailData: EndConfirmEmailData): any {
-    console.log(endConfirmEmailData);
-
-    try {
-      const sentInfo = this.supportService.sendEndEmailConfirm(endConfirmEmailData);
-      return sentInfo;
-    } catch (e) {
-      return e.message;
-    };
-  }
 
 }

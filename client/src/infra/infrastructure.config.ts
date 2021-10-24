@@ -26,6 +26,7 @@ export const APIEndpoints = {
   //auth: 'http://localhost:8080', //process.env.REACT_APP_AUTH_API,
   notifications: (process.env.REACT_APP_AUTH_API ? process.env.REACT_APP_NOTIFICATION_API : 'http://localhost:3001') as string,
   //notifications: 'http://localhost:3001', //process.env.REACT_APP_NOTIFICATION_API,
+  user: (process.env.REACT_APP_USER_API ? process.env.REACT_APP_USER_API : 'http://localhost:3001') as string,
 };
 
 export const Keycloak = {
@@ -42,4 +43,5 @@ export const URLPath = {
   users: `${APIEndpoints.auth}/auth/admin/realms/${Keycloak.realm}/users`,
   token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
   notifications: `${APIEndpoints.notifications}/notification`,
+  user: `${APIEndpoints.user}/user`
 };

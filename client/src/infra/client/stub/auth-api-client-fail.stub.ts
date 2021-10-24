@@ -74,6 +74,19 @@ function getUserByEmailService(
        });
     };
 
+/**
+ * Stub function
+ */
+function sendStartEmailConfirm(
+  name: string,
+  email: string,
+  code: string, 
+  accessToken: string ): Promise<any>{
+    return new Promise<any>( (resolve, reject) => {
+      reject(new Error("General error!"));
+     });
+  };
+
   return {
     getAdminTokenService,
     getAppTokenService,
@@ -83,5 +96,6 @@ function getUserByEmailService(
     registerService,
     getUserByEmailService,
     confirmEmailService,
+    sendStartEmailConfirm,
   };
 };

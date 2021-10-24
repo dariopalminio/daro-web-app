@@ -62,15 +62,16 @@ export default function useRegisterConfirmStart(authServiceInjected: IAuthServic
             return;
         }
 
-        const token: string = encodeToken(userEmail, createdTimestamp);
-        const verificationLink = createLink(token);
+        const verificationLink = `${StateConfig.app_url}/user/register/confirm/`;
+        //const token: string = encodeToken(userEmail, createdTimestamp);
+        //const verificationLink = createLink(token);
 
         // First: obtains admin access token
         const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
         responseAdminToken.then(jwtAdminToken => {
             // Second: send email
-            notifService.sendStartEmailConfirm(userName, userEmail, verificationLink, jwtAdminToken).then(info => {
+            authService.sendStartEmailConfirm(userName, userEmail, verificationLink, jwtAdminToken).then(info => {
                 console.log("Response sendStartEmailConfirm...", info);
                 setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: "Sent Email with verification code!", wasConfirmedOk: false, redirect: true });
              

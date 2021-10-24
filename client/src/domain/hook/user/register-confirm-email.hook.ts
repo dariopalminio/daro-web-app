@@ -40,7 +40,7 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
 
         const partsArray = decodeToken(token);
         const decodedEmail = partsArray[0];
-        const decodedCreatedTimestamp = partsArray[1];
+        const decodedCode = partsArray[1];
 
         setState({ executed: true, loading: true, confirmed: false, error: false, msg: "No verificado" });
 
@@ -63,7 +63,12 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
                 } else { // keycloak ok because user-exist
                     const userId: string = data[0].id;
                     const masterCreatedTimestamp: string = data[0].createdTimestamp;
-                    if (decodedCreatedTimestamp == String(masterCreatedTimestamp)) {
+
+                    //isVerificationCodeOk
+                    const isVerificationCodeOkResult = true;
+
+
+                    if (isVerificationCodeOkResult == true) {
 
                         // Second: update email confirmation field in user of auth server
                         const responseConfirm = authService.confirmEmailService(

@@ -6,8 +6,10 @@ import { NotificationController, SUPPORT_SERVICE_TOKEN } from './app/controller/
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './app/controller/product.controller';
 import { CategoryController, CATEGORY_SERVICE_TOKEN } from './app/controller/category.controller';
 import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
+import { UserService } from './domain/service/user.service';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
+import { UserController, USER_SERVICE_TOKEN } from './app/controller/user.controller';
 import { EmailSmtpSenderAdapter } from './infra/email/email.sender.adapter';
 import { AuthMiddleware } from './app/middleware/auth.middleware';
 import { ProductSchema, 
@@ -60,8 +62,12 @@ MongooseModule.forRootAsync({
       { name: CATEGORY_COLLECTION_TOKEN, schema: CategorySchema },
     ])
   ],
-  controllers: [AppController, NotificationController, ProductController, CategoryController],
+  controllers: [AppController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
+    {
+      provide: USER_SERVICE_TOKEN,
+      useClass: UserService,
+    },
     {
       provide: SUPPORT_SERVICE_TOKEN,
       useClass: NotificationService,
