@@ -1,8 +1,9 @@
 import { IUser } from './user.interface';
 
 export class User implements IUser {
-
+/*
     constructor(
+        id: string,
         enable: boolean,
         authId: string,
         username: string,
@@ -12,6 +13,7 @@ export class User implements IUser {
         verified: boolean,
         verificationCode: string,
         startVerificationCode: Date) {
+        this._id = id;
         this.enable = enable;
         this.authId = authId;
         this.username = username;
@@ -23,8 +25,8 @@ export class User implements IUser {
         this.startVerificationCode = startVerificationCode;
 
     }
-
-    _id: string; 
+*/
+    _id: string;
     enable: boolean;
     authId: string;
     username: string;

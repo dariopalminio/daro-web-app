@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ContactMessage } from '../model/contact.message';
 import { StartConfirmEmailData } from '../model/register/start.confirm.email.data';
 import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
-import { VerificationCodeData } from '../model/register/verification_code_data';
+import { VerificationCodeDataDTO } from '../model/register/verification_code_data.dto.type';
 import { IUserService } from '../input/port/user.service.interface';
 import { IUser } from '../model/user/user.interface';
 import { User } from '../model/user/user';
@@ -12,6 +12,7 @@ import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
 import { generateToken, encodeToken, createTokenLink } from '../helper/token.helper';
+import { UserRegisterDTO } from '../model/register/user_register.dto.type';
 
 export const USER_REPOSITORY_TOKEN = 'UserRepository_Implementation'; //ModelToken
 
@@ -42,8 +43,20 @@ export class UserService implements IUserService {
     return user;
   };
 
-  async create(user: User): Promise<boolean> {
-    const newCat: Promise<boolean> = this.userRepository.create(User);
+  //Create new user with basic data
+  async create(userRegisterDTO: UserRegisterDTO): Promise<boolean> {
+
+    let newUser: IUser = new User();
+    newUser.authId = userRegisterDTO.authId;
+    newUser.username = userRegisterDTO.username;
+    newUser.email = userRegisterDTO.email;
+    newUser.firstName = userRegisterDTO.firstName;
+    newUser.lastname = userRegisterDTO.lastname;
+    newUser.verified = false;
+    newUser.enable = true;
+    newUser.verificationCode = "123";
+
+    const newCat: Promise<boolean> = this.userRepository.create(newUser);
     console.log(newCat);
     return newCat;
   };
@@ -60,6 +73,7 @@ export class UserService implements IUserService {
     return updatedProduct;
   };
 
+  /*
   async IsVerificationCodeOk(username: string, code: string): Promise<boolean> {
     const user = this.userRepository.getByQuery({
       username: username,
@@ -69,7 +83,7 @@ export class UserService implements IUserService {
     if (!user) return false;
     return true;
   }
-
+*/
   /**
    * Send Start Email Confirm
    * Send email with verification code to registration process.
@@ -80,14 +94,20 @@ export class UserService implements IUserService {
 
     if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
 
+    try {
+    const newVerificationCode = generateToken(); //generate verification code
 
-    const codeUUID = generateToken(); //generate verification code
-    const code = "token"; //codeUUID 
+    let user: IUser = await this.userRepository.getByQuery({username: startConfirmEmailData.username});
+    if (!user) throw new Error("User not found!");
 
-    const token: string = encodeToken(startConfirmEmailData.email, code);
+    user.verificationCode = newVerificationCode;
+    const updatedOk: boolean = await this.userRepository.update(user._id, user);
+    if (!updatedOk) throw new Error("Can not save generated verification code!");
+/*
+    const token: string = encodeToken(startConfirmEmailData.email, newVerificationCode);
     const verificationLink = createTokenLink(startConfirmEmailData.verificationLink, token);
 
-    try {
+
       const contentHTML = `
     <p>Hey ${startConfirmEmailData.name}!</p>
     <p>Bienvenid@ a ${GlobalConfig.COMPANY_NAME}</p>
@@ -98,15 +118,32 @@ export class UserService implements IUserService {
 
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Please verify your email`;
       return this.sender.sendEmail(subject, startConfirmEmailData.email, contentHTML);
+      */
+      return true;
     } catch (error) {
       throw error;
     };
   };
 
 
-  async isVerificationCodeOk(verificationCodeData: VerificationCodeData): Promise<any> {
+  /**
+   * isVerificationCodeOk
+   * 
+   * verificationCodeData.user is email id from Keycloak
+   * @param verificationCodeData 
+   * @returns 
+   */
+  async isVerificationCodeOk(verificationCodeData: VerificationCodeDataDTO): Promise<any> {
+    
+    console.log("service__>verificationCodeData:", verificationCodeData);
+    const exist: boolean = await this.userRepository.hasByQuery({
+      username: verificationCodeData.username,
+      verificationCode: verificationCodeData.verificationCode,
+    });
 
-    if (verificationCodeData.code == "token")
+    console.log(exist);
+
+    if (exist)
       return { verificationCodeStatus: 'true' };
 
     return { verificationCodeStatus: 'false' };

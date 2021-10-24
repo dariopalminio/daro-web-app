@@ -9,24 +9,24 @@ export class User {
   @Prop()
   enable: boolean;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   authId: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   username: string;
 
   @Prop({
-    required: [true, 'username is required'],
+    required: true,
   })
   firstName: string;
 
   @Prop({
-    required: [true, 'lastname is required'],
+    required: true,
   })
   lastname: string;
 
   @Prop({
-    unique: [true, 'this email is now exists'],
+    unique: true,
   })
   email: string;
 
@@ -36,7 +36,7 @@ export class User {
   verified: boolean;
 
   @Prop({
-    unique: [true, 'this code is now exists'],
+    unique: true,
   })
   verificationCode: string;
 

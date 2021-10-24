@@ -3,9 +3,9 @@ import { IUserService } from '../../domain/input/port/user.service.interface';
 import { ContactMessage } from '../../domain/model/contact.message';
 import { StartConfirmEmailData } from '../../domain/model/register/start.confirm.email.data';
 import { EndConfirmEmailData } from '../../domain/model/register/end.confirm.email.data';
-import { VerificationCodeData } from '../../domain/model/register/verification_code_data';
+import { VerificationCodeDataDTO } from '../../domain/model/register/verification_code_data.dto.type';
 import { IUser } from '../../domain/model/user/user.interface';
-
+import { UserRegisterDTO } from '../../domain/model/register/user_register.dto.type';
 export const USER_SERVICE_TOKEN = 'UserService_Implementation';
 
 @Controller('user')
@@ -37,20 +37,20 @@ export class UserController {
     return res.status(HttpStatus.OK).json(user);
   };
 
-  // Add Category: /category/create
+  // Add User: /user/create
   @Post('create')
-  async createCategory(@Res() res, @Body() createCategoryDTO: IUser) {
-    const categoryCreated = await this.userService.create(createCategoryDTO);
-    if (!categoryCreated) throw new NotFoundException('Category does not exist or canot delete category!');
+  async createUser(@Res() res, @Body() userRegisterDTO: UserRegisterDTO) {
+    const categoryCreated = await this.userService.create(userRegisterDTO);
+    if (!categoryCreated) throw new NotFoundException('User does not exist or canot delete category!');
     return res.status(HttpStatus.OK).json({
-      message: 'Category Created Successfully',
+      message: 'User Created Successfully',
       categoryCreated
     });
   };
 
   // Delete Category: /delete?id=5c9d45e705ea4843c8d0e8f7
   @Delete('delete')
-  async deleteProduct(@Res() res, @Query('id') id) {
+  async deleteUser(@Res() res, @Query('id') id) {
     const categoryDeleted = await this.userService.delete(id);
     if (!categoryDeleted) throw new NotFoundException('Category does not exist or canot delete category!');
     return res.status(HttpStatus.OK).json({
@@ -61,7 +61,7 @@ export class UserController {
 
   // Update Category: /update?id=5c9d45e705ea4843c8d0e8f7
   @Put('update')
-  async updateProduct(@Res() res, @Body() user: IUser, @Query('id') categoryID) {
+  async updateUser(@Res() res, @Body() user: IUser, @Query('id') categoryID) {
     const updatedCategory = await this.userService.update(categoryID, user);
     if (!updatedCategory) throw new NotFoundException('Category does not exist!');
     return res.status(HttpStatus.OK).json({
@@ -95,8 +95,7 @@ export class UserController {
   }
 
   @Post('isVerificationCodeOk')
-  async isVerificationCodeOk(verificationCodeData: VerificationCodeData): Promise<any> {
-
+  async isVerificationCodeOk(@Body()  verificationCodeData: VerificationCodeDataDTO): Promise<any> {
     return this.userService.isVerificationCodeOk(verificationCodeData);
 
 };
