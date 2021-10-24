@@ -6,17 +6,22 @@ import { NotificationController, SUPPORT_SERVICE_TOKEN } from './app/controller/
 import { ProductController, PRODUCT_SERVICE_TOKEN } from './app/controller/product.controller';
 import { CategoryController, CATEGORY_SERVICE_TOKEN } from './app/controller/category.controller';
 import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
-import { UserService } from './domain/service/user.service';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
+import { UserService, USER_REPOSITORY_TOKEN } from './domain/service/user.service';
 import { UserController, USER_SERVICE_TOKEN } from './app/controller/user.controller';
 import { EmailSmtpSenderAdapter } from './infra/email/email.sender.adapter';
 import { AuthMiddleware } from './app/middleware/auth.middleware';
 import { ProductSchema, 
   PRODUCT_COLLECTION_TOKEN } from './infra/database/schema/product.schema';
+  import { UserSchema, 
+    USER_COLLECTION_TOKEN } from './infra/database/schema/user.schema';
 import { CategorySchema, 
   CATEGORY_COLLECTION_TOKEN } from './infra/database/schema/category.schema';
 import DB_CONNECTION from './infra/database/db.connection.string';
+import {
+  UserRepository
+} from './infra/database/repository/user.repository';
 import {
   CategoryRepository
 } from './infra/database/repository/category.repository';
@@ -60,6 +65,7 @@ MongooseModule.forRootAsync({
     MongooseModule.forFeature([
       { name: PRODUCT_COLLECTION_TOKEN, schema: ProductSchema },
       { name: CATEGORY_COLLECTION_TOKEN, schema: CategorySchema },
+      { name: USER_COLLECTION_TOKEN, schema: UserSchema },
     ])
   ],
   controllers: [AppController, UserController, NotificationController, ProductController, CategoryController],
@@ -83,6 +89,10 @@ MongooseModule.forRootAsync({
     {
       provide: CATEGORY_SERVICE_TOKEN,
       useClass: CategoryService,
+    },
+    {
+      provide: USER_REPOSITORY_TOKEN,
+      useClass: UserRepository,
     },
     {
       provide: CATEGORY_REPOSITORY_TOKEN,

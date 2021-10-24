@@ -4,18 +4,24 @@ import { StartConfirmEmailData } from '../model/register/start.confirm.email.dat
 import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { VerificationCodeData } from '../model/register/verification_code_data';
 import { IUserService } from '../input/port/user.service.interface';
+import { IUser } from '../model/user/user.interface';
+import { IRepository } from '../../domain/output/port/repository.interface';
 import IEmailSender from '../output/port/email.sender.interface';
 import { validEmail } from '../helper/validators';
 import * as GlobalConfig from '../../GlobalConfig';
 import { Base64 } from 'js-base64';
 import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
+import { v4 as uuid } from 'uuid';
 
+export const USER_REPOSITORY_TOKEN = 'UserRepository_Implementation'; //ModelToken
 
 @Injectable()
 export class UserService implements IUserService {
   constructor(
     @Inject(EMAIL_SENDER_TOKEN)
-    readonly sender: IEmailSender) {
+    readonly sender: IEmailSender,
+    @Inject(USER_REPOSITORY_TOKEN)
+    private readonly userRepository: IRepository<IUser>) {
   }
 
       /**
@@ -53,7 +59,10 @@ export class UserService implements IUserService {
 
     if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
 
-    const code = "token"; //TODO
+    
+    const codeUUID = uuid(); //generate verification code
+    const code = "token"; //codeUUID 
+
     const token: string = this.encodeToken(startConfirmEmailData.email, code);
     const verificationLink = this.createLink(startConfirmEmailData.verificationLink, token);
       
