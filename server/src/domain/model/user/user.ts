@@ -2,21 +2,20 @@ import { IUser } from './user.interface';
 
 export class User implements IUser {
 
-    constructor(  id: string,
+    constructor(
         enable: boolean,
         authId: string,
         username: string,
-        fullname: string,
+        firstName: string,
         lastname: string,
         email: string,
         verified: boolean,
         verificationCode: string,
         startVerificationCode: Date) {
-        this._id = id;
         this.enable = enable;
         this.authId = authId;
         this.username = username;
-        this.fullname = fullname;
+        this.firstName = firstName;
         this.lastname = lastname;
         this.email = email;
         this.verified = verified;
@@ -29,7 +28,7 @@ export class User implements IUser {
     enable: boolean;
     authId: string;
     username: string;
-    fullname: string;
+    firstName: string;
     lastname: string;
     email: string;
     verified: boolean;

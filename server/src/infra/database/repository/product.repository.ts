@@ -25,6 +25,11 @@ export class ProductRepository implements IRepository<IProduct> {
         //return this.conversorArrayDocToCategory(arrayDoc);
     };
 
+    async find(query: any): Promise<IProduct[]> {
+        const arrayDoc: ProductDocument[] = await  this.productModel.find(query).exec();
+        return this.castArrayDocToProduct(arrayDoc);
+    }
+
     /**
      * getById
      * If it does not find it, it returns null
@@ -35,6 +40,24 @@ export class ProductRepository implements IRepository<IProduct> {
         return objCasted;
         //return this.conversorDocToCategory(catDoc);
     };
+
+    async getByQuery(query: any): Promise<IProduct> {
+        const prodDoc: ProductDocument =  await this.productModel.findOne(query);
+        const objCasted: IProduct = JSON.parse(JSON.stringify(prodDoc));
+        return objCasted;
+    }
+
+    async hasById(id: string): Promise<boolean> {
+        const prodDoc: ProductDocument = await this.productModel.findById(id).exec();
+        if (!prodDoc) return false;
+        return true;
+    }
+
+    async hasByQuery(query: any): Promise<boolean> {
+        const prodDoc: ProductDocument  =  await this.productModel.findOne(query);
+        if (!prodDoc) return false;
+        return true;
+    }
 
     async create<IProduct>(prod: Product): Promise<boolean> {
         const docCreated: ProductDocument = await this.productModel.create(prod);

@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Inject } from '@nestjs/common';
+import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
 import { IUserService } from '../../domain/input/port/user.service.interface';
 import { ContactMessage } from '../../domain/model/contact.message';
 import { StartConfirmEmailData } from '../../domain/model/register/start.confirm.email.data';
 import { EndConfirmEmailData } from '../../domain/model/register/end.confirm.email.data';
 import { VerificationCodeData } from '../../domain/model/register/verification_code_data';
+import { IUser } from '../../domain/model/user/user.interface';
 
 export const USER_SERVICE_TOKEN = 'UserService_Implementation';
 
@@ -18,8 +19,56 @@ export class UserController {
 
   @Get()
   getHello(): string {
-    return "Hello World!";
-  }
+    return "Hello World! I'm user Service...";
+  };
+
+  // Get Products /product/all
+  @Get('all')
+  async getAll(@Res() res) {
+    const products = await this.userService.getAll();
+    return res.status(HttpStatus.OK).json(products);
+  };
+
+  // GET single Category: /product/5c9d46100e2e5c44c444b2d1
+  @Get('/id/:userID')
+  async getById(@Res() res, @Param('userID') userID) {
+    const user = await this.userService.getById(userID);
+    if (!user) throw new NotFoundException('Category does not exist!');
+    return res.status(HttpStatus.OK).json(user);
+  };
+
+  // Add Category: /category/create
+  @Post('create')
+  async createCategory(@Res() res, @Body() createCategoryDTO: IUser) {
+    const categoryCreated = await this.userService.create(createCategoryDTO);
+    if (!categoryCreated) throw new NotFoundException('Category does not exist or canot delete category!');
+    return res.status(HttpStatus.OK).json({
+      message: 'Category Created Successfully',
+      categoryCreated
+    });
+  };
+
+  // Delete Category: /delete?id=5c9d45e705ea4843c8d0e8f7
+  @Delete('delete')
+  async deleteProduct(@Res() res, @Query('id') id) {
+    const categoryDeleted = await this.userService.delete(id);
+    if (!categoryDeleted) throw new NotFoundException('Category does not exist or canot delete category!');
+    return res.status(HttpStatus.OK).json({
+      message: 'Category Deleted Successfully',
+      categoryDeleted
+    });
+  };
+
+  // Update Category: /update?id=5c9d45e705ea4843c8d0e8f7
+  @Put('update')
+  async updateProduct(@Res() res, @Body() user: IUser, @Query('id') categoryID) {
+    const updatedCategory = await this.userService.update(categoryID, user);
+    if (!updatedCategory) throw new NotFoundException('Category does not exist!');
+    return res.status(HttpStatus.OK).json({
+      message: 'Category Updated Successfully',
+      updatedCategory
+    });
+  };
 
   @Post('sendStartEmailConfirm')
   sendStartEmailConfirm(@Body() startConfirmEmailData: StartConfirmEmailData): any {

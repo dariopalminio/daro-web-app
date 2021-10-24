@@ -4,7 +4,7 @@ import { StartConfirmEmailData } from '../model/register/start.confirm.email.dat
 import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { INotificationService } from '../input/port/notification.service.interface';
 import IEmailSender from '../output/port/email.sender.interface';
-import { validEmail } from '../helper/validators';
+import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { Base64 } from 'js-base64';
 

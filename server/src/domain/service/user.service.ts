@@ -5,13 +5,13 @@ import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { VerificationCodeData } from '../model/register/verification_code_data';
 import { IUserService } from '../input/port/user.service.interface';
 import { IUser } from '../model/user/user.interface';
+import { User } from '../model/user/user';
 import { IRepository } from '../../domain/output/port/repository.interface';
 import IEmailSender from '../output/port/email.sender.interface';
-import { validEmail } from '../helper/validators';
+import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
-import { Base64 } from 'js-base64';
 import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
-import { v4 as uuid } from 'uuid';
+import { generateToken, encodeToken, createTokenLink } from '../helper/token.helper';
 
 export const USER_REPOSITORY_TOKEN = 'UserRepository_Implementation'; //ModelToken
 
@@ -24,30 +24,51 @@ export class UserService implements IUserService {
     private readonly userRepository: IRepository<IUser>) {
   }
 
-      /**
-     * Encode Token
-     * Encode the token for the email confirmation link
-     * as `email|createdTimestamp` -> Base64 encoded
-     * @param token 
-     * @returns 
-     */
-     encodeToken(email: string, createdTimestamp: string): string {
-        const concatenated =  email + '|' + createdTimestamp;
-        const encodedToken = Base64.encode(concatenated);
-        return encodedToken;
-    };
+  // Get all
+  async getAll(): Promise<IUser[]> {
+    const users: IUser[] = await this.userRepository.getAll();
+    return users;
+  };
 
-    /**
-     * Encode Link
-     * Create a url made up of the union between the url of the confirmation page and the token.
-     * The result is similar to: 'http://localhost:3000/confirm/ZGFyaW9wYWxtaW5pb0BnbWFpbC5jb218MTYzMTkzNDkxODgxNw=='
-     * @param token 
-     * @returns string with formatt follow app_url/confirm/token
-     */
-     createLink (link: string, token: string): string  {
-        const url = `${link}${token}`;
-        return url;
-    };
+  // Get a single
+  async getById(id: string): Promise<IUser> {
+    const user: IUser = await this.userRepository.getById(id);
+    return user;
+  };
+
+  // Get a single user by auth id
+  async getByAuthId(authId: string): Promise<IUser> {
+    const user: IUser = await this.userRepository.getById(authId);
+    return user;
+  };
+
+  async create(user: User): Promise<boolean> {
+    const newCat: Promise<boolean> = this.userRepository.create(User);
+    console.log(newCat);
+    return newCat;
+  };
+
+  // Delete user return this.labelModel.deleteOne({ osCode }).exec();
+  async delete(id: string): Promise<boolean> {
+    const deleted: boolean = await this.userRepository.delete(id);
+    return deleted;
+  };
+
+  // Put a single user
+  async update(id: string, user: IUser): Promise<boolean> {
+    const updatedProduct: boolean = await this.userRepository.update(id, user);
+    return updatedProduct;
+  };
+
+  async IsVerificationCodeOk(username: string, code: string): Promise<boolean> {
+    const user = this.userRepository.getByQuery({
+      username: username,
+      verificationCode: code,
+    });
+
+    if (!user) return false;
+    return true;
+  }
 
   /**
    * Send Start Email Confirm
@@ -59,13 +80,13 @@ export class UserService implements IUserService {
 
     if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
 
-    
-    const codeUUID = uuid(); //generate verification code
+
+    const codeUUID = generateToken(); //generate verification code
     const code = "token"; //codeUUID 
 
-    const token: string = this.encodeToken(startConfirmEmailData.email, code);
-    const verificationLink = this.createLink(startConfirmEmailData.verificationLink, token);
-      
+    const token: string = encodeToken(startConfirmEmailData.email, code);
+    const verificationLink = createTokenLink(startConfirmEmailData.verificationLink, token);
+
     try {
       const contentHTML = `
     <p>Hey ${startConfirmEmailData.name}!</p>
@@ -83,37 +104,37 @@ export class UserService implements IUserService {
   };
 
 
-    async isVerificationCodeOk(verificationCodeData: VerificationCodeData): Promise<any> {
+  async isVerificationCodeOk(verificationCodeData: VerificationCodeData): Promise<any> {
 
-      if (verificationCodeData.code == "token") 
-          return {verificationCodeStatus: 'true'};
-      
-      return {verificationCodeStatus: 'false'};
-    };
+    if (verificationCodeData.code == "token")
+      return { verificationCodeStatus: 'true' };
 
-    /**
-   * Send Start Email Confirm
-   * Send email with welcome message to end registration process.
-   * @param endConfirmEmailData 
-   * @returns 
-   */
-    async sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any> {
+    return { verificationCodeStatus: 'false' };
+  };
 
-        if (!validEmail(endConfirmEmailData.email)) throw new Error("Invalid email!");
+  /**
+ * Send Start Email Confirm
+ * Send email with welcome message to end registration process.
+ * @param endConfirmEmailData 
+ * @returns 
+ */
+  async sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any> {
 
-        try {
-          const contentHTML = `
+    if (!validEmail(endConfirmEmailData.email)) throw new Error("Invalid email!");
+
+    try {
+      const contentHTML = `
           <p>Hey ${endConfirmEmailData.name}!</p>
           <p>Welcome to the team! The registration was successful.</p>
           <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
           `;
-    
-          const subject: string = `[${GlobalConfig.COMPANY_NAME}] Registration successful`;
-    
-          return this.sender.sendEmail(subject, endConfirmEmailData.email, contentHTML);
-        } catch (error) {
-          throw error;
-        };
+
+      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Registration successful`;
+
+      return this.sender.sendEmail(subject, endConfirmEmailData.email, contentHTML);
+    } catch (error) {
+      throw error;
     };
+  };
 
 };

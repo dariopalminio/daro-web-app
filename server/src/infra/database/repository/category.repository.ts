@@ -26,6 +26,11 @@ export class CategoryRepository implements IRepository<ICategory> {
         //return this.conversorArrayDocToCategory(arrayDoc);
     };
 
+    async find(query: any): Promise<ICategory[]> {
+        const arrayDoc: CategoryDocument[] = await  this.categoryModel.find(query).exec();
+        return this.castArrayDocToCategory(arrayDoc);
+    }
+
     async getById(id: string): Promise<ICategory> {
         const catDoc: CategoryDocument = await this.categoryModel.findById(id).exec();
         //Doc has id name "_id"
@@ -33,6 +38,24 @@ export class CategoryRepository implements IRepository<ICategory> {
         return objCasted;
         //return this.conversorDocToCategory(catDoc);
     };
+
+    async getByQuery(query: any): Promise<ICategory> {
+        const catDoc: CategoryDocument =  await this.categoryModel.findOne(query);
+        const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
+        return objCasted;
+    }
+
+    async hasById(id: string): Promise<boolean> {
+        const catDoc: CategoryDocument = await this.categoryModel.findById(id).exec();
+        if (!catDoc) return false;
+        return true;
+    }
+
+    async hasByQuery(query: any): Promise<boolean> {
+        const catDoc: CategoryDocument  =  await this.categoryModel.findOne(query);
+        if (!catDoc) return false;
+        return true;
+    }
 
     async create<ICategory>(doc: ICategory): Promise<boolean> {
         const docCreated: CategoryDocument = await this.categoryModel.create(doc);

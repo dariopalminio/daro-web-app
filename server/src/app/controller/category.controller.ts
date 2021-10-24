@@ -26,8 +26,8 @@ export class CategoryController {
 
   // GET single Category: /product/5c9d46100e2e5c44c444b2d1
   @Get('/id/:categoryID')
-  async getById(@Res() res, @Param('categoryID') productID) {
-    const category = await this.categoryService.getById(productID);
+  async getById(@Res() res, @Param('categoryID') categoryID) {
+    const category = await this.categoryService.getById(categoryID);
     if (!category) throw new NotFoundException('Category does not exist!');
     return res.status(HttpStatus.OK).json(category);
   };

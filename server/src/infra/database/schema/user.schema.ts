@@ -18,7 +18,7 @@ export class User {
   @Prop({
     required: [true, 'username is required'],
   })
-  fullname: string;
+  firstName: string;
 
   @Prop({
     required: [true, 'lastname is required'],

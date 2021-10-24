@@ -3,7 +3,7 @@ export interface IUser{
     enable: boolean;
     authId: string;
     username: string;
-    fullname: string;
+    firstName: string;
     lastname: string;
     email: string;
     verified: boolean;
