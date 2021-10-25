@@ -1,22 +1,22 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import * as StateConfig from '../../domain.config';
-import { IAuthService } from '../../service/auth-service.interface';
-import { INotificationService } from '../../service/notification-service.interface';
+import { IAuthClient } from '../../service/auth-client.interface';
+import { INotificationClient } from '../../service/notification-client.interface';
 import { Base64 } from 'js-base64';
-import { IUserService } from '../../service/user-service.interface';
+import { IUserClient } from '../../service/user-client.interface';
 
 /**
  * use Register Confirm Email
  * Custom Hook to confirm email and to close the registration process.
  */
-export default function useRegisterConfirmEmail(authServiceInjected: IAuthService | null = null,
-    userServiceInjected: IUserService | null = null) {
+export default function useRegisterConfirmEmail(authServiceInjected: IAuthClient | null = null,
+    userClientInjected: IUserClient | null = null) {
 
     const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ executed: false, loading: false, confirmed: false, error: false, msg: '' });
-    const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
-    const userService: IUserService = userServiceInjected ? userServiceInjected : StateConfig.userService;
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
+    const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * Decode Token
@@ -55,7 +55,7 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
             // Second: verify token
             //isVerificationCodeOk
 
-            const responseValidation: Promise<any> = userService.isVerificationCodeOk(token, jwtAdminToken);
+            const responseValidation: Promise<any> = userClient.isVerificationCodeOk(token, jwtAdminToken);
 
             responseValidation.then(resp => {
                 console.log("isVerificationCodeOk --> resp:", resp);

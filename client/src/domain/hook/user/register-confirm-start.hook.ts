@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import * as StateConfig from '../../domain.config';
-import { IAuthService } from '../../service/auth-service.interface';
-import { IUserService } from '../../service/user-service.interface';
+import { IAuthClient } from '../../service/auth-client.interface';
+import { IUserClient } from '../../service/user-client.interface';
 import { Base64 } from 'js-base64';
 import { truncate } from 'node:fs';
 
@@ -10,13 +10,13 @@ import { truncate } from 'node:fs';
  * use Register Confirm Start
  * Custom Hook to start the confirm email process.
  */
-export default function useRegisterConfirmStart(authServiceInjected: IAuthService | null = null,
-    userServiceInjected: IUserService | null = null) {
+export default function useRegisterConfirmStart(authServiceInjected: IAuthClient | null = null,
+    userClientInjected: IUserClient | null = null) {
 
     const { session } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: '', wasConfirmedOk: false, redirect: false });
-    const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
-    const userService: IUserService = userServiceInjected ? userServiceInjected : StateConfig.userService;
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
+    const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
 
     /**
@@ -36,7 +36,7 @@ export default function useRegisterConfirmStart(authServiceInjected: IAuthServic
 
         responseAdminToken.then(jwtAdminToken => {
             // Second: send email
-            userService.sendStartEmailConfirm(userName, userEmail, verificationPageLink, jwtAdminToken).then(info => {
+            userClient.sendStartEmailConfirm(userName, userEmail, verificationPageLink, jwtAdminToken).then(info => {
                 console.log("Response sendStartEmailConfirm...", info);
                 setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: "register.command.email.sent", wasConfirmedOk: false, redirect: true });
              

@@ -2,7 +2,7 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
-import { IAuthService, Tokens } from '../../domain/service/auth-service.interface';
+import { IAuthClient, Tokens } from '../../domain/service/auth-client.interface';
 
 type NewUserRepresentationType = {
   username: string
@@ -66,12 +66,13 @@ type RequesRefreshToken = {
 /**
  * Auth Api Client Implementation
  * 
+ * This implements Keycloak client.
  * Service as factory function that return an interface.
  * A factory function is any function which is not a class or constructor that returns 
  * a (presumably new) object. In JavaScript, any function can return an object.
  * @returns 
  */
-export default function AuthApiClientImpl(): IAuthService {
+export default function AuthApiClientImpl(): IAuthClient {
 
   /**
    * Get Admin Token

@@ -2,20 +2,20 @@ import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
-import { IAuthService } from '../../service/auth-service.interface';
-import { IUserService } from '../../service/user-service.interface';
+import { IAuthClient } from '../../service/auth-client.interface';
+import { IUserClient } from '../../service/user-client.interface';
 
 /**
  * use Register
  * Custom Hook for create new user
  */
-export default function useRegister(authServiceInjected: IAuthService | null = null,
-    userServiceInjected: IUserService | null = null) {
+export default function useRegister(authServiceInjected: IAuthClient | null = null,
+    userClientInjected: IUserClient | null = null) {
 
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false });
-    const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
-    const userService: IUserService = userServiceInjected ? userServiceInjected : StateConfig.userService;
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
+    const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * Register function
@@ -46,7 +46,7 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                 const responseGetUser = authService.getUserByEmailService(
                     email,
                     jwtAdminToken);
-                
+
                 responseGetUser.then(data => {
 
                     if (!data[0]) {
@@ -54,7 +54,7 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                         const errorKey = "register.error.user-not-exist"; //keycloak.error.user-not-exist
                         setState({ loading: false, error: true, msg: errorKey, wasCreatedOk: false });
                         removeSessionValue();
-                    }else{ // keycloak ok because user-exist
+                    } else { // keycloak ok because user-exist
                         //console.log("Result data from register:", data[0]);
                         const successMsgKey = "register.start.success.temporarily.created";
                         setState({ loading: false, error: false, msg: successMsgKey, wasCreatedOk: true });
@@ -75,21 +75,21 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                         };
                         //console.log("userValue:", userValue);
                         setSessionValue(userValue);
-console.log("data[0].lastName:",data[0].lastName);
-                        const responseCreateUser: Promise<number> = userService.createUser(
+                        console.log("data[0].lastName:", data[0].lastName);
+                        const responseCreateUser: Promise<number> = userClient.createUser(
                             data[0].id,
                             data[0].firstName,
                             data[0].lastName,
                             email,
                             jwtAdminToken);
 
-                            responseCreateUser.then(statusNumber => {
+                        responseCreateUser.then(statusNumber => {
 
-                            }).catch(err => {
-                                // Error when create user in user service
-                                setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
-                                removeSessionValue();
-                            });
+                        }).catch(err => {
+                            // Error when create user in user service
+                            setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
+                            removeSessionValue();
+                        });
 
                     }
                 }).catch(err => {

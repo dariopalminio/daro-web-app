@@ -2,7 +2,7 @@ import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
-import { IAuthService, Tokens } from '../../service/auth-service.interface';
+import { IAuthClient, Tokens } from '../../service/auth-client.interface';
 
 var jws = require('jws');
 
@@ -16,11 +16,11 @@ var jws = require('jws');
  *      login function
  *      logout function
  */
-export default function useLogin(authServiceInjected: IAuthService | null = null) {
+export default function useLogin(authServiceInjected: IAuthClient | null = null) {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false, isEmailVerified: false });
     
-    const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
 
     /**
      * login

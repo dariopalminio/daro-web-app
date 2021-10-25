@@ -1,9 +1,9 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../context/session.context';
 import { ContactType } from '../model/notification/contact.type';
-import { INotificationService } from '../service/notification-service.interface';
+import { INotificationClient } from '../service/notification-client.interface';
 import * as StateConfig from '../domain.config';
-import { IAuthService, Tokens } from '../service/auth-service.interface';
+import { IAuthClient, Tokens } from '../service/auth-client.interface';
 import { SessionType } from '../model/user/session.type';
 
 /**
@@ -13,13 +13,13 @@ import { SessionType } from '../model/user/session.type';
  * @returns 
  */
 export default function useNotification(
-    authServiceInjected: IAuthService | null = null,
-    notifServiceInjected: INotificationService | null = null) {
+    authClientInjected: IAuthClient | null = null,
+    notifClientInjected: INotificationClient | null = null) {
 
     const { session, isTokenExpired, setSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ sending: false, hasError: false, msg: '', wasSent: false });
-    const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
-    const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
+    const notifClient: INotificationClient = notifClientInjected ? notifClientInjected : StateConfig.notificationClient;
+    const authClient: IAuthClient = authClientInjected ? authClientInjected : StateConfig.authorizationClient;
 
     /**
      * sendContactEmail
@@ -40,7 +40,7 @@ export default function useNotification(
 
         promise.then(token => {
             // Second: send email with authorization using app access token    
-            notifService.sendContactEmailService(contact, token).then(info => {
+            notifClient.sendContactEmailService(contact, token).then(info => {
                 console.log("Response sent info...");
                 console.log(info);
                 setState({ sending: false, hasError: false, msg: "contact.success.sent.email", wasSent: true })
@@ -50,7 +50,7 @@ export default function useNotification(
                         console.log("sendContactEmailService-->UNAUTHORIZED!!!");
                         let refresh_token: string = session?.refresh_token ? session?.refresh_token : '';
                         //(refreshToken: string): Promise<Tokens>
-                        const rToken = authService.getRefreshTokenService(refresh_token);
+                        const rToken = authClient.getRefreshTokenService(refresh_token);
                         rToken.then(token => {
                             console.log("rToken:", rToken);
                         });
@@ -67,7 +67,7 @@ export default function useNotification(
         });
 
 
-    }, [setState, notifService, authService, getToken, session]);
+    }, [setState, notifClient, authClient, getToken, session]);
 
     /**
      * Gets the acces token of the logged session (if user is already logged) or 
@@ -88,7 +88,7 @@ export default function useNotification(
                 console.log("EXPIRED!!!");
                 //getRefreshTokenService: (refreshToken: string) => Promise<Tokens>;
              const refreshToken: string = session.refresh_token ? session.refresh_token : '';
-                const result: Tokens = await authService.getRefreshTokenService(refreshToken);
+                const result: Tokens = await authClient.getRefreshTokenService(refreshToken);
                 token = result.access_token;
                 let newSession = {...session};
                 newSession.access_token = token;
@@ -98,7 +98,7 @@ export default function useNotification(
         } else {
             console.log("Requests an application token from the authentication server!");
             // Obtains app access token from authentication server
-            token = await authService.getAppTokenService();
+            token = await authClient.getAppTokenService();
         };
         return token;
     };

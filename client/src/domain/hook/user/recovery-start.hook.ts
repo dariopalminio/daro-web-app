@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import * as StateConfig from '../../domain.config';
-import { IAuthService } from '../../service/auth-service.interface';
+import { IAuthClient } from '../../service/auth-client.interface';
 import { INotificationService } from '../../service/notification-service.interface';
 import { Base64 } from 'js-base64';
 
@@ -9,12 +9,12 @@ import { Base64 } from 'js-base64';
 /**
  * 
  */
-export default function useRecoveryStart(authServiceInjected: IAuthService | null = null,
+export default function useRecoveryStart(authServiceInjected: IAuthClient | null = null,
     notifServiceInjected: INotificationService | null = null) {
 
     const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ sending: true, sent: false, error: false, msg: '' });
-    const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
+    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
     const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
 
 

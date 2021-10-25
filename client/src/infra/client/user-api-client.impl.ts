@@ -2,11 +2,14 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
-import { IUserService } from '../../domain/service/user-service.interface';
+import { IUserClient } from '../../domain/service/user-client.interface';
 
 
-
-export default function UserApiClientImpl(): IUserService {
+/**
+ * User Api Client Implementation
+ * @returns 
+ */
+export default function UserApiClientImpl(): IUserClient {
 
   /**
    * Create User

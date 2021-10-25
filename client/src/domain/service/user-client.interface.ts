@@ -1,5 +1,5 @@
 //Interface to do dependency inversion
-export interface IUserService {
+export interface IUserClient {
 
   createUser: (
     authId: string,

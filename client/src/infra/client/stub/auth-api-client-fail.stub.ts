@@ -1,4 +1,4 @@
-import { IAuthService, Tokens } from '../../../domain/service/auth-service.interface';
+import { IAuthClient, Tokens } from '../../../domain/service/auth-client.interface';
 
 
 /**
@@ -6,7 +6,7 @@ import { IAuthService, Tokens } from '../../../domain/service/auth-service.inter
  * This simulates a AuthApiClient with fail responses
  * @returns 
  */
-export default function AuthApiClientFailStub(): IAuthService {
+export default function AuthApiClientFailStub(): IAuthClient {
 
 // Stub function
   function getAdminTokenService(): Promise<string> {
