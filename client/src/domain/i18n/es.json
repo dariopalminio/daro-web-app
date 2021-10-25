@@ -32,6 +32,8 @@
     "register.command.email.send": "Enviar email",
     "register.error.user-not-exist": "Error: ¡usuario no existe!",
     "register.error.cannot.acquire.token": "Error: Can not acquire Admin token from service for register process.",
+    "register.command.email.sent": "Email enviado con el código de verificación.",
+    "register.error.email-does-not-sent": "El email no pudo ser enviado con el código de verificación.",
     "recovery.command.link": "Recuperar clave",
     "recovery.form.success.pass.changed": "Cambio satisfactorio! tu clave ha sido cambiada.",
     "recovery.form.error.pass.recovery.time.expired": "Error: algo ha salido mal! El link o código ya no es válido (pudo haber expirado). Por favor trtate de nuevo.",

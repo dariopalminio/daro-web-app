@@ -92,7 +92,7 @@ export default function AuthApiClienOkStub(): IAuthService {
 
       /**
  * Stub function
- */
+ 
 function sendStartEmailConfirm(
   name: string,
   email: string,
@@ -103,7 +103,7 @@ function sendStartEmailConfirm(
            resolve(resp);
      });
   };
-  
+  */
   return {
     getAdminTokenService,
     getAppTokenService,
@@ -113,6 +113,5 @@ function sendStartEmailConfirm(
     registerService,
     getUserByEmailService,
     confirmEmailService,
-    sendStartEmailConfirm,
   };
 };

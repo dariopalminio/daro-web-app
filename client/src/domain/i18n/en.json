@@ -31,6 +31,8 @@
     "register.command.link": "Register",
     "register.error.cannot.acquire.token": "Error: Can not acquire Admin token from service for register process.",
     "register.error.user-not-exist": "Error: user not exist!",
+    "register.command.email.sent": "Sent Email with verification code!",
+    "register.error.email-does-not-sent": "the email could not be sent with the verification code!",
     "recovery.command.link": "Recovery",
     "register.command.email.send": "Send email",
     "recovery.form.success.pass.changed": "Success! Your password has been changed.",

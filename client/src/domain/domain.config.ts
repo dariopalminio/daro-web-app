@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import { AuthApiClientFactory } from '../infra/client/factory/auth-api-client.factory';
+import { UserApiClientFactory } from '../infra/client/factory/user-api-client.factory';
 import { IAuthService } from './service/auth-service.interface';
+import { IUserService } from './service/user-service.interface';
 import { NotificationApiClientFactory } from '../infra/client/factory/notification-api-client.factory';
 import { INotificationService } from './service/notification-service.interface';
 
@@ -24,3 +26,4 @@ export const app_company_name = (process.env.REACT_APP_COMPANY_NAME ? process.en
 //Injection of services from origin
 export const authorizationService: IAuthService = AuthApiClientFactory.create(is_fake_mode);
 export const notificationService: INotificationService = NotificationApiClientFactory.create(is_fake_mode);
+export const userService: IUserService = UserApiClientFactory.create(is_fake_mode);

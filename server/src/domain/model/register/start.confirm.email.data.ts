@@ -1,5 +1,6 @@
 export class StartConfirmEmailData {
     name: string;
-    username: string;
+    userName: string;
     email: string;
+    verificationPageLink: string;
 };

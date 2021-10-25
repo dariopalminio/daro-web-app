@@ -3,17 +3,20 @@ import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
 import { IAuthService } from '../../service/auth-service.interface';
+import { IUserService } from '../../service/user-service.interface';
 
 /**
  * use Register
  * Custom Hook for create new user
  */
-export default function useRegister(authServiceInjected: IAuthService | null = null) {
+export default function useRegister(authServiceInjected: IAuthService | null = null,
+    userServiceInjected: IUserService | null = null) {
 
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false });
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
-    
+    const userService: IUserService = userServiceInjected ? userServiceInjected : StateConfig.userService;
+
     /**
      * Register function
      * Create new user in registration process.
@@ -72,6 +75,22 @@ export default function useRegister(authServiceInjected: IAuthService | null = n
                         };
                         //console.log("userValue:", userValue);
                         setSessionValue(userValue);
+console.log("data[0].lastName:",data[0].lastName);
+                        const responseCreateUser: Promise<number> = userService.createUser(
+                            data[0].id,
+                            data[0].firstName,
+                            data[0].lastName,
+                            email,
+                            jwtAdminToken);
+
+                            responseCreateUser.then(statusNumber => {
+
+                            }).catch(err => {
+                                // Error when create user in user service
+                                setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
+                                removeSessionValue();
+                            });
+
                     }
                 }).catch(err => {
                     // Error when get user

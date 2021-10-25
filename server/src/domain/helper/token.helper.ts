@@ -21,8 +21,8 @@ export const encodeToken = (email: string, createdTimestamp: string): string => 
  * @param token 
  * @returns string with formatt follow app_url/confirm/token
  */
- export const createTokenLink = (link: string, token: string): string => {
-    const url = `${link}${token}`;
+export const createTokenLink = (link: string, token: string): string => {
+    const url = `${link}:${token}`;
     return url;
 };
 
@@ -32,7 +32,24 @@ export const encodeToken = (email: string, createdTimestamp: string): string => 
  * @returns String with 32 hexadecimal digits divided into five groups separated by hyphens 
  * of the form 550e8400-e29b-41d4-a716-446655440000 which gives a total of 36 characters
  */
- export const generateToken = (): string => {
+export const generateToken = (): string => {
     return uuid();
 };
+
+/**
+ * Decode Token
+ * Decode process: Base64 encoded --> `email|createdTimestamp` --> [email,createdTimestamp]
+ *         const partsArray = decodeToken(token);
+    const decodedEmail = partsArray[0];
+    const decodedCode = partsArray[1];
+ * @param token Base64 encoded string
+ * @returns string[]
+ */
+export const decodeToken = (token: string): string[] => {
+    const dencodedToken = Base64.decode(token);
+    console.log("dencoded:", dencodedToken);
+    var partsArray = dencodedToken.split('|');
+    return partsArray;
+};
+
 

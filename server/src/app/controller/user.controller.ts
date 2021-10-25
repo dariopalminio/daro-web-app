@@ -33,7 +33,7 @@ export class UserController {
   @Get('/id/:userID')
   async getById(@Res() res, @Param('userID') userID) {
     const user = await this.userService.getById(userID);
-    if (!user) throw new NotFoundException('Category does not exist!');
+    if (!user) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json(user);
   };
 
@@ -52,7 +52,7 @@ export class UserController {
   @Delete('delete')
   async deleteUser(@Res() res, @Query('id') id) {
     const categoryDeleted = await this.userService.delete(id);
-    if (!categoryDeleted) throw new NotFoundException('Category does not exist or canot delete category!');
+    if (!categoryDeleted) throw new NotFoundException('User does not exist or canot delete category!');
     return res.status(HttpStatus.OK).json({
       message: 'Category Deleted Successfully',
       categoryDeleted
@@ -63,7 +63,7 @@ export class UserController {
   @Put('update')
   async updateUser(@Res() res, @Body() user: IUser, @Query('id') categoryID) {
     const updatedCategory = await this.userService.update(categoryID, user);
-    if (!updatedCategory) throw new NotFoundException('Category does not exist!');
+    if (!updatedCategory) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'Category Updated Successfully',
       updatedCategory

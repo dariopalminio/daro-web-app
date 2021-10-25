@@ -4,22 +4,26 @@ import * as StateConfig from '../../domain.config';
 import { IAuthService } from '../../service/auth-service.interface';
 import { INotificationService } from '../../service/notification-service.interface';
 import { Base64 } from 'js-base64';
+import { IUserService } from '../../service/user-service.interface';
 
 /**
  * use Register Confirm Email
  * Custom Hook to confirm email and to close the registration process.
  */
 export default function useRegisterConfirmEmail(authServiceInjected: IAuthService | null = null,
-    notifServiceInjected: INotificationService | null = null) {
+    userServiceInjected: IUserService | null = null) {
 
     const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ executed: false, loading: false, confirmed: false, error: false, msg: '' });
     const authService: IAuthService = authServiceInjected ? authServiceInjected : StateConfig.authorizationService;
-    const notifService: INotificationService = notifServiceInjected ? notifServiceInjected : StateConfig.notificationService;
+    const userService: IUserService = userServiceInjected ? userServiceInjected : StateConfig.userService;
 
     /**
      * Decode Token
      * Decode process: Base64 encoded --> `email|createdTimestamp` --> [email,createdTimestamp]
+     *         const partsArray = decodeToken(token);
+        const decodedEmail = partsArray[0];
+        const decodedCode = partsArray[1];
      * @param token Base64 encoded string
      * @returns string[]
      */
@@ -38,9 +42,9 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
      */
     const validateEmail = useCallback((token: string) => {
 
-        const partsArray = decodeToken(token);
-        const decodedEmail = partsArray[0];
-        const decodedCode = partsArray[1];
+        //const partsArray = decodeToken(token);
+        //const decodedEmail = partsArray[0];
+        //const decodedCode = partsArray[1];
 
         setState({ executed: true, loading: true, confirmed: false, error: false, msg: "No verificado" });
 
@@ -48,54 +52,68 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthServic
         const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
         responseAdminToken.then(jwtAdminToken => {
-            // Second: get user by email from auth server
-            const responseGetUser = authService.getUserByEmailService(
-                decodedEmail,
-                jwtAdminToken);
+            // Second: verify token
+            //isVerificationCodeOk
 
-            responseGetUser.then(data => {
+            const responseValidation: Promise<any> = userService.isVerificationCodeOk(token, jwtAdminToken);
 
-                if (!data[0]) {
-                    // keycloak.error.user-not-exist
-                    const errorUserNotFound = "User not found."; //keycloak.error.user-not-exist
-                    setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorUserNotFound });
-                    removeSessionValue();
-                } else { // keycloak ok because user-exist
-                    const userId: string = data[0].id;
-                    const masterCreatedTimestamp: string = data[0].createdTimestamp;
+            responseValidation.then(resp => {
+                console.log("isVerificationCodeOk --> resp:", resp);
+                const decodedEmail = resp.email;
+                // get user by email from auth server
+                const responseGetUser = authService.getUserByEmailService(
+                    decodedEmail,
+                    jwtAdminToken);
 
-                    //isVerificationCodeOk
-                    const isVerificationCodeOkResult = true;
+                responseGetUser.then(data => {
+
+                    if (!data[0]) {
+                        // keycloak.error.user-not-exist
+                        const errorUserNotFound = "User not found."; //keycloak.error.user-not-exist
+                        setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorUserNotFound });
+                        removeSessionValue();
+                    } else { // keycloak ok because user-exist
+                        const userId: string = data[0].id;
+                        const masterCreatedTimestamp: string = data[0].createdTimestamp;
+
+                        //isVerificationCodeOk
+                        const isVerificationCodeOkResult = true;
 
 
-                    if (isVerificationCodeOkResult == true) {
+                        if (isVerificationCodeOkResult == true) {
 
-                        // Second: update email confirmation field in user of auth server
-                        const responseConfirm = authService.confirmEmailService(
-                            userId,
-                            decodedEmail,
-                            jwtAdminToken);
+                            // update email confirmation field in user of auth server
+                            const responseConfirm = authService.confirmEmailService(
+                                userId,
+                                decodedEmail,
+                                jwtAdminToken);
 
-                        responseConfirm.then(status => {
-                            console.log("validateEmail, status:", status);
-                            const infoConfirmedAccountSuccess = "Your account has been created and confirm successfully. Now you can log in.";
-                            setState({ executed: true, loading: false, confirmed: true, error: false, msg: infoConfirmedAccountSuccess });
-                        }).catch(err => {
-                            // Error
-                            setState({ executed: true, loading: false, confirmed: false, error: true, msg: err.message });
-                        });
+                            responseConfirm.then(status => {
+                                console.log("validateEmail, status:", status);
+                                const infoConfirmedAccountSuccess = "Your account has been created and confirm successfully. Now you can log in.";
+                                setState({ executed: true, loading: false, confirmed: true, error: false, msg: infoConfirmedAccountSuccess });
+                            }).catch(err => {
+                                // Error
+                                setState({ executed: true, loading: false, confirmed: false, error: true, msg: err.message });
+                            });
 
-                    } else {
-                        const errorVerificationCodeIsWrong = "Dont exist! Codes do not match."; //decodedCreatedTimestamp not match
-                        setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorVerificationCodeIsWrong });
+                        } else {
+                            const errorVerificationCodeIsWrong = "Dont exist! Codes do not match."; //decodedCreatedTimestamp not match
+                            setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorVerificationCodeIsWrong });
+                        }
+                        console.log("data[0]:", data[0]);
+
                     }
-                    console.log("data[0]:", data[0]);
+                }).catch(err => {
+                    // Error when get user
+                    const errorCannotGetUser = "Error when get user.";
+                    setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorCannotGetUser });
+                });
 
-                }
             }).catch(err => {
-                // Error when get user
-                const errorCannotGetUser = "Error when get user.";
-                setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorCannotGetUser });
+                // Error: verification code not validated
+                const e = "Error: verification code not validated.";
+                setState({ executed: true, loading: false, confirmed: false, error: true, msg: e });
             });
 
         }).catch(err => {

@@ -27,11 +27,5 @@ export interface IAuthService {
     password: string,
     adminToken: string) => Promise<number>;
   getUserByEmailService(userEmail: string, adminToken: string): Promise<any>;
-  sendStartEmailConfirm: (
-    name: string,
-    email: string,
-    verificationLink: string,
-    accessToken: string
-  ) => Promise<any>;
   confirmEmailService: (userId: string, userEmail: string, adminToken: string) => Promise<number>;
   };

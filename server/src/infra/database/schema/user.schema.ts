@@ -13,7 +13,7 @@ export class User {
   authId: string;
 
   @Prop({ required: true, unique: true })
-  username: string;
+  userName: string;
 
   @Prop({
     required: true,
@@ -23,7 +23,7 @@ export class User {
   @Prop({
     required: true,
   })
-  lastname: string;
+  lastName: string;
 
   @Prop({
     unique: true,
@@ -35,9 +35,7 @@ export class User {
   })
   verified: boolean;
 
-  @Prop({
-    unique: true,
-  })
+  @Prop()
   verificationCode: string;
 
   @Prop({

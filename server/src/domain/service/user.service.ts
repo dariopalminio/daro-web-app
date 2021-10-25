@@ -11,7 +11,7 @@ import IEmailSender from '../output/port/email.sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
-import { generateToken, encodeToken, createTokenLink } from '../helper/token.helper';
+import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
 import { UserRegisterDTO } from '../model/register/user_register.dto.type';
 
 export const USER_REPOSITORY_TOKEN = 'UserRepository_Implementation'; //ModelToken
@@ -46,15 +46,16 @@ export class UserService implements IUserService {
   //Create new user with basic data
   async create(userRegisterDTO: UserRegisterDTO): Promise<boolean> {
 
+    console.log("UserRegisterDTO:",userRegisterDTO);
+
     let newUser: IUser = new User();
     newUser.authId = userRegisterDTO.authId;
-    newUser.username = userRegisterDTO.username;
+    newUser.userName = userRegisterDTO.userName;
     newUser.email = userRegisterDTO.email;
     newUser.firstName = userRegisterDTO.firstName;
-    newUser.lastname = userRegisterDTO.lastname;
+    newUser.lastName = userRegisterDTO.lastName;
     newUser.verified = false;
     newUser.enable = true;
-    newUser.verificationCode = "123";
 
     const newCat: Promise<boolean> = this.userRepository.create(newUser);
     console.log(newCat);
@@ -87,6 +88,7 @@ export class UserService implements IUserService {
   /**
    * Send Start Email Confirm
    * Send email with verification code to registration process.
+   * 
    * @param startConfirmEmailData 
    * @returns 
    */
@@ -97,15 +99,17 @@ export class UserService implements IUserService {
     try {
     const newVerificationCode = generateToken(); //generate verification code
 
-    let user: IUser = await this.userRepository.getByQuery({username: startConfirmEmailData.username});
+console.log("startConfirmEmailData",startConfirmEmailData);
+
+    let user: IUser = await this.userRepository.getByQuery({userName: startConfirmEmailData.userName});
     if (!user) throw new Error("User not found!");
 
     user.verificationCode = newVerificationCode;
     const updatedOk: boolean = await this.userRepository.update(user._id, user);
     if (!updatedOk) throw new Error("Can not save generated verification code!");
-/*
+
     const token: string = encodeToken(startConfirmEmailData.email, newVerificationCode);
-    const verificationLink = createTokenLink(startConfirmEmailData.verificationLink, token);
+    const verificationLink = createTokenLink(startConfirmEmailData.verificationPageLink, token);
 
 
       const contentHTML = `
@@ -118,7 +122,7 @@ export class UserService implements IUserService {
 
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Please verify your email`;
       return this.sender.sendEmail(subject, startConfirmEmailData.email, contentHTML);
-      */
+   
       return true;
     } catch (error) {
       throw error;
@@ -135,18 +139,26 @@ export class UserService implements IUserService {
    */
   async isVerificationCodeOk(verificationCodeData: VerificationCodeDataDTO): Promise<any> {
     
+    console.log("verificationCodeData.token:", verificationCodeData.token);
+    const partsArray = decodeToken(verificationCodeData.token);
+    const decodedEmail = partsArray[0];
+    const decodedCode = partsArray[1];
+
     console.log("service__>verificationCodeData:", verificationCodeData);
-    const exist: boolean = await this.userRepository.hasByQuery({
-      username: verificationCodeData.username,
-      verificationCode: verificationCodeData.verificationCode,
+    console.log("service__>decodedEmail:", decodedEmail);
+    let user: IUser =await this.userRepository.getByQuery({
+      userName: decodedEmail,
+      verificationCode: decodedCode,
     });
 
-    console.log(exist);
+    console.log(user);
 
-    if (exist)
-      return { verificationCodeStatus: 'true' };
-
-    return { verificationCodeStatus: 'false' };
+    if (!user) return { verificationCodeStatus: 'false', email: decodedEmail };
+    
+    user.verified = true;
+    const updatedOk: boolean = await this.userRepository.update(user._id, user);
+    
+    return { verificationCodeStatus: 'true', email: decodedEmail };
   };
 
   /**

@@ -76,7 +76,7 @@ function getUserByEmailService(
 
 /**
  * Stub function
- */
+ 
 function sendStartEmailConfirm(
   name: string,
   email: string,
@@ -86,7 +86,7 @@ function sendStartEmailConfirm(
       reject(new Error("General error!"));
      });
   };
-
+*/
   return {
     getAdminTokenService,
     getAppTokenService,
@@ -96,6 +96,5 @@ function sendStartEmailConfirm(
     registerService,
     getUserByEmailService,
     confirmEmailService,
-    sendStartEmailConfirm,
   };
 };

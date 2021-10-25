@@ -29,9 +29,9 @@ export class User implements IUser {
     _id: string;
     enable: boolean;
     authId: string;
-    username: string;
+    userName: string;
     firstName: string;
-    lastname: string;
+    lastName: string;
     email: string;
     verified: boolean;
     verificationCode: string;

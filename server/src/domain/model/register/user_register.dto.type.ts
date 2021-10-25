@@ -1,7 +1,7 @@
 export type UserRegisterDTO = {
     authId: string;
-    username: string;
+    userName: string;
     firstName: string;
-    lastname: string;
+    lastName: string;
     email: string;
   };
