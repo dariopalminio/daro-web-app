@@ -27,6 +27,7 @@
     "register.info.loading": "Loading... Trying to Register!",
     "register.start.success.temporarily.created": "Your account has been temporarily created successfully. Now you must verify your mail.",
     "register.start.success.account.confirmed": "Your account has been confirmed successfully. Now you must go to login.",
+    "register.confirm.success.account.confirmed": "Your account has been confirmed successfully. Now you must go to login.",
     "register.start.title.email.verirication": "Email verification",
     "register.command.link": "Register",
     "register.error.cannot.acquire.token": "Error: Can not acquire Admin token from service for register process.",

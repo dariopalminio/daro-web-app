@@ -27,6 +27,7 @@
     "register.info.helper.text.required": "Requerido",
     "register.start.success.temporarily.created": "Tu cuenta ha sido creada temporalmente. Ahora tu debes confirmar tu email.",
     "register.start.success.account.confirmed": "Tu cuenta ha sido confirmada satisfactoriamente. Ya te puedes logear.",
+    "register.confirm.success.account.confirmed": "Tu cuenta ha sido confirmada satisfactoriamente. Ya te puedes logear.",
     "register.start.title.email.verirication": "Confirmación de email",
     "register.command.link": "Registro",
     "register.command.email.send": "Enviar email",

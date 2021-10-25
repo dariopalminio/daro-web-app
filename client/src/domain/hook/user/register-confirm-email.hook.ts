@@ -58,8 +58,8 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthClient
             const responseValidation: Promise<any> = userClient.isVerificationCodeOk(token, jwtAdminToken);
 
             responseValidation.then(resp => {
-                console.log("isVerificationCodeOk --> resp:", resp);
-                const decodedEmail = resp.email;
+                
+                const decodedEmail = resp.data.email;
                 // get user by email from auth server
                 const responseGetUser = authService.getUserByEmailService(
                     decodedEmail,
@@ -90,7 +90,7 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthClient
 
                             responseConfirm.then(status => {
                                 console.log("validateEmail, status:", status);
-                                const infoConfirmedAccountSuccess = "Your account has been created and confirm successfully. Now you can log in.";
+                                const infoConfirmedAccountSuccess = "register.confirm.success.account.confirmed";
                                 setState({ executed: true, loading: false, confirmed: true, error: false, msg: infoConfirmedAccountSuccess });
                             }).catch(err => {
                                 // Error
@@ -101,7 +101,7 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthClient
                             const errorVerificationCodeIsWrong = "Dont exist! Codes do not match."; //decodedCreatedTimestamp not match
                             setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorVerificationCodeIsWrong });
                         }
-                        console.log("data[0]:", data[0]);
+                        //console.log("data[0]:", data[0]);
 
                     }
                 }).catch(err => {

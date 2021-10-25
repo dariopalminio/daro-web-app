@@ -1,8 +1,8 @@
 import { ContactType } from '../../../domain/model/notification/contact.type';
-import { INotificationService } from '../../../domain/service/notification-service.interface';
+import { INotificationClient } from '../../../domain/service/notification-client.interface';
 import { SessionType } from '../../../domain/model/user/session.type';
 
-export default function NotificationClientStub(): INotificationService {
+export default function NotificationClientStub(): INotificationClient {
 
 /**
  * Stub function
