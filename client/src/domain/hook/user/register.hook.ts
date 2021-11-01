@@ -56,8 +56,6 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
                         removeSessionValue();
                     } else { // keycloak ok because user-exist
                         //console.log("Result data from register:", data[0]);
-                        const successMsgKey = "register.start.success.temporarily.created";
-                        setState({ loading: false, error: false, msg: successMsgKey, wasCreatedOk: true });
                         const userValue: SessionType = {
                             createdTimestamp: data[0].createdTimestamp,
                             access_token: null,
@@ -76,6 +74,7 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
                         //console.log("userValue:", userValue);
                         setSessionValue(userValue);
                         console.log("data[0].lastName:", data[0].lastName);
+                        // Four: create user in user database
                         const responseCreateUser: Promise<number> = userClient.createUser(
                             data[0].id,
                             data[0].firstName,
@@ -84,7 +83,9 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
                             jwtAdminToken);
 
                         responseCreateUser.then(statusNumber => {
-
+                            //OK: created in keycloak and in user database
+                            const successMsgKey = "register.start.success.temporarily.created";
+                            setState({ loading: false, error: false, msg: successMsgKey, wasCreatedOk: true });
                         }).catch(err => {
                             // Error when create user in user service
                             setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });

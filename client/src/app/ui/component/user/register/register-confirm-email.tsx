@@ -30,12 +30,12 @@ function RegisterConfirmEmail({ token }: TParams) {
       {(confirmed && !loading) &&
       (<div>
         <img src={String(emailOkImage)} alt="emailOkImage" style={{width:"25%", height:"25%"}}/>
-      <Alert severity="success">{msg}</Alert>
+      <Alert severity="success">{t(msg)}</Alert>
       </div>
       )
       }
 
-      {(!confirmed && !loading && error) && <Alert severity="error">{msg}</Alert>}
+      {(!confirmed && !loading && error) && <Alert severity="error">{t(msg)}</Alert>}
 
     </div>
   );

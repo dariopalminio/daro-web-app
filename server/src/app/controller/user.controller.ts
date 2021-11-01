@@ -54,7 +54,7 @@ export class UserController {
     const categoryDeleted = await this.userService.delete(id);
     if (!categoryDeleted) throw new NotFoundException('User does not exist or canot delete category!');
     return res.status(HttpStatus.OK).json({
-      message: 'Category Deleted Successfully',
+      message: 'User Deleted Successfully',
       categoryDeleted
     });
   };
