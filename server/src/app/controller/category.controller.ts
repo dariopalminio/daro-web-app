@@ -57,7 +57,7 @@ export class CategoryController {
   // Update Category: /update?id=5c9d45e705ea4843c8d0e8f7
   @Put('update')
   async updateProduct(@Res() res, @Body() categoryDTO: ICategory, @Query('id') categoryID) {
-    const updatedCategory = await this.categoryService.update(categoryID, categoryDTO);
+    const updatedCategory = await this.categoryService.updateById(categoryID, categoryDTO);
     if (!updatedCategory) throw new NotFoundException('Category does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'Category Updated Successfully',

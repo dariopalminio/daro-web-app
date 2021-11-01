@@ -69,8 +69,8 @@ export class UserService implements IUserService {
   };
 
   // Put a single user
-  async update(id: string, user: IUser): Promise<boolean> {
-    const updatedProduct: boolean = await this.userRepository.update(id, user);
+  async updateById(id: string, user: IUser): Promise<boolean> {
+    const updatedProduct: boolean = await this.userRepository.updateById(id, user);
     return updatedProduct;
   };
 

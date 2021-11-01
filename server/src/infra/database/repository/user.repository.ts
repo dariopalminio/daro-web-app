@@ -60,10 +60,25 @@ export class UserRepository implements IRepository<IUser> {
         return !!docCreated;
     };
 
-    async update(id: string, doc: any): Promise<boolean> {
+    async updateById(id: string, doc: any): Promise<boolean> {
         const docUpdated: UserDocument = await this.userModel.findByIdAndUpdate(id, doc, {useFindAndModify: false}).exec();
         return !!docUpdated;
     };
+
+    /**
+     * 
+     * Example:
+     * { user_id: userId, username: username },
+        { security_stamp: nonce, security_stamp_updated: new Date() }
+     * @param one 
+     * @param query 
+     * @returns 
+     */
+    async update(query: any, valuesToSet: any): Promise<boolean> {
+        const docUpdated: UserDocument = await this.userModel.findOneAndUpdate(query, valuesToSet,).exec();
+        return !!docUpdated;
+    };
+
 
     async delete(id: string): Promise<boolean> {
         const docDeleted = await this.userModel.findByIdAndDelete(id, {useFindAndModify: false}).exec();

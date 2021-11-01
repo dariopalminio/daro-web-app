@@ -25,7 +25,7 @@
     "register.title": "Register",
     "register.info.helper.text.required": "Required",
     "register.info.loading": "Loading... Trying to Register!",
-    "register.start.success.temporarily.created": "Your account has been temporarily created successfully. Now you must verify your mail.",
+    "register.start.success.temporarily.created": "Now you must verify your mail.",
     "register.start.success.account.confirmed": "Your account has been confirmed successfully. Now you must go to login.",
     "register.confirm.success.account.confirmed": "Your account has been confirmed successfully. Now you must go to login.",
     "register.start.title.email.verirication": "Email verification",

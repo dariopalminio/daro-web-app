@@ -11,7 +11,7 @@ export interface IUserService {
   getById(id: string): Promise<IUser>;
   create(userRegisterDTO: UserRegisterDTO): Promise<boolean>;
   delete(id: string): Promise<boolean>;
-  update(id: string, user: IUser): Promise<boolean>;
+  updateById(id: string, user: IUser): Promise<boolean>;
 
   sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailData): Promise<any>;
   sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any>;

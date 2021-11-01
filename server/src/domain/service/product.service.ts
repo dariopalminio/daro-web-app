@@ -44,8 +44,8 @@ export class ProductService implements IProductService {
   };
 
   // Put a single category
-  async update(id: string, product: IProduct): Promise<boolean> {
-    const updatedProduct: boolean = await this.productRepository.update(id, product);
+  async updateById(id: string, product: IProduct): Promise<boolean> {
+    const updatedProduct: boolean = await this.productRepository.updateById(id, product);
     return updatedProduct;
   };
 

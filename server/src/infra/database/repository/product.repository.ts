@@ -64,8 +64,13 @@ export class ProductRepository implements IRepository<IProduct> {
         return !!docCreated;
     };
 
-    async update(id: string, prod: Product): Promise<boolean> {
+    async updateById(id: string, prod: Product): Promise<boolean> {
         const docUpdated: ProductDocument = await this.productModel.findByIdAndUpdate(id, prod, {useFindAndModify: false}).exec();
+        return !!docUpdated;
+    };
+
+    async update(query: any, valuesToSet: any): Promise<boolean> {
+        const docUpdated: ProductDocument = await this.productModel.findOneAndUpdate(query, valuesToSet,).exec();
         return !!docUpdated;
     };
 

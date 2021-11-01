@@ -38,7 +38,7 @@ export default function useLogin(authServiceInjected: IAuthClient | null = null)
                 try {
                     const userSessionValue: SessionType = convertJwtToSessionType(jwt);
                     
-                    if (userSessionValue && userSessionValue.email_verified == false) {
+                    if (userSessionValue && userSessionValue.email_verified === false) {
                         //Need to verify the email
                         const errorKey = "login.error.unconfirmed.account";
                         setState({ loading: false, error: true, msg: errorKey, isLoggedOk: false, isEmailVerified: false });

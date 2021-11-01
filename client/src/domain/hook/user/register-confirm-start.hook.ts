@@ -23,36 +23,42 @@ export default function useRegisterConfirmStart(authServiceInjected: IAuthClient
      * Start Confirm Email function
      * Sent notification by email with verification link.
      */
-    const startConfirmEmail = useCallback((userName: string, userEmail: string) => {
+    const startConfirmEmail = useCallback((userName: string, userEmail: string | undefined) => {
 
-        setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: true, error: false, confirmMsg: "Trying to send Email to Confirm!", wasConfirmedOk: false , redirect:false});console.log();
-        
-        console.log("session:",session);
-        const verificationPageLink = `${StateConfig.app_url}/user/register/confirm/`;
+        if (!userEmail) {
+            const errorMsg = "Some problem creating new user. Email does not exist in session!";
+            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: true, error: true, confirmMsg: errorMsg, wasConfirmedOk: false, redirect: false }); console.log();
+        } else {
+
+            const email: string = userEmail;
+            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: true, error: false, confirmMsg: "Trying to send Email to Confirm!", wasConfirmedOk: false, redirect: false }); console.log();
+
+            console.log("session:", session);
+            const verificationPageLink = `${StateConfig.app_url}/user/register/confirm/`;
 
 
-        // First: obtains admin access token
-        const responseAdminToken: Promise<any> = authService.getAdminTokenService();
+            // First: obtains admin access token
+            const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
-        responseAdminToken.then(jwtAdminToken => {
-            // Second: send email
-            userClient.sendStartEmailConfirm(userName, userEmail, verificationPageLink, jwtAdminToken).then(info => {
-                console.log("Response sendStartEmailConfirm...", info);
-                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: "register.command.email.sent", wasConfirmedOk: false, redirect: true });
-             
-            })
-                .catch(err => {
-                    setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: "register.error.email-does-not-sent", wasConfirmedOk: false, redirect: false });
-                });
+            responseAdminToken.then(jwtAdminToken => {
+                // Second: send email
+                userClient.sendStartEmailConfirm(userName, email, verificationPageLink, jwtAdminToken).then(info => {
+                    console.log("Response sendStartEmailConfirm...", info);
+                    setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: "register.command.email.sent", wasConfirmedOk: false, redirect: true });
 
-        }).catch(err => {
-            // Error Can not acquire Admin token from service
-            const errorMsgKey = "register.error.cannot.acquire.token";
-            setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: errorMsgKey, wasConfirmedOk: false, redirect: false });
-            //removeSessionValue();
-        });
-    
-        }, [session]);
+                })
+                    .catch(err => {
+                        setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: "register.error.email-does-not-sent", wasConfirmedOk: false, redirect: false });
+                    });
+
+            }).catch(err => {
+                // Error Can not acquire Admin token from service
+                const errorMsgKey = "register.error.cannot.acquire.token";
+                setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: errorMsgKey, wasConfirmedOk: false, redirect: false });
+                //removeSessionValue();
+            });
+        }
+    }, [session]);
 
     return {
         validVerificationCode: state.validVerificationCode,

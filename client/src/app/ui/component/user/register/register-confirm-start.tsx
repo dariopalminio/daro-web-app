@@ -78,11 +78,11 @@ const RegisterConfirmStart: FunctionComponent = () => {
    * Handle send email with verification link.
    */
   const handleSendEmail = async () => {
-    if (session?.email) {
+
       const userName = session?.given_name ? session?.given_name : "";
-      const userEmail = session?.email;
+      const userEmail: string | undefined = session?.email;
+      console.log("startConfirmEmail with ", userEmail);
       startConfirmEmail(userName, userEmail);
-    }
   };
 
   /**

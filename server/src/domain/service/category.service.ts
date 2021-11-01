@@ -40,8 +40,8 @@ export class CategoryService implements ICategoryService {
   };
 
   // Put a single category
-  async update(id: string, category: ICategory): Promise<boolean> {
-    const updatedProduct: boolean = await this.categoryRepository.update(id, category);
+  async updateById(id: string, category: ICategory): Promise<boolean> {
+    const updatedProduct: boolean = await this.categoryRepository.updateById(id, category);
     return updatedProduct;
   };
 

@@ -5,7 +5,7 @@ export interface IProductService {
   getById(id: string): Promise<IProduct>;
   create(product: IProduct): Promise<boolean>;
   delete(id: string): Promise<boolean>;
-  update(id: string, product: IProduct): Promise<boolean>;
+  updateById(id: string, product: IProduct): Promise<boolean>;
 };
 
 

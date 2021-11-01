@@ -80,7 +80,7 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthClient
                         const isVerificationCodeOkResult = true;
 
 
-                        if (isVerificationCodeOkResult == true) {
+                        if (isVerificationCodeOkResult === true) {
 
                             // update email confirmation field in user of auth server
                             const responseConfirm = authService.confirmEmailService(

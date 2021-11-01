@@ -62,7 +62,7 @@ export class UserController {
   // Update Category: /update?id=5c9d45e705ea4843c8d0e8f7
   @Put('update')
   async updateUser(@Res() res, @Body() user: IUser, @Query('id') categoryID) {
-    const updatedCategory = await this.userService.update(categoryID, user);
+    const updatedCategory = await this.userService.updateById(categoryID, user);
     if (!updatedCategory) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'Category Updated Successfully',
