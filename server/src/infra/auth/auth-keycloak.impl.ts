@@ -131,19 +131,17 @@ export class AuthKeycloakImpl implements IAuth {
       .toPromise();
     console.log("REgister-->res.status:", res.status);
     switch (res.status) {
-      case HttpStatus.CREATED:
+      case HttpStatus.CREATED: //201
         return { isSuccess: true, error: null };
-      case HttpStatus.BAD_REQUEST:
-        return {
-          isSuccess: false,
-          error: res.data,
-        };
-      case HttpStatus.CONFLICT:
+      case HttpStatus.UNAUTHORIZED: //401
+        return { isSuccess: false, error: res.data };
+      case HttpStatus.BAD_REQUEST: //400
+        return { isSuccess: false, error: res.data };
+      case HttpStatus.CONFLICT: //409
         return {
           isSuccess: false,
           error:
             'CONFLICT: Username already exists!',
-
         };
       default:
         return { isSuccess: false, error: res.data };
