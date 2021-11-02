@@ -13,14 +13,18 @@ export class AuthService implements IAuthService {
   }
 
 
+  /**
+   * Register
+   * 
+   * @param userRegisterData 
+   * @returns 
+   */
   async register(userRegisterData: UserRegisterDataDTO): Promise<any> {
 
     const adminToken = await this.authService.getAdminToken();
 
-
     const resp = await this.authService.register(userRegisterData.firstName, userRegisterData.lastName, userRegisterData.email,
       userRegisterData.password, adminToken);
-
 
     const userAuth = await this.authService.getUserInfoByAdmin(userRegisterData.email, adminToken);
 
