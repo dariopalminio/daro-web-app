@@ -96,6 +96,7 @@ export class UserController {
 
   @Post('isVerificationCodeOk')
   async isVerificationCodeOk(@Body()  verificationCodeData: VerificationCodeDataDTO): Promise<any> {
+    console.log("isVerificationCodeOk executed!");
     return this.userService.isVerificationCodeOk(verificationCodeData);
 
 };

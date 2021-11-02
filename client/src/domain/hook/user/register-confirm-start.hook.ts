@@ -41,13 +41,14 @@ export default function useRegisterConfirmStart(authServiceInjected: IAuthClient
             const responseAdminToken: Promise<any> = authService.getAdminTokenService();
 
             responseAdminToken.then(jwtAdminToken => {
-                // Second: send email
+                // Second: send email to confirmation process
                 userClient.sendStartEmailConfirm(userName, email, verificationPageLink, jwtAdminToken).then(info => {
                     console.log("Response sendStartEmailConfirm...", info);
                     setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: false, confirmMsg: "register.command.email.sent", wasConfirmedOk: false, redirect: true });
 
                 })
                     .catch(err => {
+                        // Error Can not send email
                         setState({ validVerificationCode: false, validVerificationCodeMsg: '', loading: false, error: true, confirmMsg: "register.error.email-does-not-sent", wasConfirmedOk: false, redirect: false });
                     });
 

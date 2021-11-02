@@ -40,9 +40,10 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
                 lastname,
                 email,
                 password, jwtAdminToken);
-            // Third: verifies that the user was created, asking for the information of the created user
+            
             responseReg.then(statusNumber => {
 
+                // Third: verifies that the user was created, asking for the information of the created user
                 const responseGetUser = authService.getUserByEmailService(
                     email,
                     jwtAdminToken);
@@ -74,6 +75,7 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
                         //console.log("userValue:", userValue);
                         setSessionValue(userValue);
                         console.log("data[0].lastName:", data[0].lastName);
+
                         // Four: create user in user database
                         const responseCreateUser: Promise<number> = userClient.createUser(
                             data[0].id,
@@ -87,7 +89,7 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
                             const successMsgKey = "register.start.success.temporarily.created";
                             setState({ loading: false, error: false, msg: successMsgKey, wasCreatedOk: true });
                         }).catch(err => {
-                            // Error when create user in user service
+                            // Error when create user in user database
                             setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
                             removeSessionValue();
                         });

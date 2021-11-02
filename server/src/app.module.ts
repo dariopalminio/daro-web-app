@@ -1,4 +1,5 @@
-import { Module, MiddlewareConsumer } from '@nestjs/common';
+
+import { HttpModule, HttpService, Module, OnModuleInit, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from './app/filter/exception.filter';
 import { AppController } from './app/controller/app.controller';
@@ -8,14 +9,19 @@ import { CategoryController, CATEGORY_SERVICE_TOKEN } from './app/controller/cat
 import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
+import { AuthService, AUTH_IMPL_TOKEN } from './domain/service/auth.service';
 import { UserService, USER_REPOSITORY_TOKEN } from './domain/service/user.service';
 import { UserController, USER_SERVICE_TOKEN } from './app/controller/user.controller';
+import { AuthController, AUTH_SERVICE_TOKEN } from './app/controller/auth.controller';
 import { EmailSmtpSenderAdapter } from './infra/email/email.sender.adapter';
 import { AuthMiddleware } from './app/middleware/auth.middleware';
 import { ProductSchema, 
   PRODUCT_COLLECTION_TOKEN } from './infra/database/schema/product.schema';
-  import { UserSchema, 
+import { UserSchema, 
     USER_COLLECTION_TOKEN } from './infra/database/schema/user.schema';
+
+import { AuthKeycloakImpl } from './infra/auth/auth-keycloak.impl';
+
 import { CategorySchema, 
   CATEGORY_COLLECTION_TOKEN } from './infra/database/schema/category.schema';
 import DB_CONNECTION from './infra/database/db.connection.string';
@@ -29,6 +35,7 @@ import {
   ProductRepository
 } from './infra/database/repository/product.repository';
 import LoggerHelper from './infra/logger/logger.helper';
+
 
 //Mongo
 import { MongooseModule } from '@nestjs/mongoose';
@@ -61,6 +68,7 @@ MongooseModule.forRootAsync({
 //Dependency Injector
 @Module({
   imports: [
+    HttpModule,
     MongooseModule.forRoot(DB_CONNECTION),
     MongooseModule.forFeature([
       { name: PRODUCT_COLLECTION_TOKEN, schema: ProductSchema },
@@ -68,8 +76,12 @@ MongooseModule.forRootAsync({
       { name: USER_COLLECTION_TOKEN, schema: UserSchema },
     ])
   ],
-  controllers: [AppController, UserController, NotificationController, ProductController, CategoryController],
+  controllers: [AppController, AuthController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
+    {
+      provide: AUTH_SERVICE_TOKEN,
+      useClass: AuthService,
+    },
     {
       provide: USER_SERVICE_TOKEN,
       useClass: UserService,
@@ -103,6 +115,10 @@ MongooseModule.forRootAsync({
       useClass: ProductRepository,
     },
     {
+      provide: AUTH_IMPL_TOKEN,
+      useClass: AuthKeycloakImpl,
+    },
+    {
       provide: APP_FILTER,
       useClass: ExceptionsAllFilter,
     },
@@ -112,10 +128,28 @@ MongooseModule.forRootAsync({
     },
   ],
 })
-export class AppModule {
+
+
+export class AppModule implements OnModuleInit {
+  constructor(private readonly http: HttpService) {}
+
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware)
       .forRoutes(NotificationController);
   };
 
+  onModuleInit() {
+    this.http.axiosRef.interceptors.response.use(undefined, (error) => {
+      const expectedError =
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status < 500;
+
+      if (!expectedError) {
+        return Promise.reject(error);
+      }
+
+      return error.response;
+    });
+  }
 };

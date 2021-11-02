@@ -1,0 +1,14 @@
+export interface IAuth {
+
+    getAdminToken(): Promise<string>;
+
+    register(
+        firstName: string,
+        lastName: string,
+        email: string,
+        password: string,
+        adminToken: string): Promise<any>;
+    
+    getUserInfoByAdmin(username: string, adminToken: string): Promise<any | undefined>;
+    
+  }
