@@ -3,5 +3,4 @@ export type UserRegisterDataDTO = {
     lastName: string;
     email: string;
     password: string;
-    adminToken: string;
   };
