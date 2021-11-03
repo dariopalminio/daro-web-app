@@ -3,6 +3,7 @@ export interface IAuth {
     getAdminToken(): Promise<string>;
 
     register(
+        username: string,
         firstName: string,
         lastName: string,
         email: string,

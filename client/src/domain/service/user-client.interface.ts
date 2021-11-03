@@ -1,12 +1,13 @@
 //Interface to do dependency inversion
 export interface IUserClient {
 
-  createUser: (
-    authId: string,
+  register(
+    username: string,
     firstName: string,
     lastName: string,
     email: string,
-    adminToken: string) => Promise<number>;
+    password: string,
+    adminToken: string): Promise<any>;
 
   sendStartEmailConfirm: (
     name: string,

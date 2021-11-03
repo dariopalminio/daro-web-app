@@ -35,30 +35,17 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
         // Second: creates a new user with authorization using admin access token
         responseAdminToken.then(jwtAdminToken => {
 
-            const responseReg = authService.registerService(
+            const responseReg = userClient.register(
+                email,
                 firstname,
                 lastname,
                 email,
                 password, jwtAdminToken);
             
-            responseReg.then(statusNumber => {
-
-                // Third: verifies that the user was created, asking for the information of the created user
-                const responseGetUser = authService.getUserByEmailService(
-                    email,
-                    jwtAdminToken);
-
-                responseGetUser.then(data => {
-
-                    if (!data[0]) {
-                        // keycloak.error.user-not-exist
-                        const errorKey = "register.error.user-not-exist"; //keycloak.error.user-not-exist
-                        setState({ loading: false, error: true, msg: errorKey, wasCreatedOk: false });
-                        removeSessionValue();
-                    } else { // keycloak ok because user-exist
-                        //console.log("Result data from register:", data[0]);
+            responseReg.then(resp => {
+                console.log("register response:", resp);
                         const userValue: SessionType = {
-                            createdTimestamp: data[0].createdTimestamp,
+                            createdTimestamp: "",
                             access_token: null,
                             refresh_token: null,
                             expires_in: 0,
@@ -67,40 +54,14 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
                             isLogged: false,
                             isRegistered: true,
                             email: email,
-                            email_verified: data[0].emailVerified,
-                            given_name: data[0].firstName,
-                            preferred_username: data[0].firstName,
-                            userId: data[0].id,
+                            email_verified: false,
+                            given_name: firstname,
+                            preferred_username: firstname,
+                            userId: "",
                         };
-                        //console.log("userValue:", userValue);
+                        
                         setSessionValue(userValue);
-                        console.log("data[0].lastName:", data[0].lastName);
-
-                        // Four: create user in user database
-                        const responseCreateUser: Promise<number> = userClient.createUser(
-                            data[0].id,
-                            data[0].firstName,
-                            data[0].lastName,
-                            email,
-                            jwtAdminToken);
-
-                        responseCreateUser.then(statusNumber => {
-                            //OK: created in keycloak and in user database
-                            const successMsgKey = "register.start.success.temporarily.created";
-                            setState({ loading: false, error: false, msg: successMsgKey, wasCreatedOk: true });
-                        }).catch(err => {
-                            // Error when create user in user database
-                            setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
-                            removeSessionValue();
-                        });
-
-                    }
-                }).catch(err => {
-                    // Error when get user
-                    setState({ loading: false, error: true, msg: err.message, wasCreatedOk: false });
-                    removeSessionValue();
-                });
-
+                        setState({ loading: false, error: false, msg: "", wasCreatedOk: true });
 
             }).catch(err => {
                 // Request failed with status code 409 (Conflict) or 400 (Bad Request)

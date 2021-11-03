@@ -9,7 +9,7 @@ import { CategoryController, CATEGORY_SERVICE_TOKEN } from './app/controller/cat
 import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
 import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
-import { AuthService, AUTH_IMPL_TOKEN } from './domain/service/auth.service';
+import { AuthService, AUTH_IMPL_TOKEN, USER_SERVICE_IMPL_TOKEN } from './domain/service/auth.service';
 import { UserService, USER_REPOSITORY_TOKEN } from './domain/service/user.service';
 import { UserController, USER_SERVICE_TOKEN } from './app/controller/user.controller';
 import { AuthController, AUTH_SERVICE_TOKEN } from './app/controller/auth.controller';
@@ -81,6 +81,10 @@ MongooseModule.forRootAsync({
     {
       provide: AUTH_SERVICE_TOKEN,
       useClass: AuthService,
+    },
+    {
+      provide: USER_SERVICE_IMPL_TOKEN,
+      useClass: UserService,
     },
     {
       provide: USER_SERVICE_TOKEN,

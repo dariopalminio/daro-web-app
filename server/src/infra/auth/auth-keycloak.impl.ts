@@ -90,20 +90,21 @@ export class AuthKeycloakImpl implements IAuth {
    * @returns 
    */
   async register(
+    username: string,
     firstName: string,
     lastName: string,
     email: string,
     password: string,
     adminToken: string): Promise<any> {
 
-    let access_token = adminToken;
+    const access_token = adminToken;
 
     const body: NewUserRepresentationType = {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      emailVerified: GlobalConfig.Keycloak.verify_email ? "false" : "true",
-      username: email,
+      emailVerified: "false",
+      username: username,
       credentials: [
         {
           type: 'password',

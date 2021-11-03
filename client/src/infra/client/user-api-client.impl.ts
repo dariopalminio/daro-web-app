@@ -12,33 +12,36 @@ import { IUserClient } from '../../domain/service/user-client.interface';
 export default function UserApiClientImpl(): IUserClient {
 
   /**
-   * Create User
-   * @param authId 
-   * @param firstname 
-   * @param lastname 
+   * register
+   * 
+   * @param username 
+   * @param firstName 
+   * @param lastName 
    * @param email 
+   * @param password 
    * @param adminToken 
    * @returns 
    */
-  function createUser(
-    authId: string,
+  function register(
+    username: string,
     firstName: string,
     lastName: string,
     email: string,
-    adminToken: string): Promise<number> {
+    password: string,
+    adminToken: string): Promise<any> {
 
     const body = {
-      authId: authId,
-      userName: email,
+      username: username,
       firstName: firstName,
       lastName: lastName,
       email: email,
+      password: password,
     };
+    console.log("register:", body);
 
-    console.log("body create user:",body);
     //User endpoint
-    const URL = `${OriginConfig.URLPath.user}/create`;
-
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register`;
+    console.log("url register:", URL);
     const promise: AxiosPromise<any> = axios({
       method: 'post',
       url: URL,
@@ -47,15 +50,15 @@ export default function UserApiClientImpl(): IUserClient {
     });
 
     // using .then, create a new promise which extracts the data
-    const statusNumber: Promise<number> = promise.then((response) =>
-      response.status
+    const r: Promise<any> = promise.then((response) =>
+      response
     ).catch((error) => {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
     //console.log(statusNumber);
-    return statusNumber;
+    return r;
   };
 
   /**
@@ -73,7 +76,7 @@ export default function UserApiClientImpl(): IUserClient {
     accessToken: string ): Promise<any> {
 
     //Notification endpoint
-    const URL = `${OriginConfig.URLPath.user}/sendStartEmailConfirm`;
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm/sendStartEmailConfirm`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -125,7 +128,7 @@ export default function UserApiClientImpl(): IUserClient {
 
     console.log("body create user:",body);
     //User endpoint
-    const URL = `${OriginConfig.URLPath.user}/isVerificationCodeOk`;
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm/isVerificationCodeOk`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -147,7 +150,7 @@ export default function UserApiClientImpl(): IUserClient {
   };
 
   return {
-    createUser,
+    register,
     sendStartEmailConfirm,
     isVerificationCodeOk
   };

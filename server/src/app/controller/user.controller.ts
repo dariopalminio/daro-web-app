@@ -1,11 +1,8 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
 import { IUserService } from '../../domain/input/port/user.service.interface';
-import { ContactMessage } from '../../domain/model/contact.message';
-import { StartConfirmEmailData } from '../../domain/model/register/start.confirm.email.data';
-import { EndConfirmEmailData } from '../../domain/model/register/end.confirm.email.data';
-import { VerificationCodeDataDTO } from '../../domain/model/register/verification_code_data.dto.type';
 import { IUser } from '../../domain/model/user/user.interface';
 import { UserRegisterDTO } from '../../domain/model/register/user_register.dto.type';
+
 export const USER_SERVICE_TOKEN = 'UserService_Implementation';
 
 @Controller('user')
@@ -70,35 +67,5 @@ export class UserController {
     });
   };
 
-  @Post('sendStartEmailConfirm')
-  sendStartEmailConfirm(@Body() startConfirmEmailData: StartConfirmEmailData): any {
-    console.log(startConfirmEmailData);
-
-    try {
-      const sentInfo = this.userService.sendStartEmailConfirm(startConfirmEmailData);
-      return sentInfo;
-    } catch (e) {
-      return e.message;
-    };
-  }
-
-  @Post('sendEndEmailConfirm')
-  sendEndEmailConfirm(@Body() sendConfirmEmailData: EndConfirmEmailData): any {
-    console.log(sendConfirmEmailData);
-
-    try {
-      const sentInfo = this.userService.sendEndEmailConfirm(sendConfirmEmailData);
-      return sentInfo;
-    } catch (e) {
-      return e.message;
-    };
-  }
-
-  @Post('isVerificationCodeOk')
-  async isVerificationCodeOk(@Body()  verificationCodeData: VerificationCodeDataDTO): Promise<any> {
-    console.log("isVerificationCodeOk executed!");
-    return this.userService.isVerificationCodeOk(verificationCodeData);
-
-};
 
 }
