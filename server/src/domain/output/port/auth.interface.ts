@@ -12,4 +12,5 @@ export interface IAuth {
     
     getUserInfoByAdmin(username: string, adminToken: string): Promise<any | undefined>;
     
+    deleteAuthUser(authId: string, accessToken: string): Promise<any>;
   }

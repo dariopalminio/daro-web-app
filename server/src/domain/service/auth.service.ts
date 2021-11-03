@@ -9,7 +9,6 @@ import IEmailSender from '../output/port/email.sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
-import { ContactMessage } from '../model/contact.message';
 import { StartConfirmEmailData } from '../model/register/start.confirm.email.data';
 import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { VerificationCodeDataDTO } from '../model/register/verification_code_data.dto.type';
@@ -21,14 +20,13 @@ export const USER_SERVICE_IMPL_TOKEN = 'UserService_Implementation'; //Implement
 export class AuthService implements IAuthService {
   constructor(
     @Inject(AUTH_IMPL_TOKEN)
-    private readonly authService: IAuth,
+    private readonly externalAuthService: IAuth,
     @Inject(USER_SERVICE_IMPL_TOKEN)
     private readonly userService: IUserService,
     @Inject(EMAIL_SENDER_TOKEN)
     readonly sender: IEmailSender
   ) {
   }
-
 
   /**
    * Register
@@ -41,11 +39,11 @@ export class AuthService implements IAuthService {
 
     // First: obtains admin access token
     console.log("First: obtains admin access token");
-    const adminToken = await this.authService.getAdminToken();
+    const adminToken = await this.externalAuthService.getAdminToken();
 
     // Second: creates a new user in authorization server using admin access token
     console.log("Second: creates a new user in authorization server using admin access token");
-    const authCreatedUserResp = await this.authService.register(userRegisterData.username,
+    const authCreatedUserResp = await this.externalAuthService.register(userRegisterData.username,
       userRegisterData.firstName, userRegisterData.lastName, userRegisterData.email,
       userRegisterData.password, adminToken);
 
@@ -57,18 +55,16 @@ export class AuthService implements IAuthService {
 
     // Third: verifies that the user was created, asking for the information of the created user
     console.log("Third: verifies that the user was created, asking for the information of the created user");
-    const authCreatedUser = await this.authService.getUserInfoByAdmin(userRegisterData.email, adminToken);
+    const authCreatedUser = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
 
     if (!authCreatedUser) {
       // ERROR: User could not be created in auth server
       return { isSuccess: false, error: "User could not be created in auth server!" };
     }
 
-    const { id } = authCreatedUser;
-    console.log("userAuth:", authCreatedUser);
-    console.log("userAuth.id:", id);
+    const { id } = authCreatedUser; // ID in external authorization server
+
     // Four: create new user in user database
-    console.log("Four: create new user in user database");
     const userRegisterDTO: UserRegisterDTO = {
       authId: id,
       userName: userRegisterData.email,
@@ -78,7 +74,13 @@ export class AuthService implements IAuthService {
     }
     const wasCreated: boolean = await this.userService.create(userRegisterDTO);
     if (!wasCreated) {
-      // ERROR: User could not be created in database server!
+      // ERROR: User could not be created in user database!
+      try {
+        const deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
+        console.log("Deleted user! ", deletedAuthUser);
+      } catch(error) {
+        console.log("User could not be deleted in externa auth service! ", error);
+      }
       return { isSuccess: false, error: "User could not be created in database server!" };
     }
 
@@ -98,8 +100,6 @@ export class AuthService implements IAuthService {
 
     try {
       const newVerificationCode = generateToken(); //generate verification code
-
-      console.log("startConfirmEmailData", startConfirmEmailData);
 
       let user = await this.userService.getByQuery({ userName: startConfirmEmailData.userName });
       if (!user) throw new Error("User not found!");

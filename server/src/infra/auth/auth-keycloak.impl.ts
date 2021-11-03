@@ -2,6 +2,8 @@ import { Injectable, HttpService, HttpStatus, Inject } from '@nestjs/common';
 import { IAuth } from '../../domain/output/port/auth.interface';
 import * as GlobalConfig from '../../GlobalConfig';
 import { stringify } from 'querystring';
+import { AxiosError, AxiosResponse } from 'axios';
+import { Observable } from 'rxjs';
 
 type NewAdminTokenRequestType = {
   client_id: string,
@@ -153,7 +155,7 @@ export class AuthKeycloakImpl implements IAuth {
   /**
    * Get User By username
    * 
-   * Get users returns a list of users, filtered according to userEmail params.
+   * Get users returns an users, filtered according to username params.
    * @param username 
    * @param adminToken 
    * @returns 
@@ -176,6 +178,37 @@ export class AuthKeycloakImpl implements IAuth {
 
     if (result.data && result.data[0]) return result.data[0];
     return undefined;
+  };
+
+  /**
+   * Delete user from Keycloak
+   * @param authId 
+   * @param accessToken 
+   * @returns 
+   */
+  async deleteAuthUser(authId: string, accessToken: string): Promise<any> {
+
+    const URL = `${GlobalConfig.URLPath.users}/${authId}`;
+    const header = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    try {
+      const eraseResult = await this.http.delete(URL, {
+        headers: header,
+      }).toPromise();
+
+      switch (eraseResult.status) {
+        case HttpStatus.NO_CONTENT: //204
+          return { isSuccess: true, error: null }; //successful
+        case HttpStatus.NOT_FOUND: //404
+          return { isSuccess: false, error: eraseResult.data };
+        default:
+          return { isSuccess: false, error: eraseResult.data };
+      }
+    } catch (error) {
+      return { isSuccess: false, error: error.message };
+    }
   };
 
 }
