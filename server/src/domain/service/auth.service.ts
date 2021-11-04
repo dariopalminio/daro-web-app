@@ -12,6 +12,8 @@ import { generateToken, encodeToken, createTokenLink, decodeToken } from '../hel
 import { StartConfirmEmailData } from '../model/register/start.confirm.email.data';
 import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { VerificationCodeDataDTO } from '../model/register/verification_code_data.dto.type';
+import { IAuthResponse } from '../../domain/output/port/auth.interface';
+
 
 export const AUTH_IMPL_TOKEN = 'Auth_Implementation'; //Implementation Token
 export const USER_SERVICE_IMPL_TOKEN = 'UserService_Implementation'; //Implementation Token
@@ -27,6 +29,7 @@ export class AuthService implements IAuthService {
     readonly sender: IEmailSender
   ) {
   }
+
 
   /**
    * Register
@@ -185,5 +188,12 @@ export class AuthService implements IAuthService {
       throw error;
     };
   };
+
+  async login(username: string, pass: string): Promise<IAuthResponse>{
+
+    const loginAuthResp = await this.externalAuthService.login(username,pass);
+    return loginAuthResp;
+  }
+
 
 };
