@@ -1,5 +1,6 @@
 import { Injectable, HttpService, HttpStatus, Inject } from '@nestjs/common';
-import { IAuth, IAuthResponse } from '../../domain/output/port/auth.interface';
+import { IAuth } from '../../domain/output/port/auth.interface';
+import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import * as GlobalConfig from '../../GlobalConfig';
 import { stringify } from 'querystring';
 import { AxiosResponse } from 'axios';
@@ -144,20 +145,21 @@ export class AuthKeycloakImpl implements IAuth {
     console.log("REgister-->res.status:", response.status);
     switch (response.status) {
       case HttpStatus.CREATED: //201
-        return { isSuccess: true, error: null, data: response.data };
+        return { isSuccess: true, status: response.status, error: null, data: response.data };
       case HttpStatus.UNAUTHORIZED: //401
-        return { isSuccess: false, error: response.statusText, data: response.data };
+        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
       case HttpStatus.BAD_REQUEST: //400
-        return { isSuccess: false, error: response.statusText, data: response.data };
+        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
       case HttpStatus.CONFLICT: //409
         return {
-          isSuccess: false,
+          isSuccess: false, 
+          status: response.status,
           error:
             'CONFLICT: Username already exists!',
-            data: null
+          data: null
         };
       default:
-        return { isSuccess: false, error: response.data, data: null };
+        return { isSuccess: false, status: response.status, error: response.data, data: null };
     }
   };
 
@@ -210,14 +212,14 @@ export class AuthKeycloakImpl implements IAuth {
 
       switch (eraseResult.status) {
         case HttpStatus.NO_CONTENT: //204
-          return { isSuccess: true, error: undefined, data: null }; //successful
+          return { isSuccess: true, status: eraseResult.status, error: undefined, data: null }; //successful
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, error: eraseResult.statusText, data: eraseResult.data };
+          return { isSuccess: false, status: eraseResult.status, error: eraseResult.statusText, data: eraseResult.data };
         default:
-          return { isSuccess: false, error: eraseResult.statusText, data: eraseResult.data };
+          return { isSuccess: false, status: eraseResult.status, error: eraseResult.statusText, data: eraseResult.data };
       }
     } catch (error) {
-      return { isSuccess: false, error: error.message, data: null };
+      return { isSuccess: false, status: 500, error: error.message, data: null };
     }
   };
 
@@ -268,14 +270,48 @@ export class AuthKeycloakImpl implements IAuth {
 
       switch (response.status) {
         case HttpStatus.OK: //200
-          return { isSuccess: true, error: undefined, data: response.data }; //successful
+          return { isSuccess: true, status: response.status, error: undefined, data: response.data }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
         default:
-          return { isSuccess: false, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
       }
     } catch (error) {
-      return { isSuccess: false, error: error.message, data: null };
+      return { isSuccess: false, status: 500, error: error.message, data: null };
+    }
+  };
+
+  async logout(userId: string, adminToken: string): Promise<IAuthResponse> {
+
+    //User endpoint
+    const URL = `${GlobalConfig.URLPath.users}/${userId}/logout`;
+
+    const header = {
+      Authorization: `Bearer ${adminToken}`,
+    };
+
+    try {
+
+    const response: AxiosResponse<any> = await this.http.post(URL,
+      JSON.stringify({}),
+      {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      },).toPromise();
+      console.log("logout response:",response);
+     switch (response.status) {
+        case HttpStatus.NO_CONTENT: //204
+          return { isSuccess: true, status: response.status, error: undefined, data: {message: "logged out user"} }; //successful
+        case HttpStatus.UNAUTHORIZED: //401
+        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+        case HttpStatus.NOT_FOUND: //404
+        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+        default:
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+      }
+    } catch (error) {
+      return { isSuccess: false, status: 500, error: error.message, data: null };
     }
   };
 

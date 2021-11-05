@@ -1,20 +1,20 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IAuthService } from '../input/port/auth.service.interface';
 import { IAuth } from '../../domain/output/port/auth.interface';
-import { UserRegisterDataDTO } from '../../domain/model/register/user-register-data.dto.type';
+import { UserRegisterDataDTO } from '../model/auth/register/user-register-data.dto.type';
 import { IUserService } from '../../domain/input/port/user.service.interface';
-import { UserRegisterDTO } from '../model/register/user_register.dto.type';
+import { UserRegisterDTO } from '../model/auth/register/user_register.dto.type';
 import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
 import IEmailSender from '../output/port/email.sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
-import { StartConfirmEmailData } from '../model/register/start.confirm.email.data';
-import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
-import { VerificationCodeDataDTO } from '../model/register/verification_code_data.dto.type';
-import { IAuthResponse } from '../../domain/output/port/auth.interface';
-
-
+import { StartConfirmEmailData } from '../model/auth/register/start.confirm.email.data';
+import { EndConfirmEmailData } from '../model/auth/register/end.confirm.email.data';
+import { VerificationCodeDataDTO } from '../model/auth/register/verification_code_data.dto.type';
+import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
+import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
+import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 export const AUTH_IMPL_TOKEN = 'Auth_Implementation'; //Implementation Token
 export const USER_SERVICE_IMPL_TOKEN = 'UserService_Implementation'; //Implementation Token
 
@@ -189,11 +189,26 @@ export class AuthService implements IAuthService {
     };
   };
 
-  async login(username: string, pass: string): Promise<IAuthResponse>{
+  /**
+   * 
+   * @param loginForm 
+   * @returns 
+   */
+  async login(loginForm: LoginFormDTO): Promise<IAuthResponse>{
+    
+    // Validate login form TODO...
 
-    const loginAuthResp = await this.externalAuthService.login(username,pass);
+    const loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
     return loginAuthResp;
-  }
+  };
+
+  async logout(logoutFormDTO: LogoutFormDTO): Promise<IAuthResponse>{
+    
+    // Validate login form TODO...
+
+    const logoutAuthResp = await this.externalAuthService.logout(logoutFormDTO.id, logoutFormDTO.adminToken);
+    return logoutAuthResp;
+  };
 
 
 };

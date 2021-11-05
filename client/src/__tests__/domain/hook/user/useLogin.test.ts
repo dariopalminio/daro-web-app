@@ -36,7 +36,7 @@ jest.mock("../../../client/user/GetUserInfoService", () => {
 */
 
 describe('Test useUser Hook', () => {
-
+/*
     test('login with BAD credentials should to FAIL', async () => {
         const { result, waitForNextUpdate } = renderHook(() => useLogin(AuthApiClientFailMock()));
 
@@ -58,5 +58,5 @@ describe('Test useUser Hook', () => {
         await waitForNextUpdate();
         expect(result.current.isLoggedOk).toBe(true);
     });
-
+*/
 });

@@ -3,7 +3,7 @@ import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
 import { IUserClient } from '../../domain/service/user-client.interface';
-
+import { Tokens } from '../../domain/model/user/tokens.type';
 
 /**
  * User Api Client Implementation
@@ -149,9 +149,84 @@ export default function UserApiClientImpl(): IUserClient {
     return resp;
   };
 
+  /**
+   * 
+   * @param username 
+   * @param pass 
+   * @returns 
+   */
+  function loginService(username: string, pass: string): Promise<Tokens> {
+
+    const body = {
+      username: username,
+      password: pass
+    };
+
+    //Login endpoint
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/login`;
+    
+    //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
+    const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
+
+    // using .then, create a new promise which extracts the data
+    const tokens: Promise<Tokens> = promise.then((response) => {
+      return {
+        access_token: response.data.access_token,
+        refresh_token: response.data.refresh_token,
+        expires_in: response.data.expires_in,
+        refresh_expires_in: response.data.refresh_expires_in,
+        date: new Date()
+      }
+    }
+    ).catch((error) => {
+      // response.status !== 200
+      const authError: ApiError = handleAxiosError(error);
+      throw authError;
+    });
+
+    return tokens;
+  };
+
+  /**
+   * logout
+   * @param userId 
+   * @param adminToken 
+   * @returns 
+   */
+  function logoutService(userId: string, adminToken: string): Promise<number> {
+
+    //User endpoint
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/logout`;
+
+    const body = {
+      id: userId,
+      adminToken: adminToken
+    };
+
+    const promise: AxiosPromise<any> = axios({
+      method: 'post',
+      url: URL,
+      headers: { 'Authorization': `Bearer ${adminToken}` },
+      data: qs.stringify(body)
+    });
+
+    // using .then, create a new promise which extracts the data
+    const status: Promise<number> = promise.then((response) =>
+      response.status
+    ).catch((error) => {
+      // response.status !== 200
+      const authError: ApiError = handleAxiosError(error);
+      throw authError;
+    });
+
+    return status;
+  };
+
   return {
     register,
     sendStartEmailConfirm,
-    isVerificationCodeOk
+    isVerificationCodeOk,
+    loginService,
+    logoutService
   };
 };

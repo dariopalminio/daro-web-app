@@ -3,8 +3,9 @@ import SessionContext, { ISessionContext } from '../context/session.context';
 import { ContactType } from '../model/notification/contact.type';
 import { INotificationClient } from '../service/notification-client.interface';
 import * as StateConfig from '../domain.config';
-import { IAuthClient, Tokens } from '../service/auth-client.interface';
+import { IAuthClient } from '../service/auth-client.interface';
 import { SessionType } from '../model/user/session.type';
+import { Tokens } from '../model/user/tokens.type';
 
 /**
  * use Notification 

@@ -1,6 +1,6 @@
 
 import { IUser } from '../../model/user/user.interface';
-import { UserRegisterDTO } from '../../model/register/user_register.dto.type';
+import { UserRegisterDTO } from '../../model/auth/register/user_register.dto.type';
 
 export interface IUserService {
 

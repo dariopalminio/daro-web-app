@@ -1,11 +1,12 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
-import { UserRegisterDataDTO } from '../../domain/model/register/user-register-data.dto.type';
+import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
 import { IAuthService } from '../../domain/input/port/auth.service.interface';
-import { StartConfirmEmailData } from '../../domain/model/register/start.confirm.email.data';
-import { EndConfirmEmailData } from '../../domain/model/register/end.confirm.email.data';
-import { VerificationCodeDataDTO } from '../../domain/model/register/verification_code_data.dto.type';
-import { LoginFormDTO } from '../../domain/model/auth/login-form.dto';
-import { IAuthResponse } from '../../domain/output/port/auth.interface';
+import { StartConfirmEmailData } from '../../domain/model/auth/register/start.confirm.email.data';
+import { EndConfirmEmailData } from '../../domain/model/auth/register/end.confirm.email.data';
+import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification_code_data.dto.type';
+import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
+import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
+import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 
 export const AUTH_SERVICE_TOKEN = 'AuthService_Implementation';
 
@@ -71,9 +72,16 @@ export class AuthController {
 
   @Post('login')
   async login(@Res() res, @Body() loginForm: LoginFormDTO){
-    const authResponse: IAuthResponse = await this.authService.login(loginForm.username, loginForm.password);
-    if (authResponse.isSuccess) return res.status(HttpStatus.OK).json({authResponse});
-    return res.status(HttpStatus.UNAUTHORIZED).json({authResponse});
+    const authResponse: IAuthResponse = await this.authService.login(loginForm);
+    if (authResponse.isSuccess) return res.status(HttpStatus.OK).json(authResponse.data);
+    return res.status(HttpStatus.UNAUTHORIZED).json(authResponse.data);
   };
   
+  @Post('logout')
+  async logout(@Res() res, @Body() logoutFormDTO: LogoutFormDTO){
+    const authResponse: IAuthResponse = await this.authService.logout(logoutFormDTO);
+    if (authResponse.isSuccess) return res.status(HttpStatus.OK).json(authResponse.data);
+    return res.status(HttpStatus.UNAUTHORIZED).json(authResponse.data);
+  };
+
 }

@@ -1,5 +1,8 @@
 import * as ReactDOM from "react-dom";
-import Login from "../../../../../app/ui/component/user/auth/Login";
+import Login from "../../../../../app/ui/component/user/auth/login";
+
+//TODO: Mock useTranslation() 
+
 
 jest.mock("../../../../../domain/hook/user/login.hook", () => {
   return function useLogin() {

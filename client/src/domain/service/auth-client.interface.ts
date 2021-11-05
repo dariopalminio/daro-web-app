@@ -1,24 +1,12 @@
-
-//Auth tokens
-export type Tokens = {
-  access_token: string; //JWT
-  refresh_token: string;
-  expires_in: number;
-  refresh_expires_in: number;
-  //token_type: string;
-  //'not-before-policy': number;
-  //session_state: string;
-  //scope: string;
-  date: Date;
-};
-
+import { Tokens } from '../model/user/tokens.type';
 
 //Interface to do dependency inversion
 export interface IAuthClient {
   getAdminTokenService: () => Promise<string>;
   getAppTokenService: () => Promise<string>;
   getRefreshTokenService: (refreshToken: string) => Promise<Tokens>;
-  loginService: (username: string, pass: string) => Promise<Tokens>;
+  /*
+  loginInAuthServer: (username: string, pass: string) => Promise<Tokens>;
   logoutService: (userId: string, adminToken: string) => Promise<number>;
   registerService: (
     firstname: string,
@@ -26,6 +14,7 @@ export interface IAuthClient {
     email: string,
     password: string,
     adminToken: string) => Promise<number>;
+    */
   getUserByEmailService(userEmail: string, adminToken: string): Promise<any>;
   confirmEmailService: (userId: string, userEmail: string, adminToken: string) => Promise<number>;
   };

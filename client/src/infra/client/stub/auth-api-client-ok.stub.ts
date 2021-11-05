@@ -1,5 +1,5 @@
-import { IAuthClient, Tokens } from '../../../domain/service/auth-client.interface';
-
+import { IAuthClient } from '../../../domain/service/auth-client.interface';
+import { Tokens } from '../../../domain/model/user/tokens.type';
 
 
 /**
@@ -39,8 +39,8 @@ export default function AuthApiClienOkStub(): IAuthClient {
      });
   };
 
-// Fake function
-  function loginService(username: string, pass: string): Promise<Tokens> {
+  /*
+  function loginInAuthServer(username: string, pass: string): Promise<Tokens> {
     return new Promise<Tokens>( (resolve, reject) => {
         const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw';
            
@@ -53,14 +53,14 @@ export default function AuthApiClienOkStub(): IAuthClient {
      });
   };
 
-// Stub function
+
   function logoutService(userId: string, adminToken: string): Promise<number> {
     return new Promise<number>( (resolve, reject) => {
            resolve(200);
      });
   };
 
-// Stub function
+
   function registerService(
     firstname: string,
     lastname: string,
@@ -71,7 +71,7 @@ export default function AuthApiClienOkStub(): IAuthClient {
                resolve(200);
          });
       };
-
+*/
   // Stub function
   function getUserByEmailService(
   userEmail: string, adminToken: string): Promise<any> {
@@ -108,9 +108,6 @@ function sendStartEmailConfirm(
     getAdminTokenService,
     getAppTokenService,
     getRefreshTokenService,
-    loginService,
-    logoutService,
-    registerService,
     getUserByEmailService,
     confirmEmailService,
   };

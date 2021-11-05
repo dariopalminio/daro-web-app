@@ -1,7 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ContactMessage } from '../model/contact.message';
-import { StartConfirmEmailData } from '../model/register/start.confirm.email.data';
-import { EndConfirmEmailData } from '../model/register/end.confirm.email.data';
 import { INotificationService } from '../input/port/notification.service.interface';
 import IEmailSender from '../output/port/email.sender.interface';
 import { validEmail } from '../helper/validators.helper';

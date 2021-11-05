@@ -1,3 +1,5 @@
+import { Tokens } from '../model/user/tokens.type';
+
 //Interface to do dependency inversion
 export interface IUserClient {
 
@@ -21,5 +23,8 @@ export interface IUserClient {
     adminToken: string
   ) => Promise<any>;
 
+  loginService (username: string, pass: string): Promise<Tokens>;
 
+  logoutService: (userId: string, adminToken: string) => Promise<number>;
+  
 };

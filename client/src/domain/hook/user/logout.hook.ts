@@ -3,6 +3,7 @@ import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
 import { IAuthClient } from '../../service/auth-client.interface';
+import { IUserClient } from '../../service/user-client.interface';
 
 /**
  * use Logout 
@@ -16,16 +17,18 @@ import { IAuthClient } from '../../service/auth-client.interface';
  *      login function
  *      logout function
  */
-export default function useLogout(authServiceInjected: IAuthClient | null = null) {
+export default function useLogout(authServiceInjected: IAuthClient | null = null,
+    userClientInjected: IUserClient | null = null) {
     const { removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false });
     const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
+    const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * logout function
      */
     const logout = useCallback((loggedUser: SessionType | undefined) => {
-        setState({ loading: true, error: false, msg: "logout.info.loading", isLoggedOk: true })
+        setState({ loading: true, error: false, msg: "logout.info.loading", isLoggedOk: true });
 
         const userId = loggedUser?.userId ? loggedUser?.userId : null;
         let msgKey = "";
@@ -38,7 +41,7 @@ export default function useLogout(authServiceInjected: IAuthClient | null = null
 
             responseAdminToken.then(jwtAdminToken => {
                 // Second: logoutService
-                const responseLogout = authService.logoutService(userId, jwtAdminToken);
+                const responseLogout = userClient.logoutService(userId, jwtAdminToken);
 
                 responseLogout.then(status => {
 

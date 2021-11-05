@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Body, Inject } from '@nestjs/common';
 import { INotificationService } from '../../domain/input/port/notification.service.interface';
 import { ContactMessage } from '../../domain/model/contact.message';
-import { StartConfirmEmailData } from '../../domain/model/register/start.confirm.email.data';
-import { EndConfirmEmailData } from '../../domain/model/register/end.confirm.email.data';
+
 
 
 export const SUPPORT_SERVICE_TOKEN = 'SupportService_Implementation';

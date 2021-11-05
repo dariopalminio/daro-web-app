@@ -5,7 +5,7 @@ import { IUser } from '../model/user/user.interface';
 import { User } from '../model/user/user';
 import { IRepository } from '../../domain/output/port/repository.interface';
 
-import { UserRegisterDTO } from '../model/register/user_register.dto.type';
+import { UserRegisterDTO } from '../model/auth/register/user_register.dto.type';
 
 export const USER_REPOSITORY_TOKEN = 'UserRepository_Implementation'; //ModelToken
 

@@ -1,5 +1,5 @@
-import { IAuthClient, Tokens } from '../../../domain/service/auth-client.interface';
-
+import { IAuthClient } from '../../../domain/service/auth-client.interface';
+import { Tokens } from '../../../domain/model/user/tokens.type';
 
 /**
  * Stub factory function
@@ -29,21 +29,21 @@ export default function AuthApiClientFailStub(): IAuthClient {
      });
   };
 
-// Stub function
-  function loginService(username: string, pass: string): Promise<Tokens> {
+/*
+  function loginInAuthServer(username: string, pass: string): Promise<Tokens> {
     return new Promise<Tokens>( (resolve, reject) => {
       reject(new Error("General error!"));
      });
   };
 
-// Stub function
+
   function logoutService(userId: string, adminToken: string): Promise<number> {
     return new Promise<number>( (resolve, reject) => {
       reject(new Error("General error!"));
      });
   };
 
-// Stub function
+
   function registerService(
     firstname: string,
     lastname: string,
@@ -54,7 +54,7 @@ export default function AuthApiClientFailStub(): IAuthClient {
           reject(new Error("General error!"));
          });
       };
-
+*/
 // Stub function
 function getUserByEmailService(
     userEmail: string, adminToken: string): Promise<any> {
@@ -91,9 +91,6 @@ function sendStartEmailConfirm(
     getAdminTokenService,
     getAppTokenService,
     getRefreshTokenService,
-    loginService,
-    logoutService,
-    registerService,
     getUserByEmailService,
     confirmEmailService,
   };

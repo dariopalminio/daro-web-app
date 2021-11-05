@@ -2,7 +2,8 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
-import { IAuthClient, Tokens } from '../../domain/service/auth-client.interface';
+import { IAuthClient } from '../../domain/service/auth-client.interface';
+import { Tokens } from '../../domain/model/user/tokens.type';
 
 type NewUserRepresentationType = {
   username: string
@@ -231,7 +232,8 @@ export default function AuthApiClientImpl(): IAuthClient {
    * @param param0 loginRequestData LoginRequest
    * @returns access_token JWT 
    */
-  function loginService(username: string, pass: string): Promise<Tokens> {
+   /*
+  function loginInAuthServer(username: string, pass: string): Promise<Tokens> {
 
     const body: LoginRequestType = {
       username: username,
@@ -267,7 +269,7 @@ export default function AuthApiClientImpl(): IAuthClient {
     //console.log(tokens);
     return tokens;
   };
-
+*/
   /**
    * Logout
    * 
@@ -282,6 +284,7 @@ export default function AuthApiClientImpl(): IAuthClient {
    * @param adminToken 
    * @returns 
    */
+   /*
   function logoutService(userId: string, adminToken: string): Promise<number> {
 
     //User endpoint
@@ -305,7 +308,7 @@ export default function AuthApiClientImpl(): IAuthClient {
 
     return status;
   };
-
+*/
 /**
  * Register 
  * 
@@ -325,6 +328,7 @@ export default function AuthApiClientImpl(): IAuthClient {
  * @param password 
  * @returns 
  */
+/*
   function registerService(
     firstname: string,
     lastname: string,
@@ -369,6 +373,7 @@ export default function AuthApiClientImpl(): IAuthClient {
     //console.log(statusNumber);
     return statusNumber;
   };
+*/
 
 /**
  * Get User By Email
@@ -478,9 +483,6 @@ function getUserByEmailService(userEmail: string, adminToken: string): Promise<a
     getAdminTokenService,
     getAppTokenService,
     getRefreshTokenService,
-    loginService,
-    logoutService,
-    registerService,
     getUserByEmailService,
     confirmEmailService
   };

@@ -2,7 +2,9 @@ import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
-import { IAuthClient, Tokens } from '../../service/auth-client.interface';
+import { IAuthClient } from '../../service/auth-client.interface';
+import { Tokens } from '../../model/user/tokens.type';
+import { IUserClient } from '../../service/user-client.interface';
 
 var jws = require('jws');
 
@@ -16,11 +18,13 @@ var jws = require('jws');
  *      login function
  *      logout function
  */
-export default function useLogin(authServiceInjected: IAuthClient | null = null) {
+export default function useLogin(authServiceInjected: IAuthClient | null = null,
+    userClientInjected: IUserClient | null = null) {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false, isEmailVerified: false });
     
     const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
+    const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * login
@@ -30,13 +34,14 @@ export default function useLogin(authServiceInjected: IAuthClient | null = null)
         setState({ loading: true, error: false, msg: infoKey, isLoggedOk: false, isEmailVerified: false });
 
         // First: authenticate user and pass
-        authService.loginService(email, password)
-            .then(jwt => {
+        userClient.loginService(email, password)
+            .then(tokens => {
+
                 // Second: retrieve user information
                 // Instead of making a new call to the api (with "getUserInfoService(jwt)"), 
                 // we decode the jason web token.
                 try {
-                    const userSessionValue: SessionType = convertJwtToSessionType(jwt);
+                    const userSessionValue: SessionType = convertJwtToSessionType(tokens);
                     
                     if (userSessionValue && userSessionValue.email_verified === false) {
                         //Need to verify the email
