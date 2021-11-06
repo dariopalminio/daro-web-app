@@ -3,7 +3,7 @@ import SessionContext, { ISessionContext } from '../context/session.context';
 import { ContactType } from '../model/notification/contact.type';
 import { INotificationClient } from '../service/notification-client.interface';
 import * as StateConfig from '../domain.config';
-import { IAuthClient } from '../service/auth-client.interface';
+import { IAuthTokensClient } from '../service/auth-tokens-client.interface';
 import { SessionType } from '../model/user/session.type';
 import { Tokens } from '../model/user/tokens.type';
 
@@ -14,13 +14,13 @@ import { Tokens } from '../model/user/tokens.type';
  * @returns 
  */
 export default function useNotification(
-    authClientInjected: IAuthClient | null = null,
+    authClientInjected: IAuthTokensClient | null = null,
     notifClientInjected: INotificationClient | null = null) {
 
     const { session, isTokenExpired, setSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ sending: false, hasError: false, msg: '', wasSent: false });
     const notifClient: INotificationClient = notifClientInjected ? notifClientInjected : StateConfig.notificationClient;
-    const authClient: IAuthClient = authClientInjected ? authClientInjected : StateConfig.authorizationClient;
+    const authTokensClient: IAuthTokensClient = authClientInjected ? authClientInjected : StateConfig.authorizationClient;
 
     /**
      * sendContactEmail
@@ -51,7 +51,7 @@ export default function useNotification(
                         console.log("sendContactEmailService-->UNAUTHORIZED!!!");
                         let refresh_token: string = session?.refresh_token ? session?.refresh_token : '';
                         //(refreshToken: string): Promise<Tokens>
-                        const rToken = authClient.getRefreshTokenService(refresh_token);
+                        const rToken = authTokensClient.getRefreshTokenService(refresh_token);
                         rToken.then(token => {
                             console.log("rToken:", rToken);
                         });
@@ -68,7 +68,7 @@ export default function useNotification(
         });
 
 
-    }, [setState, notifClient, authClient, getToken, session]);
+    }, [setState, notifClient, authTokensClient, getToken, session]);
 
     /**
      * Gets the acces token of the logged session (if user is already logged) or 
@@ -89,7 +89,7 @@ export default function useNotification(
                 console.log("EXPIRED!!!");
                 //getRefreshTokenService: (refreshToken: string) => Promise<Tokens>;
              const refreshToken: string = session.refresh_token ? session.refresh_token : '';
-                const result: Tokens = await authClient.getRefreshTokenService(refreshToken);
+                const result: Tokens = await authTokensClient.getRefreshTokenService(refreshToken);
                 token = result.access_token;
                 let newSession = {...session};
                 newSession.access_token = token;
@@ -99,7 +99,7 @@ export default function useNotification(
         } else {
             console.log("Requests an application token from the authentication server!");
             // Obtains app access token from authentication server
-            token = await authClient.getAppTokenService();
+            token = await authTokensClient.getAppTokenService();
         };
         return token;
     };

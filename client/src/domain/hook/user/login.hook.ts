@@ -2,7 +2,7 @@ import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
-import { IAuthClient } from '../../service/auth-client.interface';
+import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { Tokens } from '../../model/user/tokens.type';
 import { IUserClient } from '../../service/user-client.interface';
 
@@ -18,12 +18,11 @@ var jws = require('jws');
  *      login function
  *      logout function
  */
-export default function useLogin(authServiceInjected: IAuthClient | null = null,
+export default function useLogin(
     userClientInjected: IUserClient | null = null) {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false, isEmailVerified: false });
     
-    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
     const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
@@ -64,7 +63,7 @@ export default function useLogin(authServiceInjected: IAuthClient | null = null,
                 setState({ loading: false, error: true, msg: err.message, isLoggedOk: false, isEmailVerified: false });
                 removeSessionValue();
             });
-    }, [setState, setSessionValue, authService, removeSessionValue]);
+    }, [setState, setSessionValue, removeSessionValue]);
 
     /**
      * Decode JWT and return data from payload in SessionType value.

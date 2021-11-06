@@ -2,7 +2,7 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
-import { IAuthClient } from '../../domain/service/auth-client.interface';
+import { IAuthTokensClient } from '../../domain/service/auth-tokens-client.interface';
 import { Tokens } from '../../domain/model/user/tokens.type';
 
 type NewUserRepresentationType = {
@@ -73,7 +73,7 @@ type RequesRefreshToken = {
  * a (presumably new) object. In JavaScript, any function can return an object.
  * @returns 
  */
-export default function AuthApiClientImpl(): IAuthClient {
+export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
 
   /**
    * Get Admin Token

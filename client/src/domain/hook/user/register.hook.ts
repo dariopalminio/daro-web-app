@@ -2,19 +2,19 @@ import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
-import { IAuthClient } from '../../service/auth-client.interface';
+import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IUserClient } from '../../service/user-client.interface';
 
 /**
  * use Register
  * Custom Hook for create new user
  */
-export default function useRegister(authServiceInjected: IAuthClient | null = null,
+export default function useRegister(authServiceInjected: IAuthTokensClient | null = null,
     userClientInjected: IUserClient | null = null) {
 
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ loading: false, error: false, msg: '', wasCreatedOk: false });
-    const authService: IAuthClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
+    const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
     const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
@@ -30,7 +30,7 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
         setState({ loading: true, error: false, msg: "register.info.loading", wasCreatedOk: false });
 
         // First: obtains admin access token
-        const responseAdminToken: Promise<any> = authService.getAdminTokenService();
+        const responseAdminToken: Promise<any> = authTokenService.getAdminTokenService();
 
         // Second: creates a new user with authorization using admin access token
         responseAdminToken.then(jwtAdminToken => {
@@ -76,7 +76,7 @@ export default function useRegister(authServiceInjected: IAuthClient | null = nu
             removeSessionValue();
         });
 
-    }, [setState, setSessionValue, removeSessionValue, authService]);
+    }, [setState, setSessionValue, removeSessionValue, authTokenService]);
 
 
     return {

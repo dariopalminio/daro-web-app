@@ -1,15 +1,15 @@
 
-import  AuthApiClientImpl from '../auth-api-client.impl';
+import  AuthKeycloakApiClientImpl from '../auth-keycloak-api-client.impl';
 import  AuthApiClienOkStub from '../stub/auth-api-client-ok.stub';
-import { IAuthClient } from '../../../domain/service/auth-client.interface';
+import { IAuthTokensClient } from '../../../domain/service/auth-tokens-client.interface';
 
 /**
  * Factory of IAuthService implementation for dependency injection
  */
 export class AuthApiClientFactory {
-    static create(fake: boolean): IAuthClient{
+    static create(fake: boolean): IAuthTokensClient{
         //Return a factory function
         if (fake) return AuthApiClienOkStub(); //Fake for testing
-        return AuthApiClientImpl(); // Real API
+        return AuthKeycloakApiClientImpl(); // Real API
     }
 };

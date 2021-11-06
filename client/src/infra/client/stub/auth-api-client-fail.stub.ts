@@ -1,4 +1,4 @@
-import { IAuthClient } from '../../../domain/service/auth-client.interface';
+import { IAuthTokensClient } from '../../../domain/service/auth-tokens-client.interface';
 import { Tokens } from '../../../domain/model/user/tokens.type';
 
 /**
@@ -6,7 +6,7 @@ import { Tokens } from '../../../domain/model/user/tokens.type';
  * This simulates a AuthApiClient with fail responses
  * @returns 
  */
-export default function AuthApiClientFailStub(): IAuthClient {
+export default function AuthApiClientFailStub(): IAuthTokensClient {
 
 // Stub function
   function getAdminTokenService(): Promise<string> {

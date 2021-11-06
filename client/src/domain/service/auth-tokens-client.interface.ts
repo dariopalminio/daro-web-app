@@ -1,7 +1,7 @@
 import { Tokens } from '../model/user/tokens.type';
 
 //Interface to do dependency inversion
-export interface IAuthClient {
+export interface IAuthTokensClient {
   getAdminTokenService: () => Promise<string>;
   getAppTokenService: () => Promise<string>;
   getRefreshTokenService: (refreshToken: string) => Promise<Tokens>;

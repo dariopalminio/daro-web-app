@@ -9,7 +9,7 @@
     "auth.error.unauthorized": "Error: Unauthorized!",
     "auth.error.conflict": "Error: Conflict. Username already exists!",
     "auth.error.bad.request": "Error: Bad Request!",
-    "auth.error.connection.refused": "Network Error! Connection refused.",
+    "auth.error.connection.refused": "Network Error! Connection refused. Auth server may be down.",
     "auth.error.forbidden": "Error: Forbidden!",
     "auth.error.not.found": "Error: Not Found!",
     "auth.error.request.timeout": "Error: Request Timeout!",
