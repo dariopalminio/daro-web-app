@@ -15,6 +15,6 @@ export interface IAuthClient {
     password: string,
     adminToken: string) => Promise<number>;
     */
-  getUserByEmailService(userEmail: string, adminToken: string): Promise<any>;
-  confirmEmailService: (userId: string, userEmail: string, adminToken: string) => Promise<number>;
+  //getUserByEmailService(userEmail: string, adminToken: string): Promise<any>;
+  //confirmEmailService: (userId: string, userEmail: string, adminToken: string) => Promise<number>;
   };

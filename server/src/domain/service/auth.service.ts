@@ -81,7 +81,7 @@ export class AuthService implements IAuthService {
       try {
         const deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
         console.log("Deleted user! ", deletedAuthUser);
-      } catch(error) {
+      } catch (error) {
         console.log("User could not be deleted in externa auth service! ", error);
       }
       return { isSuccess: false, error: "User could not be created in database server!" };
@@ -140,28 +140,84 @@ export class AuthService implements IAuthService {
    * @param verificationCodeData 
    * @returns 
    */
-  async isVerificationCodeOk(verificationCodeData: VerificationCodeDataDTO): Promise<any> {
+  async confirmAccount(verificationCodeData: VerificationCodeDataDTO): Promise<IAuthResponse> {
 
-    console.log("verificationCodeData.token:", verificationCodeData.token);
+    //Validate token
+    if (!verificationCodeData.token) {
+          const authResponse: IAuthResponse = {
+            isSuccess: false,
+            status: 500,
+            error: "Invalid verification code token!",
+            data: {}
+          };
+          return authResponse;
+    }
+
     const partsArray = decodeToken(verificationCodeData.token);
     const decodedEmail = partsArray[0];
     const decodedCode = partsArray[1];
 
-    console.log("service__>verificationCodeData:", verificationCodeData);
-    console.log("service__>decodedEmail:", decodedEmail);
+    //Validate data
+    if (!validEmail(decodedEmail)) {
+      const authResponse: IAuthResponse = {
+        isSuccess: false,
+        status: 500,
+        error: "Invalid Email!",
+        data: { email: decodedEmail }
+      };
+      return authResponse;
+    }
+
+    //Verificate code
     let user = await this.userService.getByQuery({
       userName: decodedEmail,
       verificationCode: decodedCode,
     });
 
-    console.log(user);
+    if (!user) {
+      const authResponse: IAuthResponse = {
+        isSuccess: false,
+        status: 404,
+        error: "Not found or verification code is wrong!",
+        data: { email: decodedEmail }
+      };
+      return authResponse;
+    }
 
-    if (!user) return { verificationCodeStatus: 'false', email: decodedEmail };
+    //Update user to verificated
 
+    //Update in external auth server
+    const adminToken = await this.externalAuthService.getAdminToken();
+    const updetedAuthUser: IAuthResponse = await this.externalAuthService.confirmEmail(user.authId, decodedEmail, adminToken);
+    
+    if (!updetedAuthUser.isSuccess){
+      return updetedAuthUser;
+    }
+
+    //Update in database
     user.verified = true;
     const updatedOk: boolean = await this.userService.updateById(user._id, user);
 
-    return { verificationCodeStatus: 'true', email: decodedEmail };
+    if(!updatedOk){
+      console.log("Can not update email verified in data base for user:", user);
+    }
+
+    //Notificate to user
+    try {
+      this.sendEndEmailConfirm(user.firstName, decodedEmail);
+    } catch (error) {
+      console.log(error);
+    }
+
+    //Successful response
+    const authResponse: IAuthResponse = {
+      isSuccess: true,
+      status: 200,
+      error: undefined,
+      data: { email: decodedEmail }
+    };
+
+    return authResponse;
   };
 
   /**
@@ -170,20 +226,18 @@ export class AuthService implements IAuthService {
  * @param endConfirmEmailData 
  * @returns 
  */
-  async sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any> {
-
-    if (!validEmail(endConfirmEmailData.email)) throw new Error("Invalid email!");
+  async sendEndEmailConfirm(name: string, email: string): Promise<any> {
 
     try {
       const contentHTML = `
-          <p>Hey ${endConfirmEmailData.name}!</p>
+          <p>Hey ${name}!</p>
           <p>Welcome to the team! The registration was successful.</p>
           <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
           `;
 
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Registration successful`;
 
-      return this.sender.sendEmail(subject, endConfirmEmailData.email, contentHTML);
+      return this.sender.sendEmail(subject, email, contentHTML);
     } catch (error) {
       throw error;
     };
@@ -194,16 +248,16 @@ export class AuthService implements IAuthService {
    * @param loginForm 
    * @returns 
    */
-  async login(loginForm: LoginFormDTO): Promise<IAuthResponse>{
-    
+  async login(loginForm: LoginFormDTO): Promise<IAuthResponse> {
+
     // Validate login form TODO...
 
     const loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
     return loginAuthResp;
   };
 
-  async logout(logoutFormDTO: LogoutFormDTO): Promise<IAuthResponse>{
-    
+  async logout(logoutFormDTO: LogoutFormDTO): Promise<IAuthResponse> {
+
     // Validate login form TODO...
 
     const logoutAuthResp = await this.externalAuthService.logout(logoutFormDTO.id, logoutFormDTO.adminToken);

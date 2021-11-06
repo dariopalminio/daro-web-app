@@ -55,60 +55,13 @@ export default function useRegisterConfirmEmail(authServiceInjected: IAuthClient
             // Second: verify token
             //isVerificationCodeOk
 
-            const responseValidation: Promise<any> = userClient.isVerificationCodeOk(token, jwtAdminToken);
+            const responseValidation: Promise<any> = userClient.confirmAccount(token, jwtAdminToken);
 
-            responseValidation.then(resp => {
+            responseValidation.then(resp => { //Confirmed
                 
-                const decodedEmail = resp.data.email;
-                // get user by email from auth server
-                const responseGetUser = authService.getUserByEmailService(
-                    decodedEmail,
-                    jwtAdminToken);
-
-                responseGetUser.then(data => {
-
-                    if (!data[0]) {
-                        // keycloak.error.user-not-exist
-                        const errorUserNotFound = "User not found."; //keycloak.error.user-not-exist
-                        setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorUserNotFound });
-                        removeSessionValue();
-                    } else { // keycloak ok because user-exist
-                        const userId: string = data[0].id;
-                        const masterCreatedTimestamp: string = data[0].createdTimestamp;
-
-                        //isVerificationCodeOk
-                        const isVerificationCodeOkResult = true;
-
-
-                        if (isVerificationCodeOkResult === true) {
-
-                            // update email confirmation field in user of auth server
-                            const responseConfirm = authService.confirmEmailService(
-                                userId,
-                                decodedEmail,
-                                jwtAdminToken);
-
-                            responseConfirm.then(status => {
-                                console.log("validateEmail, status:", status);
-                                const infoConfirmedAccountSuccess = "register.confirm.success.account.confirmed";
-                                setState({ executed: true, loading: false, confirmed: true, error: false, msg: infoConfirmedAccountSuccess });
-                            }).catch(err => {
-                                // Error
-                                setState({ executed: true, loading: false, confirmed: false, error: true, msg: err.message });
-                            });
-
-                        } else {
-                            const errorVerificationCodeIsWrong = "Dont exist! Codes do not match."; //decodedCreatedTimestamp not match
-                            setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorVerificationCodeIsWrong });
-                        }
-                        //console.log("data[0]:", data[0]);
-
-                    }
-                }).catch(err => {
-                    // Error when get user
-                    const errorCannotGetUser = "Error when get user.";
-                    setState({ executed: true, loading: false, confirmed: false, error: true, msg: errorCannotGetUser });
-                });
+                console.log("validateEmail, resp:", resp);
+                const infoConfirmedAccountSuccess = "register.confirm.success.account.confirmed";
+                setState({ executed: true, loading: false, confirmed: true, error: false, msg: infoConfirmedAccountSuccess });
 
             }).catch(err => {
                 // Error: verification code not validated

@@ -47,7 +47,6 @@ export const generateToken = (): string => {
  */
 export const decodeToken = (token: string): string[] => {
     const dencodedToken = Base64.decode(token);
-    console.log("dencoded:", dencodedToken);
     var partsArray = dencodedToken.split('|');
     return partsArray;
 };

@@ -39,6 +39,15 @@ type LoginRequestType = {
   client_secret: string
 };
 
+type ConfirmEmailType = {
+  username: string
+  enabled: string
+  emailVerified: string
+  email: string
+  //attributes: {
+  //  verificationCode: string,
+  //},
+};
 
 /**
  * Keycloak
@@ -142,7 +151,7 @@ export class AuthKeycloakImpl implements IAuth {
         },
       )
       .toPromise();
-    console.log("REgister-->res.status:", response.status);
+
     switch (response.status) {
       case HttpStatus.CREATED: //201
         return { isSuccess: true, status: response.status, error: null, data: response.data };
@@ -152,7 +161,7 @@ export class AuthKeycloakImpl implements IAuth {
         return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
       case HttpStatus.CONFLICT: //409
         return {
-          isSuccess: false, 
+          isSuccess: false,
           status: response.status,
           error:
             'CONFLICT: Username already exists!',
@@ -292,21 +301,92 @@ export class AuthKeycloakImpl implements IAuth {
 
     try {
 
-    const response: AxiosResponse<any> = await this.http.post(URL,
-      JSON.stringify({}),
-      {
-        headers: {
-          Authorization: `Bearer ${adminToken}`,
-        },
-      },).toPromise();
-      console.log("logout response:",response);
-     switch (response.status) {
+      const response: AxiosResponse<any> = await this.http.post(URL,
+        JSON.stringify({}),
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }).toPromise();
+
+      switch (response.status) {
         case HttpStatus.NO_CONTENT: //204
-          return { isSuccess: true, status: response.status, error: undefined, data: {message: "logged out user"} }; //successful
+          return { isSuccess: true, status: response.status, error: undefined, data: { message: "logged out user" } }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
         case HttpStatus.NOT_FOUND: //404
-        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+        default:
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+      }
+    } catch (error) {
+      return { isSuccess: false, status: 500, error: error.message, data: null };
+    }
+  };
+
+/**
+ * Confirm Email
+ * 
+ * It asks the auth server to update the verification field of the email to true.
+ * Keycloak: PUT Update the user [SAT]
+ * call to: <http://keycloak-IP:port>/auth/admin/realms/heroes/users/<userId>
+ * with PUT command 
+ * and with header 'Content-Type: application/json' \
+ * and --data-raw in body with data emailVerified=true in next json structure: '{
+ *    "id": "56f6c53f-5150-4b42-9757-4c3dd4e7d947",
+ *    "createdTimestamp": 1588881160516,
+ *    "username": "Superman",
+ *    "enabled": true,
+ *    "totp": false,
+ *    "emailVerified": true,
+ *    "firstName": "Clark",
+ *    "lastName": "Kent",
+ *    "email": "superman@kael.com",
+ *    "disableableCredentialTypes": [],
+ *    "requiredActions": [],
+ *    "federatedIdentities": [],
+ *    "notBefore": 0,
+ *    "access": {
+ *        "manageGroupMembership": true,
+ *        "view": true,
+ *        "mapRoles": true,
+ *        "impersonate": true,
+ *        "manage": true
+ *    }
+ *}'
+ * @param userId 
+ * @param adminToken 
+ */
+  async confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<IAuthResponse> {
+
+    const body: ConfirmEmailType = {
+      email: userEmail,
+      emailVerified: "true",
+      username: userEmail,
+      enabled: "true",
+    };
+
+    //User endpoint
+    const URL = `${GlobalConfig.URLPath.users}/${userId}`;
+
+    try {
+      const response: AxiosResponse<any> = await this.http.put(
+        URL,
+        JSON.stringify(body),
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+            'Content-Type': 'application/json',
+          },
+        },).toPromise();
+
+      switch (response.status) {
+        case HttpStatus.NO_CONTENT: //204
+        return { isSuccess: true, status: response.status, error: undefined, data: { email: userEmail, message: "Email confirmed!" } }; //successful
+        case HttpStatus.UNAUTHORIZED: //401
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+        case HttpStatus.NOT_FOUND: //404
+          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
         default:
           return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
       }

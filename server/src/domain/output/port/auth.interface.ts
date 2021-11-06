@@ -16,6 +16,8 @@ export interface IAuth {
     
     deleteAuthUser(authId: string, accessToken: string): Promise<IAuthResponse>;
 
+    confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<IAuthResponse>;
+
     login(username: string, pass: string): Promise<IAuthResponse>;
 
     logout(userId: string, accessToken: string): Promise<IAuthResponse>;

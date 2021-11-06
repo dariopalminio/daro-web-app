@@ -73,14 +73,16 @@ export default function AuthApiClienOkStub(): IAuthClient {
       };
 */
   // Stub function
+  /*
   function getUserByEmailService(
   userEmail: string, adminToken: string): Promise<any> {
     return new Promise<any>( (resolve, reject) => {
       resolve({});
 });
     };
-
+*/
   // Stub function
+  /*
   function confirmEmailService(
     userId: string, 
     userEmail: string, 
@@ -89,7 +91,7 @@ export default function AuthApiClienOkStub(): IAuthClient {
                resolve(200);
          });
       };
-
+*/
       /**
  * Stub function
  
@@ -107,8 +109,6 @@ function sendStartEmailConfirm(
   return {
     getAdminTokenService,
     getAppTokenService,
-    getRefreshTokenService,
-    getUserByEmailService,
-    confirmEmailService,
+    getRefreshTokenService
   };
 };

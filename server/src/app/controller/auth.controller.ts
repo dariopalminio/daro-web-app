@@ -49,24 +49,12 @@ export class AuthController {
     } catch (e) {
       return e.message;
     };
-  }
+  };
 
-  @Post('register/confirm/sendEndEmailConfirm')
-  sendEndEmailConfirm(@Body() sendConfirmEmailData: EndConfirmEmailData): any {
-    console.log(sendConfirmEmailData);
-
-    try {
-      const sentInfo = this.authService.sendEndEmailConfirm(sendConfirmEmailData);
-      return sentInfo;
-    } catch (e) {
-      return e.message;
-    };
-  }
-
-  @Post('register/confirm/isVerificationCodeOk')
-  async isVerificationCodeOk(@Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
-    console.log("isVerificationCodeOk executed!");
-    return this.authService.isVerificationCodeOk(verificationCodeData);
+  @Post('register/confirm')
+  async confirmAccount(@Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
+    console.log("register/confirm executed!");
+    return this.authService.confirmAccount(verificationCodeData);
 
   };
 

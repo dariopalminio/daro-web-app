@@ -18,7 +18,7 @@ export interface IUserClient {
     accessToken: string
   ) => Promise<any>;
 
-  isVerificationCodeOk: (
+  confirmAccount: (
     token: string,
     adminToken: string
   ) => Promise<any>;

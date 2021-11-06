@@ -56,6 +56,7 @@ export default function AuthApiClientFailStub(): IAuthClient {
       };
 */
 // Stub function
+/*
 function getUserByEmailService(
     userEmail: string, adminToken: string): Promise<any> {
         return new Promise<any>( (resolve, reject) => {
@@ -63,8 +64,9 @@ function getUserByEmailService(
          });
       };
 
-
+*/
 // Stub function
+/*
   function confirmEmailService(
     userId: string, 
     userEmail: string, 
@@ -73,7 +75,7 @@ function getUserByEmailService(
         reject(new Error("General error!"));
        });
     };
-
+*/
 /**
  * Stub function
  
@@ -90,8 +92,6 @@ function sendStartEmailConfirm(
   return {
     getAdminTokenService,
     getAppTokenService,
-    getRefreshTokenService,
-    getUserByEmailService,
-    confirmEmailService,
+    getRefreshTokenService
   };
 };

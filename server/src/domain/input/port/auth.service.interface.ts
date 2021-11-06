@@ -11,8 +11,7 @@ export interface IAuthService {
 
     register (userRegisterData: UserRegisterDataDTO): Promise<any>;
     sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailData): Promise<any>;
-    sendEndEmailConfirm(endConfirmEmailData: EndConfirmEmailData): Promise<any>;
-    isVerificationCodeOk(verificationCodeData: VerificationCodeDataDTO): Promise<any>;
+    confirmAccount(verificationCodeData: VerificationCodeDataDTO): Promise<IAuthResponse>;
     login(loginForm: LoginFormDTO): Promise<IAuthResponse>;
     logout(logoutFormDTO: LogoutFormDTO): Promise<IAuthResponse>;
 };

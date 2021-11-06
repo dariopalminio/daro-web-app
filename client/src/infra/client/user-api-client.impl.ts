@@ -116,9 +116,9 @@ export default function UserApiClientImpl(): IUserClient {
       return info;
 
   };
-  
 
-  function isVerificationCodeOk(
+
+  function confirmAccount(
     token: string,
     adminToken: string): Promise<any> {
 
@@ -128,7 +128,7 @@ export default function UserApiClientImpl(): IUserClient {
 
     console.log("body create user:",body);
     //User endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm/isVerificationCodeOk`;
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -225,7 +225,7 @@ export default function UserApiClientImpl(): IUserClient {
   return {
     register,
     sendStartEmailConfirm,
-    isVerificationCodeOk,
+    confirmAccount,
     loginService,
     logoutService
   };

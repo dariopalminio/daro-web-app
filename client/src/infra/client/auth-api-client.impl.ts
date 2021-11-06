@@ -383,6 +383,7 @@ export default function AuthApiClientImpl(): IAuthClient {
  * @param adminToken 
  * @returns 
  */
+/*
 function getUserByEmailService(userEmail: string, adminToken: string): Promise<any> {
 
   //User endpoint
@@ -412,7 +413,7 @@ function getUserByEmailService(userEmail: string, adminToken: string): Promise<a
   // in the first position of a data array.
   return dataArray;
 };
-
+*/
 /**
  * Confirm Email
  * 
@@ -445,7 +446,7 @@ function getUserByEmailService(userEmail: string, adminToken: string): Promise<a
  *}'
  * @param userId 
  * @param adminToken 
- */
+ *//*
   function confirmEmailService(userId: string, userEmail: string, adminToken: string): Promise<number> {
 
     const body: ConfirmEmailType = {
@@ -476,14 +477,12 @@ function getUserByEmailService(userEmail: string, adminToken: string): Promise<a
 
     return status;
     };
-
+*/
   
   
   return {
     getAdminTokenService,
     getAppTokenService,
-    getRefreshTokenService,
-    getUserByEmailService,
-    confirmEmailService
+    getRefreshTokenService
   };
 };
