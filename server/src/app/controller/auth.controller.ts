@@ -1,9 +1,9 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
-import { IAuthService } from '../../domain/input/port/auth.service.interface';
-import { StartConfirmEmailData } from '../../domain/model/auth/register/start.confirm.email.data';
+import { IAuthService } from '../../domain/service/interface/auth.service.interface';
+import { StartConfirmEmailData } from '../../domain/model/auth/register/start-confirm-email-data';
 import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
-import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification_code_data.dto.type';
+import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification-code-data.dto.type';
 import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery-update-data.dto.type';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';

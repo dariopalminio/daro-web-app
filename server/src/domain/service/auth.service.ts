@@ -1,17 +1,17 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IAuthService } from '../input/port/auth.service.interface';
-import { IAuth } from '../../domain/output/port/auth.interface';
+import { IAuthService } from '../service/interface/auth.service.interface';
+import { IAuth } from '../output-port/auth.interface';
 import { UserRegisterDataDTO } from '../model/auth/register/user-register-data.dto.type';
-import { IUserService } from '../../domain/input/port/user.service.interface';
-import { UserRegisterDTO } from '../model/auth/register/user_register.dto.type';
+import { IUserService } from '../../domain/service/interface/user.service.interface';
+import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
 import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
-import IEmailSender from '../output/port/email.sender.interface';
+import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
-import { StartConfirmEmailData } from '../model/auth/register/start.confirm.email.data';
+import { StartConfirmEmailData } from '../model/auth/register/start-confirm-email-data';
 import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
-import { VerificationCodeDataDTO } from '../model/auth/register/verification_code_data.dto.type';
+import { VerificationCodeDataDTO } from '../model/auth/register/verification-code-data.dto.type';
 import { RecoveryUpdateDataDTO } from '../model/auth/recovery/recovery-update-data.dto.type';
 import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
@@ -19,6 +19,9 @@ import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 export const AUTH_IMPL_TOKEN = 'Auth_Implementation'; //Implementation Token
 export const USER_SERVICE_IMPL_TOKEN = 'UserService_Implementation'; //Implementation Token
 
+/**
+ * Authorization service
+ */
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
@@ -35,7 +38,8 @@ export class AuthService implements IAuthService {
   /**
    * Register
    * 
-   * Create a new user in authentication server and in
+   * Create a new user in authentication server and in data base.
+   * The user will have the email without confirming until he confirms it.
    * @param userRegisterData 
    * @returns 
    */
@@ -90,7 +94,7 @@ export class AuthService implements IAuthService {
 
   /**
    * Send Start Email Confirm
-   * Send email with verification code to registration process.
+   * Send an email-verification email to the user An email contains a link the user can click to verify their email address.
    * 
    * @param startConfirmEmailData 
    * @returns 
@@ -130,25 +134,24 @@ export class AuthService implements IAuthService {
     };
   };
 
-
   /**
-   * isVerificationCodeOk
+   * Confirm Account
+   * Confirm account from an email-verification action by user.
    * 
-   * verificationCodeData.user is email id from Keycloak
    * @param verificationCodeData 
    * @returns 
    */
   async confirmAccount(verificationCodeData: VerificationCodeDataDTO): Promise<IAuthResponse> {
 
     let user = null;
-    try{
+    try {
       user = await this.verificateToken(verificationCodeData.token);
-    }catch(error){
+    } catch (error) {
       const authResponse: IAuthResponse = {
         isSuccess: false,
         status: 500,
         error: error.message,
-        data: {message: "Invalid token!"}
+        data: { message: "Invalid token!" }
       };
       return authResponse;
     }
@@ -158,8 +161,8 @@ export class AuthService implements IAuthService {
     //Update in external auth server
     const adminToken = await this.externalAuthService.getAdminToken();
     const updetedAuthUser: IAuthResponse = await this.externalAuthService.confirmEmail(user.authId, user.email, adminToken);
-    
-    if (!updetedAuthUser.isSuccess){
+
+    if (!updetedAuthUser.isSuccess) {
       return updetedAuthUser;
     }
 
@@ -167,7 +170,7 @@ export class AuthService implements IAuthService {
     user.verified = true;
     const updatedOk: boolean = await this.userService.updateById(user._id, user);
 
-    if(!updatedOk){
+    if (!updatedOk) {
       console.log("Can not update email verified in data base for user:", user);
     }
 
@@ -193,7 +196,7 @@ export class AuthService implements IAuthService {
   /**
  * Send Start Email Confirm
  * Send email with welcome message to end registration process.
- * @param endConfirmEmailData 
+ * @param 
  * @returns 
  */
   async sendEndEmailConfirm(name: string, email: string): Promise<any> {
@@ -234,7 +237,7 @@ export class AuthService implements IAuthService {
   };
 
   /**
-   * 
+   * login
    * @param loginForm 
    * @returns 
    */
@@ -266,7 +269,7 @@ export class AuthService implements IAuthService {
 
     try {
       //generate verification code
-      const newVerificationCode = generateToken(); 
+      const newVerificationCode = generateToken();
 
       //save verification code
       let user = await this.userService.getByQuery({ userName: startRecoveryDataDTO.userName });
@@ -304,28 +307,28 @@ export class AuthService implements IAuthService {
    * @returns 
    */
   async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO): Promise<IAuthResponse> {
-        let user = null;
-        try{
-          user = await this.verificateToken(recoveryUpdateDataDTO.token);
-        }catch(error){
-          const authResponse: IAuthResponse = {
-            isSuccess: false,
-            status: 500,
-            error: error.message,
-            data: {message: "Invalid token!"}
-          };
-          return authResponse;
-        }
+    let user = null;
+    try {
+      user = await this.verificateToken(recoveryUpdateDataDTO.token);
+    } catch (error) {
+      const authResponse: IAuthResponse = {
+        isSuccess: false,
+        status: 500,
+        error: error.message,
+        data: { message: "Invalid token!" }
+      };
+      return authResponse;
+    }
 
-        //Update password in user
-        //Update in external auth server
-        const adminToken = await this.externalAuthService.getAdminToken();
-        const newPassword = recoveryUpdateDataDTO.password;
-        const updetedAuthUser: IAuthResponse = await this.externalAuthService.updatePassword(user.authId, newPassword, adminToken);
-        console.log(updetedAuthUser);
-        if (!updetedAuthUser.isSuccess){
-          return updetedAuthUser;
-        }
+    //Update password in user
+    //Update in external auth server
+    const adminToken = await this.externalAuthService.getAdminToken();
+    const newPassword = recoveryUpdateDataDTO.password;
+    const updetedAuthUser: IAuthResponse = await this.externalAuthService.resetPassword(user.authId, newPassword, adminToken);
+    console.log(updetedAuthUser);
+    if (!updetedAuthUser.isSuccess) {
+      return updetedAuthUser;
+    }
 
     //Notificate to user
     try {
@@ -352,27 +355,27 @@ export class AuthService implements IAuthService {
    * @param token 
    * @returns 
    */
-  async verificateToken(token: string): Promise<any>{
+  async verificateToken(token: string): Promise<any> {
 
-      //Validate token
-      if (!token) throw Error("Invalid verification code token!");
-  
-      const partsArray = decodeToken(token);
-      const decodedEmail = partsArray[0];
-      const decodedCode = partsArray[1];
-  
-      //Validate data
-      if (!validEmail(decodedEmail)) throw Error("Invalid Email!");
-  
-      //Verificate code
-      let user = await this.userService.getByQuery({
-        userName: decodedEmail,
-        verificationCode: decodedCode,
-      });
-  
-      if (!user) throw Error("Not found or verification code is wrong!");
-       
-      return user;
+    //Validate token
+    if (!token) throw Error("Invalid verification code token!");
+
+    const partsArray = decodeToken(token);
+    const decodedEmail = partsArray[0];
+    const decodedCode = partsArray[1];
+
+    //Validate data
+    if (!validEmail(decodedEmail)) throw Error("Invalid Email!");
+
+    //Verificate code
+    let user = await this.userService.getByQuery({
+      userName: decodedEmail,
+      verificationCode: decodedCode,
+    });
+
+    if (!user) throw Error("Not found or verification code is wrong!");
+
+    return user;
   };
 
 };

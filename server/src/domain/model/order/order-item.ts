@@ -1,4 +1,4 @@
-import { IOrderItem } from './order.item.interface';
+import { IOrderItem } from './order-item.interface';
 
 export class OrderItem implements IOrderItem {
 

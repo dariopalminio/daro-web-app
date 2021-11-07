@@ -1,4 +1,4 @@
-import { IOrderItem } from './order.item.interface';
+import { IOrderItem } from './order-item.interface';
 
 export interface IOrder{
     _id: string; //_id: holds an ObjectId.

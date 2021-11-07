@@ -1,5 +1,5 @@
 import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put } from '@nestjs/common';
-import { IProductService } from '../../domain/input/port/product.service.interface';
+import { IProductService } from '../../domain/service/interface/product.service.interface';
 import { Product } from '../../domain/model/product/product';
 
 export const PRODUCT_SERVICE_TOKEN = 'ProductService_Implementation';

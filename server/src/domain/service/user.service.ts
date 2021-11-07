@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 
-import { IUserService } from '../input/port/user.service.interface';
+import { IUserService } from '../service/interface/user.service.interface';
 import { IUser } from '../model/user/user.interface';
 import { User } from '../model/user/user';
-import { IRepository } from '../../domain/output/port/repository.interface';
+import { IRepository } from '../output-port/repository.interface';
 
-import { UserRegisterDTO } from '../model/auth/register/user_register.dto.type';
+import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
 
 export const USER_REPOSITORY_TOKEN = 'UserRepository_Implementation'; //ModelToken
 
@@ -69,6 +69,6 @@ export class UserService implements IUserService {
   async getByQuery(query: any): Promise<IUser> {
     const user =  await this.userRepository.getByQuery(query);
     return user;
-}
+  };
 
 };

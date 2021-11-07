@@ -13,7 +13,7 @@ import { AuthService, AUTH_IMPL_TOKEN, USER_SERVICE_IMPL_TOKEN } from './domain/
 import { UserService, USER_REPOSITORY_TOKEN } from './domain/service/user.service';
 import { UserController, USER_SERVICE_TOKEN } from './app/controller/user.controller';
 import { AuthController, AUTH_SERVICE_TOKEN } from './app/controller/auth.controller';
-import { EmailSmtpSenderAdapter } from './infra/email/email.sender.adapter';
+import { EmailSmtpSenderAdapter } from './infra/email/email-sender.adapter';
 import { AuthMiddleware } from './app/middleware/auth.middleware';
 import { ProductSchema, 
   PRODUCT_COLLECTION_TOKEN } from './infra/database/schema/product.schema';

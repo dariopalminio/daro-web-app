@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IRepository } from '../../../domain/output/port/repository.interface';
+import { IRepository } from '../../../domain/output-port/repository.interface';
 import { IUser } from '../../../domain/model/user/user.interface';
 import { User } from '../../../domain/model/user/user';
 import { UserDocument, USER_COLLECTION_TOKEN } from '../schema/user.schema';

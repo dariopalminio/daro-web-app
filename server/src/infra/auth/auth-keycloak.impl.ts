@@ -1,5 +1,5 @@
 import { Injectable, HttpService, HttpStatus, Inject } from '@nestjs/common';
-import { IAuth } from '../../domain/output/port/auth.interface';
+import { IAuth } from '../../domain/output-port/auth.interface';
 import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import * as GlobalConfig from '../../GlobalConfig';
 import { stringify } from 'querystring';
@@ -62,6 +62,8 @@ export class AuthKeycloakImpl implements IAuth {
   /**
    * Get Admin Token
    * 
+   * POST /auth/realms/{realm}/protocol/openid-connect/token
+   * 
    * Get a admin access token (from auth server) for next time can create user or update user.
    * same login url: `/auth/realms/${your-realm}/protocol/openid-connect/token`,
    * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -78,7 +80,7 @@ export class AuthKeycloakImpl implements IAuth {
     };
 
     // Token endpoint
-    const URL = GlobalConfig.URLPath.token;
+    const URL = GlobalConfig.KeycloakPath.token;
 
     const res = await this.http.post(URL, stringify(body),
       {
@@ -92,6 +94,8 @@ export class AuthKeycloakImpl implements IAuth {
 
   /**
    * Register 
+   * 
+   * POST /auth/admin/realms/{realm}/users
    * 
    * Create a new user and email must be unique.
    * Keycloak POST Create user [SAT]. 
@@ -137,7 +141,7 @@ export class AuthKeycloakImpl implements IAuth {
     };
 
     //User endpoint
-    const URL = GlobalConfig.URLPath.users;
+    const URL = GlobalConfig.KeycloakPath.users;
 
     const response: AxiosResponse<any> = await this.http
       .post(
@@ -172,9 +176,10 @@ export class AuthKeycloakImpl implements IAuth {
     }
   };
 
-
   /**
    * Get User By username
+   * 
+   * GET /auth/admin/realms/{realm}/users
    * 
    * Get users returns an users, filtered according to username params.
    * @param username 
@@ -185,7 +190,7 @@ export class AuthKeycloakImpl implements IAuth {
 
     let access_token = adminToken;
 
-    const URL = GlobalConfig.URLPath.users;
+    const URL = GlobalConfig.KeycloakPath.users;
 
     const headers = {
       Authorization: `Bearer ${access_token}`,
@@ -203,13 +208,16 @@ export class AuthKeycloakImpl implements IAuth {
 
   /**
    * Delete user from Keycloak
+   * 
+   * DELETE /auth/admin/realms/{realm}/users/{Id}
+   * 
    * @param authId 
    * @param accessToken 
    * @returns 
    */
   async deleteAuthUser(authId: string, accessToken: string): Promise<IAuthResponse> {
 
-    const URL = `${GlobalConfig.URLPath.users}/${authId}`;
+    const URL = `${GlobalConfig.KeycloakPath.users}/${authId}`;
     const header = {
       Authorization: `Bearer ${accessToken}`,
     };
@@ -234,6 +242,8 @@ export class AuthKeycloakImpl implements IAuth {
 
   /**
    * Login
+   * 
+   * POST /auth/realms/{realm}/protocol/openid-connect/token
    * 
    * Consumer cliente for login on Keycloak Server & Bearer Token & with client secret
    * configured with OpenID Endpoint configuration, Login with email = true and Access Type = public
@@ -272,7 +282,7 @@ export class AuthKeycloakImpl implements IAuth {
     };
 
     //Login endpoint
-    const URL = GlobalConfig.URLPath.token;
+    const URL = GlobalConfig.KeycloakPath.token;
     try {
       //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
       const response: AxiosResponse<any> = await this.http.post(URL, stringify(body)).toPromise();
@@ -290,10 +300,20 @@ export class AuthKeycloakImpl implements IAuth {
     }
   };
 
+  /**
+   * Remove all user sessions associated with the user Also send notification to all clients that have an 
+   * admin URL to invalidate the sessions for the particular user.
+   * 
+   * POST /{realm}/users/{id}/logout
+   * 
+   * @param userId 
+   * @param adminToken 
+   * @returns 
+   */
   async logout(userId: string, adminToken: string): Promise<IAuthResponse> {
 
     //User endpoint
-    const URL = `${GlobalConfig.URLPath.users}/${userId}/logout`;
+    const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/logout`;
 
     const header = {
       Authorization: `Bearer ${adminToken}`,
@@ -326,6 +346,8 @@ export class AuthKeycloakImpl implements IAuth {
 
 /**
  * Confirm Email
+ * 
+ * POST /auth/admin/realms/{realm}/users/{Id}
  * 
  * It asks the auth server to update the verification field of the email to true.
  * Keycloak: PUT Update the user [SAT]
@@ -367,7 +389,7 @@ export class AuthKeycloakImpl implements IAuth {
     };
 
     //User endpoint
-    const URL = `${GlobalConfig.URLPath.users}/${userId}`;
+    const URL = `${GlobalConfig.KeycloakPath.users}/${userId}`;
 
     try {
       const response: AxiosResponse<any> = await this.http.put(
@@ -395,7 +417,17 @@ export class AuthKeycloakImpl implements IAuth {
     }
   };
 
-  async updatePassword(
+  /**
+   * Set up a new password for the user.
+   * 
+   * PUT /{realm}/users/{id}/reset-password
+   * 
+   * @param userId 
+   * @param newPassword 
+   * @param adminToken 
+   * @returns 
+   */
+  async resetPassword(
     userId: string,
     newPassword: string,
     adminToken: string
@@ -408,7 +440,7 @@ export class AuthKeycloakImpl implements IAuth {
     };
 
         //User endpoint
-        const URL = `${GlobalConfig.URLPath.users}/${userId}/reset-password`;
+        const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/reset-password`;
 
     const res = await this.http
       .put(
@@ -436,4 +468,4 @@ export class AuthKeycloakImpl implements IAuth {
   };
 
 
-}
+};

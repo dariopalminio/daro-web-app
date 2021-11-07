@@ -1,4 +1,4 @@
-import { IAuthResponse } from '../../model/auth/auth-response.interface';
+import { IAuthResponse } from '../model/auth/auth-response.interface';
   
 export interface IAuth {
 
@@ -22,7 +22,7 @@ export interface IAuth {
 
     logout(userId: string, accessToken: string): Promise<IAuthResponse>;
 
-    updatePassword(
+    resetPassword(
         userId: string,
         newPassword: string,
         adminToken: string

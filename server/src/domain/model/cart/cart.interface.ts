@@ -1,4 +1,4 @@
-import { ICartItem } from './cart.item.interface';
+import { ICartItem } from './cart-item.interface';
 
 export interface ICart{
     _id: string; //_id: holds an ObjectId.

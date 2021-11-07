@@ -93,7 +93,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
     };
 
     // Token endpoint
-    const URL = OriginConfig.URLPath.token
+    const URL = OriginConfig.KeycloakPath.token
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body))
@@ -129,7 +129,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
     };
 
     // Token endpoint
-    const URL = OriginConfig.URLPath.token
+    const URL = OriginConfig.KeycloakPath.token
     //console.log("GlobalConfig.URLPath.TOKEN:");
     //console.log(OriginConfig.URLPath.token);
 
@@ -177,7 +177,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
     };
 
     // Token endpoint
-    const URL = OriginConfig.URLPath.token
+    const URL = OriginConfig.KeycloakPath.token
     //console.log("GlobalConfig.URLPath.TOKEN:");
     //console.log(OriginConfig.URLPath.token);
 
@@ -244,7 +244,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
     };
 
     //Login endpoint
-    const URL = OriginConfig.URLPath.token;
+    const URL = OriginConfig.KeycloakPath.token;
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
@@ -288,7 +288,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
   function logoutService(userId: string, adminToken: string): Promise<number> {
 
     //User endpoint
-    const URL = `${OriginConfig.URLPath.users}/${userId}/logout`;
+    const URL = `${OriginConfig.KeycloakPath.users}/${userId}/logout`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -353,7 +353,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
     };
 
     //User endpoint
-    const URL = OriginConfig.URLPath.users;
+    const URL = OriginConfig.KeycloakPath.users;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -387,7 +387,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
 function getUserByEmailService(userEmail: string, adminToken: string): Promise<any> {
 
   //User endpoint
-  const URL = OriginConfig.URLPath.users
+  const URL = OriginConfig.KeycloakPath.users
 
   //If username = email
   const config = {
@@ -457,7 +457,7 @@ function getUserByEmailService(userEmail: string, adminToken: string): Promise<a
     };
 
     //User endpoint
-    const URL = `${OriginConfig.URLPath.users}/${userId}`;
+    const URL = `${OriginConfig.KeycloakPath.users}/${userId}`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'put',

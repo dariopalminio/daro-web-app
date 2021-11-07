@@ -38,7 +38,7 @@ export const Keycloak = {
   verify_email:  ((process.env.REACT_APP_AUTH_VERIFY_EMAIL === 'true') ? true : false) as boolean,
 };
 
-export const URLPath = {
+export const KeycloakPath = {
   user_info: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/userinfo`,
   users: `${APIEndpoints.auth}/auth/admin/realms/${Keycloak.realm}/users`,
   token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,

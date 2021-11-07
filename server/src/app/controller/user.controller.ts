@@ -1,7 +1,7 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
-import { IUserService } from '../../domain/input/port/user.service.interface';
+import { IUserService } from '../../domain/service/interface/user.service.interface';
 import { IUser } from '../../domain/model/user/user.interface';
-import { UserRegisterDTO } from '../../domain/model/auth/register/user_register.dto.type';
+import { UserRegisterDTO } from '../../domain/model/auth/register/user-register.dto.type';
 
 export const USER_SERVICE_TOKEN = 'UserService_Implementation';
 

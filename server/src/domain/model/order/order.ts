@@ -1,5 +1,5 @@
 import { IOrder } from './order.interface';
-import { IOrderItem } from './order.item.interface';
+import { IOrderItem } from './order-item.interface';
 
 export class Order implements IOrder {
 

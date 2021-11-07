@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Inject } from '@nestjs/common';
-import { INotificationService } from '../../domain/input/port/notification.service.interface';
+import { INotificationService } from '../../domain/service/interface/notification.service.interface';
 import { ContactMessage } from '../../domain/model/contact.message';
 
 

@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IProductService } from '../input/port/product.service.interface';
+import { IProductService } from '../service/interface/product.service.interface';
 import { IProduct } from '../model/product/product.interface';
-import { IRepository } from '../../domain/output/port/repository.interface';
+import { IRepository } from '../output-port/repository.interface';
 
 
 //export const PRODUCT_COLLECTION_TOKEN = 'products'; //ModelToken

@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ContactMessage } from '../model/contact.message';
-import { INotificationService } from '../input/port/notification.service.interface';
-import IEmailSender from '../output/port/email.sender.interface';
+import { INotificationService } from '../service/interface/notification.service.interface';
+import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { Base64 } from 'js-base64';

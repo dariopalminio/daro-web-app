@@ -1,5 +1,5 @@
 import { ICart } from './cart.interface';
-import { ICartItem } from './cart.item.interface';
+import { ICartItem } from './cart-item.interface';
 
 export class Cart implements ICart {
 

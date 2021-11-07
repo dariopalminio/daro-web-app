@@ -1,20 +1,47 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './product.service';
-import { IRepository } from '../../domain/output/port/repository.interface';
+import { IRepository } from '../output-port/repository.interface';
 import { IProduct } from '../model/product/product.interface';
 
+/**
+    getAll(): Promise<Array<T>>;
+    find(query: any): Promise<Array<T>>; 
+    getById(id: string): Promise<T>;
+    getByQuery(query: any): Promise<T>;
+    hasById(id: string): Promise<boolean> ;
+    hasByQuery(query: any): Promise<boolean>;
+    create<R>(doc: R | T): Promise<boolean>;
+    updateById<R>(id: string, doc: R | T): Promise<boolean>;
+    update(query: any, valuesToSet: any): Promise<boolean>;
+    delete(id: string): Promise<boolean>;
+ */
 
 class ProductRepositoryNegativeStub implements IRepository<IProduct> {
     async getAll(): Promise<IProduct[]> {
         return [];
     };
+    async find(query: any): Promise<IProduct[]> {
+        return [];
+    }
     async getById(id: string): Promise<IProduct> {
         return null;
     };
-    async create<CategoryDTO>(doc: CategoryDTO): Promise<boolean> {
+    async getByQuery(query: any): Promise<IProduct> {
+        return null;
+    }
+    async hasById(id: string): Promise<boolean> {
+        return false;
+    }
+    async hasByQuery(query: any): Promise<boolean> {
+        return false;
+    }
+    async create<IProduct>(product: IProduct): Promise<boolean> {
         return false;
     };
-    async update(id: string, doc: any): Promise<boolean> {
+    async updateById(id: string, product: IProduct): Promise<boolean> {
+        return false;
+    };
+    async update(query: any, valuesToSet: any): Promise<boolean> {
         return false;
     };
     async delete(id: string): Promise<boolean> {
@@ -63,8 +90,8 @@ describe('ProductService', () => {
         expect(deleted).toEqual(false);
     });
 
-    it('productService.update should return false', async () => {
-        const deleted = await service.update("",null);
+    it('productService.updateById should return false', async () => {
+        const deleted = await service.updateById("",null);
         expect(deleted).toEqual(false);
     });
 
