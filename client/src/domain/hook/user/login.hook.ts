@@ -2,9 +2,8 @@ import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/user/session.type';
 import * as StateConfig from '../../domain.config';
-import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { Tokens } from '../../model/user/tokens.type';
-import { IUserClient } from '../../service/user-client.interface';
+import { IAuthClient } from '../../service/auth-client.interface';
 
 var jws = require('jws');
 
@@ -19,18 +18,18 @@ var jws = require('jws');
  *      logout function
  */
 export default function useLogin(
-    userClientInjected: IUserClient | null = null) {
+    userClientInjected: IAuthClient | null = null) {
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
-    const [state, setState] = useState({ loading: false, error: false, msg: '', isLoggedOk: false, isEmailVerified: false });
+    const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
     
-    const userClient: IUserClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const userClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * login
      */
     const login = useCallback((email: string, password: string) => {
         const infoKey = "login.info.loading";
-        setState({ loading: true, error: false, msg: infoKey, isLoggedOk: false, isEmailVerified: false });
+        setState({ isProcessing: true, hasError: false, msg: infoKey, isSuccess: false });
 
         // First: authenticate user and pass
         userClient.loginService(email, password)
@@ -45,22 +44,22 @@ export default function useLogin(
                     if (userSessionValue && userSessionValue.email_verified === false) {
                         //Need to verify the email
                         const errorKey = "login.error.unconfirmed.account";
-                        setState({ loading: false, error: true, msg: errorKey, isLoggedOk: false, isEmailVerified: false });
+                        setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
                     }else{
                         // Authorized
                         const msgkey = "login.success.authorized";
-                        setState({ loading: false, error: false, msg: msgkey, isLoggedOk: true, isEmailVerified: true });
+                        setState({ isProcessing: false, hasError: false, msg: msgkey, isSuccess: true });
                     }
                     setSessionValue(userSessionValue);
                 } catch (e: any) {
                     // Unauthorized by error in decoding JWT
-                    setState({ loading: false, error: true, msg: e.message, isLoggedOk: false, isEmailVerified: false });
+                    setState({ isProcessing: false, hasError: true, msg: e.message, isSuccess: false });
                     removeSessionValue();
                 }
             })
             .catch(err => {
                 // Unauthorized
-                setState({ loading: false, error: true, msg: err.message, isLoggedOk: false, isEmailVerified: false });
+                setState({ isProcessing: false, hasError: true, msg: err.message, isSuccess: false });
                 removeSessionValue();
             });
     }, [setState, setSessionValue, removeSessionValue]);
@@ -98,11 +97,10 @@ export default function useLogin(
     };
 
     return {
-        isLoggedOk: state.isLoggedOk,
-        isLoginLoading: state.loading,
-        hasLoginError: state.error,
+        isSuccess: state.isSuccess,
+        isProcessing: state.isProcessing,
+        hasError: state.hasError,
         msg: state.msg,
-        isEmailVerified: state.isEmailVerified,
         login,
     };
 };

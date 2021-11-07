@@ -61,11 +61,10 @@ const Login: FunctionComponent = () => {
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Email inválido");
   const {
-    isLoginLoading,
-    hasLoginError,
+    isProcessing,
+    hasError,
     msg,
-    isLoggedOk,
-    isEmailVerified,
+    isSuccess,
     login,
   } = useLogin();
   const classes = useStyles();
@@ -96,7 +95,7 @@ const Login: FunctionComponent = () => {
 
   return (
     <div>
-      {!isLoginLoading && (
+      {!isProcessing && (
         <form
           id="LoginForm"
           data-testid="LoginForm"
@@ -156,14 +155,14 @@ const Login: FunctionComponent = () => {
 
       <br />
 
-      {isLoginLoading && (
+      {isProcessing && (
         <div className="box">
           <strong>{t('login.info.loading')}</strong>
           <CircularProgress />
         </div>
       )}
 
-      {hasLoginError && <AlertError msg={t(msg)} />}
+      {hasError && <AlertError msg={t(msg)} />}
 
     </div>
   );

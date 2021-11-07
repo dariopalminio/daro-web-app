@@ -78,7 +78,7 @@ export const RegisterForm: FunctionComponent = () => {
   const validator: IUserValidator = UserValidatorFactory.create();
   const { t, i18n } = useTranslation();
   
-  const { wasCreatedOk, isRegisterLoading, hasRegisterError, msg, register } =
+  const { isProcessing, isSuccess, hasError, msg, register } =
     useRegister();
 
   /**
@@ -119,7 +119,7 @@ export const RegisterForm: FunctionComponent = () => {
 
   return (
     <div>
-      {wasCreatedOk && (
+      {isSuccess && (
         <Redirect to='/user/register/confirm/start'/>
       )}
 
@@ -242,9 +242,9 @@ export const RegisterForm: FunctionComponent = () => {
         </form>
       )}
 
-      {hasRegisterError && <Alert severity="error">{t(msg)}</Alert>}
+      {hasError && <Alert severity="error">{t(msg)}</Alert>}
 
-      {isRegisterLoading && <Alert severity="info">{t(msg)}</Alert>}
+      {isProcessing && <Alert severity="info">{t(msg)}</Alert>}
     </div>
   );
 };

@@ -8,7 +8,7 @@ import clsx from "clsx";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
-import useRegisterConfirmStart from "../../../../../domain/hook/user/register-confirm-start.hook";
+import useRegister from "../../../../../domain/hook/user/register.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useTranslation } from 'react-i18next';
@@ -64,13 +64,12 @@ const RegisterConfirmStart: FunctionComponent = () => {
   const { t, i18n } = useTranslation();
   
   const {
-    wasConfirmedOk,
-    isRegisterLoading,
-    hasRegisterError,
-    confirmMsg,
-    redirect,
+    isProcessing,
+    hasError,
+    msg,
+    isSuccess,
     startConfirmEmail,
-  } = useRegisterConfirmStart();
+  } = useRegister();
 
 
 
@@ -95,13 +94,8 @@ const RegisterConfirmStart: FunctionComponent = () => {
 
   return (
     <div>
-      {redirect && (<Redirect to='/user/auth' />)}
+      {isSuccess && (<Redirect to='/user/auth' />)}
 
-      {wasConfirmedOk && (
-        <Alert severity="success">
-          {t('register.start.success.account.confirmed')}
-        </Alert>
-      )}
       {!session?.email_verified && (
 
           <Paper className={clsx(classes.paperLoginForm)}>
@@ -135,11 +129,11 @@ const RegisterConfirmStart: FunctionComponent = () => {
           </Paper>
      
       )}
-      {hasRegisterError && <Alert severity="error">{t(confirmMsg)}</Alert>}
+      {hasError && <Alert severity="error">{t(msg)}</Alert>}
 
-      {isRegisterLoading && <Alert severity="info">{t(confirmMsg)}</Alert>}
+      {isProcessing && <Alert severity="info">{t(msg)}</Alert>}
 
-      {isRegisterLoading && (<CircularProgress />)}
+      {isProcessing && (<CircularProgress />)}
 
     </div>
   );

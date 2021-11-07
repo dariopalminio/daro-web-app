@@ -395,4 +395,45 @@ export class AuthKeycloakImpl implements IAuth {
     }
   };
 
+  async updatePassword(
+    userId: string,
+    newPassword: string,
+    adminToken: string
+  ): Promise<IAuthResponse> {
+    
+    const body = {
+      type: 'password',
+      temporary: false,
+      value: newPassword,
+    };
+
+        //User endpoint
+        const URL = `${GlobalConfig.URLPath.users}/${userId}/reset-password`;
+
+    const res = await this.http
+      .put(
+          URL,
+        JSON.stringify(body),
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .toPromise();
+
+    switch (res.status) {
+      case HttpStatus.NO_CONTENT: //204
+        return { isSuccess: true, status: res.status, error: undefined, data: { message: 'Password has updated successful' } }; //successful
+      case HttpStatus.UNAUTHORIZED: //401
+        return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
+      case HttpStatus.BAD_REQUEST: //no puede repetir contraseña
+        return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
+      default:
+        return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
+    }
+  };
+
+
 }

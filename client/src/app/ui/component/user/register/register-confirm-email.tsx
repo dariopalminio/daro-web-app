@@ -1,4 +1,5 @@
-import useRegisterConfirmEmail from "../../../../../domain/hook/user/register-confirm-email.hook";
+import React, { useState, useContext } from "react";
+import useRegister from "../../../../../domain/hook/user/register.hook";
 import emailOkImage from "../../../image/email_ok.png";
 import { useTranslation } from 'react-i18next';
 
@@ -14,20 +15,25 @@ type TParams = { token: string };
  * @visibleName UserRegisterConfirmEmail
  */
 function RegisterConfirmEmail({ token }: TParams) {
-  const { executed, loading, confirmed, error, msg, validateEmail } =
-    useRegisterConfirmEmail();
+  const [isExecuted, setIsExecuted] = useState(false);
+  const { isProcessing, isSuccess, hasError, msg, confirmAccount } = useRegister();
   const { t, i18n } = useTranslation();
+
+  const executeConfirmRequest = () => {
+    setIsExecuted(true);
+    confirmAccount(token);
+  };
 
   return (
     <div>
 
-      {!executed && validateEmail(token)}
+      {!isExecuted && executeConfirmRequest()}
 
-      {loading && (
+      {isProcessing && (
           <CircularProgress />
       )}
 
-      {(confirmed && !loading) &&
+      {(isSuccess && !isProcessing) &&
       (<div>
         <img src={String(emailOkImage)} alt="emailOkImage" style={{width:"25%", height:"25%"}}/>
       <Alert severity="success">{t(msg)}</Alert>
@@ -35,7 +41,7 @@ function RegisterConfirmEmail({ token }: TParams) {
       )
       }
 
-      {(!confirmed && !loading && error) && <Alert severity="error">{t(msg)}</Alert>}
+      {(!isSuccess && !isProcessing && hasError) && <Alert severity="error">{t(msg)}</Alert>}
 
     </div>
   );

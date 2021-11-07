@@ -2,14 +2,14 @@ import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
-import { IUserClient } from '../../domain/service/user-client.interface';
+import { IAuthClient } from '../../domain/service/auth-client.interface';
 import { Tokens } from '../../domain/model/user/tokens.type';
 
 /**
  * User Api Client Implementation
  * @returns 
  */
-export default function UserApiClientImpl(): IUserClient {
+export default function UserApiClientImpl(): IAuthClient {
 
   /**
    * register
@@ -76,7 +76,7 @@ export default function UserApiClientImpl(): IUserClient {
     accessToken: string ): Promise<any> {
 
     //Notification endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm/sendStartEmailConfirm`;
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm/start`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -99,14 +99,12 @@ export default function UserApiClientImpl(): IUserClient {
         .catch((error) => {
           const authError: ApiError = handleAxiosError(error);
           if (authError.status === AuthStatusEnum.UNAUTHORIZED ){
-            console.log("sendContactEmailService-->UNAUTHORIZED!!!");
             // Request a new token
             //const newAccessToken = accessToken;
             // Do a retry with a new token
             //return sendContactEmailService(contactData, newAccessToken, false);
             throw authError;
           }else{
-            console.log("sendContactEmailService-->throw authError!!!");
             throw authError;
           };
         });
@@ -114,10 +112,15 @@ export default function UserApiClientImpl(): IUserClient {
         console.log(info);
         
       return info;
-
   };
 
 
+  /**
+   * Confirm Account
+   * @param token 
+   * @param adminToken 
+   * @returns 
+   */
   function confirmAccount(
     token: string,
     adminToken: string): Promise<any> {
@@ -222,11 +225,100 @@ export default function UserApiClientImpl(): IUserClient {
     return status;
   };
 
+  /**
+   * Send Start Email with verification code to password recovery process.
+   * @param name 
+   * @param email 
+   * @param recoveryPageLink 
+   * @param accessToken 
+   * @returns 
+   */
+  function sendEmailToRecoveryPass(
+    email: string,
+    recoveryPageLink: string,
+    accessToken: string ): Promise<any> {
+
+    //Notification endpoint
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/recovery/start`;
+console.log("recovery URL:", URL);
+    const promise: AxiosPromise<any> = axios({
+      method: 'post',
+      url: URL,
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': `application/json`,
+      },
+      data: {
+        'userName': email,
+        'email': email,
+        'recoveryPageLink': recoveryPageLink,
+      }
+    });
+
+    // Using .then, create a new promise which extracts the data
+    const info: Promise<any> = promise
+        .then((response) => response.data)
+        .catch((error) => {
+          const authError: ApiError = handleAxiosError(error);
+          if (authError.status === AuthStatusEnum.UNAUTHORIZED ){
+            console.log("sendEmailToRecoveryPass-->UNAUTHORIZED!!!");
+            // Request a new token
+            //const newAccessToken = accessToken;
+            // Do a retry with a new token
+            //return sendContactEmailService(contactData, newAccessToken, false);
+            throw authError;
+          }else{
+            console.log("sendEmailToRecoveryPass-->throw authError!!!");
+            throw authError;
+          };
+        });
+  
+        console.log(info);
+        
+      return info;
+  };
+
+  function updatePassword(
+    token: string,
+    password: string,
+    adminToken: string): Promise<any> {
+
+    const body = {
+      token: token,
+      password: password
+    };
+
+    console.log("body updatePassword :",body);
+    //User endpoint
+    const URL = `${OriginConfig.APIEndpoints.backend}/auth/recovery/update`;
+
+    const promise: AxiosPromise<any> = axios({
+      method: 'post',
+      url: URL,
+      headers: { 'Authorization': `Bearer ${adminToken}` },
+      data: body
+    });
+
+    // using .then, create a new promise which extracts the data
+    const resp: Promise<any> = promise.then((response) =>
+      response
+    ).catch((error) => {
+      // response.status !== 200
+      const authError: ApiError = handleAxiosError(error);
+      throw authError;
+    });
+    //console.log(statusNumber);
+    return resp;
+  };
+
+
   return {
     register,
     sendStartEmailConfirm,
     confirmAccount,
     loginService,
-    logoutService
+    logoutService,
+    sendEmailToRecoveryPass,
+    updatePassword
   };
 };

@@ -2,8 +2,9 @@ import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, Ht
 import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
 import { IAuthService } from '../../domain/input/port/auth.service.interface';
 import { StartConfirmEmailData } from '../../domain/model/auth/register/start.confirm.email.data';
-import { EndConfirmEmailData } from '../../domain/model/auth/register/end.confirm.email.data';
+import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
 import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification_code_data.dto.type';
+import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery-update-data.dto.type';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
@@ -39,7 +40,7 @@ export class AuthController {
     return res.status(HttpStatus.CREATED).send();
   };
 
-  @Post('register/confirm/sendStartEmailConfirm')
+  @Post('register/confirm/start')
   sendStartEmailConfirm(@Body() startConfirmEmailData: StartConfirmEmailData): any {
     console.log(startConfirmEmailData);
 
@@ -70,6 +71,30 @@ export class AuthController {
     const authResponse: IAuthResponse = await this.authService.logout(logoutFormDTO);
     if (authResponse.isSuccess) return res.status(HttpStatus.OK).json(authResponse.data);
     return res.status(HttpStatus.UNAUTHORIZED).json(authResponse.data);
+  };
+
+  @Post('recovery/start')
+  sendEmailToRecoveryPass(@Body() startRecoveryDataDTO: StartRecoveryDataDTO): any {
+    console.log(startRecoveryDataDTO);
+
+    try {
+      const sentInfo = this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO);
+      return sentInfo;
+    } catch (e) {
+      return e.message;
+    };
+  };
+
+  @Post('recovery/update')
+  recoveryUpdatePassword(@Body() recoveryUpdateDataDTO: RecoveryUpdateDataDTO): any {
+    console.log(recoveryUpdateDataDTO);
+
+    try {
+      const sentInfo = this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO);
+      return sentInfo;
+    } catch (e) {
+      return e.message;
+    };
   };
 
 }

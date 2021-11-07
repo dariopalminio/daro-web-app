@@ -10,8 +10,9 @@ import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../GlobalConfig';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
 import { StartConfirmEmailData } from '../model/auth/register/start.confirm.email.data';
-import { EndConfirmEmailData } from '../model/auth/register/end.confirm.email.data';
+import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
 import { VerificationCodeDataDTO } from '../model/auth/register/verification_code_data.dto.type';
+import { RecoveryUpdateDataDTO } from '../model/auth/recovery/recovery-update-data.dto.type';
 import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
@@ -41,11 +42,9 @@ export class AuthService implements IAuthService {
   async register(userRegisterData: UserRegisterDataDTO): Promise<any> {
 
     // First: obtains admin access token
-    console.log("First: obtains admin access token");
     const adminToken = await this.externalAuthService.getAdminToken();
 
     // Second: creates a new user in authorization server using admin access token
-    console.log("Second: creates a new user in authorization server using admin access token");
     const authCreatedUserResp = await this.externalAuthService.register(userRegisterData.username,
       userRegisterData.firstName, userRegisterData.lastName, userRegisterData.email,
       userRegisterData.password, adminToken);
@@ -57,7 +56,6 @@ export class AuthService implements IAuthService {
     }
 
     // Third: verifies that the user was created, asking for the information of the created user
-    console.log("Third: verifies that the user was created, asking for the information of the created user");
     const authCreatedUser = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
 
     if (!authCreatedUser) {
@@ -117,7 +115,7 @@ export class AuthService implements IAuthService {
 
       const contentHTML = `
     <p>Hey ${startConfirmEmailData.name}!</p>
-    <p>Bienvenid@ a ${GlobalConfig.COMPANY_NAME}</p>
+    <p>Welcome to ${GlobalConfig.COMPANY_NAME}</p>
     <p>Click on the following link to confirm your email.</p>
     <h1>Verification link: ${verificationLink}</h1>
     <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
@@ -142,44 +140,15 @@ export class AuthService implements IAuthService {
    */
   async confirmAccount(verificationCodeData: VerificationCodeDataDTO): Promise<IAuthResponse> {
 
-    //Validate token
-    if (!verificationCodeData.token) {
-          const authResponse: IAuthResponse = {
-            isSuccess: false,
-            status: 500,
-            error: "Invalid verification code token!",
-            data: {}
-          };
-          return authResponse;
-    }
-
-    const partsArray = decodeToken(verificationCodeData.token);
-    const decodedEmail = partsArray[0];
-    const decodedCode = partsArray[1];
-
-    //Validate data
-    if (!validEmail(decodedEmail)) {
+    let user = null;
+    try{
+      user = await this.verificateToken(verificationCodeData.token);
+    }catch(error){
       const authResponse: IAuthResponse = {
         isSuccess: false,
         status: 500,
-        error: "Invalid Email!",
-        data: { email: decodedEmail }
-      };
-      return authResponse;
-    }
-
-    //Verificate code
-    let user = await this.userService.getByQuery({
-      userName: decodedEmail,
-      verificationCode: decodedCode,
-    });
-
-    if (!user) {
-      const authResponse: IAuthResponse = {
-        isSuccess: false,
-        status: 404,
-        error: "Not found or verification code is wrong!",
-        data: { email: decodedEmail }
+        error: error.message,
+        data: {message: "Invalid token!"}
       };
       return authResponse;
     }
@@ -188,7 +157,7 @@ export class AuthService implements IAuthService {
 
     //Update in external auth server
     const adminToken = await this.externalAuthService.getAdminToken();
-    const updetedAuthUser: IAuthResponse = await this.externalAuthService.confirmEmail(user.authId, decodedEmail, adminToken);
+    const updetedAuthUser: IAuthResponse = await this.externalAuthService.confirmEmail(user.authId, user.email, adminToken);
     
     if (!updetedAuthUser.isSuccess){
       return updetedAuthUser;
@@ -204,8 +173,9 @@ export class AuthService implements IAuthService {
 
     //Notificate to user
     try {
-      this.sendEndEmailConfirm(user.firstName, decodedEmail);
+      this.sendEndEmailConfirm(user.firstName, user.email);
     } catch (error) {
+      //Could not be notified about confirmation of account 
       console.log(error);
     }
 
@@ -214,7 +184,7 @@ export class AuthService implements IAuthService {
       isSuccess: true,
       status: 200,
       error: undefined,
-      data: { email: decodedEmail }
+      data: { email: user.email }
     };
 
     return authResponse;
@@ -243,6 +213,26 @@ export class AuthService implements IAuthService {
     };
   };
 
+  async sendSuccessfulRecoveryEmail(name: string, email: string): Promise<any> {
+
+    try {
+      const contentHTML = `
+          <p>Success ${name}!</p>
+          <p>We wanted to let you know that your password was reset.</p>
+          <p>If you run into problems, please contact support.</p>
+          <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
+          <p>Please do not reply to this email with your password. 
+          We will never ask for your password, and we strongly discourage you from sharing it with anyone.</p>
+          `;
+
+      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Password changed`;
+
+      return this.sender.sendEmail(subject, email, contentHTML);
+    } catch (error) {
+      throw error;
+    };
+  };
+
   /**
    * 
    * @param loginForm 
@@ -264,5 +254,125 @@ export class AuthService implements IAuthService {
     return logoutAuthResp;
   };
 
+
+  /**
+   * Send Email To Recovery Password
+   * @param startRecoveryDataDTO 
+   * @returns 
+   */
+  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO): Promise<any> {
+
+    if (!validEmail(startRecoveryDataDTO.email)) throw new Error("Invalid email!");
+
+    try {
+      //generate verification code
+      const newVerificationCode = generateToken(); 
+
+      //save verification code
+      let user = await this.userService.getByQuery({ userName: startRecoveryDataDTO.userName });
+      if (!user) throw new Error("User not found!");
+
+      user.verificationCode = newVerificationCode;
+      const updatedOk: boolean = await this.userService.updateById(user._id, user);
+      if (!updatedOk) throw new Error("Can not save generated verification code!");
+
+      //send email with link and verification code
+      const token: string = encodeToken(startRecoveryDataDTO.email, newVerificationCode);
+      const recoveryPageLink = createTokenLink(startRecoveryDataDTO.recoveryPageLink, token);
+
+      const emailContentHTML = `
+    <p>Forgot your password?</p>
+    <p>If you want to reset your password, click on the link below (or copy and paste the URL into your browser):</p>
+    <h1>Link to recovery: ${recoveryPageLink}</h1>
+    <p>This link will lead you to the secure page for password reset.</p>
+    <p>If you don't want to reset your password, please ignore this message. Your password will not be reset.</p>
+    <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
+    `;
+
+      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Recover your password`;
+      return this.sender.sendEmail(subject, startRecoveryDataDTO.email, emailContentHTML);
+
+      return true;
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  /**
+   * recoveryUpdatePassword
+   * @param recoveryUpdateDataDTO 
+   * @returns 
+   */
+  async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO): Promise<IAuthResponse> {
+        let user = null;
+        try{
+          user = await this.verificateToken(recoveryUpdateDataDTO.token);
+        }catch(error){
+          const authResponse: IAuthResponse = {
+            isSuccess: false,
+            status: 500,
+            error: error.message,
+            data: {message: "Invalid token!"}
+          };
+          return authResponse;
+        }
+
+        //Update password in user
+        //Update in external auth server
+        const adminToken = await this.externalAuthService.getAdminToken();
+        const newPassword = recoveryUpdateDataDTO.password;
+        const updetedAuthUser: IAuthResponse = await this.externalAuthService.updatePassword(user.authId, newPassword, adminToken);
+        console.log(updetedAuthUser);
+        if (!updetedAuthUser.isSuccess){
+          return updetedAuthUser;
+        }
+
+    //Notificate to user
+    try {
+      this.sendSuccessfulRecoveryEmail(user.firstName, user.email);
+    } catch (error) {
+      //Could not be notified about changed password 
+      console.log(error);
+    }
+
+    //Successful response
+    const authResponse: IAuthResponse = {
+      isSuccess: true,
+      status: 200,
+      error: undefined,
+      data: { email: user.email }
+    };
+
+    return authResponse;
+  };
+
+  /**
+   * Verify that the token sent is the same as the one saved in the database,
+   * for the user with the email encoded within the token.
+   * @param token 
+   * @returns 
+   */
+  async verificateToken(token: string): Promise<any>{
+
+      //Validate token
+      if (!token) throw Error("Invalid verification code token!");
+  
+      const partsArray = decodeToken(token);
+      const decodedEmail = partsArray[0];
+      const decodedCode = partsArray[1];
+  
+      //Validate data
+      if (!validEmail(decodedEmail)) throw Error("Invalid Email!");
+  
+      //Verificate code
+      let user = await this.userService.getByQuery({
+        userName: decodedEmail,
+        verificationCode: decodedCode,
+      });
+  
+      if (!user) throw Error("Not found or verification code is wrong!");
+       
+      return user;
+  };
 
 };

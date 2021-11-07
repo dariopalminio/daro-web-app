@@ -43,6 +43,7 @@
     "recovery.start.info.enter.email": "¡No te preocupes! Simplemente ingrese la dirección de correo electrónico con la que se ha registrado y recibirá un correo electrónico donde le indicaremos los pasos a seguir.",
     "recovery.start.command.send": "Enviar recuperación de contraseña",
     "recovery.start.title": "Recuperación de contraseña",
+    "recovery.updated.successful": "La contraseña ha sido actualizada de forma exitosa.",
     "contact.title": "Contactanos",
     "contact.info.call.to.action": "Dejanos un mensaje:",
     "contact.command.send": "Enviar mensaje",

@@ -1,7 +1,7 @@
 import { Tokens } from '../model/user/tokens.type';
 
 //Interface to do dependency inversion
-export interface IUserClient {
+export interface IAuthClient {
 
   register(
     username: string,
@@ -27,4 +27,16 @@ export interface IUserClient {
 
   logoutService: (userId: string, adminToken: string) => Promise<number>;
   
+  sendEmailToRecoveryPass: (
+    email: string,
+    recoveryPageLink: string,
+    accessToken: string
+  ) => Promise<any>;
+
+  updatePassword: (
+    token: string,
+    password: string,
+    adminToken: string
+  ) => Promise<any>;
+
 };

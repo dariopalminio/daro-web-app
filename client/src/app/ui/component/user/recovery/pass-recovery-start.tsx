@@ -3,7 +3,7 @@ import IUserValidator from "../../../../../domain/helper/user-validator.interfac
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
 import emailToSendImage from "../../../image/email_to_send.png";
-import useRecoveryStart from "../../../../../domain/hook/user/recovery-start.hook";
+import useRecovery from "../../../../../domain/hook/user/recovery.hook";
 import { Redirect } from "react-router";
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,7 +61,7 @@ const PassRecoveryStart: FunctionComponent = () => {
   const [emailErrorText] = useState("Email inválido");
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
-  const { sending, sent, error, msg, sendEmailToRecovery } = useRecoveryStart();
+  const { isProcessing, isSuccess, hasError, msg, sendEmailToRecovery } = useRecovery();
   const { t, i18n } = useTranslation();
 
 
@@ -88,7 +89,7 @@ const PassRecoveryStart: FunctionComponent = () => {
 
   return (
     <div>
-      {sent && <Redirect to="/user/recovery/msg" />}
+      {isSuccess && <Redirect to="/user/recovery/msg" />}
 
       <form
         id="SendEmailForm"
@@ -138,6 +139,10 @@ const PassRecoveryStart: FunctionComponent = () => {
         </Paper>
       </form>
 
+      {isProcessing && <Alert severity="info">{t(msg)}</Alert>}
+
+      {hasError && <Alert severity="error">{t(msg)}</Alert>}
+      
       <br />
     </div>
   );

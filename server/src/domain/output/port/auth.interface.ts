@@ -22,4 +22,10 @@ export interface IAuth {
 
     logout(userId: string, accessToken: string): Promise<IAuthResponse>;
 
+    updatePassword(
+        userId: string,
+        newPassword: string,
+        adminToken: string
+      ): Promise<IAuthResponse>;
+
   }

@@ -43,6 +43,7 @@
     "recovery.start.info.enter.email": "Do not worry! Just enter the email address with which you have registered and you will receive an email where we will indicate the steps to follow.",
     "recovery.start.command.send": "Send recovery password",
     "recovery.start.title": "Password Recovery",
+    "recovery.updated.successful": "Password has updated successful",
     "contact.title": "Contact us",
     "contact.info.call.to.action": "Drop us a line:",
     "contact.command.send": "Send",

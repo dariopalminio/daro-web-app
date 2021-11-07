@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
 import { FunctionComponent } from "react";
-import IUserValidator from '../../../../../domain/helper/user-validator.interface';
+import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
-import { Redirect } from 'react-router';
-import { useTranslation } from 'react-i18next';
+import { Redirect } from "react-router";
+import { useTranslation } from "react-i18next";
+import useRecovery from "../../../../../domain/hook/user/recovery.hook";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -61,54 +62,45 @@ type TParams = { token: string };
  *
  * @visibleName PassRecoveryForm
  */
- function PassRecoveryForm({ token }: TParams) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+function PassRecoveryForm({ token }: TParams) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailValid, setEmailValid] = useState(true);
-  const [emailErrorText] = useState("Email inválido");
   const [passValid, setPassValid] = useState(true);
   const [passErrorText] = useState("Invalid Password");
   const [confirmPassValid, setConfirmPassValid] = useState(true);
   const [confirmPassErrorText] = useState("Pasword does not match!");
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
+  const { isProcessing, isSuccess, hasError, msg, updatePassword } = useRecovery();
   const { t, i18n } = useTranslation();
 
-  //content text
-  //{t('recovery.form.success.pass.changed')}
-  //{t('recovery.form.error.pass.recovery.time.expired')}
-  
-
   /**
-   * 
+   * Submit update password
    */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    //TODO
-    //Redirect to Verify
+    const isPassOneOk = (await validator.passIsValid(password));
+    const isPassTwoOk = await validator.confirmPassIsValid(password, confirmPassword);
+    if (isPassOneOk && isPassTwoOk) updatePassword(token, password);
   };
-
 
   const handlePasswordChange = async (passOne: string) => {
     setPassword(passOne);
-    setPassValid(
-      await validator.passIsValid(passOne)
-    );
+    setPassValid(await validator.passIsValid(passOne));
   };
 
-  const handleConfirmPassChange = (passTwo: string): void => {
+  const handleConfirmPassChange = async (passTwo: string) => {
     setConfirmPassword(passTwo);
     const passOne = password;
-    setConfirmPassValid(validator.confirmPassIsValid(passOne, passTwo));
+    setConfirmPassValid(await validator.confirmPassIsValid(passOne, passTwo));
   };
 
   return (
     <div>
-
+      {isSuccess && (
+        <Alert severity="success">{t("recovery.updated.successful")}</Alert>
+      )}
+      {!isSuccess && (
         <form
           id="RegisterForm"
           data-testid="RegisterForm"
@@ -125,14 +117,16 @@ type TParams = { token: string };
             >
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenter)}>
-                  <h1 className={clsx(classes.h1Custom)}>{t('recovery.form.title')}</h1>
+                  <h1 className={clsx(classes.h1Custom)}>
+                    {t("recovery.form.title")}
+                  </h1>
                 </div>
               </Grid>
 
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenter)}>
                   <label className={clsx(classes.labelForPass)}>
-                    {t('register.info.password.pattern')}
+                    {t("register.info.password.pattern")}
                   </label>
                 </div>
               </Grid>
@@ -177,16 +171,19 @@ type TParams = { token: string };
                     color="primary"
                     type="submit"
                   >
-                    {t('recovery.form.command.change')}
+                    {t("recovery.form.command.change")}
                   </Button>
                 </div>
               </Grid>
             </Grid>
           </Paper>
         </form>
-   
+      )}
+      {hasError && <Alert severity="error">{t(msg)}</Alert>}
+
+      {isProcessing && <Alert severity="info">{t(msg)}</Alert>}
     </div>
   );
-};
+}
 
 export default PassRecoveryForm;
