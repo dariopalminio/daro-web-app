@@ -16,6 +16,7 @@ import { RecoveryUpdateDataDTO } from '../model/auth/recovery/recovery-update-da
 import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
+import { IUser } from '../model/user/user.interface';
 export const AUTH_IMPL_TOKEN = 'Auth_Implementation'; //Implementation Token
 export const USER_SERVICE_IMPL_TOKEN = 'UserService_Implementation'; //Implementation Token
 
@@ -143,19 +144,20 @@ export class AuthService implements IAuthService {
    */
   async confirmAccount(verificationCodeData: VerificationCodeDataDTO): Promise<IAuthResponse> {
 
-    let user = null;
+    let user: IUser = null;
     try {
       user = await this.verificateToken(verificationCodeData.token);
     } catch (error) {
+      console.log(error);
       const authResponse: IAuthResponse = {
         isSuccess: false,
-        status: 500,
+        status: 400, //BAD_REQUEST
         error: error.message,
         data: { message: "Invalid token!" }
       };
       return authResponse;
     }
-
+    console.log("Token OK!!!");
     //Update user to verificated
 
     //Update in external auth server
@@ -167,7 +169,9 @@ export class AuthService implements IAuthService {
     }
 
     //Update in database
+    const discardVerificationCode = generateToken(); //generate verification code to invalidate future uses
     user.verified = true;
+    user.verificationCode = discardVerificationCode; //verification code to invalidate future uses
     const updatedOk: boolean = await this.userService.updateById(user._id, user);
 
     if (!updatedOk) {
@@ -176,7 +180,7 @@ export class AuthService implements IAuthService {
 
     //Notificate to user
     try {
-      this.sendEndEmailConfirm(user.firstName, user.email);
+      this.sendSuccessfulEmailConfirm(user.firstName, user.email);
     } catch (error) {
       //Could not be notified about confirmation of account 
       console.log(error);
@@ -193,13 +197,13 @@ export class AuthService implements IAuthService {
     return authResponse;
   };
 
-  /**
- * Send Start Email Confirm
+/**
+ * Send email to notificate successful confirmation
  * Send email with welcome message to end registration process.
  * @param 
  * @returns 
  */
-  async sendEndEmailConfirm(name: string, email: string): Promise<any> {
+ private async sendSuccessfulEmailConfirm(name: string, email: string): Promise<any> {
 
     try {
       const contentHTML = `
@@ -216,7 +220,13 @@ export class AuthService implements IAuthService {
     };
   };
 
-  async sendSuccessfulRecoveryEmail(name: string, email: string): Promise<any> {
+  /**
+   * send email to notificate successful recovery
+   * @param name 
+   * @param email 
+   * @returns 
+   */
+   private async sendSuccessfulRecoveryEmail(name: string, email: string): Promise<any> {
 
     try {
       const contentHTML = `
@@ -307,13 +317,13 @@ export class AuthService implements IAuthService {
    * @returns 
    */
   async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO): Promise<IAuthResponse> {
-    let user = null;
+    let user: IUser  = null;
     try {
       user = await this.verificateToken(recoveryUpdateDataDTO.token);
     } catch (error) {
       const authResponse: IAuthResponse = {
         isSuccess: false,
-        status: 500,
+        status: 400, //BAD_REQUEST
         error: error.message,
         data: { message: "Invalid token!" }
       };
@@ -329,6 +339,15 @@ export class AuthService implements IAuthService {
     if (!updetedAuthUser.isSuccess) {
       return updetedAuthUser;
     }
+
+    //Update in database
+    const discardVerificationCode = generateToken(); //generate verification code to invalidate future uses
+    user.verificationCode = discardVerificationCode; //set verification code to invalidate future uses
+    const updatedOk: boolean = await this.userService.updateById(user._id, user);
+   
+    if (!updatedOk) {
+         console.log("Can not to reset verification code in data base for user:", user);
+       }
 
     //Notificate to user
     try {
@@ -350,16 +369,16 @@ export class AuthService implements IAuthService {
   };
 
   /**
-   * Verify that the token sent is the same as the one saved in the database,
+   * Verify that the token sent by user is the same as the one saved in the database,
    * for the user with the email encoded within the token.
    * @param token 
    * @returns 
    */
-  async verificateToken(token: string): Promise<any> {
+  private async verificateToken(token: string): Promise<IUser> {
 
     //Validate token
     if (!token) throw Error("Invalid verification code token!");
-
+    
     const partsArray = decodeToken(token);
     const decodedEmail = partsArray[0];
     const decodedCode = partsArray[1];
@@ -368,12 +387,14 @@ export class AuthService implements IAuthService {
     if (!validEmail(decodedEmail)) throw Error("Invalid Email!");
 
     //Verificate code
-    let user = await this.userService.getByQuery({
+    let user: IUser = await this.userService.getByQuery({
       userName: decodedEmail,
       verificationCode: decodedCode,
     });
 
-    if (!user) throw Error("Not found or verification code is wrong!");
+    if (user==null) {
+      throw Error("Not found or verification code is wrong!");
+    }
 
     return user;
   };

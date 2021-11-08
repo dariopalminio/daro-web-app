@@ -4,6 +4,7 @@ import * as StateConfig from '../../domain.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IAuthClient } from '../../service/auth-client.interface';
 import { Base64 } from 'js-base64';
+import { ContactSupportOutlined } from '@material-ui/icons';
 
 
 /**
@@ -67,18 +68,18 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
 
             // First: obtains admin access token
             const responseAdminToken: Promise<any> = authTokenService.getAdminTokenService();
-
+            
             responseAdminToken.then(jwtAdminToken => {
                 // Second: send email to confirmation process
                 userClient.updatePassword(token, password, jwtAdminToken)
                 .then(info => {
-                    console.log("Response updatePassword...", info);
                     setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'Password updated!'  });
 
                 })
                     .catch(err => {
                         // Error Can not update password
-                        setState({ isProcessing: false, isSuccess: false, hasError: true, msg: "Can not update password!"  });
+                        const msgErrorKey = err.message ;
+                        setState({ isProcessing: false, isSuccess: false, hasError: true, msg: msgErrorKey });
                     });
 
             }).catch(err => {

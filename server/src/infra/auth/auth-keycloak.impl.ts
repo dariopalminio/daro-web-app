@@ -460,7 +460,7 @@ export class AuthKeycloakImpl implements IAuth {
         return { isSuccess: true, status: res.status, error: undefined, data: { message: 'Password has updated successful' } }; //successful
       case HttpStatus.UNAUTHORIZED: //401
         return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
-      case HttpStatus.BAD_REQUEST: //no puede repetir contraseña
+      case HttpStatus.BAD_REQUEST: //400 no puede repetir contraseña
         return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
       default:
         return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };

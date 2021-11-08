@@ -4,6 +4,7 @@ import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
 import { IAuthClient } from '../../domain/service/auth-client.interface';
 import { Tokens } from '../../domain/model/user/tokens.type';
+import { AxiosError } from 'axios';
 
 /**
  * User Api Client Implementation
@@ -69,11 +70,11 @@ export default function UserApiClientImpl(): IAuthClient {
    * @param accessToken 
    * @returns 
    */
-   function sendStartEmailConfirm(
+  function sendStartEmailConfirm(
     name: string,
     email: string,
     verificationPageLink: string,
-    accessToken: string ): Promise<any> {
+    accessToken: string): Promise<any> {
 
     //Notification endpoint
     const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm/start`;
@@ -95,23 +96,23 @@ export default function UserApiClientImpl(): IAuthClient {
 
     // Using .then, create a new promise which extracts the data
     const info: Promise<any> = promise
-        .then((response) => response.data)
-        .catch((error) => {
-          const authError: ApiError = handleAxiosError(error);
-          if (authError.status === AuthStatusEnum.UNAUTHORIZED ){
-            // Request a new token
-            //const newAccessToken = accessToken;
-            // Do a retry with a new token
-            //return sendContactEmailService(contactData, newAccessToken, false);
-            throw authError;
-          }else{
-            throw authError;
-          };
-        });
-  
-        console.log(info);
-        
-      return info;
+      .then((response) => response.data)
+      .catch((error) => {
+        const authError: ApiError = handleAxiosError(error);
+        if (authError.status === AuthStatusEnum.UNAUTHORIZED) {
+          // Request a new token
+          //const newAccessToken = accessToken;
+          // Do a retry with a new token
+          //return sendContactEmailService(contactData, newAccessToken, false);
+          throw authError;
+        } else {
+          throw authError;
+        };
+      });
+
+    console.log(info);
+
+    return info;
   };
 
 
@@ -129,7 +130,7 @@ export default function UserApiClientImpl(): IAuthClient {
       token: token,
     };
 
-    console.log("body create user:",body);
+    console.log("body create user:", body);
     //User endpoint
     const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm`;
 
@@ -167,7 +168,7 @@ export default function UserApiClientImpl(): IAuthClient {
 
     //Login endpoint
     const URL = `${OriginConfig.APIEndpoints.backend}/auth/login`;
-    
+
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
 
@@ -236,11 +237,11 @@ export default function UserApiClientImpl(): IAuthClient {
   function sendEmailToRecoveryPass(
     email: string,
     recoveryPageLink: string,
-    accessToken: string ): Promise<any> {
+    accessToken: string): Promise<any> {
 
     //Notification endpoint
     const URL = `${OriginConfig.APIEndpoints.backend}/auth/recovery/start`;
-console.log("recovery URL:", URL);
+    console.log("recovery URL:", URL);
     const promise: AxiosPromise<any> = axios({
       method: 'post',
       url: URL,
@@ -257,58 +258,62 @@ console.log("recovery URL:", URL);
 
     // Using .then, create a new promise which extracts the data
     const info: Promise<any> = promise
-        .then((response) => response.data)
-        .catch((error) => {
-          const authError: ApiError = handleAxiosError(error);
-          if (authError.status === AuthStatusEnum.UNAUTHORIZED ){
-            console.log("sendEmailToRecoveryPass-->UNAUTHORIZED!!!");
-            // Request a new token
-            //const newAccessToken = accessToken;
-            // Do a retry with a new token
-            //return sendContactEmailService(contactData, newAccessToken, false);
-            throw authError;
-          }else{
-            console.log("sendEmailToRecoveryPass-->throw authError!!!");
-            throw authError;
-          };
-        });
-  
-        console.log(info);
-        
-      return info;
+      .then((response) => response.data)
+      .catch((error) => {
+        const authError: ApiError = handleAxiosError(error);
+        if (authError.status === AuthStatusEnum.UNAUTHORIZED) {
+          
+          // Request a new token
+          //const newAccessToken = accessToken;
+          // Do a retry with a new token
+          //return sendContactEmailService(contactData, newAccessToken, false);
+          throw authError;
+        } else {
+          throw authError;
+        };
+      });
+
+    console.log(info);
+
+    return info;
   };
 
-  function updatePassword(
+  /**
+   * Update Password
+   * Reset password in recovery process.
+   * @param token 
+   * @param password 
+   * @param adminToken 
+   * @returns 
+   */
+  async function updatePassword(
     token: string,
     password: string,
     adminToken: string): Promise<any> {
-
+      
     const body = {
       token: token,
       password: password
     };
 
-    console.log("body updatePassword :",body);
     //User endpoint
     const URL = `${OriginConfig.APIEndpoints.backend}/auth/recovery/update`;
+    try {
+      const response: any = await axios({
+        method: 'post',
+        url: URL,
+        headers: { 'Authorization': `Bearer ${adminToken}` },
+        data: body
+      });
 
-    const promise: AxiosPromise<any> = axios({
-      method: 'post',
-      url: URL,
-      headers: { 'Authorization': `Bearer ${adminToken}` },
-      data: body
-    });
-
-    // using .then, create a new promise which extracts the data
-    const resp: Promise<any> = promise.then((response) =>
-      response
-    ).catch((error) => {
-      // response.status !== 200
-      const authError: ApiError = handleAxiosError(error);
-      throw authError;
-    });
-    //console.log(statusNumber);
-    return resp;
+      return response.data;
+    } catch (err: any) {
+      if (err.isAxiosError) {
+        const axiosError: AxiosError = err;
+        if (axiosError.response?.status === 400) throw Error("recovery.password.error.bad.request");;
+      }
+      throw err;
+    }
   };
 
 

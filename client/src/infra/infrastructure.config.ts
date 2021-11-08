@@ -42,5 +42,5 @@ export const KeycloakPath = {
   user_info: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/userinfo`,
   users: `${APIEndpoints.auth}/auth/admin/realms/${Keycloak.realm}/users`,
   token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
-  notifications: `${APIEndpoints.notifications}/notification`,
 };
+

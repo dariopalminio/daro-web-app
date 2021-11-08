@@ -44,6 +44,8 @@
     "recovery.start.command.send": "Send recovery password",
     "recovery.start.title": "Password Recovery",
     "recovery.updated.successful": "Password has updated successful",
+    "recovery.password.error.bad.request": "Can not update password! Bad request. It may happen that the verification code expired or that the passwords are invalid. Try again.",
+    "recovery.password.successful": "Password updated!",
     "contact.title": "Contact us",
     "contact.info.call.to.action": "Drop us a line:",
     "contact.command.send": "Send",

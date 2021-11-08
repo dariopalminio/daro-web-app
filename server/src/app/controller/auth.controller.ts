@@ -53,10 +53,10 @@ export class AuthController {
   };
 
   @Post('register/confirm')
-  async confirmAccount(@Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
+  async confirmAccount(@Res() res,@Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
     console.log("register/confirm executed!");
-    return this.authService.confirmAccount(verificationCodeData);
-
+    const authResponse: IAuthResponse = await this.authService.confirmAccount(verificationCodeData);
+    return res.status(authResponse.status).json(authResponse.data);
   };
 
   @Post('login')
@@ -86,15 +86,10 @@ export class AuthController {
   };
 
   @Post('recovery/update')
-  recoveryUpdatePassword(@Body() recoveryUpdateDataDTO: RecoveryUpdateDataDTO): any {
-    console.log(recoveryUpdateDataDTO);
+  async recoveryUpdatePassword(@Res() res, @Body() recoveryUpdateDataDTO: RecoveryUpdateDataDTO): Promise<any> {
 
-    try {
-      const sentInfo = this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO);
-      return sentInfo;
-    } catch (e) {
-      return e.message;
-    };
+      const authResponse: IAuthResponse = await this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO);
+      return res.status(authResponse.status).json(authResponse.data);
   };
 
 }

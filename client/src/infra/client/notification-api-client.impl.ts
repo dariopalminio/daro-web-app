@@ -25,7 +25,7 @@ export default function NotificationApiClientImpl(): INotificationClient {
   function sendContactEmailService(contactData: ContactType, accessToken: string ): Promise<any> {
 
     //Notification endpoint
-    const URL = `${OriginConfig.URLPath.notifications}/sendContactEmail`;
+    const URL = `${OriginConfig.APIEndpoints.notifications}/notification/sendContactEmail`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
