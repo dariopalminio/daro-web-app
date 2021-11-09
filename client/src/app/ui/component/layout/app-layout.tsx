@@ -1,9 +1,10 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 import { atom, useAtom } from "jotai";
 import clsx from "clsx";
 import MainContainer from "./main-container";
 import TopNavBar from "./top-nav-bar";
 import LeftNavBar from "./left-nav-bar";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -53,9 +54,11 @@ export const openLeftStatus = atom(false);
 const AppLayout: FunctionComponent = () => {
   const [openLeft] = useAtom(openLeftStatus);
   const classes = useStyles();
+  const { t, i18n } = useTranslation();
 
   return (
     <div id="AppLayout" data-testid="AppLayout" className={classes.root}>
+      
       <CssBaseline />
       <TopNavBar />
       <LeftNavBar />

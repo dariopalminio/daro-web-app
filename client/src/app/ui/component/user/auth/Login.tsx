@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useContext } from "react";
 import useLogin from "../../../../../domain/hook/user/login.hook";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
@@ -59,7 +59,7 @@ const Login: FunctionComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
-  const [emailErrorText] = useState("Email inválido");
+  const [emailErrorText] = useState("Invalid email");
   const {
     isProcessing,
     hasError,
@@ -69,7 +69,7 @@ const Login: FunctionComponent = () => {
   } = useLogin();
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   /**
    * Login
@@ -95,6 +95,7 @@ const Login: FunctionComponent = () => {
 
   return (
     <div>
+
       {!isProcessing && (
         <form
           id="LoginForm"

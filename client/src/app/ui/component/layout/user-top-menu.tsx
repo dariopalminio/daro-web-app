@@ -98,6 +98,11 @@ const UserTopMenu: FunctionComponent = () => {
             {command_register}
           </MenuItem>
         )}
+
+        <MenuItem component={Link} to="/user/profile" onClick={handleClose}>
+          Profile
+        </MenuItem>
+
       </Menu>
     </div>
   );

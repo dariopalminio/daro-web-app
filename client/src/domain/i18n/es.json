@@ -15,6 +15,7 @@
     "auth.error.request.timeout": "Error: ¡Tiempo agotado de petición (Request Timeout)!",
     "auth.error.unsupported.media.type": "Error: Unsupported Media Type.",
     "auth.error.no.content": "Error: No content.",
+    "auth.info.must.verify.email": "Necesitas verificar el email",
     "logout.success.already.logged": "You are already logged! Do you want to log out?",
     "logout.command": "Logout",
     "logout.info.loading": "Cargando... tratando de hacer logout!",
@@ -55,5 +56,7 @@
     "notification.error.cannot.send.email": "Error: No se pudo enviar el correo!",
     "notification.error.cannot.send.email.by.token.fail": "Error: No se pudo enviar el correo! No se pudo obtener el App token desde el servicio.",
     "notification.error.contact.empty": "Contact is empty!",
-    "notification.info.sending": "Trying to send email!"
+    "notification.info.sending": "Trying to send email!",
+    "language.availables": "Lenguajes que puedes elegir:",
+    "language.current": "Tu lenguaje actual es:"
  }

@@ -13,7 +13,7 @@ import AppLayout from "./ui/component/layout/app-layout"
 const App: FunctionComponent = () => {
 
   return (
-    <SessionContextProvider>
+      <SessionContextProvider>
       <Router>
         <AppLayout />
       </Router>

@@ -7,6 +7,7 @@ import { RegisterConfirmEmailPage } from "../../page/user/register/register-conf
 import { PassRecoveryStartPage } from "../../page/user/recovery/pass-recovery-start.page";
 import { PassRecoveryMsgPage } from "../../page/user/recovery/pass-recovery-msg.page";
 import { PassRecoveryFormPage } from "../../page/user/recovery/pass-recovery-form.page";
+import { UserProfilePage } from "../../page/user/profile/user-profile.page";
 import { CartPage } from "../../page/cart/cart.page";
 import { HomePage } from "../../page/subpage01/home.page";
 import { ContactPage } from "../../page/contact/contact.page";
@@ -32,6 +33,7 @@ const MainContainer: FunctionComponent = () => {
         <Route path="/user/recovery/start" component={PassRecoveryStartPage} exact></Route>
         <Route path="/user/recovery/msg" component={PassRecoveryMsgPage} exact></Route>
         <Route path="/user/recovery/form/:token" component={PassRecoveryFormPage} exact></Route>
+        <Route path="/user/profile" component={UserProfilePage} exact></Route>
       </Switch>
     </div>
     <Footer />

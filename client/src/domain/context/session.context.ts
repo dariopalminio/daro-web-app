@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { SessionType } from '../model/user/session.type';
 import { atom } from "jotai";
+import * as Storage from '../../infra/storage/browser.storage';
 
 //name in session/local storage
 const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";
@@ -41,7 +42,7 @@ export const recoverySessionFromStorage = (): SessionType => {
   if (typeof Storage !== "undefined") {
     // Code when Storage is supported
 
-    const sessionStorageItem = window.sessionStorage.getItem(SESSION_ITEM_NAME);
+    const sessionStorageItem = Storage.getFromSession(SESSION_ITEM_NAME);
     const sessionJSONString: string = sessionStorageItem ? sessionStorageItem : "";
 
     if (sessionJSONString && sessionJSONString !== "") {
@@ -65,7 +66,7 @@ export const setSessionToStorage = (sessionToLoad: SessionType): void => {
   if (typeof Storage !== "undefined") {
     // Code when Storage is supported
     const sessionStorageItem: string = JSON.stringify(sessionToLoad);
-    window.sessionStorage.setItem(SESSION_ITEM_NAME, sessionStorageItem);
+    Storage.setInSession(SESSION_ITEM_NAME, sessionStorageItem);
   }
 };
 
