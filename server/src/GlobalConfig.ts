@@ -7,6 +7,10 @@ export const COMPANY_NAME: string = process.env.SERVER_BFF_COMPANY_NAME;
 
 export const AUTH_MIDDLEWARE_ON = process.env.SERVER_BFF_AUTH_MIDDLEWARE_ON.toLowerCase() == 'true' ? true : false; 
 
+export const APP_NAME: string = process.env.SERVER_BFF_APP_NAME;
+export const VERSION: string = process.env.SERVER_BFF_VERSION;
+
+
 export const email = {
   HOST: process.env.SERVER_BFF_EMAIL_HOST as string,
   PORT: Number(process.env.SERVER_BFF_EMAIL_PORT) as number,
