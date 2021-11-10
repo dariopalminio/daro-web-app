@@ -1,9 +1,6 @@
-import { FunctionComponent } from "react";
+
 import PassRecoveryForm from "../../../component/user/recovery/pass-recovery-form";
 import {
-  BrowserRouter as Router,
-  Route,
-  Link,
   RouteComponentProps,
 } from "react-router-dom";
 

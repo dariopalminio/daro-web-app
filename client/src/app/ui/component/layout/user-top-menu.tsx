@@ -2,6 +2,7 @@ import React, { FunctionComponent, useContext } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 import SessionContext, { ISessionContext } from "../../../../domain/context/session.context";
+import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import MenuItem from "@material-ui/core/MenuItem";
@@ -33,12 +34,7 @@ const UserTopMenu: FunctionComponent = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const { session } = useContext(SessionContext) as ISessionContext;
-  
-  //content text
-  const command_login = "Login";
-  const command_logout = "Go to Logout";
-  const command_register = "Register";
-  const label_account_of_current_user = "account of current user";
+  const { t } = useTranslation();
 
   const openAnchorEl = Boolean(anchorEl);
 
@@ -52,8 +48,8 @@ const UserTopMenu: FunctionComponent = () => {
 
   const getLoginMenuText = () => {
     if (session && !session?.isLogged) {
-      return command_login;
-    } else return command_login;
+      return t('login.command');
+    } else return t('logout.command');
   };
 
   const getUserProfileIcon = () => {
@@ -65,7 +61,7 @@ const UserTopMenu: FunctionComponent = () => {
   return (
     <div className={clsx(classes.menuItem)}>
       <IconButton
-        aria-label={label_account_of_current_user}
+        aria-label= {t('account.current.user')}
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenu}
@@ -95,12 +91,12 @@ const UserTopMenu: FunctionComponent = () => {
 
         {session && !session?.isRegistered && (
           <MenuItem component={Link} to="/user/register/form" onClick={handleClose}>
-            {command_register}
+            {t('register.command')}
           </MenuItem>
         )}
 
         <MenuItem component={Link} to="/user/profile" onClick={handleClose}>
-          Profile
+          {t('profile.command')}
         </MenuItem>
 
       </Menu>

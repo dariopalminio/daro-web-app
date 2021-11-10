@@ -121,58 +121,61 @@ export class AuthKeycloakImpl implements IAuth {
     email: string,
     password: string,
     adminToken: string): Promise<IAuthResponse> {
+    try {
+      const access_token = adminToken;
 
-    const access_token = adminToken;
-
-    const body: NewUserRepresentationType = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      emailVerified: "false",
-      username: username,
-      credentials: [
-        {
-          type: 'password',
-          value: password,
-          temporary: "false",
-        },
-      ],
-      enabled: "true",
-    };
-
-    //User endpoint
-    const URL = GlobalConfig.KeycloakPath.users;
-
-    const response: AxiosResponse<any> = await this.http
-      .post(
-        URL,
-        JSON.stringify(body),
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            'Content-Type': 'application/json',
+      const body: NewUserRepresentationType = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        emailVerified: "false",
+        username: username,
+        credentials: [
+          {
+            type: 'password',
+            value: password,
+            temporary: "false",
           },
-        },
-      )
-      .toPromise();
+        ],
+        enabled: "true",
+      };
 
-    switch (response.status) {
-      case HttpStatus.CREATED: //201
-        return { isSuccess: true, status: response.status, error: null, data: response.data };
-      case HttpStatus.UNAUTHORIZED: //401
-        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
-      case HttpStatus.BAD_REQUEST: //400
-        return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
-      case HttpStatus.CONFLICT: //409
-        return {
-          isSuccess: false,
-          status: response.status,
-          error:
-            'CONFLICT: Username already exists!',
-          data: null
-        };
-      default:
-        return { isSuccess: false, status: response.status, error: response.data, data: null };
+      //User endpoint
+      const URL = GlobalConfig.KeycloakPath.users;
+
+      const response: AxiosResponse<any> = await this.http
+        .post(
+          URL,
+          JSON.stringify(body),
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        .toPromise();
+
+      switch (response.status) {
+        case HttpStatus.CREATED: //201
+          return { isSuccess: true, status: response.status, message: null, data: response.data };
+        case HttpStatus.UNAUTHORIZED: //401
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+        case HttpStatus.BAD_REQUEST: //400
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+        case HttpStatus.CONFLICT: //409
+          return {
+            isSuccess: false,
+            status: response.status,
+            message:
+              'CONFLICT: Username already exists!',
+            data: null
+          };
+        default:
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+      }
+    } catch (error) {
+      return { isSuccess: false, status: 500, message: error.message, data: error };
     }
   };
 
@@ -229,14 +232,14 @@ export class AuthKeycloakImpl implements IAuth {
 
       switch (eraseResult.status) {
         case HttpStatus.NO_CONTENT: //204
-          return { isSuccess: true, status: eraseResult.status, error: undefined, data: null }; //successful
+          return { isSuccess: true, status: eraseResult.status, message: undefined, data: null }; //successful
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, status: eraseResult.status, error: eraseResult.statusText, data: eraseResult.data };
+          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: eraseResult.data };
         default:
-          return { isSuccess: false, status: eraseResult.status, error: eraseResult.statusText, data: eraseResult.data };
+          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: eraseResult.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, error: error.message, data: null };
+      return { isSuccess: false, status: 500, message: error.message, data: error };
     }
   };
 
@@ -272,31 +275,34 @@ export class AuthKeycloakImpl implements IAuth {
    * @returns access_token JWT 
    */
   async login(username: string, pass: string): Promise<IAuthResponse> {
-
-    const body: LoginRequestType = {
-      username: username,
-      password: pass,
-      grant_type: 'password',
-      client_id: GlobalConfig.Keycloak.client_id,
-      client_secret: GlobalConfig.Keycloak.client_secret
-    };
-
-    //Login endpoint
-    const URL = GlobalConfig.KeycloakPath.token;
     try {
+      const body: LoginRequestType = {
+        username: username,
+        password: pass,
+        grant_type: 'password',
+        client_id: GlobalConfig.Keycloak.client_id,
+        client_secret: GlobalConfig.Keycloak.client_secret
+      };
+      console.log("Login in keycloak body: ", body);
+      //Login endpoint
+      const URL = GlobalConfig.KeycloakPath.token;
+
       //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
       const response: AxiosResponse<any> = await this.http.post(URL, stringify(body)).toPromise();
-
+      console.log("Login in keycloak: ", response.status);
+      console.log("Login in keycloak: ", response);
       switch (response.status) {
         case HttpStatus.OK: //200
-          return { isSuccess: true, status: response.status, error: undefined, data: response.data }; //successful
+          return { isSuccess: true, status: response.status, message: undefined, data: response.data }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
         default:
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, error: error.message, data: null };
+      console.log("Login in keycloak error: ", error);
+      //"connect ECONNREFUSED 127.0.0.1:8080"
+      return { isSuccess: false, status: 500, message: error.message, data: error };
     }
   };
 
@@ -311,15 +317,13 @@ export class AuthKeycloakImpl implements IAuth {
    * @returns 
    */
   async logout(userId: string, adminToken: string): Promise<IAuthResponse> {
-
-    //User endpoint
-    const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/logout`;
-
-    const header = {
-      Authorization: `Bearer ${adminToken}`,
-    };
-
     try {
+      //User endpoint
+      const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/logout`;
+
+      const header = {
+        Authorization: `Bearer ${adminToken}`,
+      };
 
       const response: AxiosResponse<any> = await this.http.post(URL,
         JSON.stringify({}),
@@ -331,67 +335,66 @@ export class AuthKeycloakImpl implements IAuth {
 
       switch (response.status) {
         case HttpStatus.NO_CONTENT: //204
-          return { isSuccess: true, status: response.status, error: undefined, data: { message: "logged out user" } }; //successful
+          return { isSuccess: true, status: response.status, message: undefined, data: { message: "logged out user" } }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
         default:
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, error: error.message, data: null };
+      return { isSuccess: false, status: 500, message: error.message, data: error };
     }
   };
 
-/**
- * Confirm Email
- * 
- * POST /auth/admin/realms/{realm}/users/{Id}
- * 
- * It asks the auth server to update the verification field of the email to true.
- * Keycloak: PUT Update the user [SAT]
- * call to: <http://keycloak-IP:port>/auth/admin/realms/heroes/users/<userId>
- * with PUT command 
- * and with header 'Content-Type: application/json' \
- * and --data-raw in body with data emailVerified=true in next json structure: '{
- *    "id": "56f6c53f-5150-4b42-9757-4c3dd4e7d947",
- *    "createdTimestamp": 1588881160516,
- *    "username": "Superman",
- *    "enabled": true,
- *    "totp": false,
- *    "emailVerified": true,
- *    "firstName": "Clark",
- *    "lastName": "Kent",
- *    "email": "superman@kael.com",
- *    "disableableCredentialTypes": [],
- *    "requiredActions": [],
- *    "federatedIdentities": [],
- *    "notBefore": 0,
- *    "access": {
- *        "manageGroupMembership": true,
- *        "view": true,
- *        "mapRoles": true,
- *        "impersonate": true,
- *        "manage": true
- *    }
- *}'
- * @param userId 
- * @param adminToken 
- */
+  /**
+   * Confirm Email
+   * 
+   * POST /auth/admin/realms/{realm}/users/{Id}
+   * 
+   * It asks the auth server to update the verification field of the email to true.
+   * Keycloak: PUT Update the user [SAT]
+   * call to: <http://keycloak-IP:port>/auth/admin/realms/heroes/users/<userId>
+   * with PUT command 
+   * and with header 'Content-Type: application/json' \
+   * and --data-raw in body with data emailVerified=true in next json structure: '{
+   *    "id": "56f6c53f-5150-4b42-9757-4c3dd4e7d947",
+   *    "createdTimestamp": 1588881160516,
+   *    "username": "Superman",
+   *    "enabled": true,
+   *    "totp": false,
+   *    "emailVerified": true,
+   *    "firstName": "Clark",
+   *    "lastName": "Kent",
+   *    "email": "superman@kael.com",
+   *    "disableableCredentialTypes": [],
+   *    "requiredActions": [],
+   *    "federatedIdentities": [],
+   *    "notBefore": 0,
+   *    "access": {
+   *        "manageGroupMembership": true,
+   *        "view": true,
+   *        "mapRoles": true,
+   *        "impersonate": true,
+   *        "manage": true
+   *    }
+   *}'
+   * @param userId 
+   * @param adminToken 
+   */
   async confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<IAuthResponse> {
-
-    const body: ConfirmEmailType = {
-      email: userEmail,
-      emailVerified: "true",
-      username: userEmail,
-      enabled: "true",
-    };
-
-    //User endpoint
-    const URL = `${GlobalConfig.KeycloakPath.users}/${userId}`;
-
     try {
+      const body: ConfirmEmailType = {
+        email: userEmail,
+        emailVerified: "true",
+        username: userEmail,
+        enabled: "true",
+      };
+
+      //User endpoint
+      const URL = `${GlobalConfig.KeycloakPath.users}/${userId}`;
+
       const response: AxiosResponse<any> = await this.http.put(
         URL,
         JSON.stringify(body),
@@ -400,20 +403,20 @@ export class AuthKeycloakImpl implements IAuth {
             Authorization: `Bearer ${adminToken}`,
             'Content-Type': 'application/json',
           },
-        },).toPromise();
+        }).toPromise();
 
       switch (response.status) {
         case HttpStatus.NO_CONTENT: //204
-        return { isSuccess: true, status: response.status, error: undefined, data: { email: userEmail, message: "Email confirmed!" } }; //successful
+          return { isSuccess: true, status: response.status, message: undefined, data: { email: userEmail, message: "Email confirmed!" } }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
         default:
-          return { isSuccess: false, status: response.status, error: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, error: error.message, data: null };
+      return { isSuccess: false, status: 500, message: error.message, data: error };
     }
   };
 
@@ -432,38 +435,41 @@ export class AuthKeycloakImpl implements IAuth {
     newPassword: string,
     adminToken: string
   ): Promise<IAuthResponse> {
-    
-    const body = {
-      type: 'password',
-      temporary: false,
-      value: newPassword,
-    };
+    try {
+      const body = {
+        type: 'password',
+        temporary: false,
+        value: newPassword,
+      };
 
-        //User endpoint
-        const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/reset-password`;
+      //User endpoint
+      const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/reset-password`;
 
-    const res = await this.http
-      .put(
+      const res = await this.http
+        .put(
           URL,
-        JSON.stringify(body),
-        {
-          headers: {
-            Authorization: `Bearer ${adminToken}`,
-            'Content-Type': 'application/json',
+          JSON.stringify(body),
+          {
+            headers: {
+              Authorization: `Bearer ${adminToken}`,
+              'Content-Type': 'application/json',
+            },
           },
-        },
-      )
-      .toPromise();
+        )
+        .toPromise();
 
-    switch (res.status) {
-      case HttpStatus.NO_CONTENT: //204
-        return { isSuccess: true, status: res.status, error: undefined, data: { message: 'Password has updated successful' } }; //successful
-      case HttpStatus.UNAUTHORIZED: //401
-        return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
-      case HttpStatus.BAD_REQUEST: //400 no puede repetir contraseña
-        return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
-      default:
-        return { isSuccess: false, status: res.status, error: res.statusText, data: res.data };
+      switch (res.status) {
+        case HttpStatus.NO_CONTENT: //204
+          return { isSuccess: true, status: res.status, message: undefined, data: { message: 'Password has been updated successful!' } }; //successful
+        case HttpStatus.UNAUTHORIZED: //401
+          return { isSuccess: false, status: res.status, message: res.statusText, data: res.data };
+        case HttpStatus.BAD_REQUEST: //400 no puede repetir contraseña
+          return { isSuccess: false, status: res.status, message: res.statusText, data: res.data };
+        default:
+          return { isSuccess: false, status: res.status, message: res.statusText, data: res.data };
+      }
+    } catch (error) {
+      return { isSuccess: false, status: 500, message: error.message, data: error };
     }
   };
 

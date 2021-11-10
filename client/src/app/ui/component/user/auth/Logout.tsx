@@ -29,7 +29,7 @@ const Logout: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const { logout } = useLogout();
   const classes = useStyles();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
 
   /**

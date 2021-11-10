@@ -17,8 +17,8 @@ async function bootstrap() {
   app.enableCors();
 
 
-  console.log('SET app route', process.env.SERVER_BFF_APP_PREFIX_ROUTE);
-  app.setGlobalPrefix(process.env.SERVER_BFF_APP_PREFIX_ROUTE);
+  console.log('SET app route', GlobalConfig.PREFIX_ROUTE);
+  app.setGlobalPrefix(GlobalConfig.PREFIX_ROUTE);
 
   console.log('load swagger module');
   setupDocModule(app);

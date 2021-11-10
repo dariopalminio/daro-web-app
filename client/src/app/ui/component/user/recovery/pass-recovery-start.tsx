@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useContext } from "react";
+import React, { FunctionComponent, useState } from "react";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
@@ -56,13 +56,12 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 const PassRecoveryStart: FunctionComponent = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
-  const [emailErrorText] = useState("Email inválido");
+  const [emailErrorText] = useState("Invalid Email");
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { isProcessing, isSuccess, hasError, msg, sendEmailToRecovery } = useRecovery();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
 
   /**
@@ -120,7 +119,7 @@ const PassRecoveryStart: FunctionComponent = () => {
             <TextField
               id="standard-basic"
               className="textfield-custom"
-              label="Email"
+              label={t('profile.label.email')}
               placeholder="your@email.com"
               onChange={(e) => handleEmailChange(e.target.value)}
               value={email}

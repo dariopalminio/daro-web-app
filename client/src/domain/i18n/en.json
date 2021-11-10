@@ -6,7 +6,8 @@
     "login.label.password": "Password",
     "login.success.authorized": "Authorized",
     "auth.error.unknow": "Error: Unknown!",
-    "auth.error.unauthorized": "Error: Unauthorized!",
+    "auth.login.error.unauthorized": "Error: Unauthorized! Password or email is wrong.",
+    "auth.login.error.unauthorized.decoding.JWT": "Error: Unauthorized! Password or email is wrong.",
     "auth.error.conflict": "Error: Conflict. Username already exists!",
     "auth.error.bad.request": "Error: Bad Request!",
     "auth.error.connection.refused": "Network Error! Connection refused. Auth server may be down.",
@@ -47,6 +48,8 @@
     "recovery.updated.successful": "Password has updated successful",
     "recovery.password.error.bad.request": "Can not update password! Bad request. It may happen that the verification code expired or that the passwords are invalid. Try again.",
     "recovery.password.successful": "Password updated!",
+    "recovery.info.sent.pass": "We have sent password reset instructions to your email address.",
+    "recovery.info.check.email.is.correct": "If no email is received within ten minutes, check that the submitted address is correct.",
     "contact.title": "Contact us",
     "contact.info.call.to.action": "Drop us a line:",
     "contact.command.send": "Send",
@@ -58,5 +61,11 @@
     "notification.error.contact.empty": "Contact is empty!",
     "notification.info.sending": "Trying to send email!",
     "language.availables": "Available languages ​​you can choose:",
-    "language.current": "Your current language is:"
+    "language.current": "Your current language is:",
+    "account.current.user": "account of current user",
+    "profile.command": "Profile",
+    "contact.label.fullname": "Full name",
+    "profile.label.email": "email",
+    "contact.label.message": "Message"
+
 }

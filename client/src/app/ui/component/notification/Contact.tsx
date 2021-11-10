@@ -68,7 +68,7 @@ const Contact: FunctionComponent = () => {
   const [emailErrorText] = useState("Invalid Email");
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
 
   /**
@@ -139,7 +139,7 @@ const Contact: FunctionComponent = () => {
             <TextField
               id="standard-basic-1"
               className={clsx(classes.textfieldCustom)}
-              label="Full Name"
+              label={t('contact.label.fullname')}
               placeholder=""
               onChange={(e) => handleNameChange(e.target.value)}
               value={contact.name}
@@ -148,7 +148,7 @@ const Contact: FunctionComponent = () => {
             <TextField
               id="standard-basic"
               className={clsx(classes.textfieldCustom)}
-              label="Email"
+              label={t('profile.label.email')}
               placeholder="daro@email.com"
               onChange={(e) => handleEmailChange(e.target.value)}
               value={contact.email}
@@ -168,7 +168,7 @@ const Contact: FunctionComponent = () => {
             <TextField
               id="outlined-textarea"
               className={clsx(classes.multilineCustom)}
-              label="Message"
+              label={t('contact.label.message')}
               placeholder="Placeholder"
               onChange={(e) => handleMessageChange(e.target.value)}
               multiline

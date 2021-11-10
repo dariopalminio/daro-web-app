@@ -1,6 +1,9 @@
 import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put } from '@nestjs/common';
 import { IProductService } from '../../domain/service/interface/product.service.interface';
 import { Product } from '../../domain/model/product/product';
+import * as GlobalConfig from '../../GlobalConfig';
+import { HelloWorldDTO } from '../dto/hello-world.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 export const PRODUCT_SERVICE_TOKEN = 'ProductService_Implementation';
 
@@ -13,10 +16,29 @@ export class ProductController {
     ) {}
 
 
-    @Get()
-    getHello(): string {
-      return "Hello World! I'm Product Service...";
-    };
+    @ApiOperation({
+        summary:
+          'Hello world is get method to do Ping and test this service.',
+      })
+      @ApiResponse({
+        status: 200,
+        description:
+          'Succefully Ping',
+        type: HelloWorldDTO,
+      })
+      @Get()
+      getHello(@Res() res) {
+        const response: HelloWorldDTO = {
+          isSuccess: true,
+          status: 200,
+          message: "Hello World from product service " + GlobalConfig.VERSION + "!",
+          name: "product",
+          version: GlobalConfig.VERSION,
+          date: new Date()
+        };
+        return res.status(200).json(response);
+      };
+    
 
     // Get Products /product/all
     @Get('all')
@@ -37,7 +59,7 @@ export class ProductController {
     @Post('create')
     async createProduct(@Res() res, @Body() createProductDTO: Product) {
             const productCreated = await this.productService.create(createProductDTO);
-            if (!productCreated) throw new NotFoundException('Product does not exist or canot delete category!');
+            if (!productCreated) throw new NotFoundException('Product does not exist or canot delete!');
             return res.status(HttpStatus.OK).json({
                 message: 'Product Successfully Created',
                 productCreated

@@ -14,7 +14,7 @@ import Alert from "@material-ui/lab/Alert";
  */
 const Auth: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
 
   return (

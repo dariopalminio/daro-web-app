@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 export const PORT: number = Number(process.env.SERVER_BFF_PORT);
-
+export const PREFIX_ROUTE: string = process.env.SERVER_BFF_PREFIX_ROUTE;
 export const COMPANY_NAME: string = process.env.SERVER_BFF_COMPANY_NAME;
 
 export const AUTH_MIDDLEWARE_ON = process.env.SERVER_BFF_AUTH_MIDDLEWARE_ON.toLowerCase() == 'true' ? true : false; 
@@ -50,3 +50,10 @@ export const KeycloakPath = {
   token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
 };
 
+export const DB = {
+    MONGO_ON_SERVER: process.env.SERVER_BFF_MONGO_ON_SERVER as string,
+    MONGO_DB: process.env.SERVER_BFF_MONGO_DB as string,
+    MONGO_HOST:process.env.SERVER_BFF_MONGO_HOST as string,
+    MONGO_USERNAME: process.env.SERVER_BFF_MONGO_USERNAME as string,
+    MONGO_USERPASSWORD: process.env.SERVER_BFF_MONGO_USERPASSWORD as string,
+  };

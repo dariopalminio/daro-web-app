@@ -1,6 +1,5 @@
-import React, { FunctionComponent, useState } from "react";
-import IUserValidator from "../../../../../domain/helper/user-validator.interface";
-import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
+import { FunctionComponent } from "react";
+import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import emailSentImage from "../../../image/email_sent.png";
 
@@ -50,42 +49,11 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName PassRecoveryCallToActionMsg
  */
 const PassRecoveryMsg: FunctionComponent = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailIsInvalid, setEmailIsInvalid] = useState(false);
-  const [emailErrorText] = useState("Email inválido");
+  const { t } = useTranslation();
   const classes = useStyles();
-  const validator: IUserValidator = UserValidatorFactory.create();
-
-  //content text
-  const info_recovery_sent_pass = "We've sent password reset instructions to your email address.";
-  const info_recovery_check_email_is_correct = "If no email is received within ten minutes, check that the submitted address is correct.";
-
-  /**
-   * Submit
-   */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    //TODO
-  };
-
-  /**
-   * Validate if the email is in the correct format
-   * @param emailValue
-   */
-  const handleEmailChange = async (emailValue: string) => {
-    setEmail(emailValue);
-
-    if (!(await validator.emailIsValid(emailValue))) {
-      setEmailIsInvalid(true);
-    } else {
-      setEmailIsInvalid(false);
-    }
-  };
 
   return (
     <div>
-
 
           <Paper className={clsx(classes.paperLoginForm)}>
             <div className={clsx(classes.wrapperCenter)}>
@@ -93,7 +61,7 @@ const PassRecoveryMsg: FunctionComponent = () => {
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
-            {info_recovery_sent_pass} 
+            {t('recovery.info.sent.pass')} 
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
@@ -101,16 +69,11 @@ const PassRecoveryMsg: FunctionComponent = () => {
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>
-            {info_recovery_check_email_is_correct}
+            {t('recovery.info.check.email.is.correct')}
             </div>
 
-
           </Paper>
-
-
       <br />
-
-
     </div>
   );
 };

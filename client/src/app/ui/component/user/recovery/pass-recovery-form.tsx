@@ -1,9 +1,7 @@
-import React, { useState, useContext } from "react";
-import { FunctionComponent } from "react";
+import React, { useState } from "react";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
-import { Redirect } from "react-router";
 import { useTranslation } from "react-i18next";
 import useRecovery from "../../../../../domain/hook/user/recovery.hook";
 
@@ -72,7 +70,7 @@ function PassRecoveryForm({ token }: TParams) {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { isProcessing, isSuccess, hasError, msg, updatePassword } = useRecovery();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   /**
    * Submit update password

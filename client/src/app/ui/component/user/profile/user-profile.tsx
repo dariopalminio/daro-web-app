@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { supportedLngs } from "../../../../../domain/i18n/supported-lngs";
 
 //@material-ui
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -33,7 +32,7 @@ const UserProfile: FunctionComponent = () => {
             <ListItem button key={index} onClick={() => changeLanguage(lng)}>
               <ListItemIcon>
               <FlagIcon />
-              { ((i18n.language) ==lng) && <StartIcon />}
+              { ((i18n.language) === lng) && <StartIcon />}
               </ListItemIcon>
               <ListItemText primary={lng} />
             </ListItem>

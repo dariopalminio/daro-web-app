@@ -1,4 +1,4 @@
-import * as OriginConfig from '../infrastructure.config';
+import * as InfraConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
@@ -7,10 +7,10 @@ import { Tokens } from '../../domain/model/user/tokens.type';
 import { AxiosError } from 'axios';
 
 /**
- * User Api Client Implementation
+ * Auth Api Client Implementation
  * @returns 
  */
-export default function UserApiClientImpl(): IAuthClient {
+export default function ApiAuthClientImpl(): IAuthClient {
 
   /**
    * register
@@ -41,7 +41,7 @@ export default function UserApiClientImpl(): IAuthClient {
     console.log("register:", body);
 
     //User endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/register`;
     console.log("url register:", URL);
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -77,7 +77,7 @@ export default function UserApiClientImpl(): IAuthClient {
     accessToken: string): Promise<any> {
 
     //Notification endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm/start`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/register/confirm/start`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -132,7 +132,7 @@ export default function UserApiClientImpl(): IAuthClient {
 
     console.log("body create user:", body);
     //User endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/register/confirm`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/register/confirm`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -167,7 +167,7 @@ export default function UserApiClientImpl(): IAuthClient {
     };
 
     //Login endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/login`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/login`;
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
@@ -200,7 +200,7 @@ export default function UserApiClientImpl(): IAuthClient {
   function logoutService(userId: string, adminToken: string): Promise<number> {
 
     //User endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/logout`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/logout`;
 
     const body = {
       id: userId,
@@ -240,7 +240,7 @@ export default function UserApiClientImpl(): IAuthClient {
     accessToken: string): Promise<any> {
 
     //Notification endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/recovery/start`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/recovery/start`;
     console.log("recovery URL:", URL);
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -297,7 +297,7 @@ export default function UserApiClientImpl(): IAuthClient {
     };
 
     //User endpoint
-    const URL = `${OriginConfig.APIEndpoints.backend}/auth/recovery/update`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/recovery/update`;
     try {
       const response: any = await axios({
         method: 'post',

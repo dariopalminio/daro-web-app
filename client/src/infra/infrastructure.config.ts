@@ -22,11 +22,9 @@ export const is_fake_mode = ((process.env.REACT_APP_FAKE === 'true') ? true : fa
 
 
 export const APIEndpoints = {
-  auth: (process.env.REACT_APP_AUTH_API ? process.env.REACT_APP_AUTH_API : 'http://localhost:8080') as string,
-  //auth: 'http://localhost:8080', //process.env.REACT_APP_AUTH_API,
+  authKeycloak: (process.env.REACT_APP_KEYCLOAK ? process.env.REACT_APP_KEYCLOAK : 'http://localhost:8080') as string,
   notifications: (process.env.REACT_APP_AUTH_API ? process.env.REACT_APP_NOTIFICATION_API : 'http://localhost:3001') as string,
-  //notifications: 'http://localhost:3001', //process.env.REACT_APP_NOTIFICATION_API,
-  backend: (process.env.REACT_APP_USER_API ? process.env.REACT_APP_USER_API : 'http://localhost:3001') as string,
+  auth: (process.env.REACT_APP_API_AUTH ? process.env.REACT_APP_API_AUTH : 'http://localhost:3001') as string,
 };
 
 export const Keycloak = {
@@ -39,8 +37,8 @@ export const Keycloak = {
 };
 
 export const KeycloakPath = {
-  user_info: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/userinfo`,
-  users: `${APIEndpoints.auth}/auth/admin/realms/${Keycloak.realm}/users`,
-  token: `${APIEndpoints.auth}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
+  user_info: `${APIEndpoints.authKeycloak}/auth/realms/${Keycloak.realm}/protocol/openid-connect/userinfo`,
+  users: `${APIEndpoints.authKeycloak}/auth/admin/realms/${Keycloak.realm}/users`,
+  token: `${APIEndpoints.authKeycloak}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
 };
 

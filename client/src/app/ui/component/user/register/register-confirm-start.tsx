@@ -1,8 +1,6 @@
-import React, {
+import {
   FunctionComponent,
-  useState,
-  useContext,
-  useEffect,
+  useContext
 } from "react";
 import clsx from "clsx";
 import SessionContext, {
@@ -61,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const RegisterConfirmStart: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const classes = useStyles();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   
   const {
     isProcessing,
@@ -82,14 +80,6 @@ const RegisterConfirmStart: FunctionComponent = () => {
       const userEmail: string | undefined = session?.email;
       console.log("startConfirmEmail with ", userEmail);
       startConfirmEmail(userName, userEmail);
-  };
-
-  /**
-   * Handle Automatic login.
-   * @param email 
-   */
-  const handleAutomaticLogin = async (email: string) => {
-    //login(email, password);
   };
 
   return (

@@ -19,7 +19,7 @@ export enum AuthStatusEnum {
  */
 export const AuthStatusText = {
     'UNKNOWN': { status: 0, text: 'auth.error.unknow' },
-    'UNAUTHORIZED': { status: 401, text: 'auth.error.unauthorized' },
+    'UNAUTHORIZED': { status: 401, text: 'login.auth.error.unauthorized' },
     'CONFLICT': { status: 409, text: 'auth.error.conflict' },
     'BAD_REQUEST': { status: 400, text: 'auth.error.bad.request' },
     'ERR_CONNECTION_REFUSED': { status: 102, text: 'auth.error.connection.refused' },

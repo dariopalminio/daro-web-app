@@ -76,7 +76,7 @@ export const RegisterForm: FunctionComponent = () => {
   const [confirmPassErrorText] = useState("Pasword does not match!");
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   
   const { isProcessing, isSuccess, hasError, msg, register } =
     useRegister();

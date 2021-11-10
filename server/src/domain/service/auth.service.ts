@@ -44,11 +44,15 @@ export class AuthService implements IAuthService {
    * @param userRegisterData 
    * @returns 
    */
-  async register(userRegisterData: UserRegisterDataDTO): Promise<any> {
+  async register(userRegisterData: UserRegisterDataDTO): Promise<IAuthResponse> {
 
     // First: obtains admin access token
-    const adminToken = await this.externalAuthService.getAdminToken();
-
+    let adminToken;
+    try {
+      adminToken = await this.externalAuthService.getAdminToken();
+    } catch (error) {
+      return { isSuccess: false, status: 500, message: "Could not get admin acces token from auth server!", data: error };
+    }
     // Second: creates a new user in authorization server using admin access token
     const authCreatedUserResp = await this.externalAuthService.register(userRegisterData.username,
       userRegisterData.firstName, userRegisterData.lastName, userRegisterData.email,
@@ -65,7 +69,7 @@ export class AuthService implements IAuthService {
 
     if (!authCreatedUser) {
       // ERROR: User could not be created in auth server
-      return { isSuccess: false, error: "User could not be created in auth server!" };
+      return { isSuccess: false, status: 500, message: "User could not be created in auth server!", data: {} };
     }
 
     const { id } = authCreatedUser; // ID in external authorization server
@@ -87,7 +91,7 @@ export class AuthService implements IAuthService {
       } catch (error) {
         console.log("User could not be deleted in externa auth service! ", error);
       }
-      return { isSuccess: false, error: "User could not be created in database server!" };
+      return { isSuccess: false, status: 500, message: "User could not be created in database server!", data: {} };
     }
 
     return authCreatedUserResp;
@@ -100,17 +104,18 @@ export class AuthService implements IAuthService {
    * @param startConfirmEmailData 
    * @returns 
    */
-  async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailData): Promise<any> {
-
-    if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
+  async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailData): Promise<IAuthResponse> {
 
     try {
-      const newVerificationCode = generateToken(); //generate verification code
+
+      if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
 
       let user = await this.userService.getByQuery({ userName: startConfirmEmailData.userName });
       if (!user) throw new Error("User not found!");
 
+      const newVerificationCode = generateToken(); //generate verification code
       user.verificationCode = newVerificationCode;
+
       const updatedOk: boolean = await this.userService.updateById(user._id, user);
       if (!updatedOk) throw new Error("Can not save generated verification code!");
 
@@ -127,11 +132,22 @@ export class AuthService implements IAuthService {
     `;
 
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Please verify your email`;
-      return this.sender.sendEmail(subject, startConfirmEmailData.email, contentHTML);
+      const emailResponse: any = this.sender.sendEmail(subject, startConfirmEmailData.email, contentHTML);
 
-      return true;
+      return {
+        isSuccess: true,
+        status: 200,
+        message: "An email-verification was sent to the user with a link the user can click to verify their email address!",
+        data: emailResponse
+      };
+
     } catch (error) {
-      throw error;
+      return {
+        isSuccess: false,
+        status: 500,
+        message: error.message,
+        data: error
+      };
     };
   };
 
@@ -152,7 +168,7 @@ export class AuthService implements IAuthService {
       const authResponse: IAuthResponse = {
         isSuccess: false,
         status: 400, //BAD_REQUEST
-        error: error.message,
+        message: error.message,
         data: { message: "Invalid token!" }
       };
       return authResponse;
@@ -161,7 +177,12 @@ export class AuthService implements IAuthService {
     //Update user to verificated
 
     //Update in external auth server
-    const adminToken = await this.externalAuthService.getAdminToken();
+    let adminToken;
+    try {
+      adminToken = await this.externalAuthService.getAdminToken();
+    } catch (error) {
+      return { isSuccess: false, status: 500, message: "Could not get admin acces token from auth server!", data: error };
+    }
     const updetedAuthUser: IAuthResponse = await this.externalAuthService.confirmEmail(user.authId, user.email, adminToken);
 
     if (!updetedAuthUser.isSuccess) {
@@ -190,20 +211,20 @@ export class AuthService implements IAuthService {
     const authResponse: IAuthResponse = {
       isSuccess: true,
       status: 200,
-      error: undefined,
+      message: "Account confirmed!",
       data: { email: user.email }
     };
 
     return authResponse;
   };
 
-/**
- * Send email to notificate successful confirmation
- * Send email with welcome message to end registration process.
- * @param 
- * @returns 
- */
- private async sendSuccessfulEmailConfirm(name: string, email: string): Promise<any> {
+  /**
+   * Send email to notificate successful confirmation
+   * Send email with welcome message to end registration process.
+   * @param 
+   * @returns 
+   */
+  private async sendSuccessfulEmailConfirm(name: string, email: string): Promise<any> {
 
     try {
       const contentHTML = `
@@ -226,7 +247,7 @@ export class AuthService implements IAuthService {
    * @param email 
    * @returns 
    */
-   private async sendSuccessfulRecoveryEmail(name: string, email: string): Promise<any> {
+  private async sendSuccessfulRecoveryEmail(name: string, email: string): Promise<any> {
 
     try {
       const contentHTML = `
@@ -256,6 +277,7 @@ export class AuthService implements IAuthService {
     // Validate login form TODO...
 
     const loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
+    console.log("Login in service body: ", loginAuthResp);
     return loginAuthResp;
   };
 
@@ -273,11 +295,11 @@ export class AuthService implements IAuthService {
    * @param startRecoveryDataDTO 
    * @returns 
    */
-  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO): Promise<any> {
-
-    if (!validEmail(startRecoveryDataDTO.email)) throw new Error("Invalid email!");
+  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO): Promise<IAuthResponse> {
 
     try {
+      if (!validEmail(startRecoveryDataDTO.email)) throw new Error("Invalid email!");
+
       //generate verification code
       const newVerificationCode = generateToken();
 
@@ -303,11 +325,21 @@ export class AuthService implements IAuthService {
     `;
 
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Recover your password`;
-      return this.sender.sendEmail(subject, startRecoveryDataDTO.email, emailContentHTML);
+      const emailResponse: any = this.sender.sendEmail(subject, startRecoveryDataDTO.email, emailContentHTML);
 
-      return true;
+      return {
+        isSuccess: true,
+        status: 200,
+        message: "Email was sent To Recovery Password!",
+        data: emailResponse
+      };
     } catch (error) {
-      throw error;
+      return {
+        isSuccess: false,
+        status: 500,
+        message: error.message,
+        data: error
+      };
     };
   };
 
@@ -317,14 +349,14 @@ export class AuthService implements IAuthService {
    * @returns 
    */
   async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO): Promise<IAuthResponse> {
-    let user: IUser  = null;
+    let user: IUser = null;
     try {
       user = await this.verificateToken(recoveryUpdateDataDTO.token);
     } catch (error) {
       const authResponse: IAuthResponse = {
         isSuccess: false,
         status: 400, //BAD_REQUEST
-        error: error.message,
+        message: error.message,
         data: { message: "Invalid token!" }
       };
       return authResponse;
@@ -332,7 +364,12 @@ export class AuthService implements IAuthService {
 
     //Update password in user
     //Update in external auth server
-    const adminToken = await this.externalAuthService.getAdminToken();
+    let adminToken;
+    try {
+      adminToken = await this.externalAuthService.getAdminToken();
+    } catch (error) {
+      return { isSuccess: false, status: 500, message: "Could not get admin acces token from auth server!", data: error };
+    }
     const newPassword = recoveryUpdateDataDTO.password;
     const updetedAuthUser: IAuthResponse = await this.externalAuthService.resetPassword(user.authId, newPassword, adminToken);
     console.log(updetedAuthUser);
@@ -344,10 +381,10 @@ export class AuthService implements IAuthService {
     const discardVerificationCode = generateToken(); //generate verification code to invalidate future uses
     user.verificationCode = discardVerificationCode; //set verification code to invalidate future uses
     const updatedOk: boolean = await this.userService.updateById(user._id, user);
-   
+
     if (!updatedOk) {
-         console.log("Can not to reset verification code in data base for user:", user);
-       }
+      console.log("Can not to reset verification code in data base for user:", user);
+    }
 
     //Notificate to user
     try {
@@ -361,7 +398,7 @@ export class AuthService implements IAuthService {
     const authResponse: IAuthResponse = {
       isSuccess: true,
       status: 200,
-      error: undefined,
+      message: undefined,
       data: { email: user.email }
     };
 
@@ -378,7 +415,7 @@ export class AuthService implements IAuthService {
 
     //Validate token
     if (!token) throw Error("Invalid verification code token!");
-    
+
     const partsArray = decodeToken(token);
     const decodedEmail = partsArray[0];
     const decodedCode = partsArray[1];
@@ -392,7 +429,7 @@ export class AuthService implements IAuthService {
       verificationCode: decodedCode,
     });
 
-    if (user==null) {
+    if (user == null) {
       throw Error("Not found or verification code is wrong!");
     }
 

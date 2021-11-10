@@ -1,9 +1,6 @@
-import { FunctionComponent } from "react";
+
 import RegisterConfirmEmail from "../../../component/user/register/register-confirm-email";
 import {
-  BrowserRouter as Router,
-  Route,
-  Link,
   RouteComponentProps,
 } from "react-router-dom";
 

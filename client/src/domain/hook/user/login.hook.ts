@@ -34,10 +34,6 @@ export default function useLogin(
         // First: authenticate user and pass
         userClient.loginService(email, password)
             .then(tokens => {
-
-                // Second: retrieve user information
-                // Instead of making a new call to the api (with "getUserInfoService(jwt)"), 
-                // we decode the jason web token.
                 try {
                     const userSessionValue: SessionType = convertJwtToSessionType(tokens);
                     
@@ -53,7 +49,8 @@ export default function useLogin(
                     setSessionValue(userSessionValue);
                 } catch (e: any) {
                     // Unauthorized by error in decoding JWT
-                    setState({ isProcessing: false, hasError: true, msg: e.message, isSuccess: false });
+                    const msgkeyUnauth = "login.error.unauthorized.decoding.JWT";
+                    setState({ isProcessing: false, hasError: true, msg: e.msgkeyUnauth, isSuccess: false });
                     removeSessionValue();
                 }
             })

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import useRegister from "../../../../../domain/hook/user/register.hook";
 import emailOkImage from "../../../image/email_ok.png";
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ type TParams = { token: string };
 function RegisterConfirmEmail({ token }: TParams) {
   const [isExecuted, setIsExecuted] = useState(false);
   const { isProcessing, isSuccess, hasError, msg, confirmAccount } = useRegister();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const executeConfirmRequest = () => {
     setIsExecuted(true);

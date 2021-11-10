@@ -6,7 +6,8 @@
     "login.label.password": "Contraseña",
     "login.success.authorized": "¡Te has logeado satisfactoriamente!",
     "auth.error.unknow": "Error: Desconocido!",
-    "auth.error.unauthorized": "Error: ¡No autorizado!",
+    "auth.login.error.unauthorized": "Error: ¡No autorizado! El mail o la contraseña están incorrectos.",
+    "auth.login.error.unauthorized.decoding.JWT": "Error: ¡No autorizado! Algo salió mal decodificando el token de seguridad JWT.",
     "auth.error.conflict": "Error: Conflicto. ¡Username ya existe!",
     "auth.error.bad.request": "Petición no válida!",
     "auth.error.connection.refused": "Error de red! Conexión rechazada.",
@@ -47,6 +48,8 @@
     "recovery.updated.successful": "La contraseña ha sido actualizada de forma exitosa.",
     "recovery.password.error.bad.request": "No pudo cambiar la contraseña. La petición se encuentra con problemas. Puede ser que se le haya expirado el token. Intente de nuevo.",
     "recovery.password.successful": "La contraseña fue cambiada satisfactoriamente.",
+    "recovery.info.sent.pass": "We have sent password reset instructions to your email address.",
+    "recovery.info.check.email.is.correct": "If no email is received within ten minutes, check that the submitted address is correct.",
     "contact.title": "Contactanos",
     "contact.info.call.to.action": "Dejanos un mensaje:",
     "contact.command.send": "Enviar mensaje",
@@ -58,5 +61,10 @@
     "notification.error.contact.empty": "Contact is empty!",
     "notification.info.sending": "Trying to send email!",
     "language.availables": "Lenguajes que puedes elegir:",
-    "language.current": "Tu lenguaje actual es:"
+    "language.current": "Tu lenguaje actual es:",
+    "account.current.user": "account of current user",
+    "profile.command": "Profile",
+    "contact.label.fullname": "Nombre completo",
+    "profile.label.email": "email",
+    "contact.label.message": "Mensaje"
  }

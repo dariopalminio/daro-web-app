@@ -1,9 +1,8 @@
 
 
 export interface IAuthResponse {
-
     isSuccess: boolean;
     status: number; //HTTP status
-    error: string; 
+    message: string; 
     data: any;
   }
