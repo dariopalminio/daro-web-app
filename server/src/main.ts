@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import * as GlobalConfig from './GlobalConfig';
+import { AppModule } from './app/app.module';
+import * as GlobalConfig from './infra/config/global-config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { setupDocModule } from './infra/document/setup-doc-module';
 

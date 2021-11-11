@@ -1,40 +1,40 @@
 
 import { HttpModule, HttpService, Module, OnModuleInit, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from './app/filter/exception.filter';
-import { AppController } from './app/controller/app.controller';
-import { NotificationController, SUPPORT_SERVICE_TOKEN } from './app/controller/notification.controller';
-import { ProductController, PRODUCT_SERVICE_TOKEN } from './app/controller/product.controller';
-import { CategoryController, CATEGORY_SERVICE_TOKEN } from './app/controller/category.controller';
-import { NotificationService, EMAIL_SENDER_TOKEN } from './domain/service/notification.service';
-import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './domain/service/product.service';
-import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from './domain/service/category.service';
-import { AuthService, AUTH_IMPL_TOKEN, USER_SERVICE_IMPL_TOKEN } from './domain/service/auth.service';
-import { UserService, USER_REPOSITORY_TOKEN } from './domain/service/user.service';
-import { UserController, USER_SERVICE_TOKEN } from './app/controller/user.controller';
-import { AuthController, AUTH_SERVICE_TOKEN } from './app/controller/auth.controller';
-import { EmailSmtpSenderAdapter } from './infra/email/email-sender.adapter';
-import { AuthMiddleware } from './app/middleware/auth.middleware';
+import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from '../app/filter/exception.filter';
+import { AppController } from '../app/controller/app.controller';
+import { NotificationController, SUPPORT_SERVICE_TOKEN } from '../app/controller/notification.controller';
+import { ProductController, PRODUCT_SERVICE_TOKEN } from '../app/controller/product.controller';
+import { CategoryController, CATEGORY_SERVICE_TOKEN } from '../app/controller/category.controller';
+import { NotificationService, EMAIL_SENDER_TOKEN } from '../domain/service/notification.service';
+import { ProductService, PRODUCT_REPOSITORY_TOKEN } from '../domain/service/product.service';
+import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from '../domain/service/category.service';
+import { AuthService, AUTH_IMPL_TOKEN, USER_SERVICE_IMPL_TOKEN } from '../domain/service/auth.service';
+import { UserService, USER_REPOSITORY_TOKEN } from '../domain/service/user.service';
+import { UserController, USER_SERVICE_TOKEN } from '../app/controller/user.controller';
+import { AuthController, AUTH_SERVICE_TOKEN } from '../app/controller/auth.controller';
+import { EmailSmtpSenderAdapter } from '../infra/email/email-sender.adapter';
+import { AuthMiddleware } from '../app/middleware/auth.middleware';
 import { ProductSchema, 
-  PRODUCT_COLLECTION_TOKEN } from './infra/database/schema/product.schema';
+  PRODUCT_COLLECTION_TOKEN } from '../infra/database/schema/product.schema';
 import { UserSchema, 
-    USER_COLLECTION_TOKEN } from './infra/database/schema/user.schema';
+    USER_COLLECTION_TOKEN } from '../infra/database/schema/user.schema';
 
-import { AuthKeycloakImpl } from './infra/auth/auth-keycloak.impl';
+import { AuthKeycloakImpl } from '../infra/auth/auth-keycloak.impl';
 
 import { CategorySchema, 
-  CATEGORY_COLLECTION_TOKEN } from './infra/database/schema/category.schema';
-import DB_CONNECTION from './infra/database/db.connection.string';
+  CATEGORY_COLLECTION_TOKEN } from '../infra/database/schema/category.schema';
+import DB_CONNECTION from '../infra/database/db.connection.string';
 import {
   UserRepository
-} from './infra/database/repository/user.repository';
+} from '../infra/database/repository/user.repository';
 import {
   CategoryRepository
-} from './infra/database/repository/category.repository';
+} from '../infra/database/repository/category.repository';
 import {
   ProductRepository
-} from './infra/database/repository/product.repository';
-import LoggerHelper from './infra/logger/logger.helper';
+} from '../infra/database/repository/product.repository';
+import LoggerHelper from '../infra/logger/logger.helper';
 
 
 //Mongo
@@ -42,28 +42,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 console.log(DB_CONNECTION);
 
-/**
- * 
- 
-export default () => ({
-  mongoConnection: `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_USERPASSWORD}@${process.env.MONGO_HOST}/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
-  test: process.env.TEST,
-  redirectUri: process.env.REDIRECT_URI,
-});
-
-
-
-MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get('mongoConnection'),
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useFindAndModify: false,
-      }),
-      inject: [ConfigService],
-    })
- */
 
 //Dependency Injector
 @Module({

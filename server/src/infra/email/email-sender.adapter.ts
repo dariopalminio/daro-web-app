@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../config/global-config';
 import IEmailSender from '../../domain/output-port/email-sender.interface';
 
 const nodemailer = require("nodemailer");

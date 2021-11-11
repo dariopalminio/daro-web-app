@@ -7,7 +7,7 @@ import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
 import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../../infra/config/global-config';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
 import { StartConfirmEmailData } from '../model/auth/register/start-confirm-email-data';
 import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';

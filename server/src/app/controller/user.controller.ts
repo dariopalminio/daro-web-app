@@ -2,7 +2,7 @@ import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, Ht
 import { IUserService } from '../../domain/service/interface/user.service.interface';
 import { IUser } from '../../domain/model/user/user.interface';
 import { UserRegisterDTO } from '../../domain/model/auth/register/user-register.dto.type';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 

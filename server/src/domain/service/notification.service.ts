@@ -3,7 +3,7 @@ import { ContactMessage } from '../model/contact.message';
 import { INotificationService } from '../service/interface/notification.service.interface';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../../infra/config/global-config';
 import { Base64 } from 'js-base64';
 
 export const EMAIL_SENDER_TOKEN = 'EmailSender_Implementation';

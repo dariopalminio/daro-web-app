@@ -1,7 +1,7 @@
 import { Injectable, HttpService, HttpStatus, Inject } from '@nestjs/common';
 import { IAuth } from '../../domain/output-port/auth.interface';
 import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../config/global-config';
 import { stringify } from 'querystring';
 import { AxiosResponse } from 'axios';
 

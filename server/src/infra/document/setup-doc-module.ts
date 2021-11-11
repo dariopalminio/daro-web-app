@@ -1,5 +1,5 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../config/global-config';
 //import * as fs from 'fs';
 
 /**

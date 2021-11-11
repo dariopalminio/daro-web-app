@@ -1,7 +1,7 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
 import { ICategoryService } from '../../domain/service/interface/category.service.interface';
 import { ICategory } from '../../domain/model/category/category.interface';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 

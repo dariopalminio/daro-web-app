@@ -1,4 +1,4 @@
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../config/global-config';
 
 /**
  * DB_CONNECTION string for mongo data base

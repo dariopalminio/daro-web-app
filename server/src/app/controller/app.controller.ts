@@ -1,5 +1,5 @@
 import { Controller, Get, Res, Post, Body, Inject} from '@nestjs/common';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Res, Post, Headers, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
 import { IAuthService } from '../../domain/service/interface/auth.service.interface';
 import { StartConfirmEmailData } from '../../domain/model/auth/register/start-confirm-email-data';
@@ -8,7 +8,7 @@ import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { AuthResponseDTO } from '../../domain/model/auth/auth-response.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../../infra/config/global-config';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 export const AUTH_SERVICE_TOKEN = 'AuthService_Implementation';
@@ -141,9 +141,18 @@ export class AuthController {
     type: AuthResponseDTO,
   })
   @Post('recovery/start')
-  async sendEmailToRecoveryPass(@Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
-      const authResponse: AuthResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO);
-      return res.status(authResponse.status).json(authResponse);
+  async sendEmailToRecoveryPass(@Headers() headers, @Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
+
+    let locale = 'en';
+ 
+    if (headers !== undefined && headers.locale !== undefined) {
+        locale = headers.locale;
+    }
+
+    console.log("locale", locale);
+
+    const authResponse: AuthResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO);
+    return res.status(authResponse.status).json(authResponse);
 
   };
 

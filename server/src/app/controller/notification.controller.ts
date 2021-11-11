@@ -1,7 +1,7 @@
 import { Controller, Res, Get, Post, Body, Inject } from '@nestjs/common';
 import { INotificationService } from '../../domain/service/interface/notification.service.interface';
 import { ContactMessage } from '../../domain/model/contact.message';
-import * as GlobalConfig from '../../GlobalConfig';
+import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 

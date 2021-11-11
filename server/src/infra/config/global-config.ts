@@ -18,12 +18,9 @@ export const email = {
   PASS: process.env.SERVER_BFF_EMAIL_PASS as string,
   FROM: process.env.SERVER_BFF_EMAIL_FROM as string,
   APP_NAME: process.env.SERVER_BFF_EMAIL_APP_NAME as string
-}
-
+};
 
 export const PUBLIC_KEY = process.env.SERVER_BFF_KEYCLOAK_PUBLIC_KEY as string;
-
-
 
 // SERVER_BFF_ENV: prod | dev | qa
 export const environment = process.env.SERVER_BFF_ENV;
