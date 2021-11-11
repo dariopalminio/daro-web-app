@@ -1,10 +1,9 @@
-import { useCallback, useContext, useState } from 'react';
-import SessionContext, { ISessionContext } from '../../context/session.context';
+import { useCallback, useState } from 'react';
+//import SessionContext, { ISessionContext } from '../../context/session.context';
 import * as StateConfig from '../../domain.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IAuthClient } from '../../service/auth-client.interface';
-import { Base64 } from 'js-base64';
-import { ContactSupportOutlined } from '@material-ui/icons';
+
 
 
 /**
@@ -13,10 +12,10 @@ import { ContactSupportOutlined } from '@material-ui/icons';
 export default function useRecovery(authServiceInjected: IAuthTokensClient | null = null,
     userClientInjected: IAuthClient | null = null) {
 
-    const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
+    //const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, isSuccess: false, hasError: false, msg: '' });
     const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
-    const userClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * sendEmailToRecovery
@@ -37,7 +36,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
 
             responseAdminToken.then(jwtAdminToken => {
                 // Second: send email to confirmation process
-                userClient.sendEmailToRecoveryPass(email, recoveryPageLink, jwtAdminToken)
+                authClient.sendEmailToRecoveryPass(email, recoveryPageLink, jwtAdminToken)
                 .then(info => {
                     console.log("Response sendStartEmailConfirm...", info);
                     setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'ok'  });
@@ -56,7 +55,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
             });
         }
 
-    }, []);
+    }, [authClient, authTokenService]);
 
     const updatePassword = useCallback((token: string, password: string) => {
         setState({ isProcessing: true, isSuccess: false, hasError: false, msg: 'sending'  });
@@ -71,7 +70,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
             
             responseAdminToken.then(jwtAdminToken => {
                 // Second: send email to confirmation process
-                userClient.updatePassword(token, password, jwtAdminToken)
+                authClient.updatePassword(token, password, jwtAdminToken)
                 .then(info => {
                     setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'Password updated!'  });
 
@@ -89,7 +88,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
                 //removeSessionValue();
             });
         }
-    }, []);
+    }, [authClient, authTokenService]);
 
     return {
         isProcessing: state.isProcessing,

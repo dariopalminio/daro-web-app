@@ -1,10 +1,11 @@
 import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
+import { handleAxiosError, ApiError } from './api.client.error';
 import qs from 'querystring';
 import { IAuthTokensClient } from '../../domain/service/auth-tokens-client.interface';
 import { Tokens } from '../../domain/model/user/tokens.type';
 
+/*
 type NewUserRepresentationType = {
   username: string
   enabled: string
@@ -41,7 +42,7 @@ type LoginRequestType = {
   client_id: string
   client_secret: string
 };
-
+*/
 type NewAdminTokenRequestType = {
   client_id: string,
   grant_type: string,

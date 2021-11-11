@@ -15,7 +15,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
     const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, isSuccess: false, hasError: false, msg: '' });
     const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
-    const userClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * Register function
@@ -35,7 +35,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
         // Second: creates a new user with authorization using admin access token
         responseAdminToken.then(jwtAdminToken => {
 
-            const responseReg = userClient.register(
+            const responseReg = authClient.register(
                 email,
                 firstname,
                 lastname,
@@ -76,7 +76,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
             removeSessionValue();
         });
 
-    }, [setState, setSessionValue, removeSessionValue, authTokenService]);
+    }, [setState, setSessionValue, removeSessionValue, authTokenService, authClient]);
 
    /**
      * Start Confirm Email function
@@ -101,7 +101,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
 
             responseAdminToken.then(jwtAdminToken => {
                 // Second: send email to confirmation process
-                userClient.sendStartEmailConfirm(userName, email, verificationPageLink, jwtAdminToken).then(info => {
+                authClient.sendStartEmailConfirm(userName, email, verificationPageLink, jwtAdminToken).then(info => {
                     console.log("Response sendStartEmailConfirm...", info);
                     setState({ isProcessing: false, hasError: false, msg: "register.command.email.sent", isSuccess: true });
 
@@ -118,7 +118,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                 //removeSessionValue();
             });
         }
-    }, [session]);
+    }, [session, authClient, authTokenService]);
 
        /**
      * Validate Email
@@ -138,7 +138,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                 // Second: verify token
                 //isVerificationCodeOk
     
-                const responseValidation: Promise<any> = userClient.confirmAccount(token, jwtAdminToken);
+                const responseValidation: Promise<any> = authClient.confirmAccount(token, jwtAdminToken);
     
                 responseValidation.then(resp => { //Confirmed
                     
@@ -158,7 +158,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                 setState({ isProcessing: false, isSuccess: false, hasError: true, msg: errorCannotGetAdminToken });
             });
     
-        }, []);
+        }, [authClient, authTokenService]);
 
     return {
         isSuccess: state.isSuccess,

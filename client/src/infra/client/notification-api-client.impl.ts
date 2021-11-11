@@ -1,5 +1,5 @@
 
-import * as OriginConfig from '../infrastructure.config';
+import * as InfraConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import { ContactType } from '../../domain/model/notification/contact.type';
@@ -25,7 +25,7 @@ export default function NotificationApiClientImpl(): INotificationClient {
   function sendContactEmailService(contactData: ContactType, accessToken: string ): Promise<any> {
 
     //Notification endpoint
-    const URL = `${OriginConfig.APIEndpoints.notifications}/notification/sendContactEmail`;
+    const URL = `${InfraConfig.APIEndpoints.notifications}/sendContactEmail`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -44,10 +44,6 @@ export default function NotificationApiClientImpl(): INotificationClient {
         const authError: ApiError = handleAxiosError(error);
         if (authError.status === AuthStatusEnum.UNAUTHORIZED ){
           console.log("sendContactEmailService-->UNAUTHORIZED!!!");
-          // Request a new token
-          //const newAccessToken = accessToken;
-          // Do a retry with a new token
-          //return sendContactEmailService(contactData, newAccessToken, false);
           throw authError;
         }else{
           console.log("sendContactEmailService-->throw authError!!!");

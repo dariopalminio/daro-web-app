@@ -22,7 +22,7 @@ export default function useLogin(
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
     
-    const userClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * login
@@ -32,7 +32,7 @@ export default function useLogin(
         setState({ isProcessing: true, hasError: false, msg: infoKey, isSuccess: false });
 
         // First: authenticate user and pass
-        userClient.loginService(email, password)
+        authClient.loginService(email, password)
             .then(tokens => {
                 try {
                     const userSessionValue: SessionType = convertJwtToSessionType(tokens);
@@ -50,7 +50,7 @@ export default function useLogin(
                 } catch (e: any) {
                     // Unauthorized by error in decoding JWT
                     const msgkeyUnauth = "login.error.unauthorized.decoding.JWT";
-                    setState({ isProcessing: false, hasError: true, msg: e.msgkeyUnauth, isSuccess: false });
+                    setState({ isProcessing: false, hasError: true, msg: msgkeyUnauth, isSuccess: false });
                     removeSessionValue();
                 }
             })
@@ -59,7 +59,7 @@ export default function useLogin(
                 setState({ isProcessing: false, hasError: true, msg: err.message, isSuccess: false });
                 removeSessionValue();
             });
-    }, [setState, setSessionValue, removeSessionValue]);
+    }, [setState, setSessionValue, removeSessionValue, authClient]);
 
     /**
      * Decode JWT and return data from payload in SessionType value.

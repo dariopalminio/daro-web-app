@@ -23,8 +23,8 @@ export const is_fake_mode = ((process.env.REACT_APP_FAKE === 'true') ? true : fa
 
 export const APIEndpoints = {
   authKeycloak: (process.env.REACT_APP_KEYCLOAK ? process.env.REACT_APP_KEYCLOAK : 'http://localhost:8080') as string,
-  notifications: (process.env.REACT_APP_AUTH_API ? process.env.REACT_APP_NOTIFICATION_API : 'http://localhost:3001') as string,
-  auth: (process.env.REACT_APP_API_AUTH ? process.env.REACT_APP_API_AUTH : 'http://localhost:3001') as string,
+  notifications: process.env.REACT_APP_NOTIFICATION_API as string,
+  auth: process.env.REACT_APP_API_AUTH as string,
 };
 
 export const Keycloak = {

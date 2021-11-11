@@ -22,7 +22,7 @@ export default function useLogout(authServiceInjected: IAuthTokensClient | null 
     const { removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
     const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
-    const userClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
 
     /**
      * logout function
@@ -40,7 +40,7 @@ export default function useLogout(authServiceInjected: IAuthTokensClient | null 
 
             responseAdminToken.then(jwtAdminToken => {
                 // Second: logoutService
-                const responseLogout = userClient.logoutService(userId, jwtAdminToken);
+                const responseLogout = authClient.logoutService(userId, jwtAdminToken);
 
                 responseLogout.then(status => {
                     setState({ isProcessing: false, hasError: false, msg: "logout.success" , isSuccess: true });
@@ -59,7 +59,7 @@ export default function useLogout(authServiceInjected: IAuthTokensClient | null 
         };
 
         removeSessionValue();
-    }, [setState, removeSessionValue, authTokenService]);
+    }, [setState, removeSessionValue, authTokenService, authClient]);
 
     return {
         isSuccess: state.isSuccess,

@@ -23,24 +23,25 @@ const UserContextProvider: FC = ({ children }) => {
     setSession(recoverySessionFromStorage);
   }, [setSession]);
 
-  function setSessionValue(s: SessionType) {
-    setSessionToStorage(s);
-    setSession(s);
-  }
-
-  function removeSessionValue() {
-    setSessionToStorage(SessionDefaultValue);
-    setSession(SessionDefaultValue);
-  }
-
   const sharedValue = useMemo(()=>{
+
+    function setSessionValue(s: SessionType) {
+      setSessionToStorage(s);
+      setSession(s);
+    }
+  
+    function removeSessionValue() {
+      setSessionToStorage(SessionDefaultValue);
+      setSession(SessionDefaultValue);
+    }
+
     return({
       session,
       setSessionValue,
       removeSessionValue,
       isTokenExpired,
     })
-  },[session]);
+  },[session, setSession]);
 
   return (
     <SessionContext.Provider

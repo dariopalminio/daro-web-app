@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../context/session.context';
 import { ContactType } from '../model/notification/contact.type';
 import { INotificationClient } from '../service/notification-client.interface';
@@ -25,7 +25,7 @@ export default function useNotification(
     /**
      * sendContactEmail
      */
-    const sendContactEmail = useCallback((contact: ContactType) => {
+    const sendContactEmail = (contact: ContactType) => {
         setState({ sending: true, hasError: false, msg: "notification.info.sending", wasSent: false });
 
         console.log("Sending email simulation from...");
@@ -68,14 +68,14 @@ export default function useNotification(
         });
 
 
-    }, [setState, notifClient, authTokensClient, getToken, session]);
+    };
 
     /**
      * Gets the acces token of the logged session (if user is already logged) or 
      * requests an application token from the authentication server.
      * @param session 
      * @returns 
-     */
+     */     
     async function getToken(session: SessionType | undefined) {
         let token: string = '';
         if (session && session?.isLogged) {
