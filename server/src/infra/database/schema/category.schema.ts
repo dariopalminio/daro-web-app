@@ -18,4 +18,3 @@ export class Category {
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
 
-export const CATEGORY_COLLECTION_TOKEN = Category.name; //'categories'; //ModelToken

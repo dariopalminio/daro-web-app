@@ -11,13 +11,13 @@ import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import * as GlobalConfig from '../../infra/config/global-config';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
-export const AUTH_SERVICE_TOKEN = 'AuthService_Implementation';
+
 
 @Controller('auth')
 export class AuthController {
 
   constructor(
-    @Inject(AUTH_SERVICE_TOKEN)
+    @Inject('IAuthService')
     private readonly authService: IAuthService
   ) { }
 

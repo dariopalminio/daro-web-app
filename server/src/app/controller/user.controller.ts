@@ -6,13 +6,11 @@ import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export const USER_SERVICE_TOKEN = 'UserService_Implementation';
-
 @Controller('user')
 export class UserController {
 
   constructor(
-    @Inject(USER_SERVICE_TOKEN)
+    @Inject('IUserService')
     private readonly userService: IUserService
   ) { }
 

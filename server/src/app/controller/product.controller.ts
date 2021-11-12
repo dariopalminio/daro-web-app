@@ -5,13 +5,12 @@ import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-export const PRODUCT_SERVICE_TOKEN = 'ProductService_Implementation';
 
 @Controller('catalog/product')
 export class ProductController {
     
   constructor(
-    @Inject(PRODUCT_SERVICE_TOKEN)
+    @Inject('IProductService')
     private readonly productService: IProductService
     ) {}
 

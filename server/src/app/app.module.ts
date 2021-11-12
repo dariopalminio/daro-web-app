@@ -1,30 +1,27 @@
 
 import { HttpModule, HttpService, Module, OnModuleInit, MiddlewareConsumer } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { ExceptionsAllFilter, LOGGER_HELPER_TOKEN } from '../app/filter/exception.filter';
+import { ExceptionsAllFilter } from '../app/filter/exception.filter';
 import { AppController } from '../app/controller/app.controller';
-import { NotificationController, SUPPORT_SERVICE_TOKEN } from '../app/controller/notification.controller';
-import { ProductController, PRODUCT_SERVICE_TOKEN } from '../app/controller/product.controller';
-import { CategoryController, CATEGORY_SERVICE_TOKEN } from '../app/controller/category.controller';
-import { NotificationService, EMAIL_SENDER_TOKEN } from '../domain/service/notification.service';
-import { ProductService, PRODUCT_REPOSITORY_TOKEN } from '../domain/service/product.service';
-import { CategoryService, CATEGORY_REPOSITORY_TOKEN } from '../domain/service/category.service';
-import { AuthService, AUTH_IMPL_TOKEN, USER_SERVICE_IMPL_TOKEN } from '../domain/service/auth.service';
-import { UserService, USER_REPOSITORY_TOKEN } from '../domain/service/user.service';
-import { UserController, USER_SERVICE_TOKEN } from '../app/controller/user.controller';
-import { AuthController, AUTH_SERVICE_TOKEN } from '../app/controller/auth.controller';
+import { NotificationController } from '../app/controller/notification.controller';
+import { ProductController } from '../app/controller/product.controller';
+import { CategoryController } from '../app/controller/category.controller';
+import { NotificationService } from '../domain/service/notification.service';
+import { ProductService } from '../domain/service/product.service';
+import { CategoryService } from '../domain/service/category.service';
+import { AuthService } from '../domain/service/auth.service';
+import { UserService } from '../domain/service/user.service';
+import { UserController } from '../app/controller/user.controller';
+import { AuthController } from '../app/controller/auth.controller';
 import { EmailSmtpSenderAdapter } from '../infra/email/email-sender.adapter';
-import { TranslatorImpl } from '../infra/i18n/translator-impl';
+import { TranslatorNestjsI18nImpl } from '../infra/i18n/translator-nestjs-i18n-impl';
 import { AuthMiddleware } from '../app/middleware/auth.middleware';
-import { ProductSchema, 
-  PRODUCT_COLLECTION_TOKEN } from '../infra/database/schema/product.schema';
-import { UserSchema, 
-    USER_COLLECTION_TOKEN } from '../infra/database/schema/user.schema';
+import { ProductSchema } from '../infra/database/schema/product.schema';
+import { UserSchema } from '../infra/database/schema/user.schema';
 
 import { AuthKeycloakImpl } from '../infra/auth/auth-keycloak.impl';
 
-import { CategorySchema, 
-  CATEGORY_COLLECTION_TOKEN } from '../infra/database/schema/category.schema';
+import { CategorySchema } from '../infra/database/schema/category.schema';
 import DB_CONNECTION from '../infra/database/db.connection.string';
 import {
   UserRepository
@@ -51,9 +48,9 @@ console.log(DB_CONNECTION);
     HttpModule,
     MongooseModule.forRoot(DB_CONNECTION),
     MongooseModule.forFeature([
-      { name: PRODUCT_COLLECTION_TOKEN, schema: ProductSchema },
-      { name: CATEGORY_COLLECTION_TOKEN, schema: CategorySchema },
-      { name: USER_COLLECTION_TOKEN, schema: UserSchema },
+      { name: 'Product', schema: ProductSchema },
+      { name: 'Category', schema: CategorySchema },
+      { name: 'User', schema: UserSchema },
     ]),
     I18nModuleConfig,
   ],
@@ -61,50 +58,46 @@ console.log(DB_CONNECTION);
   providers: [
     {
       provide: 'ITranslator',
-      useClass: TranslatorImpl,
+      useClass: TranslatorNestjsI18nImpl,
     },
     {
-      provide: AUTH_SERVICE_TOKEN,
+      provide: 'IAuthService',
       useClass: AuthService,
     },
     {
-      provide: USER_SERVICE_IMPL_TOKEN,
+      provide: 'IUserService',
       useClass: UserService,
     },
     {
-      provide: USER_SERVICE_TOKEN,
-      useClass: UserService,
-    },
-    {
-      provide: SUPPORT_SERVICE_TOKEN,
+      provide: 'INotificationService',
       useClass: NotificationService,
     },
     {
-      provide: PRODUCT_SERVICE_TOKEN,
+      provide: 'IProductService',
       useClass: ProductService,
     },
     {
-      provide: EMAIL_SENDER_TOKEN,
+      provide: 'IEmailSender',
       useClass: EmailSmtpSenderAdapter,
     },
     {
-      provide: CATEGORY_SERVICE_TOKEN,
+      provide: 'ICategoryService',
       useClass: CategoryService,
     },
     {
-      provide: USER_REPOSITORY_TOKEN,
+      provide: 'IUserRepository',
       useClass: UserRepository,
     },
     {
-      provide: CATEGORY_REPOSITORY_TOKEN,
+      provide: 'ICategoryRepository',
       useClass: CategoryRepository,
     },
     {
-      provide: PRODUCT_REPOSITORY_TOKEN,
+      provide: 'IProductRepository',
       useClass: ProductRepository,
     },
     {
-      provide: AUTH_IMPL_TOKEN,
+      provide: 'IAuth',
       useClass: AuthKeycloakImpl,
     },
     {
@@ -112,7 +105,7 @@ console.log(DB_CONNECTION);
       useClass: ExceptionsAllFilter,
     },
     {
-      provide: LOGGER_HELPER_TOKEN,
+      provide: 'ILoggerService',
       useClass: LoggerHelper,
     },
   ],

@@ -5,13 +5,12 @@ import { CategoryDTO } from '../model/category/category.dto';
 import { IRepository } from '../output-port/repository.interface';
 import { ICategoryService } from '../service/interface/category.service.interface';
 
-export const CATEGORY_REPOSITORY_TOKEN = 'CategoryRepository_Implementation'; //ModelToken
 
 @Injectable()
 export class CategoryService implements ICategoryService {
 
   constructor(
-    @Inject(CATEGORY_REPOSITORY_TOKEN)
+    @Inject('ICategoryRepository')
     private readonly categoryRepository: IRepository<ICategory>,
   ) { }
 

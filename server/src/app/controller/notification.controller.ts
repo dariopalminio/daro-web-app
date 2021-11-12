@@ -6,13 +6,12 @@ import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
-export const SUPPORT_SERVICE_TOKEN = 'SupportService_Implementation';
 
 @Controller('notification')
 export class NotificationController {
 
   constructor(
-    @Inject(SUPPORT_SERVICE_TOKEN)
+    @Inject('INotificationService')
     private readonly supportService: INotificationService
   ) { }
 

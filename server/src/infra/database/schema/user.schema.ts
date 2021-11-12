@@ -45,5 +45,3 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-export const USER_COLLECTION_TOKEN = User.name; //'user'; //ModelToken

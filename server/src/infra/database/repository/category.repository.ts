@@ -6,7 +6,7 @@ import { IRepository } from '../../../domain/output-port/repository.interface';
 import { ICategory } from '../../../domain/model/category/category.interface';
 import { Category } from '../../../domain/model/category/category';
 import { CategoryDTO } from '../../../domain/model/category/category.dto';
-import { CategoryDocument, CATEGORY_COLLECTION_TOKEN } from '../schema/category.schema';
+import { CategoryDocument } from '../schema/category.schema';
 
 
 /**
@@ -16,7 +16,7 @@ import { CategoryDocument, CATEGORY_COLLECTION_TOKEN } from '../schema/category.
 export class CategoryRepository implements IRepository<ICategory> {
 
     constructor(
-        @InjectModel(CATEGORY_COLLECTION_TOKEN)
+        @InjectModel('Category')
         private readonly categoryModel: Model<CategoryDocument>,
     ) { }
 

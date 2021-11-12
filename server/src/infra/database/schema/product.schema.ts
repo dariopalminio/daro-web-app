@@ -36,5 +36,3 @@ export class Product {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
-
-export const PRODUCT_COLLECTION_TOKEN = Product.name; //'products'; //ModelToken

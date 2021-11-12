@@ -7,12 +7,12 @@ import { IRepository } from '../output-port/repository.interface';
 
 import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
 
-export const USER_REPOSITORY_TOKEN = 'UserRepository_Implementation'; //ModelToken
+
 
 @Injectable()
 export class UserService implements IUserService {
   constructor(
-    @Inject(USER_REPOSITORY_TOKEN)
+    @Inject('IUserRepository')
     private readonly userRepository: IRepository<IUser>) {
   }
 

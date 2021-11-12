@@ -8,7 +8,7 @@ import {
   } from '@nestjs/common';
   import {LoggerService as ILoggerService } from '@nestjs/common';
 
-  export const LOGGER_HELPER_TOKEN = "LoggerHelperService";
+
   
   /**
    * Filter for all exceptions.
@@ -19,7 +19,7 @@ import {
   export class ExceptionsAllFilter implements ExceptionFilter {
 
     constructor(
-      @Inject(LOGGER_HELPER_TOKEN)
+      @Inject('ILoggerService')
       private readonly logger: ILoggerService
       ) { }
 

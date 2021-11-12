@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { IRepository } from '../../../domain/output-port/repository.interface';
 import { IProduct } from '../../../domain/model/product/product.interface';
 import { Product } from '../../../domain/model/product/product';
-import { ProductDocument, PRODUCT_COLLECTION_TOKEN } from '../schema/product.schema';
+import { ProductDocument } from '../schema/product.schema';
 
 
 export const CATEGORY_REPO_TOKEN = 'CategoryRepositoryImplementation'; //ModelToken
@@ -15,7 +15,7 @@ export const CATEGORY_REPO_TOKEN = 'CategoryRepositoryImplementation'; //ModelTo
 export class ProductRepository implements IRepository<IProduct> {
 
     constructor(
-        @InjectModel(PRODUCT_COLLECTION_TOKEN)
+        @InjectModel('Product')
         private readonly productModel: Model<ProductDocument>,
     ) { }
 

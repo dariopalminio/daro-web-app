@@ -4,15 +4,12 @@ import { IProduct } from '../model/product/product.interface';
 import { IRepository } from '../output-port/repository.interface';
 
 
-//export const PRODUCT_COLLECTION_TOKEN = 'products'; //ModelToken
-
-export const PRODUCT_REPOSITORY_TOKEN = 'ProductRepository_Implementation'; //ModelToken
 
 @Injectable()
 export class ProductService implements IProductService {
 
   constructor(
-    @Inject(PRODUCT_REPOSITORY_TOKEN)
+    @Inject('IProductRepository')
     private readonly productRepository: IRepository<IProduct>,
   ) { }
 

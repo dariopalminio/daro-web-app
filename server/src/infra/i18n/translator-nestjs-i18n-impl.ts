@@ -4,9 +4,10 @@ import { I18nRequestScopeService } from 'nestjs-i18n';
 
 /**
  * i18n wrapper class
+ * A simple and lightweight class implementation to wrap i18n
  */
 @Injectable()
-export class TranslatorImpl implements ITranslator {
+export class TranslatorNestjsI18nImpl implements ITranslator {
     
     constructor(
         @Inject('I18nRequestScopeService')

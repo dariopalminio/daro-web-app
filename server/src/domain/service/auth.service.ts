@@ -4,7 +4,6 @@ import { IAuth } from '../output-port/auth.interface';
 import { UserRegisterDataDTO } from '../model/auth/register/user-register-data.dto.type';
 import { IUserService } from '../../domain/service/interface/user.service.interface';
 import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
-import { EMAIL_SENDER_TOKEN } from '../service/notification.service';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../infra/config/global-config';
@@ -17,8 +16,7 @@ import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import { IUser } from '../model/user/user.interface';
-export const AUTH_IMPL_TOKEN = 'Auth_Implementation'; //Implementation Token
-export const USER_SERVICE_IMPL_TOKEN = 'UserService_Implementation'; //Implementation Token
+
 
 /**
  * Authorization service
@@ -26,11 +24,11 @@ export const USER_SERVICE_IMPL_TOKEN = 'UserService_Implementation'; //Implement
 @Injectable()
 export class AuthService implements IAuthService {
   constructor(
-    @Inject(AUTH_IMPL_TOKEN)
+    @Inject('IAuth')
     private readonly externalAuthService: IAuth,
-    @Inject(USER_SERVICE_IMPL_TOKEN)
+    @Inject('IUserService')
     private readonly userService: IUserService,
-    @Inject(EMAIL_SENDER_TOKEN)
+    @Inject('IEmailSender')
     readonly sender: IEmailSender
   ) {
   }
