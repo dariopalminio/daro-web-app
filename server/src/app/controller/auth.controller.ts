@@ -141,15 +141,8 @@ export class AuthController {
     type: AuthResponseDTO,
   })
   @Post('recovery/start')
-  async sendEmailToRecoveryPass(@Headers() headers, @Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
+  async sendEmailToRecoveryPass(@Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
 
-    let locale = 'en';
- 
-    if (headers !== undefined && headers.locale !== undefined) {
-        locale = headers.locale;
-    }
-
-    console.log("locale", locale);
 
     const authResponse: AuthResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO);
     return res.status(authResponse.status).json(authResponse);

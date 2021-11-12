@@ -1,0 +1,8 @@
+{
+    "HELLO_MESSAGE": "BASE: Hello World from {app} {version}!",
+    "GOODBYE_MESSAGE": "Goodbye ",
+    "SETUP": {
+      "WELCOME": "Welcome ",
+      "GOODBYE": "Goodbye "
+    }
+  }

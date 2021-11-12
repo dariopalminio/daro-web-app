@@ -14,6 +14,7 @@ import { UserService, USER_REPOSITORY_TOKEN } from '../domain/service/user.servi
 import { UserController, USER_SERVICE_TOKEN } from '../app/controller/user.controller';
 import { AuthController, AUTH_SERVICE_TOKEN } from '../app/controller/auth.controller';
 import { EmailSmtpSenderAdapter } from '../infra/email/email-sender.adapter';
+import { TranslatorImpl } from '../infra/i18n/translator-impl';
 import { AuthMiddleware } from '../app/middleware/auth.middleware';
 import { ProductSchema, 
   PRODUCT_COLLECTION_TOKEN } from '../infra/database/schema/product.schema';
@@ -39,9 +40,10 @@ import LoggerHelper from '../infra/logger/logger.helper';
 
 //Mongo
 import { MongooseModule } from '@nestjs/mongoose';
+//i18n
+import { I18nModuleConfig } from '../infra/i18n/i18n-module-config';
 
 console.log(DB_CONNECTION);
-
 
 //Dependency Injector
 @Module({
@@ -52,10 +54,15 @@ console.log(DB_CONNECTION);
       { name: PRODUCT_COLLECTION_TOKEN, schema: ProductSchema },
       { name: CATEGORY_COLLECTION_TOKEN, schema: CategorySchema },
       { name: USER_COLLECTION_TOKEN, schema: UserSchema },
-    ])
+    ]),
+    I18nModuleConfig,
   ],
   controllers: [AppController, AuthController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
+    {
+      provide: 'ITranslator',
+      useClass: TranslatorImpl,
+    },
     {
       provide: AUTH_SERVICE_TOKEN,
       useClass: AuthService,
