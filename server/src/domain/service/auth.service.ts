@@ -16,7 +16,7 @@ import { IAuthResponse } from '../../domain/model/auth/auth-response.interface';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import { IUser } from '../model/user/user.interface';
-
+import { ITranslator } from '../../domain/output-port/translator.interface';
 
 /**
  * Authorization service
@@ -29,7 +29,9 @@ export class AuthService implements IAuthService {
     @Inject('IUserService')
     private readonly userService: IUserService,
     @Inject('IEmailSender')
-    readonly sender: IEmailSender
+    readonly sender: IEmailSender,
+    @Inject('ITranslator')
+    private readonly i18n: ITranslator,
   ) {
   }
 
@@ -120,16 +122,25 @@ export class AuthService implements IAuthService {
       const token: string = encodeToken(startConfirmEmailData.email, newVerificationCode);
       const verificationLink = createTokenLink(startConfirmEmailData.verificationPageLink, token);
 
+      const line1 = await this.i18n.translate('auth.REGISTER_START_EMAIL.HEY',
+        { args: { name: startConfirmEmailData.name }, });
+      const line2 = await this.i18n.translate('auth.REGISTER_START_EMAIL.WELCOME',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
+      const line3 = await this.i18n.translate('auth.REGISTER_START_EMAIL.CONFIRM_INFO',);
+      const line4 = await this.i18n.translate('auth.REGISTER_START_EMAIL.VERIFICATION_LINK',);
+      const line5 = await this.i18n.translate('auth.REGISTER_START_EMAIL.THANK',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
 
       const contentHTML = `
-    <p>Hey ${startConfirmEmailData.name}!</p>
-    <p>Welcome to ${GlobalConfig.COMPANY_NAME}</p>
-    <p>Click on the following link to confirm your email.</p>
-    <h1>Verification link: ${verificationLink}</h1>
-    <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
+    <p>${line1}!</p>
+    <p>${line2}</p>
+    <p>${line3}</p>
+    <h1>${line4}: ${verificationLink}</h1>
+    <p>${line5}</p>
     `;
+      console.log("contentHTML:", contentHTML);
 
-      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Please verify your email`;
+      const subject: string = await this.i18n.translate('auth.REGISTER_START_EMAIL.SUBJECT', { args: { company: GlobalConfig.COMPANY_NAME }, });
       const emailResponse: any = this.sender.sendEmail(subject, startConfirmEmailData.email, contentHTML);
 
       return {
@@ -225,14 +236,19 @@ export class AuthService implements IAuthService {
   private async sendSuccessfulEmailConfirm(name: string, email: string): Promise<any> {
 
     try {
+      const line1 = await this.i18n.translate('auth.REGISTER_END_EMAIL.HEY',
+        { args: { name: name }, });
+      const line2 = await this.i18n.translate('auth.REGISTER_END_EMAIL.SUCCESS',);
+      const line3 = await this.i18n.translate('auth.REGISTER_END_EMAIL.THANK',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
+
       const contentHTML = `
-          <p>Hey ${name}!</p>
-          <p>Welcome to the team! The registration was successful.</p>
-          <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
+          <p>${line1}</p>
+          <p>${line2}</p>
+          <p>${line3}</p>
           `;
-
-      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Registration successful`;
-
+      const subject: string = await this.i18n.translate('auth.REGISTER_END_EMAIL.SUBJECT',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
       return this.sender.sendEmail(subject, email, contentHTML);
     } catch (error) {
       throw error;
@@ -248,16 +264,24 @@ export class AuthService implements IAuthService {
   private async sendSuccessfulRecoveryEmail(name: string, email: string): Promise<any> {
 
     try {
-      const contentHTML = `
-          <p>Success ${name}!</p>
-          <p>We wanted to let you know that your password was reset.</p>
-          <p>If you run into problems, please contact support.</p>
-          <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
-          <p>Please do not reply to this email with your password. 
-          We will never ask for your password, and we strongly discourage you from sharing it with anyone.</p>
-          `;
 
-      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Password changed`;
+      const line1 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.HEY',
+        { args: { name: name }, });
+      const line2 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUCCESS',);
+      const line3 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.CONTACT',);
+      const line4 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.THANK',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
+      const line5 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.NO_REPLY',);
+
+      const contentHTML = `
+          <p>${line1}</p>
+          <p>${line2}</p>
+          <p>${line3}</p>
+          <p>${line4}</p>
+          <p>${line5}</p>
+          `;
+      const subject: string = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUBJECT',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
 
       return this.sender.sendEmail(subject, email, contentHTML);
     } catch (error) {
@@ -313,16 +337,26 @@ export class AuthService implements IAuthService {
       const token: string = encodeToken(startRecoveryDataDTO.email, newVerificationCode);
       const recoveryPageLink = createTokenLink(startRecoveryDataDTO.recoveryPageLink, token);
 
-      const emailContentHTML = `
-    <p>Forgot your password?</p>
-    <p>If you want to reset your password, click on the link below (or copy and paste the URL into your browser):</p>
-    <h1>Link to recovery: ${recoveryPageLink}</h1>
-    <p>This link will lead you to the secure page for password reset.</p>
-    <p>If you don't want to reset your password, please ignore this message. Your password will not be reset.</p>
-    <p>Thanks, The team of ${GlobalConfig.COMPANY_NAME}</p>
-    `;
+      //create email content
+      const line1 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.FORGOT',);
+      const line2 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.CALL_TO_ACTION',);
+      const line3 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.LINK',);
+      const line4 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.EXPLAIN',);
+      const line5 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.NO_REPLY',);
+      const line6 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.THANK',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
 
-      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Recover your password`;
+      const emailContentHTML = `
+    <p>${line1}</p>
+    <p>${line2}</p>
+    <h1>${line3}: ${recoveryPageLink}</h1>
+    <p>${line4}</p>
+    <p>${line5}</p>
+    <p>${line6}</p>
+    `;
+      const subject: string = await this.i18n.translate('auth.RECOVERY_START_EMAIL.SUBJECT',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
+
       const emailResponse: any = this.sender.sendEmail(subject, startRecoveryDataDTO.email, emailContentHTML);
 
       return {

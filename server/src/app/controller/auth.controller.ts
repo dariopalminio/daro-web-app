@@ -75,6 +75,7 @@ export class AuthController {
   })
   @Post('register/confirm/start')
   async sendStartEmailConfirm(@Res() res, @Body() startConfirmEmailData: StartConfirmEmailData) {
+
     const result: AuthResponseDTO = await this.authService.sendStartEmailConfirm(startConfirmEmailData);
     return res.status(result.status).json(result);
   };

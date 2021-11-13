@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const RegisterConfirmStart: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const classes = useStyles();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const {
     isProcessing,
@@ -79,7 +79,7 @@ const RegisterConfirmStart: FunctionComponent = () => {
       const userName = session?.given_name ? session?.given_name : "";
       const userEmail: string | undefined = session?.email;
       console.log("startConfirmEmail with ", userEmail);
-      startConfirmEmail(userName, userEmail);
+      startConfirmEmail(userName, userEmail, i18n.language);
   };
 
   return (

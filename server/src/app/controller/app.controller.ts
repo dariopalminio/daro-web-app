@@ -48,7 +48,6 @@ export class AppController {
     console.log(await this.myi18n.translate('app.HELLO_MESSAGE', options));
     
 
-
     const response: HelloWorldDTO = {
       isSuccess: true,
       status: 200,

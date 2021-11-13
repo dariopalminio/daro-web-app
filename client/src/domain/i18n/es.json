@@ -25,6 +25,7 @@
     "register.info.password.pattern": "Introduzca un mínimo de 10 caracteres con números y letras.",
     "register.command": "Registrar",
     "register.title": "Registrarse",
+    "register.label.confirm.password": "Confirma contraseña",
     "register.info.loading": "Loading... Trying to Register!",
     "register.info.helper.text.required": "Requerido",
     "register.start.success.temporarily.created": "Ahora tu debes confirmar tu email.",
@@ -66,5 +67,7 @@
     "profile.command": "Perfil",
     "contact.label.fullname": "Nombre completo",
     "profile.label.email": "email",
+    "profile.label.lastname": "Nombre",
+    "profile.label.firstname": "Apellido",
     "contact.label.message": "Mensaje"
  }

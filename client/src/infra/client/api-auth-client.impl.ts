@@ -74,7 +74,9 @@ export default function ApiAuthClientImpl(): IAuthClient {
     name: string,
     email: string,
     verificationPageLink: string,
-    accessToken: string): Promise<any> {
+    locale: string,
+    accessToken: string
+    ): Promise<any> {
 
     //Notification endpoint
     const URL = `${InfraConfig.APIEndpoints.auth}/register/confirm/start`;
@@ -85,6 +87,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': `application/json`,
+        'locale': locale,
       },
       data: {
         'name': name,

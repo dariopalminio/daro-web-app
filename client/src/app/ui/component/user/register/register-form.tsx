@@ -150,7 +150,7 @@ export const RegisterForm: FunctionComponent = () => {
                 <TextField
                   id="standard-basic-1"
                   className={clsx(classes.textfieldCustom)}
-                  label="First Name"
+                  label={t('profile.label.firstname')}
                   placeholder=""
                   onChange={(e) => handleFirstNameChange(e.target.value)}
                   value={firstName}
@@ -162,7 +162,7 @@ export const RegisterForm: FunctionComponent = () => {
                 <TextField
                   id="standard-basic-2"
                   className={clsx(classes.textfieldCustom)}
-                  label="Last Name"
+                  label={t('profile.label.lastname')}
                   placeholder=""
                   onChange={(e) => handleLastNameChange(e.target.value)}
                   value={lastName}
@@ -174,7 +174,7 @@ export const RegisterForm: FunctionComponent = () => {
                 <TextField
                   id="standard-basic-3"
                   className={clsx(classes.textfieldCustom)}
-                  label="Email"
+                  label={t('profile.label.email')}
                   placeholder="you@email.com"
                   onChange={(e) => handleEmailChange(e.target.value)}
                   value={email}
@@ -197,7 +197,7 @@ export const RegisterForm: FunctionComponent = () => {
                 <TextField
                   id="standard-basic-4"
                   className={clsx(classes.textfieldCustom)}
-                  label="Password"
+                  label={t('login.label.password')}
                   type="password"
                   onChange={(e) => handlePasswordChange(e.target.value)}
                   value={password}
@@ -213,7 +213,7 @@ export const RegisterForm: FunctionComponent = () => {
                   <TextField
                     id="standard-basic-5"
                     className={clsx(classes.textfieldCustom)}
-                    label="Confirm Password"
+                    label={t('register.label.confirm.password')}
                     type="password"
                     onChange={(e) => handleConfirmPassChange(e.target.value)}
                     value={confirmPassword}

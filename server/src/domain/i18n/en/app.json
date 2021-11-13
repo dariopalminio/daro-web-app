@@ -1,8 +1,11 @@
 {
     "HELLO_MESSAGE": "Hello World from {app} {version}!",
     "GOODBYE_MESSAGE": "Goodbye ",
-    "SETUP": {
-      "WELCOME": "Welcome ",
-      "GOODBYE": "Goodbye "
+    "REGISTER_START_EMAIL": {
+      "HEY": "Hey {name}!",
+      "WELCOME": "Welcome to {company}",
+      "CONFIRM_INFO": "Click on the following link to confirm your email.",
+      "VERIFICATION_LINK": "Verification link:",
+      "THANK": "Thanks, The team of {company}"
     }
   }

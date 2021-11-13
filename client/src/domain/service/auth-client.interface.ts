@@ -15,6 +15,7 @@ export interface IAuthClient {
     name: string,
     email: string,
     verificationPageLink: string,
+    locale: string,
     accessToken: string
   ) => Promise<any>;
 

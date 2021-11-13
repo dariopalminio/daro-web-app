@@ -82,7 +82,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
      * Start Confirm Email function
      * Sent notification by email with verification link.
      */
-    const startConfirmEmail = useCallback((userName: string, userEmail: string | undefined) => {
+    const startConfirmEmail = useCallback((userName: string, userEmail: string | undefined, locale: string) => {
 
         if (!userEmail) {
             const errorMsg = "Some problem creating new user. Email does not exist in session!";
@@ -101,7 +101,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
 
             responseAdminToken.then(jwtAdminToken => {
                 // Second: send email to confirmation process
-                authClient.sendStartEmailConfirm(userName, email, verificationPageLink, jwtAdminToken).then(info => {
+                authClient.sendStartEmailConfirm(userName, email, verificationPageLink, locale, jwtAdminToken).then(info => {
                     console.log("Response sendStartEmailConfirm...", info);
                     setState({ isProcessing: false, hasError: false, msg: "register.command.email.sent", isSuccess: true });
 

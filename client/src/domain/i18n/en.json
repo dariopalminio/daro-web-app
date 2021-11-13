@@ -25,6 +25,7 @@
     "register.info.password.pattern": "Enter a minimum of 10 characters with numbers and letters.",
     "register.command": "Register",
     "register.title": "Register",
+    "register.label.confirm.password": "Confirm password",
     "register.info.helper.text.required": "Required",
     "register.info.loading": "Loading... Trying to Register!",
     "register.start.success.temporarily.created": "Now you must verify your mail.",
@@ -66,6 +67,8 @@
     "profile.command": "Profile",
     "contact.label.fullname": "Full name",
     "profile.label.email": "email",
+    "profile.label.lastname": "lastname",
+    "profile.label.firstname": "firstname",
     "contact.label.message": "Message"
 
 }
