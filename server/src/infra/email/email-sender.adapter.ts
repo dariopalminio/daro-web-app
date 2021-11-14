@@ -3,8 +3,10 @@ import * as GlobalConfig from '../config/global-config';
 import IEmailSender from '../../domain/output-port/email-sender.interface';
 import * as path from 'path';
 
+const fs = require("fs")
 const nodemailer = require("nodemailer");
-const hbs = require('nodemailer-handlebars');
+const handlebars = require("handlebars")
+
 
 @Injectable()
 export class EmailSmtpSenderAdapter implements IEmailSender {
@@ -22,7 +24,7 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
     ) throw Error("SmtpOptions param is empty!");
 
     this.templatePath = '../../../src/domain/emails/templates/';
-
+    this.smtpTransporter = nodemailer.createTransport(this.getSmtpOptions());
   };
 
   /**
@@ -75,7 +77,7 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
         html: htmlContent
       };
 
-      this.smtpTransporter = nodemailer.createTransport(this.getSmtpOptions());
+      //this.smtpTransporter = nodemailer.createTransport(this.getSmtpOptions());
       const sentInfo: any = await this.smtpTransporter.sendMail(email);
       console.log("sentInfo:");
       console.log(sentInfo);
@@ -98,46 +100,50 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
 
   /**
    * Send email using template
-   * 
+   * Send emails from NodeJS applications using Nodemailer & Handlebars 
    * https://github.com/accimeesterlin/nodemailer-examples/tree/master/sendTemplates
    * 
    * @param subject 
    * @param toEmail addressee to send
    * @param templateName file name located in templates folder
-   * @param contexts params to insterts in template
+   * @param params params to insterts in template
    * @param locale language
    */
-  async sendEmailWithTemplate(subject: string, toEmail: string, templateName: string, contexts: any, locale: string): Promise<any> {
+  async sendEmailWithTemplate(subject: string, toEmail: string, templateName: string, params: any, locale: string): Promise<any> {
     try {
-
-      const handlebarsConfig = {
-        viewEngine: {
-          extName: '.handlebars',
-          layoutsDir: path.resolve(__dirname, this.templatePath + locale),
-          defaultLayout: templateName,
-          partialsDir: path.resolve(__dirname, this.templatePath + locale)
-        },
-        viewPath: path.resolve(__dirname, this.templatePath + locale),
-      };
-
-      this.smtpTransporter = nodemailer.createTransport(this.getSmtpOptions());
-      this.smtpTransporter.use('compile', hbs(handlebarsConfig));
+      const htmlToSend: string = this.getTemplateAsHtmlString(templateName, params, locale);
 
       let mailOptions = {
         from: GlobalConfig.email.FROM, // sender address,
         to: toEmail, // TODO: email receiver
         subject: subject,
-        template: templateName,
-        context: contexts
+        html: htmlToSend,
       };
-      
+      //this.smtpTransporter = nodemailer.createTransport(this.getSmtpOptions());
       const sentInfo: any = await this.smtpTransporter.sendMail(mailOptions);
-      console.log("sentInfo:", sentInfo);
+      //console.log("sentInfo:", sentInfo);
       return sentInfo;
     } catch (error) {
       console.log("Nodemailer error!! Can not send email. ERROR: ", error);
       throw error;
     };
-  }
+  };
+
+  /**
+   * Get template file and convert it to html string.
+   * Handlebars to help with HTML templating of the email body. 
+   * @param templateName file name located in templates folder
+   * @param params params to insterts in template 
+   * @param locale language
+   * @returns 
+   */
+  getTemplateAsHtmlString(templateName: string, params: any, locale: string): string {
+    const fileName = path.join(path.resolve(__dirname, this.templatePath + locale), `/${templateName}.hbs`);
+    const emailTemplateSource = fs.readFileSync(fileName, "utf8");
+    const template = handlebars.compile(emailTemplateSource);
+    const htmlToSend = template(params);
+    return htmlToSend;
+  };
 
 };
+
