@@ -96,6 +96,17 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
     }
   };
 
+  /**
+   * Send email using template
+   * 
+   * https://github.com/accimeesterlin/nodemailer-examples/tree/master/sendTemplates
+   * 
+   * @param subject 
+   * @param toEmail addressee to send
+   * @param templateName file name located in templates folder
+   * @param contexts params to insterts in template
+   * @param locale language
+   */
   async sendEmailWithTemplate(subject: string, toEmail: string, templateName: string, contexts: any, locale: string): Promise<any> {
     try {
 
@@ -121,7 +132,8 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
       };
       
       const sentInfo: any = await this.smtpTransporter.sendMail(mailOptions);
-      console.log("sentInfo:");
+      console.log("sentInfo:", sentInfo);
+      return sentInfo;
     } catch (error) {
       console.log("Nodemailer error!! Can not send email. ERROR: ", error);
       throw error;
