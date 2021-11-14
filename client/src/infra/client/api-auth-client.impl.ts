@@ -74,7 +74,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
     name: string,
     email: string,
     verificationPageLink: string,
-    locale: string,
+    lang: string,
     accessToken: string
     ): Promise<any> {
 
@@ -87,7 +87,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': `application/json`,
-        'locale': locale,
+        'lang': lang,
       },
       data: {
         'name': name,
@@ -127,6 +127,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
    */
   function confirmAccount(
     token: string,
+    lang: string,
     adminToken: string): Promise<any> {
 
     const body = {
@@ -140,7 +141,9 @@ export default function ApiAuthClientImpl(): IAuthClient {
     const promise: AxiosPromise<any> = axios({
       method: 'post',
       url: URL,
-      headers: { 'Authorization': `Bearer ${adminToken}` },
+      headers: { 
+        'Authorization': `Bearer ${adminToken}`, 
+        'lang': lang, },
       data: body
     });
 

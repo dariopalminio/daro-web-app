@@ -126,7 +126,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
      * If the token is correct, then update email confirmation field in user to true.
      * @param token Base64 encoded string
      */
-        const confirmAccount = useCallback((token: string) => {
+        const confirmAccount = useCallback((token: string, lang: string) => {
 
 
             setState({ isProcessing: true, isSuccess: false, hasError: false, msg: "No verificado" });
@@ -138,7 +138,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                 // Second: verify token
                 //isVerificationCodeOk
     
-                const responseValidation: Promise<any> = authClient.confirmAccount(token, jwtAdminToken);
+                const responseValidation: Promise<any> = authClient.confirmAccount(token, lang, jwtAdminToken);
     
                 responseValidation.then(resp => { //Confirmed
                     

@@ -29,17 +29,17 @@ export class AppController {
   @Get()
   async getHello(@Headers() headers, @Res() res) {
 
-    let locale = 'en';
+    let lang = 'en';
  
-    if (headers && headers.locale) {
-        locale = headers.locale;
+    if (headers && headers.lang) {
+      lang = headers.lang;
     }
 
     const options = {
-      lang: locale,
+      lang: lang,
       args: { app: GlobalConfig.APP_NAME, version: GlobalConfig.VERSION },
     };
-    console.log("getHello________________________headers.locale:", locale);
+    console.log("getHello________________________headers.locale:", lang);
     console.log(await this.i18n.translate('app.HELLO_MESSAGE',{
       args: { app: GlobalConfig.APP_NAME, version: GlobalConfig.VERSION },
     }));

@@ -8,7 +8,8 @@ import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../infra/config/global-config';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
-import { StartConfirmEmailData } from '../model/auth/register/start-confirm-email-data';
+import { StartConfirmEmailDataDTO } from '../model/auth/register/start-confirm-email-data.dto';
+import { ParamsRegisterStart } from '../model/auth/register/params-register-start.type';
 import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
 import { VerificationCodeDataDTO } from '../model/auth/register/verification-code-data.dto.type';
 import { RecoveryUpdateDataDTO } from '../model/auth/recovery/recovery-update-data.dto.type';
@@ -104,16 +105,19 @@ export class AuthService implements IAuthService {
    * @param startConfirmEmailData 
    * @returns 
    */
-  async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailData): Promise<IAuthResponse> {
+  async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailDataDTO, locale: string): Promise<IAuthResponse> {
 
     try {
 
       if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
+      if (!startConfirmEmailData.verificationPageLink) throw new Error("Invalid link!");
 
+      // Get user
       let user = await this.userService.getByQuery({ userName: startConfirmEmailData.userName });
       if (!user) throw new Error("User not found!");
 
-      const newVerificationCode = generateToken(); //generate verification code
+      // Generate new verification code
+      const newVerificationCode = generateToken(); 
       user.verificationCode = newVerificationCode;
 
       const updatedOk: boolean = await this.userService.updateById(user._id, user);
@@ -122,27 +126,15 @@ export class AuthService implements IAuthService {
       const token: string = encodeToken(startConfirmEmailData.email, newVerificationCode);
       const verificationLink = createTokenLink(startConfirmEmailData.verificationPageLink, token);
 
-      const line1 = await this.i18n.translate('auth.REGISTER_START_EMAIL.HEY',
-        { args: { name: startConfirmEmailData.name }, });
-      const line2 = await this.i18n.translate('auth.REGISTER_START_EMAIL.WELCOME',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-      const line3 = await this.i18n.translate('auth.REGISTER_START_EMAIL.CONFIRM_INFO',);
-      const line4 = await this.i18n.translate('auth.REGISTER_START_EMAIL.VERIFICATION_LINK',);
-      const line5 = await this.i18n.translate('auth.REGISTER_START_EMAIL.THANK',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-
-      const contentHTML = `
-    <p>${line1}!</p>
-    <p>${line2}</p>
-    <p>${line3}</p>
-    <h1>${line4}: ${verificationLink}</h1>
-    <p>${line5}</p>
-    `;
-      console.log("contentHTML:", contentHTML);
-
+      // Prepare params tu email template
+      const paramsRegisterStart: ParamsRegisterStart = new ParamsRegisterStart();
+      paramsRegisterStart.name = startConfirmEmailData.name;
+      paramsRegisterStart.company = GlobalConfig.COMPANY_NAME;
+      paramsRegisterStart.link = verificationLink;
       const subject: string = await this.i18n.translate('auth.REGISTER_START_EMAIL.SUBJECT', { args: { company: GlobalConfig.COMPANY_NAME }, });
-      const emailResponse: any = this.sender.sendEmail(subject, startConfirmEmailData.email, contentHTML);
-
+      
+      //Send email
+      const emailResponse: any = await this.sender.sendEmailWithTemplate(subject, startConfirmEmailData.email, "register-start", paramsRegisterStart, locale);
       return {
         isSuccess: true,
         status: 200,
@@ -167,7 +159,7 @@ export class AuthService implements IAuthService {
    * @param verificationCodeData 
    * @returns 
    */
-  async confirmAccount(verificationCodeData: VerificationCodeDataDTO): Promise<IAuthResponse> {
+  async confirmAccount(verificationCodeData: VerificationCodeDataDTO, lang: string): Promise<IAuthResponse> {
 
     let user: IUser = null;
     try {
@@ -210,7 +202,7 @@ export class AuthService implements IAuthService {
 
     //Notificate to user
     try {
-      this.sendSuccessfulEmailConfirm(user.firstName, user.email);
+      this.sendSuccessfulEmailConfirm(user.firstName, user.email, lang);
     } catch (error) {
       //Could not be notified about confirmation of account 
       console.log(error);
@@ -233,23 +225,16 @@ export class AuthService implements IAuthService {
    * @param 
    * @returns 
    */
-  private async sendSuccessfulEmailConfirm(name: string, email: string): Promise<any> {
+  private async sendSuccessfulEmailConfirm(name: string, email: string, lang: string): Promise<any> {
 
     try {
-      const line1 = await this.i18n.translate('auth.REGISTER_END_EMAIL.HEY',
-        { args: { name: name }, });
-      const line2 = await this.i18n.translate('auth.REGISTER_END_EMAIL.SUCCESS',);
-      const line3 = await this.i18n.translate('auth.REGISTER_END_EMAIL.THANK',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-
-      const contentHTML = `
-          <p>${line1}</p>
-          <p>${line2}</p>
-          <p>${line3}</p>
-          `;
+      //set params to template
+      const paramsRegisterEnd  = {namr: name, company: GlobalConfig.COMPANY_NAME};
+      //Send email
       const subject: string = await this.i18n.translate('auth.REGISTER_END_EMAIL.SUBJECT',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-      return this.sender.sendEmail(subject, email, contentHTML);
+      { args: { company: GlobalConfig.COMPANY_NAME }, });
+      const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "register-end", paramsRegisterEnd, lang);
+      return emailResponse;
     } catch (error) {
       throw error;
     };

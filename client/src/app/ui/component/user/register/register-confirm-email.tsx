@@ -17,11 +17,11 @@ type TParams = { token: string };
 function RegisterConfirmEmail({ token }: TParams) {
   const [isExecuted, setIsExecuted] = useState(false);
   const { isProcessing, isSuccess, hasError, msg, confirmAccount } = useRegister();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const executeConfirmRequest = () => {
     setIsExecuted(true);
-    confirmAccount(token);
+    confirmAccount(token, i18n.language);
   };
 
   return (

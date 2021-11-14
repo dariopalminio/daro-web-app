@@ -1,7 +1,7 @@
 import { Controller, Get, Res, Post, Headers, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
 import { IAuthService } from '../../domain/service/interface/auth.service.interface';
-import { StartConfirmEmailData } from '../../domain/model/auth/register/start-confirm-email-data';
+import { StartConfirmEmailDataDTO } from '../../domain/model/auth/register/start-confirm-email-data.dto';
 import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
 import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification-code-data.dto.type';
 import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery-update-data.dto.type';
@@ -55,7 +55,7 @@ export class AuthController {
     type: AuthResponseDTO,
   })
   @Post('register')
-  async register(@Res() res, @Body() userRegisterDTO: UserRegisterDataDTO) {
+  async register(@Res() res, @Body() userRegisterDTO: UserRegisterDataDTO): Promise<any> {
 
     const result: AuthResponseDTO = await this.authService.register(userRegisterDTO);
     console.log("register controller:",result);
@@ -74,9 +74,9 @@ export class AuthController {
     type: AuthResponseDTO,
   })
   @Post('register/confirm/start')
-  async sendStartEmailConfirm(@Res() res, @Body() startConfirmEmailData: StartConfirmEmailData) {
+  async sendStartEmailConfirm(@Headers() headers, @Res() res, @Body() startConfirmEmailData: StartConfirmEmailDataDTO) {
 
-    const result: AuthResponseDTO = await this.authService.sendStartEmailConfirm(startConfirmEmailData);
+    const result: AuthResponseDTO = await this.authService.sendStartEmailConfirm(startConfirmEmailData, this.getLang(headers));
     return res.status(result.status).json(result);
   };
 
@@ -91,8 +91,9 @@ export class AuthController {
     type: AuthResponseDTO,
   })
   @Post('register/confirm')
-  async confirmAccount(@Res() res,@Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
-    const authResponse: AuthResponseDTO = await this.authService.confirmAccount(verificationCodeData);
+  async confirmAccount(@Headers() headers, @Res() res,@Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
+
+    const authResponse: AuthResponseDTO = await this.authService.confirmAccount(verificationCodeData, this.getLang(headers));
     return res.status(authResponse.status).json(authResponse);
   };
 
@@ -166,4 +167,9 @@ export class AuthController {
       return res.status(authResponse.status).json(authResponse);
   };
 
+  private getLang(headers: any): string{
+    if (headers && headers.lang) return headers.lang;
+    return 'en';
+  };
+  
 };

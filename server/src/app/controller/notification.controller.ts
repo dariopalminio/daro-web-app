@@ -42,13 +42,13 @@ export class NotificationController {
   @Post('sendContactEmail')
   async sendContactEmail(@Headers() headers, @Res() res, @Body() contactMessage: ContactMessage) {
     console.log(contactMessage);
-    let locale = 'en';
+    let lang = 'en';
  
-    if (headers && headers.locale) {
-        locale = headers.locale;
+    if (headers && headers.lang) {
+      lang = headers.lang;
     }
     try {
-      const sentInfo = await this.supportService.sendContactEmail(contactMessage, locale);
+      const sentInfo = await this.supportService.sendContactEmail(contactMessage, lang);
       return res.status(HttpStatus.OK).json(sentInfo);
     } catch (e) {
       const data = {error: e.message};

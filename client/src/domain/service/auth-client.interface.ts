@@ -15,12 +15,13 @@ export interface IAuthClient {
     name: string,
     email: string,
     verificationPageLink: string,
-    locale: string,
+    lang: string,
     accessToken: string
   ) => Promise<any>;
 
   confirmAccount: (
     token: string,
+    lang: string,
     adminToken: string
   ) => Promise<any>;
 

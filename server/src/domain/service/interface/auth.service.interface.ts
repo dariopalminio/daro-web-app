@@ -1,6 +1,6 @@
 
 import { UserRegisterDataDTO } from '../../model/auth/register/user-register-data.dto.type';
-import { StartConfirmEmailData } from '../../model/auth/register/start-confirm-email-data';
+import { StartConfirmEmailDataDTO } from '../../model/auth/register/start-confirm-email-data.dto';
 import { StartRecoveryDataDTO } from '../../model/auth/recovery/start-recovery-data.dto.type';
 import { VerificationCodeDataDTO } from '../../model/auth/register/verification-code-data.dto.type';
 import { IAuthResponse } from '../../../domain/model/auth/auth-response.interface';
@@ -11,8 +11,8 @@ import { RecoveryUpdateDataDTO } from '../../../domain/model/auth/recovery/recov
 export interface IAuthService {
 
     register (userRegisterData: UserRegisterDataDTO): Promise<any>;
-    sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailData): Promise<any>;
-    confirmAccount(verificationCodeData: VerificationCodeDataDTO): Promise<IAuthResponse>;
+    sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailDataDTO, lang:string): Promise<any>;
+    confirmAccount(verificationCodeData: VerificationCodeDataDTO, lang:string): Promise<IAuthResponse>;
     login(loginForm: LoginFormDTO): Promise<IAuthResponse>;
     logout(logoutFormDTO: LogoutFormDTO): Promise<IAuthResponse>;
     sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO): Promise<any>;
