@@ -19,26 +19,13 @@ export class NotificationService implements INotificationService {
    * @param contactMessage 
    * @returns 
    */
-  async sendContactEmail(contactMessage: ContactMessage): Promise<any> {
+  async sendContactEmail(contactMessage: ContactMessage, locale: string): Promise<any> {
 
     if (!validEmail(contactMessage.email)) throw new Error("Invalid email!");
 
     try {
-      const contentHTML = `
-    We will contact you shortly...
-    <h1>User Information</h1>
-    <ul>
-        <li>Username: ${contactMessage.name}</li>
-        <li>User Email: ${contactMessage.email}</li>
-        <li>PhoneNumber: ${contactMessage.phone}</li>
-    </ul>
-    <p>Message: ${contactMessage.message}</p>
-    `;
-
-      //const sender: IEmailSender = new EmailSmtpSenderAdapter();
-
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Support`;
-      return this.sender.sendEmail(subject, contactMessage.email, contentHTML);
+      return await this.sender.sendEmailWithTemplate(subject, contactMessage.email, "contact", contactMessage, locale);
     } catch (error) {
       throw error;
     };

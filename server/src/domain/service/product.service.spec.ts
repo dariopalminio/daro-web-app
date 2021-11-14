@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService, PRODUCT_REPOSITORY_TOKEN } from './product.service';
+import { ProductService } from './product.service';
 import { IRepository } from '../output-port/repository.interface';
 import { IProduct } from '../model/product/product.interface';
 
@@ -61,7 +61,7 @@ describe('ProductService', () => {
                     //getModelToken() function returns a prepared injection token based on a token name. 
                     //Using this token, you can easily provide a mock implementation using any of the standard 
                     //custom provider techniques, including useClass, useValue, and useFactory. 
-                    provide: PRODUCT_REPOSITORY_TOKEN,
+                    provide: 'ProductRepository',
                     // notice that only the functions we call from the model are mocked
                     useValue: new ProductRepositoryNegativeStub(),
                 },

@@ -1,10 +1,10 @@
-import { Controller, Res, Get, Post, Body, Inject } from '@nestjs/common';
+import { Controller, Res, Get, Post, Body, Inject, Headers, HttpStatus } from '@nestjs/common';
 import { INotificationService } from '../../domain/service/interface/notification.service.interface';
 import { ContactMessage } from '../../domain/model/contact.message';
 import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import { EmailDataDTO } from '../../domain/model/email-data-dto';
 
 
 @Controller('notification')
@@ -40,16 +40,35 @@ export class NotificationController {
   };
 
   @Post('sendContactEmail')
-  sendContactEmail(@Body() contactMessage: ContactMessage): any {
+  async sendContactEmail(@Headers() headers, @Res() res, @Body() contactMessage: ContactMessage) {
     console.log(contactMessage);
+    let locale = 'en';
+ 
+    if (headers && headers.locale) {
+        locale = headers.locale;
+    }
+    try {
+      const sentInfo = await this.supportService.sendContactEmail(contactMessage, locale);
+      return res.status(HttpStatus.OK).json(sentInfo);
+    } catch (e) {
+      const data = {error: e.message};
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(data);
+    };
+  };
+
+  @Post('sendEmail')
+  async sendEmail(@Res() res, @Body() emailDataDTO: EmailDataDTO) {
+    console.log(emailDataDTO);
 
     try {
-      const sentInfo = this.supportService.sendContactEmail(contactMessage);
-      return sentInfo;
+      const sentInfo = await this.supportService.sendEmail(emailDataDTO.subject,emailDataDTO.email,emailDataDTO.content);
+      return res.status(HttpStatus.OK).json(sentInfo);
     } catch (e) {
-      return e.message;
+      const data = {error: e.message};
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(data);
     };
-  }
+  };
+
 
 
 }

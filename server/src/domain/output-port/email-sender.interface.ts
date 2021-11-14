@@ -1,4 +1,6 @@
 
 export default interface IEmailSender {
-    sendEmail(subject: string, toEmail: string, htmlContent: string): Promise<boolean>;
+    sendEmail(subject: string, toEmail: string, htmlContent: string): Promise<any>;
+    sendEmailFromOject(obj: any): Promise<any>;
+    sendEmailWithTemplate(subject: string, toEmail: string, templateName: string, contexts: any, lang: string): Promise<any>;
   }
