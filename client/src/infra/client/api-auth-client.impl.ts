@@ -243,6 +243,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
   function sendEmailToRecoveryPass(
     email: string,
     recoveryPageLink: string,
+    lang: string,
     accessToken: string): Promise<any> {
 
     //Notification endpoint
@@ -254,6 +255,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': `application/json`,
+        'lang': lang, 
       },
       data: {
         'userName': email,
@@ -295,6 +297,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
   async function updatePassword(
     token: string,
     password: string,
+    lang: string,
     adminToken: string): Promise<any> {
       
     const body = {
@@ -308,7 +311,9 @@ export default function ApiAuthClientImpl(): IAuthClient {
       const response: any = await axios({
         method: 'post',
         url: URL,
-        headers: { 'Authorization': `Bearer ${adminToken}` },
+        headers: { 
+          'Authorization': `Bearer ${adminToken}`,
+          'lang': lang,  },
         data: body
       });
 

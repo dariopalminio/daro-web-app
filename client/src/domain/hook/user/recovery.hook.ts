@@ -20,7 +20,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
     /**
      * sendEmailToRecovery
      */
-    const sendEmailToRecovery = useCallback((email: string) => {
+    const sendEmailToRecovery = useCallback((email: string, lang: string) => {
 
         setState({ isProcessing: true, isSuccess: false, hasError: false, msg: 'sending'  });
 
@@ -36,7 +36,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
 
             responseAdminToken.then(jwtAdminToken => {
                 // Second: send email to confirmation process
-                authClient.sendEmailToRecoveryPass(email, recoveryPageLink, jwtAdminToken)
+                authClient.sendEmailToRecoveryPass(email, recoveryPageLink, lang, jwtAdminToken)
                 .then(info => {
                     console.log("Response sendStartEmailConfirm...", info);
                     setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'ok'  });
@@ -57,7 +57,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
 
     }, [authClient, authTokenService]);
 
-    const updatePassword = useCallback((token: string, password: string) => {
+    const updatePassword = useCallback((token: string, password: string, lang: string) => {
         setState({ isProcessing: true, isSuccess: false, hasError: false, msg: 'sending'  });
 
         if (!token || !password) {
@@ -70,7 +70,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
             
             responseAdminToken.then(jwtAdminToken => {
                 // Second: send email to confirmation process
-                authClient.updatePassword(token, password, jwtAdminToken)
+                authClient.updatePassword(token, password, lang, jwtAdminToken)
                 .then(info => {
                     setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'Password updated!'  });
 

@@ -143,10 +143,12 @@ export class AuthController {
     type: AuthResponseDTO,
   })
   @Post('recovery/start')
-  async sendEmailToRecoveryPass(@Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
+  async sendEmailToRecoveryPass(@Headers() headers, @Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
 
+console.log("sendEmailToRecoveryPass getLang:",this.getLang(headers));
+console.log("sendEmailToRecoveryPass startRecoveryDataDTO:",startRecoveryDataDTO);
 
-    const authResponse: AuthResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO);
+    const authResponse: AuthResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO, this.getLang(headers));
     return res.status(authResponse.status).json(authResponse);
 
   };
@@ -162,8 +164,8 @@ export class AuthController {
     type: AuthResponseDTO,
   })
   @Post('recovery/update')
-  async recoveryUpdatePassword(@Res() res, @Body() recoveryUpdateDataDTO: RecoveryUpdateDataDTO) {
-      const authResponse: AuthResponseDTO = await this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO);
+  async recoveryUpdatePassword(@Headers() headers, @Res() res, @Body() recoveryUpdateDataDTO: RecoveryUpdateDataDTO) {
+      const authResponse: AuthResponseDTO = await this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO, this.getLang(headers));
       return res.status(authResponse.status).json(authResponse);
   };
 

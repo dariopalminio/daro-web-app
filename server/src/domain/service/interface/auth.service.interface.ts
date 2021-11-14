@@ -15,6 +15,6 @@ export interface IAuthService {
     confirmAccount(verificationCodeData: VerificationCodeDataDTO, lang:string): Promise<IAuthResponse>;
     login(loginForm: LoginFormDTO): Promise<IAuthResponse>;
     logout(logoutFormDTO: LogoutFormDTO): Promise<IAuthResponse>;
-    sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO): Promise<any>;
-    recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO): Promise<IAuthResponse>;
+    sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO, lang:string): Promise<any>;
+    recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang:string): Promise<IAuthResponse>;
 };

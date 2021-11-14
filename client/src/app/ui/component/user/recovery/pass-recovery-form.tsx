@@ -70,7 +70,7 @@ function PassRecoveryForm({ token }: TParams) {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { isProcessing, isSuccess, hasError, msg, updatePassword } = useRecovery();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   /**
    * Submit update password
@@ -79,7 +79,7 @@ function PassRecoveryForm({ token }: TParams) {
     e.preventDefault();
     const isPassOneOk = (await validator.passIsValid(password));
     const isPassTwoOk = await validator.confirmPassIsValid(password, confirmPassword);
-    if (isPassOneOk && isPassTwoOk) updatePassword(token, password);
+    if (isPassOneOk && isPassTwoOk) updatePassword(token, password, i18n.language);
   };
 
   const handlePasswordChange = async (passOne: string) => {

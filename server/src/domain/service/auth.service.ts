@@ -229,46 +229,12 @@ export class AuthService implements IAuthService {
 
     try {
       //set params to template
-      const paramsRegisterEnd  = {namr: name, company: GlobalConfig.COMPANY_NAME};
+      const paramsRegisterEnd  = {name: name, company: GlobalConfig.COMPANY_NAME};
       //Send email
       const subject: string = await this.i18n.translate('auth.REGISTER_END_EMAIL.SUBJECT',
       { args: { company: GlobalConfig.COMPANY_NAME }, });
       const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "register-end", paramsRegisterEnd, lang);
       return emailResponse;
-    } catch (error) {
-      throw error;
-    };
-  };
-
-  /**
-   * send email to notificate successful recovery
-   * @param name 
-   * @param email 
-   * @returns 
-   */
-  private async sendSuccessfulRecoveryEmail(name: string, email: string): Promise<any> {
-
-    try {
-
-      const line1 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.HEY',
-        { args: { name: name }, });
-      const line2 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUCCESS',);
-      const line3 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.CONTACT',);
-      const line4 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.THANK',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-      const line5 = await this.i18n.translate('auth.RECOVERY_END_EMAIL.NO_REPLY',);
-
-      const contentHTML = `
-          <p>${line1}</p>
-          <p>${line2}</p>
-          <p>${line3}</p>
-          <p>${line4}</p>
-          <p>${line5}</p>
-          `;
-      const subject: string = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUBJECT',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-
-      return this.sender.sendEmail(subject, email, contentHTML);
     } catch (error) {
       throw error;
     };
@@ -302,10 +268,11 @@ export class AuthService implements IAuthService {
    * @param startRecoveryDataDTO 
    * @returns 
    */
-  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO): Promise<IAuthResponse> {
-
+  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO, lang:string): Promise<IAuthResponse> {
+console.log("sendEmailToRecoveryPass lang:", lang);
     try {
       if (!validEmail(startRecoveryDataDTO.email)) throw new Error("Invalid email!");
+      if (!startRecoveryDataDTO.recoveryPageLink) throw new Error("Invalid recovery link!");
 
       //generate verification code
       const newVerificationCode = generateToken();
@@ -322,28 +289,12 @@ export class AuthService implements IAuthService {
       const token: string = encodeToken(startRecoveryDataDTO.email, newVerificationCode);
       const recoveryPageLink = createTokenLink(startRecoveryDataDTO.recoveryPageLink, token);
 
-      //create email content
-      const line1 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.FORGOT',);
-      const line2 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.CALL_TO_ACTION',);
-      const line3 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.LINK',);
-      const line4 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.EXPLAIN',);
-      const line5 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.NO_REPLY',);
-      const line6 = await this.i18n.translate('auth.RECOVERY_START_EMAIL.THANK',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-
-      const emailContentHTML = `
-    <p>${line1}</p>
-    <p>${line2}</p>
-    <h1>${line3}: ${recoveryPageLink}</h1>
-    <p>${line4}</p>
-    <p>${line5}</p>
-    <p>${line6}</p>
-    `;
+      //set params to email template
+      const params = {recoverylink: recoveryPageLink, company: GlobalConfig.COMPANY_NAME};
+      //send email
       const subject: string = await this.i18n.translate('auth.RECOVERY_START_EMAIL.SUBJECT',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
-
-      const emailResponse: any = this.sender.sendEmail(subject, startRecoveryDataDTO.email, emailContentHTML);
-
+      { args: { company: GlobalConfig.COMPANY_NAME }, });
+      const emailResponse: any = await this.sender.sendEmailWithTemplate(subject, startRecoveryDataDTO.email, "recovery-start", params, lang);
       return {
         isSuccess: true,
         status: 200,
@@ -365,7 +316,7 @@ export class AuthService implements IAuthService {
    * @param recoveryUpdateDataDTO 
    * @returns 
    */
-  async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO): Promise<IAuthResponse> {
+  async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang:string): Promise<IAuthResponse> {
     let user: IUser = null;
     try {
       user = await this.verificateToken(recoveryUpdateDataDTO.token);
@@ -405,23 +356,37 @@ export class AuthService implements IAuthService {
 
     //Notificate to user
     try {
-      this.sendSuccessfulRecoveryEmail(user.firstName, user.email);
+      this.sendSuccessfulRecoveryEmail(user.firstName, user.email, lang);
     } catch (error) {
       //Could not be notified about changed password 
       console.log(error);
     }
 
-    //Successful response
-    const authResponse: IAuthResponse = {
-      isSuccess: true,
-      status: 200,
-      message: undefined,
-      data: { email: user.email }
-    };
-
-    return authResponse;
+    return updetedAuthUser;
   };
 
+    /**
+   * send email to notificate successful recovery
+   * @param name 
+   * @param email 
+   * @returns 
+   */
+     private async sendSuccessfulRecoveryEmail(name: string, email: string, lang:string): Promise<any> {
+
+      try {
+        //set params to email template
+        const params = {name: name, company: GlobalConfig.COMPANY_NAME};
+        //Send email
+        const subject: string = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUBJECT',
+          { args: { company: GlobalConfig.COMPANY_NAME }, });
+  
+        const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "recovery-end", params, lang);
+        return emailResponse;
+      } catch (error) {
+        throw error;
+      };
+    };
+    
   /**
    * Verify that the token sent by user is the same as the one saved in the database,
    * for the user with the email encoded within the token.

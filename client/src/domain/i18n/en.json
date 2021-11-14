@@ -69,6 +69,7 @@
     "profile.label.email": "email",
     "profile.label.lastname": "lastname",
     "profile.label.firstname": "firstname",
-    "contact.label.message": "Message"
+    "contact.label.message": "Message",
+    "message.info.thank.you": "Thank you!"
 
 }

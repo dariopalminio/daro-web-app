@@ -49,8 +49,8 @@
     "recovery.updated.successful": "La contraseña ha sido actualizada de forma exitosa.",
     "recovery.password.error.bad.request": "No pudo cambiar la contraseña. La petición se encuentra con problemas. Puede ser que se le haya expirado el token. Intente de nuevo.",
     "recovery.password.successful": "La contraseña fue cambiada satisfactoriamente.",
-    "recovery.info.sent.pass": "We have sent password reset instructions to your email address.",
-    "recovery.info.check.email.is.correct": "If no email is received within ten minutes, check that the submitted address is correct.",
+    "recovery.info.sent.pass": "Hemos enviado instrucciones para restablecer la contraseña a su dirección de correo electrónico.",
+    "recovery.info.check.email.is.correct": "Si no se recibe ningún correo electrónico en diez minutos, verifique que la dirección enviada sea correcta.",
     "contact.title": "Contactanos",
     "contact.info.call.to.action": "Dejanos un mensaje:",
     "contact.command.send": "Enviar mensaje",
@@ -69,5 +69,6 @@
     "profile.label.email": "email",
     "profile.label.lastname": "Nombre",
     "profile.label.firstname": "Apellido",
-    "contact.label.message": "Mensaje"
+    "contact.label.message": "Mensaje",
+    "message.info.thank.you": "¡Gracias!"
  }

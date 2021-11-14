@@ -61,7 +61,7 @@ const PassRecoveryStart: FunctionComponent = () => {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { isProcessing, isSuccess, hasError, msg, sendEmailToRecovery } = useRecovery();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
 
   /**
@@ -69,7 +69,7 @@ const PassRecoveryStart: FunctionComponent = () => {
    */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendEmailToRecovery(email);
+    sendEmailToRecovery(email, i18n.language);
   };
 
   /**

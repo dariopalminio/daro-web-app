@@ -57,7 +57,7 @@ const PassRecoveryMsg: FunctionComponent = () => {
 
           <Paper className={clsx(classes.paperLoginForm)}>
             <div className={clsx(classes.wrapperCenter)}>
-              <h1 className={clsx(classes.h1Custom)}>Thank you!</h1>
+              <h1 className={clsx(classes.h1Custom)}>{t('message.info.thank.you')}</h1>
             </div>
 
             <div className={clsx(classes.wrapperCenter)}>

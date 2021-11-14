@@ -32,12 +32,14 @@ export interface IAuthClient {
   sendEmailToRecoveryPass: (
     email: string,
     recoveryPageLink: string,
+    lang: string,
     accessToken: string
   ) => Promise<any>;
 
   updatePassword: (
     token: string,
     password: string,
+    lang: string,
     adminToken: string
   ) => Promise<any>;
 
