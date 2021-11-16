@@ -20,14 +20,26 @@ export class CategoryRepository implements IRepository<ICategory> {
         private readonly categoryModel: Model<CategoryDocument>,
     ) { }
 
-    async getAll(): Promise<ICategory[]> {
-        const arrayDoc: CategoryDocument[] = await this.categoryModel.find({}).exec();
+    async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<ICategory[]> {
+        let arrayDoc: CategoryDocument[];
+        if (page && limit && orderByField) {
+            // All with pagination and sorting
+            console.log(`getAll page ${page} /limit ${limit} orderByField ${orderByField}`);
+            const direction: number = isAscending ? 1 : -1;
+            const mysort = [[orderByField, direction]];
+            const gap: number = (page - 1) * limit;
+            arrayDoc = await this.categoryModel.find({}).sort(mysort).skip(gap).limit(limit).exec();
+            //similar to arrayDoc.slice((page - 1) * limit, page * limit);
+        } else {
+            // All without pagination and without sorting
+            console.log(`getAll without page/limit`);
+            arrayDoc = await this.categoryModel.find({}).exec();
+        }
         return this.castArrayDocToCategory(arrayDoc);
-        //return this.conversorArrayDocToCategory(arrayDoc);
     };
 
     async find(query: any): Promise<ICategory[]> {
-        const arrayDoc: CategoryDocument[] = await  this.categoryModel.find(query).exec();
+        const arrayDoc: CategoryDocument[] = await this.categoryModel.find(query).exec();
         return this.castArrayDocToCategory(arrayDoc);
     }
 
@@ -40,7 +52,7 @@ export class CategoryRepository implements IRepository<ICategory> {
     };
 
     async getByQuery(query: any): Promise<ICategory> {
-        const catDoc: CategoryDocument =  await this.categoryModel.findOne(query);
+        const catDoc: CategoryDocument = await this.categoryModel.findOne(query);
         const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
         return objCasted;
     }
@@ -52,7 +64,7 @@ export class CategoryRepository implements IRepository<ICategory> {
     }
 
     async hasByQuery(query: any): Promise<boolean> {
-        const catDoc: CategoryDocument  =  await this.categoryModel.findOne(query);
+        const catDoc: CategoryDocument = await this.categoryModel.findOne(query);
         if (!catDoc) return false;
         return true;
     }
@@ -63,7 +75,7 @@ export class CategoryRepository implements IRepository<ICategory> {
     };
 
     async updateById(id: string, doc: any): Promise<boolean> {
-        const docUpdated: CategoryDocument = await this.categoryModel.findByIdAndUpdate(id, doc, {useFindAndModify: false}).exec();
+        const docUpdated: CategoryDocument = await this.categoryModel.findByIdAndUpdate(id, doc, { useFindAndModify: false }).exec();
         return !!docUpdated;
     };
 
@@ -73,7 +85,7 @@ export class CategoryRepository implements IRepository<ICategory> {
     };
 
     async delete(id: string): Promise<boolean> {
-        const docDeleted = await this.categoryModel.findByIdAndDelete(id, {useFindAndModify: false}).exec();
+        const docDeleted = await this.categoryModel.findByIdAndDelete(id, { useFindAndModify: false }).exec();
         return !!docDeleted; //doc is not null
     };
 

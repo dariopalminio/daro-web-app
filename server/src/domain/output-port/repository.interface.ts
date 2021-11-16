@@ -5,7 +5,14 @@
  */
 export interface IRepository<T> {
 
-    getAll(): Promise<Array<T>>;
+  /**
+   * Get all optionally with pagination and sorting
+   * @param page 
+   * @param limit 
+   * @param orderByField 
+   * @param isAscending 
+   */
+    getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<Array<T>>;
 
     find(query: any): Promise<Array<T>>; 
 

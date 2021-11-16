@@ -15,8 +15,11 @@ export class CategoryService implements ICategoryService {
   ) { }
 
   // Get all category
-  async getAll(): Promise<ICategory[]> {
-    const cats: ICategory[] = await this.categoryRepository.getAll();
+  async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<ICategory[]> {
+    /*if (page && limit &&  orderByField){}
+
+    }*/
+    const cats: ICategory[] = await this.categoryRepository.getAll(page, limit, orderByField, isAscending);
     return cats;
   };
 

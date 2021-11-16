@@ -41,10 +41,20 @@ export class ProductController {
 
     // Get Products /product/all
     @Get('all')
-    async getProducts(@Res() res) {
-        const products = await this.productService.getAll();
-        return res.status(HttpStatus.OK).json(products);
-    }
+    async getAll(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
+
+      if (pageParam && limitParam && orderBy && isAsc) {
+        const page: number = parseInt(pageParam);
+        const limit: number = parseInt(limitParam);
+        const orderByField: string = orderBy.toString();
+        const isAscending: boolean = (isAsc === 'true') ? true : false;
+        const list = await this.productService.getAll(page, limit, orderByField, isAscending);
+        return res.status(HttpStatus.OK).json(list);
+      } else {
+        const list = await this.productService.getAll();
+        return res.status(HttpStatus.OK).json(list);
+      }
+    };
 
     // GET single product: /product/5c9d46100e2e5c44c444b2d1
     @Get('/id/:productID')

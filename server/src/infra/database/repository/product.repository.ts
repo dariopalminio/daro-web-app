@@ -19,10 +19,22 @@ export class ProductRepository implements IRepository<IProduct> {
         private readonly productModel: Model<ProductDocument>,
     ) { }
 
-    async getAll(): Promise<IProduct[]> {
-        const arrayDoc: ProductDocument[] = await this.productModel.find({}).exec();
+    async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]> {
+        let arrayDoc: ProductDocument[];
+        if (page && limit && orderByField) {
+            // All with pagination and sorting
+            console.log(`getAll page ${page} /limit ${limit} orderByField ${orderByField}`);
+            const direction: number = isAscending ? 1 : -1;
+            const mysort = [[orderByField, direction]];
+            const gap: number = (page - 1) * limit;
+            arrayDoc = await this.productModel.find({}).sort(mysort).skip(gap).limit(limit).exec();
+            //similar to arrayDoc.slice((page - 1) * limit, page * limit);
+        } else {
+            // All without pagination and without sorting
+            console.log(`getAll without page/limit`);
+            arrayDoc = await this.productModel.find({}).exec();
+        }
         return this.castArrayDocToProduct(arrayDoc);
-        //return this.conversorArrayDocToCategory(arrayDoc);
     };
 
     async find(query: any): Promise<IProduct[]> {

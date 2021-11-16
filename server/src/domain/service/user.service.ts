@@ -17,8 +17,8 @@ export class UserService implements IUserService {
   }
 
   // Get all
-  async getAll(): Promise<IUser[]> {
-    const users: IUser[] = await this.userRepository.getAll();
+  async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]> {
+    const users: IUser[] = await this.userRepository.getAll(page, limit, orderByField, isAscending);
     return users;
   };
 

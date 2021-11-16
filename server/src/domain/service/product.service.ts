@@ -15,8 +15,8 @@ export class ProductService implements IProductService {
 
 
   // Get all category
-  async getAll(): Promise<IProduct[]> {
-    const products: IProduct[] = await this.productRepository.getAll();
+  async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]> {
+    const products: IProduct[] = await this.productRepository.getAll(page, limit, orderByField, isAscending);
     //console.log(cats);
     return products;
   };
