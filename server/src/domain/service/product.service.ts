@@ -21,6 +21,11 @@ export class ProductService implements IProductService {
     return products;
   };
 
+  async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]>{
+    const products: IProduct[] = await this.productRepository.find(query, page, limit, orderByField, isAscending);
+    return products;
+  };
+
   // Get a single category
   async getById(id: string): Promise<IProduct> {
     const product: IProduct = await this.productRepository.getById(id);

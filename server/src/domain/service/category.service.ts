@@ -23,6 +23,11 @@ export class CategoryService implements ICategoryService {
     return cats;
   };
 
+  async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<ICategory[]>{
+    const cats: ICategory[] = await this.categoryRepository.find(query, page, limit, orderByField, isAscending);
+    return cats;
+  };
+
   // Get a single category
   async getById(id: string): Promise<ICategory> {
     const category: ICategory = await this.categoryRepository.getById(id);

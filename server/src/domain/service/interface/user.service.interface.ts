@@ -5,6 +5,7 @@ import { UserRegisterDTO } from '../../model/auth/register/user-register.dto.typ
 export interface IUserService {
 
   getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]>;
+  find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]>;
   getById(id: string): Promise<IUser>;
   getByQuery(query: any): Promise<IUser>;
   create(userRegisterDTO: UserRegisterDTO): Promise<boolean>;

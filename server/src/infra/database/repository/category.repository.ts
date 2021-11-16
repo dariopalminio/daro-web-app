@@ -38,8 +38,20 @@ export class CategoryRepository implements IRepository<ICategory> {
         return this.castArrayDocToCategory(arrayDoc);
     };
 
-    async find(query: any): Promise<ICategory[]> {
-        const arrayDoc: CategoryDocument[] = await this.categoryModel.find(query).exec();
+    async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<ICategory[]> {
+        let arrayDoc: CategoryDocument[];
+
+        if (page && limit && orderByField) {
+            // All with pagination and sorting
+            const direction: number = isAscending ? 1 : -1;
+            const mysort = [[orderByField, direction]];
+            const gap: number = (page - 1) * limit;
+            arrayDoc = await this.categoryModel.find(query).sort(mysort).skip(gap).limit(limit).exec();
+        } else {
+            // All without pagination and without sorting
+            arrayDoc = await this.categoryModel.find(query).exec();
+        }
+
         return this.castArrayDocToCategory(arrayDoc);
     }
 

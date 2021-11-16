@@ -22,6 +22,11 @@ export class UserService implements IUserService {
     return users;
   };
 
+  async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]>{
+    const users: IUser[] = await this.userRepository.find(query, page, limit, orderByField, isAscending);
+    return users;
+  };
+
   // Get a single
   async getById(id: string): Promise<IUser> {
     const user: IUser = await this.userRepository.getById(id);

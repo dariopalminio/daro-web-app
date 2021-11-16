@@ -39,8 +39,20 @@ export class UserRepository implements IRepository<IUser> {
         //return this.conversorArrayDocToCategory(arrayDoc);
     };
 
-    async find(query: any): Promise<IUser[]> {
-        const arrayDoc: UserDocument[] = await  this.userModel.find(query).exec();
+    async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]> {
+        let arrayDoc: UserDocument[];
+
+        if (page && limit && orderByField) {
+            // All with pagination and sorting
+            const direction: number = isAscending ? 1 : -1;
+            const mysort = [[orderByField, direction]];
+            const gap: number = (page - 1) * limit;
+            arrayDoc = await this.userModel.find(query).sort(mysort).skip(gap).limit(limit).exec();
+        } else {
+            // All without pagination and without sorting
+            arrayDoc = await this.userModel.find(query).exec();
+        }
+
         return this.castArrayDocToUser(arrayDoc);
     }
 
