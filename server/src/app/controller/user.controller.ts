@@ -11,7 +11,7 @@ export class UserController {
 
   constructor(
     @Inject('IUserService')
-    private readonly userService: IUserService
+    private readonly userService: IUserService<IUser>
   ) { }
 
 

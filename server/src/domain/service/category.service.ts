@@ -7,12 +7,13 @@ import { ICategoryService } from '../service/interface/category.service.interfac
 
 
 @Injectable()
-export class CategoryService implements ICategoryService {
+export class CategoryService implements ICategoryService<ICategory> {
 
   constructor(
     @Inject('ICategoryRepository')
     private readonly categoryRepository: IRepository<ICategory>,
   ) { }
+
 
   // Get all category
   async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<ICategory[]> {
@@ -52,4 +53,21 @@ export class CategoryService implements ICategoryService {
     return updatedProduct;
   };
 
+  async getByQuery(query: any): Promise<ICategory> {
+    const cat =  await this.categoryRepository.getByQuery(query);
+    return cat;
+  };
+
+  async update(query: any, valuesToSet: any): Promise<boolean> {
+    const updatedProduct: boolean = await this.categoryRepository.update(query, valuesToSet);
+    return updatedProduct;
+  };
+
+  async hasById(id: string): Promise<boolean> {
+    return await this.categoryRepository.hasById(id);
+  };
+
+  async hasByQuery(query: any): Promise<boolean> {
+    return await this.categoryRepository.hasByQuery(query);
+  };
 };

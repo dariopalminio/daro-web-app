@@ -9,5 +9,7 @@ export class AuthResponseDTO implements IAuthResponse{
   @ApiProperty()
   readonly message: string; 
   @ApiProperty()
-  readonly data: any;
+  readonly data?: any;
+  @ApiProperty()
+  readonly error?: any;
 }

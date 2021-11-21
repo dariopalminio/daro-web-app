@@ -13,23 +13,14 @@ export interface IRepository<T> {
    * @param isAscending 
    */
     getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<Array<T>>;
-
     find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<Array<T>>; 
-
     getById(id: string): Promise<T>;
-
     getByQuery(query: any): Promise<T>;
-
     hasById(id: string): Promise<boolean> ;
-
     hasByQuery(query: any): Promise<boolean>;
-
     create<R>(doc: R | T): Promise<boolean>;
-
     updateById<R>(id: string, doc: R | T): Promise<boolean>;
-
     update(query: any, valuesToSet: any): Promise<boolean>;
-
     delete(id: string): Promise<boolean>;
     
   }

@@ -148,6 +148,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
     
                 }).catch(err => {
                     // Error: verification code not validated
+                    console.log("err:", err);
                     const e = "Error: verification code not validated.";
                     setState({ isProcessing: false, isSuccess: false, hasError: true, msg: e });
                 });

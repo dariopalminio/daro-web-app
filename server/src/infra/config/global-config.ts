@@ -1,7 +1,7 @@
 
 require('dotenv').config();
 
-export const PORT: number = Number(process.env.SERVER_BFF_PORT);
+export const PORT: number = Number(process.env.SERVER_BFF_PORT) as number;
 export const PREFIX_ROUTE: string = process.env.SERVER_BFF_PREFIX_ROUTE;
 export const COMPANY_NAME: string = process.env.SERVER_BFF_COMPANY_NAME;
 
@@ -9,6 +9,8 @@ export const AUTH_MIDDLEWARE_ON = process.env.SERVER_BFF_AUTH_MIDDLEWARE_ON.toLo
 
 export const APP_NAME: string = process.env.SERVER_BFF_APP_NAME;
 export const VERSION: string = process.env.SERVER_BFF_VERSION;
+
+export const EXPIRATION_DAYS_LIMIT: number = Number(process.env.SERVER_BFF_AUTH_EXPIRATION_DAYS_LIMIT) as number;
 
 
 export const email = {

@@ -5,12 +5,9 @@ import { IUser } from '../model/user/user.interface';
 import { User } from '../model/user/user';
 import { IRepository } from '../output-port/repository.interface';
 
-import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
-
-
 
 @Injectable()
-export class UserService implements IUserService {
+export class UserService implements IUserService<IUser> {
   constructor(
     @Inject('IUserRepository')
     private readonly userRepository: IRepository<IUser>) {
@@ -40,9 +37,7 @@ export class UserService implements IUserService {
   };
 
   //Create new user with basic data
-  async create(userRegisterDTO: UserRegisterDTO): Promise<boolean> {
-
-    console.log("UserRegisterDTO:",userRegisterDTO);
+  async create(userRegisterDTO: IUser): Promise<boolean> {
 
     let newUser: IUser = new User();
     newUser.authId = userRegisterDTO.authId;
@@ -74,6 +69,19 @@ export class UserService implements IUserService {
   async getByQuery(query: any): Promise<IUser> {
     const user =  await this.userRepository.getByQuery(query);
     return user;
+  };
+
+  async update(query: any, valuesToSet: any): Promise<boolean> {
+    const updatedProduct: boolean = await this.userRepository.update(query, valuesToSet);
+    return updatedProduct;
+  };
+
+  async hasById(id: string): Promise<boolean> {
+    return await this.userRepository.hasById(id);
+  };
+
+  async hasByQuery(query: any): Promise<boolean> {
+    return await this.userRepository.hasByQuery(query);
   };
 
 };

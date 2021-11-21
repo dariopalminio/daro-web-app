@@ -11,7 +11,7 @@ export class CategoryController {
 
   constructor(
     @Inject('ICategoryService')
-    private readonly categoryService: ICategoryService
+    private readonly categoryService: ICategoryService<ICategory>
   ) { }
 
   @ApiOperation({

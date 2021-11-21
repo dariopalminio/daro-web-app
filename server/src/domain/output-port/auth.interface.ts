@@ -12,7 +12,7 @@ export interface IAuth {
         password: string,
         adminToken: string): Promise<IAuthResponse>;
     
-    getUserInfoByAdmin(username: string, adminToken: string): Promise<any | undefined>;
+    getUserInfoByAdmin(username: string, adminToken: string): Promise<IAuthResponse>;
     
     deleteAuthUser(authId: string, accessToken: string): Promise<IAuthResponse>;
 

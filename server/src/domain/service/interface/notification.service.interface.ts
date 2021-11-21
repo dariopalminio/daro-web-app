@@ -1,4 +1,4 @@
-import { ContactMessage } from '../../model/contact.message';
+import { ContactMessage } from '../../model/notification/contact.message';
 
 
 export interface INotificationService {

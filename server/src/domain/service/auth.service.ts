@@ -18,17 +18,19 @@ import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import { IUser } from '../model/user/user.interface';
 import { ITranslator } from '../../domain/output-port/translator.interface';
+import { ResponseCode } from '../../domain/model/service/response.code.enum';
 
 /**
  * Authorization service
  */
 @Injectable()
 export class AuthService implements IAuthService {
+
   constructor(
     @Inject('IAuth')
     private readonly externalAuthService: IAuth,
     @Inject('IUserService')
-    private readonly userService: IUserService,
+    private readonly userService: IUserService<IUser>,
     @Inject('IEmailSender')
     readonly sender: IEmailSender,
     @Inject('ITranslator')
@@ -47,12 +49,14 @@ export class AuthService implements IAuthService {
    */
   async register(userRegisterData: UserRegisterDataDTO): Promise<IAuthResponse> {
 
+    //TODO: Validate data (error BadRequestException)
+
     // First: obtains admin access token
     let adminToken;
     try {
       adminToken = await this.externalAuthService.getAdminToken();
     } catch (error) {
-      return { isSuccess: false, status: 500, message: "Could not get admin acces token from auth server!", data: error };
+      return { isSuccess: false, status: ResponseCode.INTERNAL_SERVER_ERROR, message: "Could not get admin acces token from auth server!", data: {}, error: error};
     }
     // Second: creates a new user in authorization server using admin access token
     const authCreatedUserResp = await this.externalAuthService.register(userRegisterData.username,
@@ -66,15 +70,16 @@ export class AuthService implements IAuthService {
     }
 
     // Third: verifies that the user was created, asking for the information of the created user
-    const authCreatedUser = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
+    const response: IAuthResponse = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
 
-    if (!authCreatedUser) {
+    if (!response.isSuccess) {
       // ERROR: User could not be created in auth server
-      return { isSuccess: false, status: 500, message: "User could not be created in auth server!", data: {} };
+      return response;
     }
-
+    
+    const authCreatedUser = response.data.user;
     const { id } = authCreatedUser; // ID in external authorization server
-
+    
     // Four: create new user in user database
     const userRegisterDTO: UserRegisterDTO = {
       authId: id,
@@ -84,15 +89,28 @@ export class AuthService implements IAuthService {
       email: userRegisterData.email,
     }
     const wasCreated: boolean = await this.userService.create(userRegisterDTO);
+
     if (!wasCreated) {
-      // ERROR: User could not be created in user database!
+      // ERROR: User could not be created in user database
+      const msg = "User could not be deleted in externa auth service! ";
+      //revert operation in auth server (keycloak)
+      let deletedAuthUser = {};
       try {
-        const deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
-        console.log("Deleted user! ", deletedAuthUser);
+        deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
       } catch (error) {
         console.log("User could not be deleted in externa auth service! ", error);
+        deletedAuthUser = {error: error}
       }
-      return { isSuccess: false, status: 500, message: "User could not be created in database server!", data: {} };
+      const errorData: any = {
+        message: msg,
+        deleted: deletedAuthUser
+      };
+      return { 
+        isSuccess: false, 
+        status: ResponseCode.INTERNAL_SERVER_ERROR, 
+        message: msg, 
+        data: {}, 
+        error: errorData };
     }
 
     return authCreatedUserResp;
@@ -108,16 +126,20 @@ export class AuthService implements IAuthService {
   async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailDataDTO, locale: string): Promise<IAuthResponse> {
 
     try {
+      if (!validEmail(startConfirmEmailData.email)) throw new Error("Bad Request: Invalid email!");
+      if (!startConfirmEmailData.verificationPageLink) throw new Error("Bad Request: Invalid link!");
+    } catch (error) {
+      return this.responseBadRequest(error);
+    };
 
-      if (!validEmail(startConfirmEmailData.email)) throw new Error("Invalid email!");
-      if (!startConfirmEmailData.verificationPageLink) throw new Error("Invalid link!");
+    try {
 
       // Get user
       let user = await this.userService.getByQuery({ userName: startConfirmEmailData.userName });
       if (!user) throw new Error("User not found!");
 
       // Generate new verification code
-      const newVerificationCode = generateToken(); 
+      const newVerificationCode = generateToken();
       user.verificationCode = newVerificationCode;
 
       const updatedOk: boolean = await this.userService.updateById(user._id, user);
@@ -132,23 +154,18 @@ export class AuthService implements IAuthService {
       paramsRegisterStart.company = GlobalConfig.COMPANY_NAME;
       paramsRegisterStart.link = verificationLink;
       const subject: string = await this.i18n.translate('auth.REGISTER_START_EMAIL.SUBJECT', { args: { company: GlobalConfig.COMPANY_NAME }, });
-      
+
       //Send email
       const emailResponse: any = await this.sender.sendEmailWithTemplate(subject, startConfirmEmailData.email, "register-start", paramsRegisterStart, locale);
       return {
         isSuccess: true,
-        status: 200,
+        status: ResponseCode.OK,
         message: "An email-verification was sent to the user with a link the user can click to verify their email address!",
         data: emailResponse
       };
 
     } catch (error) {
-      return {
-        isSuccess: false,
-        status: 500,
-        message: error.message,
-        data: error
-      };
+      this.responseInternalError(error);
     };
   };
 
@@ -165,16 +182,9 @@ export class AuthService implements IAuthService {
     try {
       user = await this.verificateToken(verificationCodeData.token);
     } catch (error) {
-      console.log(error);
-      const authResponse: IAuthResponse = {
-        isSuccess: false,
-        status: 400, //BAD_REQUEST
-        message: error.message,
-        data: { message: "Invalid token!" }
-      };
-      return authResponse;
-    }
-    console.log("Token OK!!!");
+      return this.responseBadRequest(error);
+    };
+
     //Update user to verificated
 
     //Update in external auth server
@@ -182,7 +192,7 @@ export class AuthService implements IAuthService {
     try {
       adminToken = await this.externalAuthService.getAdminToken();
     } catch (error) {
-      return { isSuccess: false, status: 500, message: "Could not get admin acces token from auth server!", data: error };
+      this.responseInternalError(error);
     }
     const updetedAuthUser: IAuthResponse = await this.externalAuthService.confirmEmail(user.authId, user.email, adminToken);
 
@@ -201,19 +211,20 @@ export class AuthService implements IAuthService {
     }
 
     //Notificate to user
+    let notificated: any;
     try {
-      this.sendSuccessfulEmailConfirm(user.firstName, user.email, lang);
+      notificated = this.sendSuccessfulEmailConfirm(user.firstName, user.email, lang);
     } catch (error) {
       //Could not be notified about confirmation of account 
-      console.log(error);
+      notificated = error;
     }
 
     //Successful response
     const authResponse: IAuthResponse = {
       isSuccess: true,
-      status: 200,
+      status: ResponseCode.OK,
       message: "Account confirmed!",
-      data: { email: user.email }
+      data: { notificated: notificated }
     };
 
     return authResponse;
@@ -229,10 +240,10 @@ export class AuthService implements IAuthService {
 
     try {
       //set params to template
-      const paramsRegisterEnd  = {name: name, company: GlobalConfig.COMPANY_NAME};
+      const paramsRegisterEnd = { name: name, company: GlobalConfig.COMPANY_NAME };
       //Send email
       const subject: string = await this.i18n.translate('auth.REGISTER_END_EMAIL.SUBJECT',
-      { args: { company: GlobalConfig.COMPANY_NAME }, });
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
       const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "register-end", paramsRegisterEnd, lang);
       return emailResponse;
     } catch (error) {
@@ -247,9 +258,16 @@ export class AuthService implements IAuthService {
    */
   async login(loginForm: LoginFormDTO): Promise<IAuthResponse> {
 
-    // Validate login form TODO...
+    // TODO: Validate login form (error BadRequestException)
+
+    // TODO: Validate if user is disabled by 3 consecutive failed login attempts
 
     const loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
+
+    if (!loginAuthResp.isSuccess) { //failed login attempt
+      // TODO: Save failed login attempt
+      // TODO: Disable user account after 3 consecutive failed login attempts
+    }
     console.log("Login in service body: ", loginAuthResp);
     return loginAuthResp;
   };
@@ -268,12 +286,16 @@ export class AuthService implements IAuthService {
    * @param startRecoveryDataDTO 
    * @returns 
    */
-  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO, lang:string): Promise<IAuthResponse> {
-console.log("sendEmailToRecoveryPass lang:", lang);
+  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO, lang: string): Promise<IAuthResponse> {
+    console.log("sendEmailToRecoveryPass lang:", lang);
     try {
-      if (!validEmail(startRecoveryDataDTO.email)) throw new Error("Invalid email!");
-      if (!startRecoveryDataDTO.recoveryPageLink) throw new Error("Invalid recovery link!");
+      if (!validEmail(startRecoveryDataDTO.email)) throw new Error("Bad Request: Invalid email!");
+      if (!startRecoveryDataDTO.recoveryPageLink) throw new Error("Bad Request: Invalid recovery link!");
+    } catch (error) {
+      return this.responseBadRequest(error);
+    };
 
+    try {
       //generate verification code
       const newVerificationCode = generateToken();
 
@@ -282,6 +304,8 @@ console.log("sendEmailToRecoveryPass lang:", lang);
       if (!user) throw new Error("User not found!");
 
       user.verificationCode = newVerificationCode;
+      user.startVerificationCode = new Date();
+      console.log("*** user.startVerificationCode: ", user.startVerificationCode);
       const updatedOk: boolean = await this.userService.updateById(user._id, user);
       if (!updatedOk) throw new Error("Can not save generated verification code!");
 
@@ -290,24 +314,19 @@ console.log("sendEmailToRecoveryPass lang:", lang);
       const recoveryPageLink = createTokenLink(startRecoveryDataDTO.recoveryPageLink, token);
 
       //set params to email template
-      const params = {recoverylink: recoveryPageLink, company: GlobalConfig.COMPANY_NAME};
+      const params = { recoverylink: recoveryPageLink, company: GlobalConfig.COMPANY_NAME };
       //send email
       const subject: string = await this.i18n.translate('auth.RECOVERY_START_EMAIL.SUBJECT',
-      { args: { company: GlobalConfig.COMPANY_NAME }, });
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
       const emailResponse: any = await this.sender.sendEmailWithTemplate(subject, startRecoveryDataDTO.email, "recovery-start", params, lang);
       return {
         isSuccess: true,
-        status: 200,
+        status: ResponseCode.OK,
         message: "Email was sent To Recovery Password!",
         data: emailResponse
       };
     } catch (error) {
-      return {
-        isSuccess: false,
-        status: 500,
-        message: error.message,
-        data: error
-      };
+      this.responseInternalError(error);
     };
   };
 
@@ -316,18 +335,14 @@ console.log("sendEmailToRecoveryPass lang:", lang);
    * @param recoveryUpdateDataDTO 
    * @returns 
    */
-  async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang:string): Promise<IAuthResponse> {
+  async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang: string): Promise<IAuthResponse> {
+    
     let user: IUser = null;
+
     try {
       user = await this.verificateToken(recoveryUpdateDataDTO.token);
     } catch (error) {
-      const authResponse: IAuthResponse = {
-        isSuccess: false,
-        status: 400, //BAD_REQUEST
-        message: error.message,
-        data: { message: "Invalid token!" }
-      };
-      return authResponse;
+      return this.responseBadRequest(error);
     }
 
     //Update password in user
@@ -336,7 +351,12 @@ console.log("sendEmailToRecoveryPass lang:", lang);
     try {
       adminToken = await this.externalAuthService.getAdminToken();
     } catch (error) {
-      return { isSuccess: false, status: 500, message: "Could not get admin acces token from auth server!", data: error };
+      return { 
+        isSuccess: false, 
+        status: ResponseCode.INTERNAL_SERVER_ERROR, 
+        message: "Could not get admin acces token from auth server!", 
+        data: {}, 
+        error: error };
     }
     const newPassword = recoveryUpdateDataDTO.password;
     const updetedAuthUser: IAuthResponse = await this.externalAuthService.resetPassword(user.authId, newPassword, adminToken);
@@ -365,28 +385,28 @@ console.log("sendEmailToRecoveryPass lang:", lang);
     return updetedAuthUser;
   };
 
-    /**
-   * send email to notificate successful recovery
-   * @param name 
-   * @param email 
-   * @returns 
-   */
-     private async sendSuccessfulRecoveryEmail(name: string, email: string, lang:string): Promise<any> {
+  /**
+ * send email to notificate successful recovery
+ * @param name 
+ * @param email 
+ * @returns 
+ */
+  private async sendSuccessfulRecoveryEmail(name: string, email: string, lang: string): Promise<any> {
 
-      try {
-        //set params to email template
-        const params = {name: name, company: GlobalConfig.COMPANY_NAME};
-        //Send email
-        const subject: string = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUBJECT',
-          { args: { company: GlobalConfig.COMPANY_NAME }, });
-  
-        const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "recovery-end", params, lang);
-        return emailResponse;
-      } catch (error) {
-        throw error;
-      };
+    try {
+      //set params to email template
+      const params = { name: name, company: GlobalConfig.COMPANY_NAME };
+      //Send email
+      const subject: string = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUBJECT',
+        { args: { company: GlobalConfig.COMPANY_NAME }, });
+
+      const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "recovery-end", params, lang);
+      return emailResponse;
+    } catch (error) {
+      throw error;
     };
-    
+  };
+
   /**
    * Verify that the token sent by user is the same as the one saved in the database,
    * for the user with the email encoded within the token.
@@ -395,15 +415,15 @@ console.log("sendEmailToRecoveryPass lang:", lang);
    */
   private async verificateToken(token: string): Promise<IUser> {
 
-    //Validate token
-    if (!token) throw Error("Invalid verification code token!");
+    //Validate if token exist
+    if (!token) throw Error("Bad Request: Invalid verification code token!");
 
     const partsArray = decodeToken(token);
     const decodedEmail = partsArray[0];
     const decodedCode = partsArray[1];
 
-    //Validate data
-    if (!validEmail(decodedEmail)) throw Error("Invalid Email!");
+    //Validate email
+    if (!validEmail(decodedEmail)) throw Error("Bad Request: Invalid Email!");
 
     //Verificate code
     let user: IUser = await this.userService.getByQuery({
@@ -412,10 +432,65 @@ console.log("sendEmailToRecoveryPass lang:", lang);
     });
 
     if (user == null) {
-      throw Error("Not found or verification code is wrong!");
+      throw Error("Bad Request: Not found or verification code is wrong!");
+    }
+
+    //Validate if expired time
+    const dateOfProcessStarted: Date = new Date(user.startVerificationCode);
+
+    if (this.isDateExpired(dateOfProcessStarted, GlobalConfig.EXPIRATION_DAYS_LIMIT)) {
+      throw Error("Bad Request: Time has expired! Start the process again.");
     }
 
     return user;
+  };
+
+  /**
+   * Validate if the number of days expired. Is the date expired?
+   * Receive a date and calculate if the number of days until today exceeds the number of expiration deadlines (daysLimit)
+   * @param date 
+   * @param days 
+   * @returns 
+   */
+  private isDateExpired(date: Date, daysLimit: number): boolean {
+    const todate = new Date(); //Now time
+    const difference_ms = todate.getTime() - date.getTime();
+    const difference_days = Math.round(difference_ms / 86400000); //number of days until today
+    return difference_days > daysLimit;
+  };
+
+  /**
+   * Create IAuthResponse object with BAD_REQUEST error
+   * @param error 
+   * @returns IAuthResponse object with BAD_REQUEST error
+   */
+  private responseBadRequest(error: any): IAuthResponse {
+    //console.log(error);
+    const authResponse: IAuthResponse = {
+      isSuccess: false,
+      status: ResponseCode.BAD_REQUEST, //BAD_REQUEST
+      message: error.message,
+      data: {},
+      error: error
+    };
+    return authResponse;
+  };
+
+  /**
+   * Create IAuthResponse object with INTERNAL_SERVER_ERROR 
+   * @param error 
+   * @returns IAuthResponse object with INTERNAL_SERVER_ERROR
+   */
+  private responseInternalError(error: any): IAuthResponse {
+    //console.log(error);
+    const authResponse: IAuthResponse = {
+      isSuccess: false,
+      status: ResponseCode.INTERNAL_SERVER_ERROR,
+      message: error.message,
+      data: {},
+      error: error
+    };
+    return authResponse;
   };
 
 };

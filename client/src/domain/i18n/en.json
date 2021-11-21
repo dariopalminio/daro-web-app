@@ -8,6 +8,7 @@
     "auth.error.unknow": "Error: Unknown!",
     "auth.login.error.unauthorized": "Error: Unauthorized! Password or email is wrong.",
     "auth.login.error.unauthorized.decoding.JWT": "Error: Unauthorized! Password or email is wrong.",
+    "login.auth.error.unauthorized": "Error: Unauthorized! Password or email is wrong.",
     "auth.error.conflict": "Error: Conflict. Username already exists!",
     "auth.error.bad.request": "Error: Bad Request!",
     "auth.error.connection.refused": "Network Error! Connection refused. Auth server may be down.",

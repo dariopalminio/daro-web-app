@@ -160,22 +160,23 @@ export class AuthKeycloakImpl implements IAuth {
         case HttpStatus.CREATED: //201
           return { isSuccess: true, status: response.status, message: null, data: response.data };
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         case HttpStatus.BAD_REQUEST: //400
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         case HttpStatus.CONFLICT: //409
           return {
             isSuccess: false,
             status: response.status,
-            message:
-              'CONFLICT: Username already exists!',
-            data: null
+            message: 'Conflict: Username already exists!',
+            data: {}, 
+            error: response.data
           };
         default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, message: error.message, data: error };
+      const msg = error.message ? error.message : "Unknown error when trying to register new user.";
+      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
     }
   };
 
@@ -189,8 +190,9 @@ export class AuthKeycloakImpl implements IAuth {
    * @param adminToken 
    * @returns 
    */
-  async getUserInfoByAdmin(username: string, adminToken: string): Promise<any | undefined> {
+  async getUserInfoByAdmin(username: string, adminToken: string): Promise<IAuthResponse> {
 
+    try{
     let access_token = adminToken;
 
     const URL = GlobalConfig.KeycloakPath.users;
@@ -205,8 +207,15 @@ export class AuthKeycloakImpl implements IAuth {
       })
       .toPromise();
 
-    if (result.data && result.data[0]) return result.data[0];
-    return undefined;
+    if (result.data && result.data[0]) {
+      const user = {user: result.data[0]};
+      return { isSuccess: true, status: result.status, message: result.statusText, data: user }; //successful
+    }
+    return { isSuccess: false, status: result.status, message: result.statusText, data: {}, error: result.data };
+  }catch(e: any){
+    const msg = e.message ? e.message : "Unknown error in get user by username";
+    return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: e };
+  };
   };
 
   /**
@@ -234,12 +243,13 @@ export class AuthKeycloakImpl implements IAuth {
         case HttpStatus.NO_CONTENT: //204
           return { isSuccess: true, status: eraseResult.status, message: undefined, data: null }; //successful
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: eraseResult.data };
+          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: {}, error: eraseResult.data };
         default:
-          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: eraseResult.data };
+          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: {}, error: eraseResult.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, message: error.message, data: error };
+      const msg = error.message ? error.message : "Unknown error in delete user.";
+      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
     }
   };
 
@@ -295,14 +305,15 @@ export class AuthKeycloakImpl implements IAuth {
         case HttpStatus.OK: //200
           return { isSuccess: true, status: response.status, message: undefined, data: response.data }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
       }
     } catch (error) {
       console.log("Login in keycloak error: ", error);
+      const msg = error.message ? error.message : "Unknown error in login.";
       //"connect ECONNREFUSED 127.0.0.1:8080"
-      return { isSuccess: false, status: 500, message: error.message, data: error };
+      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
     }
   };
 
@@ -335,16 +346,17 @@ export class AuthKeycloakImpl implements IAuth {
 
       switch (response.status) {
         case HttpStatus.NO_CONTENT: //204
-          return { isSuccess: true, status: response.status, message: undefined, data: { message: "logged out user" } }; //successful
+          return { isSuccess: true, status: response.status, message: undefined, data: { message: "Logged out user." } }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, message: error.message, data: error };
+      const msg = error.message ? error.message : "Unknown error in login.";
+      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
     }
   };
 
@@ -407,16 +419,17 @@ export class AuthKeycloakImpl implements IAuth {
 
       switch (response.status) {
         case HttpStatus.NO_CONTENT: //204
-          return { isSuccess: true, status: response.status, message: undefined, data: { email: userEmail, message: "Email confirmed!" } }; //successful
+          return { isSuccess: true, status: response.status, message: "Email confirmed!", data: response.data }; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: response.data };
+          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, message: error.message, data: error };
+      const msg = error.message ? error.message : "Unknown error in confirm email.";
+      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
     }
   };
 
@@ -470,7 +483,8 @@ export class AuthKeycloakImpl implements IAuth {
           return { isSuccess: false, status: res.status, message: res.statusText, data: res.data };
       }
     } catch (error) {
-      return { isSuccess: false, status: 500, message: error.message, data: error };
+      const msg = error.message ? error.message : "Unknown error in confirm email.";
+      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
     }
   };
 

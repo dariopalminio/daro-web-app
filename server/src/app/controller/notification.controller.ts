@@ -1,10 +1,10 @@
 import { Controller, Res, Get, Post, Body, Inject, Headers, HttpStatus } from '@nestjs/common';
 import { INotificationService } from '../../domain/service/interface/notification.service.interface';
-import { ContactMessage } from '../../domain/model/contact.message';
+import { ContactMessage } from '../../domain/model/notification/contact.message';
 import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { EmailDataDTO } from '../../domain/model/email-data-dto';
+import { EmailDataDTO } from '../../domain/model/notification/email-data-dto';
 
 
 @Controller('notification')

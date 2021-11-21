@@ -6,7 +6,7 @@ import { IRepository } from '../output-port/repository.interface';
 
 
 @Injectable()
-export class ProductService implements IProductService {
+export class ProductService implements IProductService<IProduct> {
 
   constructor(
     @Inject('IProductRepository')
@@ -49,6 +49,24 @@ export class ProductService implements IProductService {
   async updateById(id: string, product: IProduct): Promise<boolean> {
     const updatedProduct: boolean = await this.productRepository.updateById(id, product);
     return updatedProduct;
+  };
+
+  async getByQuery(query: any): Promise<IProduct> {
+    const product =  await this.productRepository.getByQuery(query);
+    return product;
+  };
+
+  async update(query: any, valuesToSet: any): Promise<boolean> {
+    const updatedProduct: boolean = await this.productRepository.update(query, valuesToSet);
+    return updatedProduct;
+  };
+
+  async hasById(id: string): Promise<boolean> {
+    return await this.productRepository.hasById(id);
+  };
+
+  async hasByQuery(query: any): Promise<boolean> {
+    return await this.productRepository.hasByQuery(query);
   };
 
 };

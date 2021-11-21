@@ -3,18 +3,6 @@ import { ProductService } from './product.service';
 import { IRepository } from '../output-port/repository.interface';
 import { IProduct } from '../model/product/product.interface';
 
-/**
-    getAll(): Promise<Array<T>>;
-    find(query: any): Promise<Array<T>>; 
-    getById(id: string): Promise<T>;
-    getByQuery(query: any): Promise<T>;
-    hasById(id: string): Promise<boolean> ;
-    hasByQuery(query: any): Promise<boolean>;
-    create<R>(doc: R | T): Promise<boolean>;
-    updateById<R>(id: string, doc: R | T): Promise<boolean>;
-    update(query: any, valuesToSet: any): Promise<boolean>;
-    delete(id: string): Promise<boolean>;
- */
 
 class ProductRepositoryNegativeStub implements IRepository<IProduct> {
     async getAll(): Promise<IProduct[]> {
