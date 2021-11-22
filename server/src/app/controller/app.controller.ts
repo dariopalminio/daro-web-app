@@ -34,19 +34,11 @@ export class AppController {
     if (headers && headers.lang) {
       lang = headers.lang;
     }
-
+ 
     const options = {
       lang: lang,
       args: { app: GlobalConfig.APP_NAME, version: GlobalConfig.VERSION },
     };
-    console.log("getHello________________________headers.locale:", lang);
-    console.log(await this.i18n.translate('app.HELLO_MESSAGE',{
-      args: { app: GlobalConfig.APP_NAME, version: GlobalConfig.VERSION },
-    }));
-    console.log(await this.i18n.translate('app.HELLO_MESSAGE', options));
-    console.log("myi18n:");
-    console.log(await this.myi18n.translate('app.HELLO_MESSAGE', options));
-    
 
     const response: HelloWorldDTO = {
       isSuccess: true,

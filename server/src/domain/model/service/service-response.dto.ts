@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IAuthResponse } from './auth-response.interface';
+import { IServiceResponse } from './service-response.interface';
 
-export class AuthResponseDTO implements IAuthResponse{
+export class ServiceResponseDTO implements IServiceResponse{
   @ApiProperty()
   readonly isSuccess: boolean;
   @ApiProperty()

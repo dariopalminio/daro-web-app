@@ -23,7 +23,6 @@ export class UserRepository implements IRepository<IUser> {
 
         if (page && limit && orderByField) {
             // All with pagination and sorting
-            console.log(`getAll page ${page} /limit ${limit} orderByField ${orderByField}`);
             const direction: number = isAscending ? 1 : -1;
             const mysort = [[orderByField, direction]];
             const gap: number = (page - 1) * limit;
@@ -31,7 +30,6 @@ export class UserRepository implements IRepository<IUser> {
             //similar to arrayDoc.slice((page - 1) * limit, page * limit);
         } else {
             // All without pagination and without sorting
-            console.log(`getAll without page/limit`);
             arrayDoc = await this.userModel.find({}).exec();
         }
 

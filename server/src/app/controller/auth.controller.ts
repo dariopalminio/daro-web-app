@@ -6,7 +6,7 @@ import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-rec
 import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification-code-data.dto.type';
 import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery-update-data.dto.type';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
-import { AuthResponseDTO } from '../../domain/model/auth/auth-response.dto';
+import { ServiceResponseDTO } from '../../domain/model/service/service-response.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import * as GlobalConfig from '../../infra/config/global-config';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -35,7 +35,7 @@ export class AuthController {
   getHello(@Res() res) {
     const response: HelloWorldDTO = {
       isSuccess: true,
-      status: 200,
+      status: HttpStatus.OK,
       message: "Hello World from auth " + GlobalConfig.VERSION + "!",
       name: "auth",
       version: GlobalConfig.VERSION,
@@ -52,12 +52,12 @@ export class AuthController {
     status: 200,
     description:
       'Successfully created user',
-    type: AuthResponseDTO,
+    type: ServiceResponseDTO,
   })
   @Post('register')
   async register(@Res() res, @Body() userRegisterDTO: UserRegisterDataDTO): Promise<any> {
 
-    const result: AuthResponseDTO = await this.authService.register(userRegisterDTO);
+    const result: ServiceResponseDTO = await this.authService.register(userRegisterDTO);
     console.log("register controller:",result);
     return res.status(result.status).json(result);
 
@@ -71,12 +71,12 @@ export class AuthController {
     status: 200,
     description:
       'An email-verification was sent to the user with a link the user can click to verify their email address!',
-    type: AuthResponseDTO,
+    type: ServiceResponseDTO,
   })
   @Post('register/confirm/start')
   async sendStartEmailConfirm(@Headers() headers, @Res() res, @Body() startConfirmEmailData: StartConfirmEmailDataDTO) {
 
-    const result: AuthResponseDTO = await this.authService.sendStartEmailConfirm(startConfirmEmailData, this.getLang(headers));
+    const result: ServiceResponseDTO = await this.authService.sendStartEmailConfirm(startConfirmEmailData, this.getLang(headers));
     return res.status(result.status).json(result);
   };
 
@@ -88,12 +88,12 @@ export class AuthController {
     status: 200,
     description:
       'Account confirmed!',
-    type: AuthResponseDTO,
+    type: ServiceResponseDTO,
   })
   @Post('register/confirm')
   async confirmAccount(@Headers() headers, @Res() res,@Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
 
-    const authResponse: AuthResponseDTO = await this.authService.confirmAccount(verificationCodeData, this.getLang(headers));
+    const authResponse: ServiceResponseDTO = await this.authService.confirmAccount(verificationCodeData, this.getLang(headers));
     return res.status(authResponse.status).json(authResponse);
   };
 
@@ -105,11 +105,11 @@ export class AuthController {
     status: 200,
     description:
       'Authenticated!',
-    type: AuthResponseDTO,
+    type: ServiceResponseDTO,
   })
   @Post('login')
   async login(@Res() res, @Body() loginForm: LoginFormDTO){
-    const authResponse: AuthResponseDTO = await this.authService.login(loginForm);
+    const authResponse: ServiceResponseDTO = await this.authService.login(loginForm);
     if (authResponse.isSuccess) return res.status(HttpStatus.OK).json(authResponse.data);
     console.log("Login in controller: ", authResponse);
     return res.status(HttpStatus.UNAUTHORIZED).json(authResponse);
@@ -123,11 +123,11 @@ export class AuthController {
     status: 200,
     description:
       'logout!',
-    type: AuthResponseDTO,
+    type: ServiceResponseDTO,
   })
   @Post('logout')
   async logout(@Res() res, @Body() logoutFormDTO: LogoutFormDTO){
-    const authResponse: AuthResponseDTO = await this.authService.logout(logoutFormDTO);
+    const authResponse: ServiceResponseDTO = await this.authService.logout(logoutFormDTO);
     if (authResponse.isSuccess) return res.status(HttpStatus.OK).json(authResponse);
     return res.status(HttpStatus.UNAUTHORIZED).json(authResponse);
   };
@@ -140,7 +140,7 @@ export class AuthController {
     status: 200,
     description:
       'Email was sent To Recovery Password!',
-    type: AuthResponseDTO,
+    type: ServiceResponseDTO,
   })
   @Post('recovery/start')
   async sendEmailToRecoveryPass(@Headers() headers, @Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
@@ -148,7 +148,7 @@ export class AuthController {
 console.log("sendEmailToRecoveryPass getLang:",this.getLang(headers));
 console.log("sendEmailToRecoveryPass startRecoveryDataDTO:",startRecoveryDataDTO);
 
-    const authResponse: AuthResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO, this.getLang(headers));
+    const authResponse: ServiceResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO, this.getLang(headers));
     return res.status(authResponse.status).json(authResponse);
 
   };
@@ -161,11 +161,11 @@ console.log("sendEmailToRecoveryPass startRecoveryDataDTO:",startRecoveryDataDTO
     status: 200,
     description:
       'Password has been updated successful!',
-    type: AuthResponseDTO,
+    type: ServiceResponseDTO,
   })
   @Post('recovery/update')
   async recoveryUpdatePassword(@Headers() headers, @Res() res, @Body() recoveryUpdateDataDTO: RecoveryUpdateDataDTO) {
-      const authResponse: AuthResponseDTO = await this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO, this.getLang(headers));
+      const authResponse: ServiceResponseDTO = await this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO, this.getLang(headers));
       return res.status(authResponse.status).json(authResponse);
   };
 

@@ -28,7 +28,7 @@ export class CategoryController {
   getHello(@Res() res) {
     const response: HelloWorldDTO = {
       isSuccess: true,
-      status: 200,
+      status: HttpStatus.OK,
       message: "Hello World from category service " + GlobalConfig.VERSION + "!",
       name: "category",
       version: GlobalConfig.VERSION,

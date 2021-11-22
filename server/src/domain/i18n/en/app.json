@@ -3,9 +3,6 @@
     "GOODBYE_MESSAGE": "Goodbye ",
     "REGISTER_START_EMAIL": {
       "HEY": "Hey {name}!",
-      "WELCOME": "Welcome to {company}",
-      "CONFIRM_INFO": "Click on the following link to confirm your email.",
-      "VERIFICATION_LINK": "Verification link:",
       "THANK": "Thanks, The team of {company}"
     }
   }

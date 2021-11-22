@@ -30,7 +30,7 @@ export class ProductController {
       getHello(@Res() res) {
         const response: HelloWorldDTO = {
           isSuccess: true,
-          status: 200,
+          status: HttpStatus.OK,
           message: "Hello World from product service " + GlobalConfig.VERSION + "!",
           name: "product",
           version: GlobalConfig.VERSION,

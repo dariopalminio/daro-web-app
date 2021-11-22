@@ -4,14 +4,17 @@ import { INotificationService } from '../service/interface/notification.service.
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import * as GlobalConfig from '../../infra/config/global-config';
-
-
+import { IServiceResponse } from '../../domain/model/service/service-response.interface';
+import { ITranslator } from '../../domain/output-port/translator.interface';
+import { ResponseCode } from '../../domain/model/service/response.code.enum';
 
 @Injectable()
 export class NotificationService implements INotificationService {
   constructor(
     @Inject('IEmailSender')
-    readonly sender: IEmailSender) {
+    readonly sender: IEmailSender,
+    @Inject('ITranslator')
+    private readonly i18n: ITranslator) {
   }
 
   /**
@@ -19,27 +22,52 @@ export class NotificationService implements INotificationService {
    * @param contactMessage 
    * @returns 
    */
-  async sendContactEmail(contactMessage: ContactMessage, locale: string): Promise<any> {
+  async sendContactEmail(contactMessage: ContactMessage, locale: string): Promise<IServiceResponse> {
 
-    if (!validEmail(contactMessage.email)) throw new Error("Invalid email!");
+    if (!validEmail(contactMessage.email)) throw new Error(await this.i18n.translate('notification.ERROR.INVALID_EMAIL',));
 
     try {
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Support`;
-      return await this.sender.sendEmailWithTemplate(subject, contactMessage.email, "contact", contactMessage, locale);
+      const infoReturned: any = await this.sender.sendEmailWithTemplate(subject, contactMessage.email, "contact", contactMessage, locale);
+      const resp: IServiceResponse = {
+        isSuccess: true,
+        status: ResponseCode.OK,
+        message: await this.i18n.translate('notification.MESSAGE.EMAIL_SENT_SUCCESS',),
+        data: infoReturned
+      };
     } catch (error) {
-      throw error;
+      const resp: IServiceResponse = {
+        isSuccess: false,
+        status: ResponseCode.INTERNAL_SERVER_ERROR,
+        message: await this.i18n.translate('notification.ERROR.EMAIL_COULD_NOT_SENT',),
+        data: {},
+        error: error};
+      return resp;
     };
   };
 
-  async sendEmail(subject: string, email: string, contentHTML: string): Promise<any> {
+  async sendEmail(subject: string, email: string, contentHTML: string): Promise<IServiceResponse> {
 
     if (!validEmail(email)) throw new Error("Invalid email!");
 
     try {
       const subject: string = `[${GlobalConfig.COMPANY_NAME}] Please verify your email`;
-      return this.sender.sendEmail(subject, email, contentHTML);
+      const infoReturned: any = await this.sender.sendEmail(subject, email, contentHTML);
+      const resp: IServiceResponse = {
+        isSuccess: true,
+        status: ResponseCode.OK,
+        message: await this.i18n.translate('notification.MESSAGE.EMAIL_SENT_SUCCESS',),
+        data: infoReturned
+      };
+      return resp;
     } catch (error) {
-      throw error;
+      const resp: IServiceResponse = {
+        isSuccess: false,
+        status: ResponseCode.INTERNAL_SERVER_ERROR,
+        message: await this.i18n.translate('notification.ERROR.EMAIL_COULD_NOT_SENT',),
+        data: {},
+        error: error};
+      return resp;
     };
   };
 

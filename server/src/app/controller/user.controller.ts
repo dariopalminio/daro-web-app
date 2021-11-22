@@ -29,7 +29,7 @@ export class UserController {
   getHello(@Res() res) {
     const response: HelloWorldDTO = {
       isSuccess: true,
-      status: 200,
+      status: HttpStatus.OK,
       message: "Hello World from product user " + GlobalConfig.VERSION + "!",
       name: "user",
       version: GlobalConfig.VERSION,
