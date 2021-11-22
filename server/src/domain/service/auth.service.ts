@@ -56,12 +56,13 @@ export class AuthService implements IAuthService {
     try {
       adminToken = await this.externalAuthService.getAdminToken();
     } catch (error) {
-      return { 
-        isSuccess: false, 
-        status: ResponseCode.INTERNAL_SERVER_ERROR, 
+      return {
+        isSuccess: false,
+        status: ResponseCode.INTERNAL_SERVER_ERROR,
         message: await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',),
-        data: {}, error: 
-        error};
+        data: {}, error:
+          error
+      };
     }
     // Second: creates a new user in authorization server using admin access token
     const authCreatedUserResp = await this.externalAuthService.register(userRegisterData.username,
@@ -81,10 +82,10 @@ export class AuthService implements IAuthService {
       // ERROR: User could not be created in auth server
       return response;
     }
-    
+
     const authCreatedUser = response.data.user;
     const { id } = authCreatedUser; // ID in external authorization server
-    
+
     // Four: create new user in user database
     const userRegisterDTO: UserRegisterDTO = {
       authId: id,
@@ -104,18 +105,19 @@ export class AuthService implements IAuthService {
         deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
       } catch (error) {
         console.log(errorMsg, error);
-        deletedAuthUser = {error: error}
+        deletedAuthUser = { error: error }
       }
       const errorData: any = {
         message: errorMsg,
         deleted: deletedAuthUser
       };
-      return { 
-        isSuccess: false, 
-        status: ResponseCode.INTERNAL_SERVER_ERROR, 
-        message: errorMsg, 
-        data: {}, 
-        error: errorData };
+      return {
+        isSuccess: false,
+        status: ResponseCode.INTERNAL_SERVER_ERROR,
+        message: errorMsg,
+        data: {},
+        error: errorData
+      };
     }
 
     return authCreatedUserResp;
@@ -130,9 +132,12 @@ export class AuthService implements IAuthService {
    */
   async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailDataDTO, locale: string): Promise<IServiceResponse> {
 
+    // Data validation
     try {
-      if (!validEmail(startConfirmEmailData.email)) throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMAIL',));
-      if (!startConfirmEmailData.verificationPageLink) throw new Error(await this.i18n.translate('auth.ERROR.INVALID_LINK',));
+      if (!validEmail(startConfirmEmailData.email))
+        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMAIL',));
+      if (!startConfirmEmailData.verificationPageLink)
+        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_LINK',));
     } catch (error) {
       return this.responseBadRequest(error);
     };
@@ -263,7 +268,14 @@ export class AuthService implements IAuthService {
    */
   async login(loginForm: LoginFormDTO): Promise<IServiceResponse> {
 
-    // TODO: Validate login form (error BadRequestException)
+    // Validate login form (error BadRequestException)
+    try {
+      if (!loginForm.username || !loginForm.password)
+        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_CREDENTIALS',));
+    } catch (error) {
+      // Error BadRequestException
+      return this.responseBadRequest(error);
+    };
 
     // TODO: Validate if user is disabled by 3 consecutive failed login attempts
 
@@ -273,7 +285,7 @@ export class AuthService implements IAuthService {
       // TODO: Save failed login attempt
       // TODO: Disable user account after 3 consecutive failed login attempts
     }
-    
+
     return loginAuthResp;
   };
 
@@ -284,9 +296,26 @@ export class AuthService implements IAuthService {
    */
   async logout(logoutFormDTO: LogoutFormDTO): Promise<IServiceResponse> {
 
-    // Validate login form TODO...
+    const userAuthId: string = logoutFormDTO.id;
+    try {
+      if (!userAuthId)
+        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_VALUE',));
+    } catch (error) {
+      return this.responseBadRequest(error);
+    };
 
-    const logoutAuthResp = await this.externalAuthService.logout(logoutFormDTO.id, logoutFormDTO.adminToken);
+    let adminToken: string = logoutFormDTO.adminToken;
+    if (!logoutFormDTO.adminToken) {
+      try {
+        adminToken = await this.externalAuthService.getAdminToken();
+      } catch (error) {
+        this.responseInternalError(error);
+      }
+    }
+
+    // Close session in external auth server
+    const logoutAuthResp = await this.externalAuthService.logout(userAuthId, adminToken);
+
     return logoutAuthResp;
   };
 
@@ -315,7 +344,7 @@ export class AuthService implements IAuthService {
 
       user.verificationCode = newVerificationCode;
       user.startVerificationCode = new Date();
-      
+
       const updatedOk: boolean = await this.userService.updateById(user._id, user);
       if (!updatedOk) throw new Error(await this.i18n.translate('auth.ERROR.COULD_NOT_SAVE_VERIFICATION_CODE',));
 
@@ -346,7 +375,7 @@ export class AuthService implements IAuthService {
    * @returns 
    */
   async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang: string): Promise<IServiceResponse> {
-    
+
     let user: IUser = null;
 
     try {
@@ -361,12 +390,13 @@ export class AuthService implements IAuthService {
     try {
       adminToken = await this.externalAuthService.getAdminToken();
     } catch (error) {
-      return { 
-        isSuccess: false, 
-        status: ResponseCode.INTERNAL_SERVER_ERROR, 
-        message: await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',), 
-        data: {}, 
-        error: error };
+      return {
+        isSuccess: false,
+        status: ResponseCode.INTERNAL_SERVER_ERROR,
+        message: await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',),
+        data: {},
+        error: error
+      };
     }
     const newPassword = recoveryUpdateDataDTO.password;
     const updetedAuthUser: IServiceResponse = await this.externalAuthService.resetPassword(user.authId, newPassword, adminToken);
