@@ -9,7 +9,6 @@ import { LogoutFormDTO } from '../../../domain/model/auth/login/logout-form.dto'
 import { RecoveryUpdateDataDTO } from '../../../domain/model/auth/recovery/recovery-update-data.dto.type';
 
 export interface IAuthService {
-
     register (userRegisterData: UserRegisterDataDTO): Promise<any>;
     sendStartEmailConfirm(startConfirmEmailMessage: StartConfirmEmailDataDTO, lang:string): Promise<any>;
     confirmAccount(verificationCodeData: VerificationCodeDataDTO, lang:string): Promise<IServiceResponse>;

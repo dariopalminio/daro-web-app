@@ -1,4 +1,4 @@
-export interface IPersistentService<T> {
+export interface IPersistentAggregate<T> {
       getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<Array<T>>;
       find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<Array<T>>; 
       getById(id: string): Promise<T>;
@@ -9,6 +9,5 @@ export interface IPersistentService<T> {
       hasById(id: string): Promise<boolean>;
       hasByQuery(query: any): Promise<boolean>;
       update(query: any, valuesToSet: any): Promise<boolean>;
-
     };
 
