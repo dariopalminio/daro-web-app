@@ -1,6 +1,6 @@
 import { ITranslator } from '../../../domain/output-port/translator.interface';
 
-export class TranslatorHelloWorldStub implements ITranslator {
+export class TranslatorStub implements ITranslator {
 
   constructor(
   ) { }

@@ -1,8 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '../../../app/controller/app.controller';
-import { TranslatorHelloWorldStub } from '../../infra/i18n/traslator-hello-world.stub';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { ITranslator } from '../../../domain/output-port/translator.interface';
+
+// Stub for i18n traslator
+export class TranslatorHelloWorldStub implements ITranslator {
+
+  constructor(
+  ) { }
+
+  async translate(key: any, options?: any): Promise<string> {
+    return "Hello world!";
+  }
+
+};
 
 describe('Unit test, AppController response test', () => {
   let appController: AppController;

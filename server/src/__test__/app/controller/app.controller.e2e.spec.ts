@@ -10,6 +10,8 @@ describe('E2E test, AppController status test', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
+    //DOTO: need ti simulate GlobalConfig
+
     // Dependency injection for testing
     const testingModuleRef: TestingModule = await Test.createTestingModule({
       imports: [
