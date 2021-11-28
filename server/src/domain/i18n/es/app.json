@@ -1,5 +1,6 @@
 {
-    "HELLO_MESSAGE": "Hola mundo desde {app} {version}!",
+  "HELLO": "Hello",
+  "HELLO_MESSAGE": "Hola mundo desde {app} {version}!",
     "GOODBYE_MESSAGE": "Chauuu",
     "SETUP": {
       "WELCOME": "bienvenido",

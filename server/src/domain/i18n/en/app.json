@@ -1,5 +1,6 @@
 {
-    "HELLO_MESSAGE": "Hello World from {app} {version}!",
+  "HELLO": "Hello",
+  "HELLO_MESSAGE": "Hello World from {app} {version}!",
     "GOODBYE_MESSAGE": "Goodbye ",
     "REGISTER_START_EMAIL": {
       "HEY": "Hey {name}!",
