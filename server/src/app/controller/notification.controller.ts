@@ -1,7 +1,7 @@
 import { Controller, Res, Get, Post, Body, Inject, Headers, HttpStatus } from '@nestjs/common';
 import { INotificationService } from '../../domain/service/interface/notification.service.interface';
 import { ContactMessage } from '../../domain/model/notification/contact.message';
-import * as GlobalConfig from '../../infra/config/global-config';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { EmailDataDTO } from '../../domain/model/notification/email-data-dto';
@@ -13,7 +13,9 @@ export class NotificationController {
 
   constructor(
     @Inject('INotificationService')
-    private readonly supportService: INotificationService
+    private readonly supportService: INotificationService,
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,
   ) { }
 
 
@@ -32,9 +34,9 @@ export class NotificationController {
     const response: HelloWorldDTO = {
       isSuccess: true,
       status: HttpStatus.OK,
-      message: "Hello World from notification service " + GlobalConfig.VERSION + "!",
+      message: "Hello World from notification service " + this.globalConfig.get<string>('VERSION') + "!",
       name: "notification",
-      version: GlobalConfig.VERSION,
+      version: this.globalConfig.get<string>('VERSION'),
       date: new Date()
     };
     return res.status(200).json(response);

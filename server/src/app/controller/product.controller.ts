@@ -2,7 +2,7 @@ import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundEx
 import { IProductService } from '../../domain/service/interface/product.service.interface';
 import { Product } from '../../domain/model/product/product';
 import { IProduct } from '../../domain/model/product/product.interface';
-import * as GlobalConfig from '../../infra/config/global-config';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
@@ -12,7 +12,9 @@ export class ProductController {
     
   constructor(
     @Inject('IProductService')
-    private readonly productService: IProductService<IProduct>
+    private readonly productService: IProductService<IProduct>,
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,
     ) {}
 
 
@@ -31,9 +33,9 @@ export class ProductController {
         const response: HelloWorldDTO = {
           isSuccess: true,
           status: HttpStatus.OK,
-          message: "Hello World from product service " + GlobalConfig.VERSION + "!",
+          message: "Hello World from product service " + this.globalConfig.get<string>('VERSION') + "!",
           name: "product",
-          version: GlobalConfig.VERSION,
+          version: this.globalConfig.get<string>('VERSION'),
           date: new Date()
         };
         return res.status(200).json(response);

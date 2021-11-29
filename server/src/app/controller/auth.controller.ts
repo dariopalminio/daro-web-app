@@ -8,7 +8,7 @@ import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { ServiceResponseDTO } from '../../domain/model/service/service-response.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
-import * as GlobalConfig from '../../infra/config/global-config';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 
@@ -18,7 +18,9 @@ export class AuthController {
 
   constructor(
     @Inject('IAuthService')
-    private readonly authService: IAuthService
+    private readonly authService: IAuthService,
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,
   ) { }
 
   @ApiOperation({
@@ -36,9 +38,9 @@ export class AuthController {
     const response: HelloWorldDTO = {
       isSuccess: true,
       status: HttpStatus.OK,
-      message: "Hello World from auth " + GlobalConfig.VERSION + "!",
+      message: "Hello World from auth " + this.globalConfig.get<string>('VERSION') + "!",
       name: "auth",
-      version: GlobalConfig.VERSION,
+      version: this.globalConfig.get<string>('VERSION'),
       date: new Date()
     };
     return res.status(200).json(response);

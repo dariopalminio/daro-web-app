@@ -1,7 +1,7 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
 import { ICategoryService } from '../../domain/service/interface/category.service.interface';
 import { ICategory } from '../../domain/model/category/category.interface';
-import * as GlobalConfig from '../../infra/config/global-config';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
@@ -11,7 +11,9 @@ export class CategoryController {
 
   constructor(
     @Inject('ICategoryService')
-    private readonly categoryService: ICategoryService<ICategory>
+    private readonly categoryService: ICategoryService<ICategory>,
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,
   ) { }
 
   @ApiOperation({
@@ -29,9 +31,9 @@ export class CategoryController {
     const response: HelloWorldDTO = {
       isSuccess: true,
       status: HttpStatus.OK,
-      message: "Hello World from category service " + GlobalConfig.VERSION + "!",
+      message: "Hello World from category service " + this.globalConfig.get<string>('VERSION') + "!",
       name: "category",
-      version: GlobalConfig.VERSION,
+      version: this.globalConfig.get<string>('VERSION'),
       date: new Date()
     };
     return res.status(200).json(response);

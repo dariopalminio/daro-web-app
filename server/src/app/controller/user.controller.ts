@@ -2,7 +2,7 @@ import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, Ht
 import { IUserService } from '../../domain/service/interface/user.service.interface';
 import { IUser } from '../../domain/model/user/user.interface';
 import { UserRegisterDTO } from '../../domain/model/auth/register/user-register.dto.type';
-import * as GlobalConfig from '../../infra/config/global-config';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
@@ -11,7 +11,9 @@ export class UserController {
 
   constructor(
     @Inject('IUserService')
-    private readonly userService: IUserService<IUser>
+    private readonly userService: IUserService<IUser>,
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,
   ) { }
 
 
@@ -30,9 +32,9 @@ export class UserController {
     const response: HelloWorldDTO = {
       isSuccess: true,
       status: HttpStatus.OK,
-      message: "Hello World from product user " + GlobalConfig.VERSION + "!",
+      message: "Hello World from product user " + this.globalConfig.get<string>('VERSION') + "!",
       name: "user",
-      version: GlobalConfig.VERSION,
+      version: this.globalConfig.get<string>('VERSION'),
       date: new Date()
     };
     return res.status(200).json(response);
