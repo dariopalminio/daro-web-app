@@ -3,10 +3,10 @@ import { ContactMessage } from '../model/notification/contact.message';
 import { INotificationService } from '../service/interface/notification.service.interface';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
-import * as GlobalConfig from '../../infra/config/global-config';
 import { IServiceResponse } from '../../domain/model/service/service-response.interface';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 
 @Injectable()
 export class NotificationService implements INotificationService {
@@ -14,7 +14,9 @@ export class NotificationService implements INotificationService {
     @Inject('IEmailSender')
     readonly sender: IEmailSender,
     @Inject('ITranslator')
-    private readonly i18n: ITranslator) {
+    private readonly i18n: ITranslator,
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,) {
   }
 
   /**
@@ -27,7 +29,7 @@ export class NotificationService implements INotificationService {
     if (!validEmail(contactMessage.email)) throw new Error(await this.i18n.translate('notification.ERROR.INVALID_EMAIL',));
 
     try {
-      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Support`;
+      const subject: string = `[${this.globalConfig.get<string>('COMPANY_NAME')}] Support`;
       const infoReturned: any = await this.sender.sendEmailWithTemplate(subject, contactMessage.email, "contact", contactMessage, locale);
       const resp: IServiceResponse = {
         isSuccess: true,
@@ -51,7 +53,7 @@ export class NotificationService implements INotificationService {
     if (!validEmail(email)) throw new Error("Invalid email!");
 
     try {
-      const subject: string = `[${GlobalConfig.COMPANY_NAME}] Please verify your email`;
+      const subject: string = `[${this.globalConfig.get<string>('COMPANY_NAME')}] Please verify your email`;
       const infoReturned: any = await this.sender.sendEmail(subject, email, contentHTML);
       const resp: IServiceResponse = {
         isSuccess: true,

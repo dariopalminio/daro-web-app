@@ -1,10 +1,11 @@
 import { Injectable, HttpService, HttpStatus, Inject } from '@nestjs/common';
 import { IAuth } from '../../domain/output-port/auth.interface';
 import { IServiceResponse } from '../../domain/model/service/service-response.interface';
-import * as GlobalConfig from '../config/global-config';
 import { stringify } from 'querystring';
 import { AxiosResponse } from 'axios';
 import { ITranslator } from '../../domain/output-port/translator.interface';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+
 
 type NewAdminTokenRequestType = {
   client_id: string,
@@ -56,9 +57,12 @@ type ConfirmEmailType = {
 export class AuthKeycloakImpl implements IAuth {
 
   constructor(
-    @Inject('HttpService') private readonly http: HttpService,
+    @Inject('HttpService') 
+    private readonly http: HttpService,
     @Inject('ITranslator')
     private readonly i18n: ITranslator,
+    @Inject('IGlobalConfig')
+    private readonly config: IGlobalConfig,
   ) { }
 
   /**
@@ -73,16 +77,16 @@ export class AuthKeycloakImpl implements IAuth {
   async getAdminToken(): Promise<string> {
 
     const body: NewAdminTokenRequestType = {
-      client_id: GlobalConfig.Keycloak.client_id,
+      client_id: this.config.get<string>('Keycloak_client_id'),
       grant_type: 'password',
-      username: GlobalConfig.Keycloak.username_admin,
-      password: GlobalConfig.Keycloak.password_admin,
+      username: this.config.get<string>('Keycloak_username_admin'),
+      password: this.config.get<string>('Keycloak_password_admin'),
       scope: 'openid roles',
-      client_secret: GlobalConfig.Keycloak.client_secret,
+      client_secret: this.config.get<string>('Keycloak_client_secret'),
     };
 
     // Token endpoint
-    const URL = GlobalConfig.KeycloakPath.token;
+    const URL = this.config.get<string>('Keycloak_path_token');
 
     const res = await this.http.post(URL, stringify(body),
       {
@@ -143,7 +147,7 @@ export class AuthKeycloakImpl implements IAuth {
       };
 
       //User endpoint
-      const URL = GlobalConfig.KeycloakPath.users;
+      const URL = this.config.get<string>('Keycloak_path_users');
 
       const response: AxiosResponse<any> = await this.http
         .post(
@@ -197,7 +201,7 @@ export class AuthKeycloakImpl implements IAuth {
     try {
       let access_token = adminToken;
 
-      const URL = GlobalConfig.KeycloakPath.users;
+      const URL = this.config.get<string>('Keycloak_path_users');
 
       const headers = {
         Authorization: `Bearer ${access_token}`,
@@ -231,7 +235,7 @@ export class AuthKeycloakImpl implements IAuth {
    */
   async deleteAuthUser(authId: string, accessToken: string): Promise<IServiceResponse> {
 
-    const URL = `${GlobalConfig.KeycloakPath.users}/${authId}`;
+    const URL = `${this.config.get<string>('Keycloak_path_users')}/${authId}`;
     const header = {
       Authorization: `Bearer ${accessToken}`,
     };
@@ -292,12 +296,12 @@ export class AuthKeycloakImpl implements IAuth {
         username: username,
         password: pass,
         grant_type: 'password',
-        client_id: GlobalConfig.Keycloak.client_id,
-        client_secret: GlobalConfig.Keycloak.client_secret
+        client_id: this.config.get<string>('Keycloak_client_id'),
+        client_secret: this.config.get<string>('Keycloak_client_secret')
       };
 
       //Login endpoint
-      const URL = GlobalConfig.KeycloakPath.token;
+      const URL = this.config.get<string>('Keycloak_path_token');
 
       //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
       const response: AxiosResponse<any> = await this.http.post(URL, stringify(body)).toPromise();
@@ -335,7 +339,7 @@ export class AuthKeycloakImpl implements IAuth {
   async logout(userId: string, adminToken: string): Promise<IServiceResponse> {
     try {
       //User endpoint
-      const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/logout`;
+      const URL = `${this.config.get<string>('Keycloak_path_users')}/${userId}/logout`;
 
       const header = {
         Authorization: `Bearer ${adminToken}`,
@@ -416,7 +420,7 @@ export class AuthKeycloakImpl implements IAuth {
       };
 
       //User endpoint
-      const URL = `${GlobalConfig.KeycloakPath.users}/${userId}`;
+      const URL = `${this.config.get<string>('Keycloak_path_users')}/${userId}`;
 
       const response: AxiosResponse<any> = await this.http.put(
         URL,
@@ -484,7 +488,7 @@ export class AuthKeycloakImpl implements IAuth {
       };
 
       //User endpoint
-      const URL = `${GlobalConfig.KeycloakPath.users}/${userId}/reset-password`;
+      const URL = `${this.config.get<string>('Keycloak_path_users')}/${userId}/reset-password`;
 
       const res = await this.http
         .put(

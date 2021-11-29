@@ -6,7 +6,6 @@ import { IUserService } from '../../domain/service/interface/user.service.interf
 import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
-import * as GlobalConfig from '../../infra/config/global-config';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
 import { StartConfirmEmailDataDTO } from '../model/auth/register/start-confirm-email-data.dto';
 import { ParamsRegisterStart } from '../model/auth/register/params-register-start.type';
@@ -19,6 +18,7 @@ import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import { IUser } from '../model/user/user.interface';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 
 /**
  * Authorization service
@@ -35,6 +35,8 @@ export class AuthService implements IAuthService {
     readonly sender: IEmailSender,
     @Inject('ITranslator')
     private readonly i18n: ITranslator,
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,
   ) {
   }
 
@@ -161,9 +163,9 @@ export class AuthService implements IAuthService {
       // Prepare params tu email template
       const paramsRegisterStart: ParamsRegisterStart = new ParamsRegisterStart();
       paramsRegisterStart.name = startConfirmEmailData.name;
-      paramsRegisterStart.company = GlobalConfig.COMPANY_NAME;
+      paramsRegisterStart.company = this.globalConfig.get<string>('COMPANY_NAME');
       paramsRegisterStart.link = verificationLink;
-      const subject: string = await this.i18n.translate('auth.REGISTER_START_EMAIL.SUBJECT', { args: { company: GlobalConfig.COMPANY_NAME }, });
+      const subject: string = await this.i18n.translate('auth.REGISTER_START_EMAIL.SUBJECT', { args: { company: paramsRegisterStart.company }, });
 
       //Send email
       const emailResponse: any = await this.sender.sendEmailWithTemplate(subject, startConfirmEmailData.email, "register-start", paramsRegisterStart, locale);
@@ -250,10 +252,10 @@ export class AuthService implements IAuthService {
 
     try {
       //set params to template
-      const paramsRegisterEnd = { name: name, company: GlobalConfig.COMPANY_NAME };
+      const paramsRegisterEnd = { name: name, company: this.globalConfig.get<string>('COMPANY_NAME') };
       //Send email
       const subject: string = await this.i18n.translate('auth.REGISTER_END_EMAIL.SUBJECT',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
+        { args: { company: this.globalConfig.get<string>('COMPANY_NAME') }, });
       const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "register-end", paramsRegisterEnd, lang);
       return emailResponse;
     } catch (error) {
@@ -353,10 +355,10 @@ export class AuthService implements IAuthService {
       const recoveryPageLink = createTokenLink(startRecoveryDataDTO.recoveryPageLink, token);
 
       //set params to email template
-      const params = { recoverylink: recoveryPageLink, company: GlobalConfig.COMPANY_NAME };
+      const params = { recoverylink: recoveryPageLink, company: this.globalConfig.get<string>('COMPANY_NAME') };
       //send email
       const subject: string = await this.i18n.translate('auth.RECOVERY_START_EMAIL.SUBJECT',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
+        { args: { company: this.globalConfig.get<string>('COMPANY_NAME') }, });
       const emailResponse: any = await this.sender.sendEmailWithTemplate(subject, startRecoveryDataDTO.email, "recovery-start", params, lang);
       return {
         isSuccess: true,
@@ -435,10 +437,10 @@ export class AuthService implements IAuthService {
 
     try {
       //set params to email template
-      const params = { name: name, company: GlobalConfig.COMPANY_NAME };
+      const params = { name: name, company: this.globalConfig.get<string>('COMPANY_NAME') };
       //Send email
       const subject: string = await this.i18n.translate('auth.RECOVERY_END_EMAIL.SUBJECT',
-        { args: { company: GlobalConfig.COMPANY_NAME }, });
+        { args: { company: this.globalConfig.get<string>('COMPANY_NAME') }, });
 
       const emailResponse: any = this.sender.sendEmailWithTemplate(subject, email, "recovery-end", params, lang);
       return emailResponse;
@@ -477,8 +479,9 @@ export class AuthService implements IAuthService {
 
     //Validate if expired time
     const dateOfProcessStarted: Date = new Date(user.startVerificationCode);
+    const expirationDaysLimit: number = this.globalConfig.get<number>('EXPIRATION_DAYS_LIMIT');
 
-    if (this.isDateExpired(dateOfProcessStarted, GlobalConfig.EXPIRATION_DAYS_LIMIT)) {
+    if (this.isDateExpired(dateOfProcessStarted, expirationDaysLimit)) {
       throw Error(await this.i18n.translate('auth.ERROR.VERIFICATION_CODE_EXPIRED',));
     }
 

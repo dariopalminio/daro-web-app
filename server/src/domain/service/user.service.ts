@@ -1,5 +1,4 @@
 import { Injectable, Inject } from '@nestjs/common';
-
 import { IUserService } from '../service/interface/user.service.interface';
 import { IUser } from '../model/user/user.interface';
 import { User } from '../model/user/user';

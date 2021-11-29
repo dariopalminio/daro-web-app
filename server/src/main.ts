@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import * as GlobalConfig from './infra/config/global-config';
+
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { setupDocModule } from './infra/document/setup-doc-module';
+require('dotenv').config();
 
 async function bootstrap() {
   //const app = await NestFactory.create(AppModule);
@@ -17,13 +18,13 @@ async function bootstrap() {
   app.enableCors();
 
 
-  console.log('SET app route', GlobalConfig.PREFIX_ROUTE);
-  app.setGlobalPrefix(GlobalConfig.PREFIX_ROUTE);
+  console.log('SET app route', process.env.SERVER_BFF_PREFIX_ROUTE);
+  app.setGlobalPrefix(process.env.SERVER_BFF_PREFIX_ROUTE);
 
   console.log('load swagger module');
   setupDocModule(app);
 
-  console.log("Server running in port:", GlobalConfig.PORT);
-  await app.listen(GlobalConfig.PORT);
+  console.log("Server running in port:", process.env.SERVER_BFF_PORT);
+  await app.listen(process.env.SERVER_BFF_PORT);
 }
 bootstrap();

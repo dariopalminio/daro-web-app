@@ -1,5 +1,5 @@
 import { Controller, Get, Res, Post, Body, Inject, Headers } from '@nestjs/common';
-import * as GlobalConfig from '../../infra/config/global-config';
+
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ITranslator } from '../../domain/output-port/translator.interface';
@@ -46,8 +46,8 @@ export class AppController {
       isSuccess: true,
       status: 200,
       message: await this.myI18n.translate('app.HELLO_MESSAGE', options),
-      name: GlobalConfig.APP_NAME,
-      version: GlobalConfig.VERSION,
+      name: this.globalConfig.get<string>('APP_NAME') as string,
+      version: this.globalConfig.get<string>('VERSION') as string,
       date: new Date()
     };
     return res.status(200).json(response);

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import * as GlobalConfig from '../config/global-config';
+import { Injectable, Inject } from '@nestjs/common';
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import IEmailSender from '../../domain/output-port/email-sender.interface';
 import * as path from 'path';
 
@@ -15,12 +15,14 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
   templatePath: string;
 
   constructor(
+    @Inject('IGlobalConfig')
+    private readonly config: IGlobalConfig,
   ) {
     // Configuración transportador NodeMailer
-    if (!GlobalConfig.email.USER ||
-      !GlobalConfig.email.PASS ||
-      !GlobalConfig.email.HOST ||
-      !GlobalConfig.email.PORT
+    if (!this.config.get<string>('EMAIL_USER') ||
+      !this.config.get<string>('EMAIL_PASS') ||
+      !this.config.get<string>('EMAIL_HOST') ||
+      !this.config.get<string>('EMAIL_PORT')
     ) throw Error("SmtpOptions param is empty!");
 
     this.templatePath = '../../../src/domain/emails/templates/';
@@ -32,19 +34,19 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
    * @returns 
    */
   private getSmtpOptions() {
-    if (!GlobalConfig.email.USER ||
-      !GlobalConfig.email.PASS ||
-      !GlobalConfig.email.HOST ||
-      !GlobalConfig.email.PORT
-    )
+    if (!this.config.get<string>('EMAIL_USER') ||
+    !this.config.get<string>('EMAIL_PASS') ||
+    !this.config.get<string>('EMAIL_HOST') ||
+    !this.config.get<string>('EMAIL_PORT')
+  )
       throw Error("SmtpOptions param is empty!");
     return {
-      host: GlobalConfig.email.HOST,
-      port: GlobalConfig.email.PORT,
+      host: this.config.get<string>('EMAIL_HOST'),
+      port: this.config.get<string>('EMAIL_PORT'),
       secure: true,
       auth: {
-        user: GlobalConfig.email.USER,
-        pass: GlobalConfig.email.PASS
+        user: this.config.get<string>('EMAIL_USER'),
+        pass: this.config.get<string>('EMAIL_PASS')
       },
     };
   };
@@ -71,7 +73,7 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
     try {
 
       const email = {
-        from: GlobalConfig.email.FROM, // sender address,
+        from: this.config.get<string>('EMAIL_FROM'), // sender address,
         to: toEmail,
         subject: subject,
         html: htmlContent
@@ -114,7 +116,7 @@ export class EmailSmtpSenderAdapter implements IEmailSender {
       const htmlToSend: string = this.getTemplateAsHtmlString(templateName, params, locale);
 
       let mailOptions = {
-        from: GlobalConfig.email.FROM, // sender address,
+        from: this.config.get<string>('EMAIL_FROM'), // sender address,
         to: toEmail, // TODO: email receiver
         subject: subject,
         html: htmlToSend,

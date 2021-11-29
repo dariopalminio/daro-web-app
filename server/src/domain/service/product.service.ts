@@ -4,7 +4,6 @@ import { IProduct } from '../model/product/product.interface';
 import { IRepository } from '../output-port/repository.interface';
 
 
-
 @Injectable()
 export class ProductService implements IProductService<IProduct> {
 

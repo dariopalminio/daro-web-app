@@ -34,7 +34,6 @@ import {
 } from '../infra/database/repository/product.repository';
 import LoggerHelper from '../infra/logger/logger.helper';
 
-import { IGlobalConfig } from '../domain/output-port/global-config.interface';
 import { GlobalConfigImpl } from '../infra/config/global-config-impl';
 
 //Mongo
@@ -42,7 +41,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 //i18n
 import { I18nModuleConfig } from '../infra/i18n/i18n-module-config';
 
-console.log(DB_CONNECTION);
+console.log("DB_CONNECTION:", DB_CONNECTION);
 
 //Dependency Injector
 @Module({

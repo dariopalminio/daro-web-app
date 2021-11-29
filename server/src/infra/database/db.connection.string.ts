@@ -1,4 +1,4 @@
-import * as GlobalConfig from '../config/global-config';
+require('dotenv').config();
 
 /**
  * DB_CONNECTION string for mongo data base
@@ -6,16 +6,16 @@ import * as GlobalConfig from '../config/global-config';
  */
 let DB_CONNECTION: string = '';
 
-if (GlobalConfig.DB.MONGO_ON_SERVER === 'false') {
+if (process.env.SERVER_BFF_MONGO_ON_SERVER === 'false') {
     //Running in Localhost 
     //Example: mongodb://testadmin:testadmin123@127.0.0.1:27017/?authSource=bdTest
     //Example: mongodb://127.0.0.1:27017/test?readPreference=primary&appname=MongoDB%20Compass&ssl=false
     DB_CONNECTION = `mongodb://`;
-    DB_CONNECTION += `${GlobalConfig.DB.MONGO_USERNAME}:`;
+    DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_USERNAME}:`;
     //password encoded as a connection string URI
-    DB_CONNECTION += `${encodeURIComponent(GlobalConfig.DB.MONGO_USERPASSWORD)}@`;
-    DB_CONNECTION += `${GlobalConfig.DB.MONGO_HOST}/`;
-    DB_CONNECTION += `?authSource=${GlobalConfig.DB.MONGO_DB}`;
+    DB_CONNECTION += `${encodeURIComponent(process.env.SERVER_BFF_MONGO_USERPASSWORD)}@`;
+    DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_HOST}/`;
+    DB_CONNECTION += `?authSource=${process.env.SERVER_BFF_MONGO_DB}`;
 } else {
     //Running in server
     //mongodb+srv://daro:<password>@cluster0.7hvve.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
@@ -24,11 +24,11 @@ if (GlobalConfig.DB.MONGO_ON_SERVER === 'false') {
     //SERVER_BFF_MONGO_USERNAME="daro"
     //SERVER_BFF_MONGO_USERPASSWORD="Daroandres12345"
     DB_CONNECTION = `mongodb+srv://`;
-    DB_CONNECTION += `${GlobalConfig.DB.MONGO_USERNAME}:`;
+    DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_USERNAME}:`;
     //password encoded as a connection string URI
-    DB_CONNECTION += `${encodeURIComponent(GlobalConfig.DB.MONGO_USERPASSWORD)}@`;
-    DB_CONNECTION += `${GlobalConfig.DB.MONGO_HOST}/`;
-    DB_CONNECTION += `${GlobalConfig.DB.MONGO_DB}?retryWrites=true&w=majority`;
+    DB_CONNECTION += `${encodeURIComponent(process.env.SERVER_BFF_MONGO_USERPASSWORD)}@`;
+    DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_HOST}/`;
+    DB_CONNECTION += `${process.env.SERVER_BFF_MONGO_DB}?retryWrites=true&w=majority`;
 }
 
 
