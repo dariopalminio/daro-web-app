@@ -1,17 +1,19 @@
-import { Controller, Get, Res, Post, Body, Inject, Headers} from '@nestjs/common';
+import { Controller, Get, Res, Post, Body, Inject, Headers } from '@nestjs/common';
 import * as GlobalConfig from '../../infra/config/global-config';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ITranslator } from '../../domain/output-port/translator.interface';
-
+import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 
 @Controller()
 export class AppController {
-  
-  constructor(    
+
+  constructor(
     @Inject('ITranslator')
     private readonly myI18n: ITranslator,
-  ) {}
+    @Inject('IGlobalConfig')
+    private readonly globalConfig: IGlobalConfig,
+  ) { };
 
   @ApiOperation({
     summary:
@@ -27,14 +29,17 @@ export class AppController {
   async getHello(@Headers() headers, @Res() res) {
 
     let lang = 'en';
- 
+
     if (headers && headers.lang) {
       lang = headers.lang;
     }
- 
+
     const options = {
       lang: lang,
-      args: { app: GlobalConfig.APP_NAME, version: GlobalConfig.VERSION },
+      args: {
+        app: this.globalConfig.get<string>('APP_NAME') as string,
+        version: this.globalConfig.get<string>('VERSION') as string
+      },
     };
 
     const response: HelloWorldDTO = {
@@ -52,14 +57,17 @@ export class AppController {
   async getI18n(@Headers() headers, @Res() res) {
 
     let lang = 'en';
- 
+
     if (headers && headers.lang) {
       lang = headers.lang;
     }
- 
+
     const options = {
       lang: lang,
-      args: { app: GlobalConfig.APP_NAME, version: GlobalConfig.VERSION },
+      args: {
+        app: this.globalConfig.get<string>('APP_NAME') as string,
+        version: this.globalConfig.get<string>('VERSION') as string
+      },
     };
 
     const response = {

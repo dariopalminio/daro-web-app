@@ -3,7 +3,8 @@ import { AppController } from '../../../app/controller/app.controller';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { ITranslator } from '../../../domain/output-port/translator.interface';
-
+import { IGlobalConfig } from '../../../domain/output-port/global-config.interface';
+    
 // Stub for i18n traslator
 export class TranslatorHelloWorldStub implements ITranslator {
 
@@ -13,6 +14,27 @@ export class TranslatorHelloWorldStub implements ITranslator {
   async translate(key: any, options?: any): Promise<string> {
     return "Hello world!";
   }
+
+};
+
+// Global config Mock
+export class GlobalConfigMock implements IGlobalConfig{
+    
+  variables: Map<string, any> = new Map();
+
+  constructor(
+  ) { 
+      this.set('APP_NAME', "App name test" as string);
+      this.set('VERSION', "v1 test" as string);
+  };
+
+  get<R>(key: string): R {
+      return this.variables.get(key) as R;
+  };
+
+  set<R>(key: string, value: R): void {
+      this.variables.set(key,value);
+  };
 
 };
 
@@ -26,7 +48,12 @@ describe('Unit test, AppController response test', () => {
       providers: [{
         provide: 'ITranslator',
         useClass: TranslatorHelloWorldStub,
-      }],
+      },
+      {
+        provide: 'IGlobalConfig',
+        useClass: GlobalConfigMock,
+      },
+    ],
     }).compile();
 
     appController = testingModuleRef.get<AppController>(AppController);
@@ -42,7 +69,7 @@ describe('Unit test, AppController response test', () => {
     let resParamMock = {
       send: function () { },
       json: function (d) {
-        //console.log("\n json: " + JSON.stringify(d));
+        console.log("\n json: " + JSON.stringify(d));
         expect(d.message).toEqual("Hello world!");
       },
       status: function (s) {
@@ -57,7 +84,7 @@ describe('Unit test, AppController response test', () => {
 
 });
 
-describe('AppController status test', () => {
+describe('[Unit test] AppController status test', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -67,7 +94,11 @@ describe('AppController status test', () => {
       providers: [{
         provide: 'ITranslator',
         useClass: TranslatorHelloWorldStub,
-      }],
+      },
+      {
+        provide: 'IGlobalConfig',
+        useClass: GlobalConfigMock,
+      },],
     }).compile();
 
     app = testingModuleRef.createNestApplication();

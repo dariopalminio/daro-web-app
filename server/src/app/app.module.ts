@@ -34,6 +34,8 @@ import {
 } from '../infra/database/repository/product.repository';
 import LoggerHelper from '../infra/logger/logger.helper';
 
+import { IGlobalConfig } from '../domain/output-port/global-config.interface';
+import { GlobalConfigImpl } from '../infra/config/global-config-impl';
 
 //Mongo
 import { MongooseModule } from '@nestjs/mongoose';
@@ -56,6 +58,10 @@ console.log(DB_CONNECTION);
   ],
   controllers: [AppController, AuthController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
+    {
+      provide: 'IGlobalConfig',
+      useClass: GlobalConfigImpl,
+    },
     {
       provide: 'ITranslator',
       useClass: TranslatorNestjsI18nImpl,

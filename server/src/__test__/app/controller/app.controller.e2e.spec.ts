@@ -1,16 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from '../../../app/controller/app.controller';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { HttpModule } from '@nestjs/axios';
+import { AppController } from '../../../app/controller/app.controller';
 import { TranslatorNestjsI18nImpl } from '../../../infra/i18n/translator-nestjs-i18n-impl';
 import { I18nModuleConfig } from '../../../infra/i18n/i18n-module-config';
+import { GlobalConfigImpl } from '../../../infra/config/global-config-impl';
+import { IGlobalConfig } from '../../../domain/output-port/global-config.interface';
+import { ITranslator } from '../../../domain/output-port/translator.interface';
 
 describe('E2E test, AppController status test', () => {
-  let app: INestApplication;
+  let appController: INestApplication;
 
-  beforeEach(async () => {
-    //DOTO: need ti simulate GlobalConfig
+  beforeAll(async () => {
 
     // Dependency injection for testing
     const testingModuleRef: TestingModule = await Test.createTestingModule({
@@ -19,18 +21,25 @@ describe('E2E test, AppController status test', () => {
         I18nModuleConfig,
       ],
       controllers: [AppController],
-      providers: [{
+      providers: [
+        {
         provide: 'ITranslator',
         useClass: TranslatorNestjsI18nImpl,
-      }],
+      },
+      {
+        provide: 'IGlobalConfig',
+        useClass: GlobalConfigImpl,
+      },
+    ],
     }).compile();
 
-    app = testingModuleRef.createNestApplication();
-    await app.init();
+    appController = testingModuleRef.createNestApplication();
+    //app.use(new AuthMiddleware().use); // auth middleware
+    await appController.init();
   });
 
   it(`/GET app wold be return 200 and data object with isSuccess=true`, async () => {
-    const response = await request(app.getHttpServer()).get('/');
+    const response = await request(appController.getHttpServer()).get('/');
     expect(response.status).toBe(200); //chack status
     expect(response.body.isSuccess).toBe(true); //chack data
     return response;
@@ -40,14 +49,14 @@ describe('E2E test, AppController status test', () => {
   // Integration Test
   // Test if TranslatorNestjsI18nImpl and I18nModuleConfig works with default langauge
   it(`GET /i18n app wold be return hello message in EN as default langauage`, async () => {
-    const response = await request(app.getHttpServer()).get('/i18n');
+    const response = await request(appController.getHttpServer()).get('/i18n');
     expect(response.body.message).toBe("Hello"); //chack data
     return response;
   }
   );
 
   afterAll(async () => {
-    await app.close();
+    await appController.close();
   });
 
 });

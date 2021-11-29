@@ -1,6 +1,9 @@
 
 require('dotenv').config();
 
+// SERVER_BFF_ENV: prod | dev | qa
+export const environment = process.env.SERVER_BFF_ENV;
+
 export const PORT: number = Number(process.env.SERVER_BFF_PORT) as number;
 export const PREFIX_ROUTE: string = process.env.SERVER_BFF_PREFIX_ROUTE;
 export const COMPANY_NAME: string = process.env.SERVER_BFF_COMPANY_NAME;
@@ -23,9 +26,6 @@ export const email = {
 };
 
 export const PUBLIC_KEY = process.env.SERVER_BFF_KEYCLOAK_PUBLIC_KEY as string;
-
-// SERVER_BFF_ENV: prod | dev | qa
-export const environment = process.env.SERVER_BFF_ENV;
 
 export const is_fake_mode = ((process.env.SERVER_BFF_FAKE === 'true') ? true : false) as boolean;
 
