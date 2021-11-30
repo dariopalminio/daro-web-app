@@ -72,7 +72,7 @@ const mockProductDocDeleted = (): Partial<ProductDocument> => ({
     "__v": 0
 });
 
-describe('ProductRepository', () => {
+describe('[Unit test] ProductRepository', () => {
     let repository: ProductRepository;
     let model: Model<ProductDocument>;
 
@@ -107,7 +107,7 @@ describe('ProductRepository', () => {
     });
 
 
-    it('should be defined', () => {
+    it('ProductRepository should be defined', () => {
         expect(repository).toBeDefined();
     });
 
@@ -115,7 +115,7 @@ describe('ProductRepository', () => {
         jest.clearAllMocks();
     });
 
-    it('productService.getAll should return all products', async () => {
+    it('productRepository.getAll should return all products', async () => {
 
         jest.spyOn(model, 'find').mockReturnValue({
             exec: jest.fn().mockResolvedValueOnce(mockArrayResult),
@@ -125,7 +125,7 @@ describe('ProductRepository', () => {
         expect(products).toEqual(mockArrayResult);
     });
 
-    it('productService.getById should getOne by id', async () => {
+    it('productRepository.getById should getOne by id', async () => {
 
         jest.spyOn(model, 'findById').mockReturnValueOnce(
             createMock<Query<ProductDocument, ProductDocument>>({
@@ -140,7 +140,7 @@ describe('ProductRepository', () => {
         expect(response).toEqual(findMockProdDoc);
     });
 
-    it.skip('productService.updateProduct should update a product successfully', async () => {
+    it.skip('productRepository.updateProduct should update a product successfully', async () => {
 
         jest.spyOn(model, 'findOneAndUpdate').mockReturnValueOnce(
             createMock<Query<ProductDocument, ProductDocument>>({
@@ -163,7 +163,7 @@ describe('ProductRepository', () => {
         expect(updatedCat).toEqual(mockProd);
     });
 
-    it('productService.deleteProduct should return that it did delete a Product', async () => {
+    it('productRepository.deleteProduct should return that it did delete a Product', async () => {
 
         jest.spyOn(model, 'findByIdAndDelete').mockReturnValueOnce(
             createMock<Query<ProductDocument, ProductDocument>>({

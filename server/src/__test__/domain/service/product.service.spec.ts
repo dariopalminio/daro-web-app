@@ -3,7 +3,7 @@ import { ProductService } from '../../../domain/service/product.service';
 import { IRepository } from '../../../domain/output-port/repository.interface';
 import { IProduct } from '../../../domain/model/product/product.interface';
 
-
+// Mocking repository
 class ProductRepositoryNegativeStub implements IRepository<IProduct> {
     async getAll(): Promise<IProduct[]> {
         return [];
@@ -37,7 +37,7 @@ class ProductRepositoryNegativeStub implements IRepository<IProduct> {
     };
 };
 
-describe('ProductService', () => {
+describe('[Unit test] ProductService', () => {
     let service: ProductService;
     let repo: IRepository<IProduct>;
 
@@ -49,9 +49,9 @@ describe('ProductService', () => {
                     //getModelToken() function returns a prepared injection token based on a token name. 
                     //Using this token, you can easily provide a mock implementation using any of the standard 
                     //custom provider techniques, including useClass, useValue, and useFactory. 
-                    provide: 'ProductRepository',
+                    provide: 'IProductRepository',
                     // notice that only the functions we call from the model are mocked
-                    useValue: new ProductRepositoryNegativeStub(),
+                    useClass: ProductRepositoryNegativeStub,
                 },
             ],
         }).compile();
@@ -60,12 +60,8 @@ describe('ProductService', () => {
     });
 
 
-    it('should be defined', () => {
+    it('ProductService should be defined', () => {
         expect(service).toBeDefined();
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
     });
 
     it('productService.getAll should return an empty array', async () => {
@@ -86,6 +82,10 @@ describe('ProductService', () => {
     it('productService.create should return false', async () => {
         const deleted = await service.create(null);
         expect(deleted).toEqual(false);
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
 });
