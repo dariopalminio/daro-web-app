@@ -42,6 +42,20 @@ $ npm install
 ```
 
 ## Running the app
+=========================================================================
+Start Data Base Server 
+export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
+mongod --dbpath /Users/dariopalminio/data/db
+=========================================================================
+Start Keycloak Server 
+cd Applications/keycloak-13.0.1/bin
+sh standalone.sh
+http://127.0.0.1:8080/auth/
+admin admin
+=========================================================================
+Start cliente http://localhost:3000/
+
+
 
 ```bash
 # development

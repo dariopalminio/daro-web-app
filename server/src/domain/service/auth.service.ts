@@ -19,7 +19,8 @@ import { IUser } from '../model/user/user.interface';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
-
+import validateLoginFormDTOSchema from '../../domain/validator/login-form.dto.validator'; 
+import traslateValidateErrorsText from '../../domain/validator/traslate_validator_error_text';
 /**
  * Authorization service
  */
@@ -270,10 +271,16 @@ export class AuthService implements IAuthService {
    */
   async login(loginForm: LoginFormDTO): Promise<IServiceResponse> {
 
+
     // Validate login form (error BadRequestException)
     try {
-      if (!loginForm.username || !loginForm.password)
-        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_CREDENTIALS',));
+
+      if (!validateLoginFormDTOSchema(loginForm)){
+        throw new Error(await traslateValidateErrorsText(validateLoginFormDTOSchema, this.i18n));
+      };
+
+     // if (!loginForm.username || !loginForm.password)
+      //  throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_CREDENTIALS',));
     } catch (error) {
       // Error BadRequestException
       return this.responseBadRequest(error);
