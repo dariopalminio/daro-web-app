@@ -64,13 +64,13 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                         setState({ isProcessing: false, hasError: false, msg: "", isSuccess: true });
 
             }).catch(err => {
-                // Request failed with status code 409 (Conflict) or 400 (Bad Request)
+                console.log("Error: Request failed with status code 409 (Conflict) or 400 (Bad Request)!");
                 setState({ isProcessing: false, hasError: true, msg: err.message, isSuccess: false });
                 removeSessionValue();
             });
 
         }).catch(err => {
-            // Error Can not acquire Admin token from service
+            console.log("Error Can not acquire Admin token from service!");
             const errorMsgKey = "register.error.cannot.acquire.token";
             setState({ isProcessing: false, hasError: true, msg: errorMsgKey, isSuccess: false });
             removeSessionValue();
