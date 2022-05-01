@@ -20,4 +20,7 @@ Nest is [MIT licensed](LICENSE).
 - Node shop api with stripe payment:  https://github.com/safak/youtube/tree/node-shop-api
 - Responsive testing tool: https://responsivedesignchecker.com/
 - Material UI: https://v4.mui.com/
+- MONGO Best Practices: https://www.mongodb.com/developer/article/mongodb-schema-design-best-practices/
+- MONGO Best Practices: https://www.mongodb.com/basics/best-practices
+
 
