@@ -21,13 +21,17 @@ export class DTOValidator {
     //this.validateDTOSchema = this.ajvalidator.compile(this.dtoSchema);
   };
 
+  /**
+   * Return concatenated error messages
+   * @param i18n traslator
+   * @returns error message
+   */
   async traslateValidateErrorsText(i18n?: ITranslator) {
-    let compoundMessage = '';
 
-    if (typeof(i18n) === 'undefined') {
-      compoundMessage = this.ajvalidator.errorsText(this.validateDTOSchema.errors, { separator: "\n" });
-      return compoundMessage;
-    }
+    if (typeof(i18n) === 'undefined')
+      return this.ajvalidator.errorsText(this.validateDTOSchema.errors, { separator: "\n" });
+
+    let compoundMessage = '';
 
     for (var valor of this.validateDTOSchema.errors) {
       compoundMessage = compoundMessage + await i18n.translate(valor.message) + "\n";
@@ -36,6 +40,11 @@ export class DTOValidator {
     return compoundMessage;
   };
 
+  /**
+   * Validate Json object data using an JSON Schema
+   * @param objectJson Json object data
+   * @returns boolean
+   */
   validate(objectJson: any){
     return this.validateDTOSchema(objectJson);
   };

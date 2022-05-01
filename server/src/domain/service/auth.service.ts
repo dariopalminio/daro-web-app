@@ -20,7 +20,7 @@ import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { LoginFormDTOValidator } from '../../domain/validator/login-form-dto.validator'; 
-
+import { UserRegisterDataDTOValidator } from '../../domain/validator/user-register-data-dto.validator'; 
 /**
  * Authorization service
  */
@@ -53,6 +53,16 @@ export class AuthService implements IAuthService {
   async register(userRegisterData: UserRegisterDataDTO): Promise<IServiceResponse> {
 
     //TODO: Validate data (error BadRequestException)
+    try {
+      let validator = new UserRegisterDataDTOValidator();
+      if (!validator.validate(userRegisterData)){
+        throw new Error(await validator.traslateValidateErrorsText(this.i18n));
+      };
+
+    } catch (error) {
+      // Error BadRequestException
+      return this.responseBadRequest(error);
+    };
 
     // First: obtains admin access token
     let adminToken;
