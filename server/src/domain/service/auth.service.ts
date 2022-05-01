@@ -52,7 +52,7 @@ export class AuthService implements IAuthService {
    */
   async register(userRegisterData: UserRegisterDataDTO): Promise<IServiceResponse> {
 
-    //TODO: Validate data (error BadRequestException)
+    //Validate data
     try {
       let validator = new UserRegisterDataDTOValidator();
       if (!validator.validate(userRegisterData)){
