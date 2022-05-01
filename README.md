@@ -1,7 +1,20 @@
 Daro web app
 
 ## Stack
-MERN + Nest + Typescript
+
+Stack: MERN + Nest + Typescript
+Programming Language: Javascript, Typescript
+Frontend Frameworks & libraries: React, Atom
+i18: react-i18next, i18next
+UI: @material-ui
+Testing: Jest, React Testing Library
+Build, pack & automation tool: npm
+Data Base NoSQL: Mongo
+Segurity, authentication & authorization: Keyckloak
+Backend Frameworks & libraries: NodeJS, NestJS
+Validatio data: avj, typebox
+Documentation: Swagger
+HTTP Client: Axios
 
 ## License
 
@@ -10,6 +23,7 @@ Nest is [MIT licensed](LICENSE).
 
 ## Referencias:
 - Code commits standard: https://www.conventionalcommits.org/en/v1.0.0/
+- HTTP Client, Axios :https://axios-http.com/docs/intro
 - Internationalization, react-i18next: https://github.com/andretorres00123/react-i18n-tutorial
 - Internationalization, i18next: https://www.i18next.com/overview/getting-started
 - Internationalization, i18next, video: https://www.youtube.com/watch?v=Nc2xWHONPjQ
