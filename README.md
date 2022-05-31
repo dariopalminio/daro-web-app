@@ -66,5 +66,6 @@ $ npm run start:prod
 - Material UI: https://v4.mui.com/
 - MONGO Best Practices: https://www.mongodb.com/developer/article/mongodb-schema-design-best-practices/
 - MONGO Best Practices: https://www.mongodb.com/basics/best-practices
+- Ajv and JWT: https://github.com/Desarrollo-Util/express-example
 
 
