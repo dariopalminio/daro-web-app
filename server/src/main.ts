@@ -26,5 +26,10 @@ async function bootstrap() {
 
   console.log("Server running in port:", process.env.SERVER_BFF_PORT);
   await app.listen(process.env.SERVER_BFF_PORT);
+
+  const url =`${process.env.SERVER_BFF_DOMAIN}:${process.env.SERVER_BFF_PORT}${process.env.SERVER_BFF_PREFIX_ROUTE}`;
+  console.log("Server running in:", url);
+
+
 }
 bootstrap();

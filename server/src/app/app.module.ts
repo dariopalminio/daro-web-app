@@ -1,8 +1,10 @@
 
 import { HttpModule, HttpService, Module, OnModuleInit, MiddlewareConsumer } from '@nestjs/common';
+import { TerminusModule } from '@nestjs/terminus';
 import { APP_FILTER } from '@nestjs/core';
 import { ExceptionsAllFilter } from '../app/filter/exception.filter';
 import { AppController } from '../app/controller/app.controller';
+import { HealthCheckController } from '../app/controller/healt-check.controller';
 import { NotificationController } from '../app/controller/notification.controller';
 import { ProductController } from '../app/controller/product.controller';
 import { CategoryController } from '../app/controller/category.controller';
@@ -46,6 +48,7 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
 //Dependency Injector
 @Module({
   imports: [
+    TerminusModule,
     HttpModule,
     MongooseModule.forRoot(DB_CONNECTION),
     MongooseModule.forFeature([
@@ -55,7 +58,7 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
     ]),
     I18nModuleConfig,
   ],
-  controllers: [AppController, AuthController, UserController, NotificationController, ProductController, CategoryController],
+  controllers: [AppController, HealthCheckController, AuthController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
     {
       provide: 'IGlobalConfig',

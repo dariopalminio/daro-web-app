@@ -27,6 +27,7 @@
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/platform-express": "^7.6.15",
     "@nestjs/swagger": "^4.8.2",
+    "@nestjs/terminus": "^8.0.6",
     "@sinclair/typebox": "^0.23.5",
     "@types/nodemailer-smtp-transport": "^2.7.4",
     "acorn": "^8.5.0",

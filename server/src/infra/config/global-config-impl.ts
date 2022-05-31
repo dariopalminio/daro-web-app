@@ -20,6 +20,8 @@ export class GlobalConfigImpl implements IGlobalConfig{
 
         this.set('COMPANY_NAME', process.env.SERVER_BFF_COMPANY_NAME as string);
         this.set('PORT', Number(process.env.SERVER_BFF_PORT) as number);
+        this.set('DOMAIN', (process.env.SERVER_BFF_DOMAIN) as string);
+
         this.set('PREFIX_ROUTE', process.env.SERVER_BFF_PREFIX_ROUTE as string);
         this.set('AUTH_MIDDLEWARE_ON', (process.env.SERVER_BFF_AUTH_MIDDLEWARE_ON.toLowerCase() == 'true' ? true : false) as boolean); 
         this.set('APP_NAME', process.env.SERVER_BFF_APP_NAME as string);
