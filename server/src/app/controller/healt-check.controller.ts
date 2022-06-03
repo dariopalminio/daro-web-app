@@ -1,24 +1,17 @@
 import { Controller, Get, Inject } from "@nestjs/common";
 import { HealthCheck, HealthCheckService, MongooseHealthIndicator } from "@nestjs/terminus";
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 
-/**
- * It provides features such as graceful shutdown and Kubernetes liveness/readiness health checks 
- * for HTTP applications.
- */
+
+
 @Controller('health')
 export class HealthCheckController {
     constructor(
-        @Inject('IGlobalConfig')
-        private readonly globalConfig: IGlobalConfig,
         private healthCheckService: HealthCheckService,
         private db: MongooseHealthIndicator,
-    ){}
+    ) { }
 
     /**
-     * A health check is typically a combination of several health indicators. 
-     * Basically, a health check is positive if all the health indicators are up and running. 
-     * 
+     * /health returns the status of the service and the dependencies.  
      * @returns 
      */
     @Get()
@@ -26,6 +19,28 @@ export class HealthCheckController {
     checkHealth() {
         return this.healthCheckService.check([
             () => this.db.pingCheck('mongoose')
+        ]);
+    }
+
+    /**
+     * Returns the readiness state to accept incoming requests from the gateway or the upstream proxy. 
+     * Readiness signals that the app is running normally but isn’t ready to receive requests just yet. 
+     */
+    @Get('rediness')
+    @HealthCheck()
+    rediness() {
+        return this.healthCheckService.check([
+        ]);
+    }
+
+    /**
+     * Returns the liveness of a microservice. If the check does not return the expected response, 
+     * it means that the process is unhealthy or dead and should be replaced as soon as possible.
+     */
+    @Get('liveness')
+    @HealthCheck()
+    liveness() {
+        return this.healthCheckService.check([
         ]);
     }
 }
