@@ -17,7 +17,7 @@ export class GlobalConfigImpl implements IGlobalConfig{
 
     private loadDefaultValues(){
         this.set('environment', process.env.SERVER_BFF_ENV as string);
-
+        this.set('DEBUG', ((process.env.SERVER_BFF_DEBUG === 'true') ? true : false) as boolean);
         this.set('COMPANY_NAME', process.env.SERVER_BFF_COMPANY_NAME as string);
         this.set('PORT', Number(process.env.SERVER_BFF_PORT) as number);
         this.set('DOMAIN', (process.env.SERVER_BFF_DOMAIN) as string);
@@ -78,9 +78,8 @@ export class GlobalConfigImpl implements IGlobalConfig{
         this.variables.set(key,value);
     };
 
-    getVariables(): string {
-        const json: string = JSON.stringify(Object.fromEntries(this.variables));
-        return json; 
+    stringify(): string {
+        return JSON.stringify(Object.fromEntries(this.variables)); 
     };
 
 };

@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Body, Inject, Headers } from '@nestjs/common';
+import { Controller, Get, Res, Inject, Headers } from '@nestjs/common';
 import { HealthCheck, HttpHealthIndicator, HealthCheckService, MongooseHealthIndicator } from "@nestjs/terminus";
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -123,6 +123,10 @@ export class AppController {
       },
     };
 
+    let variables = "DEBUG is false!";
+    if (this.globalConfig.get<boolean>('DEBUG') as boolean)
+      variables =this.globalConfig.stringify()
+
     const response = {
       isSuccess: true,
       status: 200,
@@ -130,7 +134,7 @@ export class AppController {
       name: this.globalConfig.get<string>('APP_NAME') as string,
       version: this.globalConfig.get<string>('VERSION') as string,
       date: new Date(),
-      globalConfig: this.globalConfig.getVariables(),
+      globalConfig: variables,
     };
     return res.status(200).json(response);
   };
