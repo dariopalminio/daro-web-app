@@ -67,5 +67,5 @@ $ npm run start:prod
 - MONGO Best Practices: https://www.mongodb.com/developer/article/mongodb-schema-design-best-practices/
 - MONGO Best Practices: https://www.mongodb.com/basics/best-practices
 - Ajv and JWT: https://github.com/Desarrollo-Util/express-example
-
+- API Guide: https://github.com/byrondover/api-guidelines/blob/master/Guidelines.md#errors
 
