@@ -78,4 +78,9 @@ export class GlobalConfigImpl implements IGlobalConfig{
         this.variables.set(key,value);
     };
 
+    getVariables(): string {
+        const json: string = JSON.stringify(Object.fromEntries(this.variables));
+        return json; 
+    };
+
 };

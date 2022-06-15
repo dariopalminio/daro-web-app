@@ -1,5 +1,5 @@
 import { Controller, Get, Res, Post, Body, Inject, Headers } from '@nestjs/common';
-
+import { HealthCheck, HttpHealthIndicator, HealthCheckService, MongooseHealthIndicator } from "@nestjs/terminus";
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ITranslator } from '../../domain/output-port/translator.interface';
@@ -13,6 +13,9 @@ export class AppController {
     private readonly myI18n: ITranslator,
     @Inject('IGlobalConfig')
     private readonly globalConfig: IGlobalConfig,
+    private healthCheckService: HealthCheckService,
+    private http: HttpHealthIndicator,
+    private db: MongooseHealthIndicator,
   ) { };
 
   @ApiOperation({
@@ -53,8 +56,58 @@ export class AppController {
     return res.status(200).json(response);
   };
 
-  @Get('i18n')
-  async getI18n(@Headers() headers, @Res() res) {
+  /**
+   * Health endpoint returns the status of the service and the dependencies.
+   * Health endpoints are designed specifically for load balancers and service discovery solutions. 
+   * As such, they should be exceedingly simple, indicating the health of an API via HTTP response codes.
+   * A load balancer should know whether to keep a service in the pool or eject it after sending a HEAD request to the service health endpoint.
+   * Health endpoints are designed for both human consumption, and also for dynamic load balancing. 
+   * Outputs should be intuitive and easy-to-read, should also be able to serve applications at 
+   * 1 QPS without any impact on application performance. Avoid exposing difficult-to-compute or 
+   * resource-intensive values, or if we must, background-compute and cache them for as long as 
+   * necessary to make the performance hit negligible.
+   *   
+   * @returns returns the status of the service and the dependencies.  
+   */
+  @Get('health')
+  @HealthCheck()
+  checkHealth() {
+    return this.healthCheckService.check([
+      () => this.db.pingCheck('mongoose')
+    ]);
+  }
+
+  /**
+   * Returns the readiness state to accept incoming requests from the gateway or the upstream proxy. 
+   * Readiness signals that the app is running normally but isn’t ready to receive requests just yet. 
+   */
+  @Get('health/readiness')
+  @HealthCheck()
+  readiness() {
+    return this.healthCheckService.check([
+      () => this.http.pingCheck('nestjs-docs', 'https://docs.nestjs.com'),
+    ]);
+  }
+
+  /**
+   * Returns the liveness of a microservice. If the check does not return the expected response, 
+   * it means that the process is unhealthy or dead and should be replaced as soon as possible.
+   */
+  @Get('health/liveness')
+  @HealthCheck()
+  liveness() {
+    return this.healthCheckService.check([
+    ]);
+  }
+
+  /**
+   * debug endpoints are designed specifically internal use, 
+   * to expose sensitive configuration, environment and logging information to aid in development. 
+   * These endpoints are NOT for public consumption, as such should be disabled by default, 
+   * requiring an explicit non-default configuration setting or environment variable to enable at start-up.
+   */
+  @Get('debug')
+  async debug(@Headers() headers, @Res() res) {
 
     let lang = 'en';
 
@@ -71,10 +124,16 @@ export class AppController {
     };
 
     const response = {
-
-      message: await this.myI18n.translate('app.HELLO', options),
-
+      isSuccess: true,
+      status: 200,
+      message: await this.myI18n.translate('app.HELLO_MESSAGE', options),
+      name: this.globalConfig.get<string>('APP_NAME') as string,
+      version: this.globalConfig.get<string>('VERSION') as string,
+      date: new Date(),
+      globalConfig: this.globalConfig.getVariables(),
     };
     return res.status(200).json(response);
   };
+
+
 };
