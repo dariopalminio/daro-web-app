@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "d701a2d9-7abd-4733-b224-2c5319bab7ab",
 		"name": "Backend",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15989306"
 	},
 	"item": [
 		{
@@ -33,6 +34,40 @@
 						"api",
 						"webshop",
 						"v1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get health check",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-custom-lang",
+						"value": "es",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "lang",
+						"value": "es",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3001/api/webshop/v1/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"webshop",
+						"v1",
+						"health"
 					]
 				}
 			},
@@ -335,7 +370,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/user",
+					"raw": "http://localhost:3001/api/webshop/v1/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -345,7 +380,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"user"
+						"users"
 					]
 				}
 			},
@@ -357,7 +392,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/user/all",
+					"raw": "http://localhost:3001/api/webshop/v1/users/all",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -367,7 +402,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"user",
+						"users",
 						"all"
 					]
 				}
@@ -488,14 +523,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/user/create",
+					"raw": "http://localhost:3001/users/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3001",
 					"path": [
-						"user",
+						"users",
 						"create"
 					]
 				}
@@ -527,14 +562,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/user/isVerificationCodeOk",
+					"raw": "http://localhost:3001/users/isVerificationCodeOk",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3001",
 					"path": [
-						"user",
+						"users",
 						"isVerificationCodeOk"
 					]
 				}
@@ -547,7 +582,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/user/delete?id=6175b91487a04a35d18440af",
+					"raw": "http://localhost:3001/api/webshop/v1/users/delete?id=6175b91487a04a35d18440af",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -557,7 +592,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"user",
+						"users",
 						"delete"
 					],
 					"query": [
@@ -576,7 +611,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/category/",
+					"raw": "http://localhost:3001/api/webshop/v1/categories/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -586,8 +621,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"category",
+						"categories",
 						""
 					]
 				}
@@ -600,7 +634,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/category/all?page=1&limit=2&orderBy=name&isAsc=true",
+					"raw": "http://localhost:3001/api/webshop/v1/categories/all?page=1&limit=2&orderBy=name&isAsc=true",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -610,8 +644,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"category",
+						"categories",
 						"all"
 					],
 					"query": [
@@ -661,7 +694,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/category/create",
+					"raw": "http://localhost:3001/api/webshop/v1/categories/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -671,8 +704,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"category",
+						"categories",
 						"create"
 					]
 				}
@@ -685,7 +717,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/category/id/60e0ded93267c61a7e118918",
+					"raw": "http://localhost:3001/api/webshop/v1/categories/id/60e0ded93267c61a7e118918",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -695,8 +727,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"category",
+						"categories",
 						"id",
 						"60e0ded93267c61a7e118918"
 					]
@@ -719,7 +750,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/category/update?id=60e0ded93267c61a7e118918",
+					"raw": "http://localhost:3001/api/webshop/v1/categories/update?id=60e0ded93267c61a7e118918",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -729,8 +760,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"category",
+						"categories",
 						"update"
 					],
 					"query": [
@@ -749,7 +779,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/category/delete?id=60e264d5d9787e34850f57df",
+					"raw": "http://localhost:3001/api/webshop/v1/categories/delete?id=60e264d5d9787e34850f57df",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -759,8 +789,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"category",
+						"categories",
 						"delete"
 					],
 					"query": [
@@ -779,7 +808,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/product/",
+					"raw": "http://localhost:3001/api/webshop/v1/products/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -789,8 +818,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"product",
+						"products",
 						""
 					]
 				}
@@ -822,7 +850,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/product/create",
+					"raw": "http://localhost:3001/api/webshop/v1/products/create",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -832,8 +860,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"product",
+						"products",
 						"create"
 					]
 				}
@@ -846,7 +873,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/product/all",
+					"raw": "http://localhost:3001/api/webshop/v1/products/all",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -856,8 +883,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"product",
+						"products",
 						"all"
 					]
 				}
@@ -870,7 +896,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/product/id/60e13c077fb12f24e2f7a61e",
+					"raw": "http://localhost:3001/api/webshop/v1/products/id/60e13c077fb12f24e2f7a61e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -880,8 +906,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"product",
+						"products",
 						"id",
 						"60e13c077fb12f24e2f7a61e"
 					]
@@ -895,7 +920,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/product/delete?id=60e12e1207d43822059cde81",
+					"raw": "http://localhost:3001/api/webshop/v1/products/delete?id=60e12e1207d43822059cde81",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -905,8 +930,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"product",
+						"products",
 						"delete"
 					],
 					"query": [
@@ -934,7 +958,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/api/webshop/v1/catalog/product/update?id=60e13c077fb12f24e2f7a61e",
+					"raw": "http://localhost:3001/api/webshop/v1/products/update?id=60e13c077fb12f24e2f7a61e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -944,8 +968,7 @@
 						"api",
 						"webshop",
 						"v1",
-						"catalog",
-						"product",
+						"products",
 						"update"
 					],
 					"query": [

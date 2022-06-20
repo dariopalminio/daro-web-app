@@ -4,7 +4,8 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { ITranslator } from '../../../domain/output-port/translator.interface';
 import { IGlobalConfig } from '../../../domain/output-port/global-config.interface';
-    
+import { TerminusModule } from '@nestjs/terminus';
+
 // Stub for i18n traslator
 export class TranslatorHelloWorldStub implements ITranslator {
 
@@ -36,6 +37,10 @@ export class GlobalConfigMock implements IGlobalConfig{
       this.variables.set(key,value);
   };
 
+  stringify(): string {
+    return JSON.stringify(Object.fromEntries(this.variables)); 
+  };
+
 };
 
 describe('Unit test, AppController response test', () => {
@@ -44,6 +49,7 @@ describe('Unit test, AppController response test', () => {
   beforeEach(async () => {
     // Dependency injection for testing
     const testingModuleRef: TestingModule = await Test.createTestingModule({
+      imports: [TerminusModule],
       controllers: [AppController],
       providers: [{
         provide: 'ITranslator',
@@ -90,6 +96,7 @@ describe('[Unit test] AppController status test', () => {
   beforeEach(async () => {
     // Dependency injection for testing
     const testingModuleRef: TestingModule = await Test.createTestingModule({
+      imports: [TerminusModule],
       controllers: [AppController],
       providers: [{
         provide: 'ITranslator',

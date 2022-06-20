@@ -6,7 +6,7 @@ import { IGlobalConfig } from '../../domain/output-port/global-config.interface'
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
 
   constructor(

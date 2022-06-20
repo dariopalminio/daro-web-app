@@ -6,7 +6,7 @@ import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
-@Controller('catalog/category')
+@Controller('categories')
 export class CategoryController {
 
   constructor(

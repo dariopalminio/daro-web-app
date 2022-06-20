@@ -8,6 +8,7 @@ import { I18nModuleConfig } from '../../../infra/i18n/i18n-module-config';
 import { GlobalConfigImpl } from '../../../infra/config/global-config-impl';
 import { IGlobalConfig } from '../../../domain/output-port/global-config.interface';
 import { ITranslator } from '../../../domain/output-port/translator.interface';
+import { TerminusModule } from '@nestjs/terminus';
 
 describe('E2E test, AppController status test', () => {
   let appController: INestApplication;
@@ -17,6 +18,7 @@ describe('E2E test, AppController status test', () => {
     // Dependency injection for testing
     const testingModuleRef: TestingModule = await Test.createTestingModule({
       imports: [
+        TerminusModule,
         HttpModule,
         I18nModuleConfig,
       ],
@@ -42,15 +44,6 @@ describe('E2E test, AppController status test', () => {
     const response = await request(appController.getHttpServer()).get('/');
     expect(response.status).toBe(200); //chack status
     expect(response.body.isSuccess).toBe(true); //chack data
-    return response;
-  }
-  );
-
-  // Integration Test
-  // Test if TranslatorNestjsI18nImpl and I18nModuleConfig works with default langauge
-  it(`GET /i18n app wold be return hello message in EN as default langauage`, async () => {
-    const response = await request(appController.getHttpServer()).get('/i18n');
-    expect(response.body.message).toBe("Hello"); //chack data
     return response;
   }
   );

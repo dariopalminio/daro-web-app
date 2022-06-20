@@ -8,7 +8,7 @@ import { EmailDataDTO } from '../../domain/model/notification/email-data-dto';
 import { IServiceResponse } from '../../domain/model/service/service-response.interface';
 
 
-@Controller('notification')
+@Controller('notifications')
 export class NotificationController {
 
   constructor(
