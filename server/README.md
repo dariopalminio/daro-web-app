@@ -117,12 +117,15 @@ npm i @types/nodemailer-smtp-transport --save
 $ npm install
 ```
 
+## Run
 
-Start Data Base Server 
+Start Mongo Data Base Server 
+
 export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
 mongod --dbpath /Users/dariopalminio/data/db
 
 Start Keycloak Server 
+
 cd Applications/keycloak-13.0.1/bin
 sh standalone.sh
 http://127.0.0.1:8080/auth/
