@@ -29,8 +29,11 @@
 ## Installation from zero
 
 Install Visual Studio Code
+
 Install extension: ES7+ React/Redux/React-Native snippets
+
 Install Node.js version LTS 
+
 ```bash
 node -v
 v16.16.0
