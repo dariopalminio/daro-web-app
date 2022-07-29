@@ -64,6 +64,11 @@ Configure MongoDB PATH
 - Client: C:\Program Files\MongoDB\Server\6.0\bin\mongo
 - Data: C:\Program Files\MongoDB\Server\6.0\data\
 
+Start Data Base Server 
+
+export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
+mongod --dbpath /Users/dariopalminio/data/db
+
 Install Keycloak 13.0.1 from https://www.keycloak.org/archive/downloads-13.0.1.html
 
 Because Keycloak uses Java, then install JDK from https://jdk.java.net/
@@ -78,6 +83,9 @@ Configure Keycloak PATH and execute
 ```bash
 standalone.bat
 ```
+
+Start Keycloak Server in http://127.0.0.1:8080/auth/ 
+
 Server running and go to http://localhost:8080/auth/ 
 
 Create admin user with admin pass in Keykloak
@@ -109,18 +117,17 @@ npm i @types/nodemailer-smtp-transport --save
 $ npm install
 ```
 
-## Running the app
-=========================================================================
+
 Start Data Base Server 
 export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
 mongod --dbpath /Users/dariopalminio/data/db
-=========================================================================
+
 Start Keycloak Server 
 cd Applications/keycloak-13.0.1/bin
 sh standalone.sh
 http://127.0.0.1:8080/auth/
 admin admin
-=========================================================================
+
 Start cliente http://localhost:3000/
 
 
