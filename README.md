@@ -12,7 +12,7 @@ Daro web app
 - Data Base NoSQL: Mongo
 - Segurity, authentication & authorization: Keyckloak
 - Backend Frameworks & libraries: NodeJS, NestJS
-- Validatio data: avj, typebox
+- Validation data: avj, typebox
 - Documentation: Swagger
 - HTTP Client: Axios
 
