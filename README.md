@@ -2,19 +2,19 @@ Daro web app
 
 ## Stack
 
-Stack: MERN + Nest + Typescript
-Programming Language: Javascript, Typescript
-Frontend Frameworks & libraries: React, Atom
-i18: react-i18next, i18next
-UI: @material-ui
-Testing: Jest, React Testing Library
-Build, pack & automation tool: npm
-Data Base NoSQL: Mongo
-Segurity, authentication & authorization: Keyckloak
-Backend Frameworks & libraries: NodeJS, NestJS
-Validatio data: avj, typebox
-Documentation: Swagger
-HTTP Client: Axios
+- Stack: MERN + Nest + Typescript
+- Programming Language: Javascript, Typescript
+- Frontend Frameworks & libraries: React, Atom
+- i18: react-i18next, i18next
+- UI: @material-ui
+- Testing: Jest, React Testing Library
+- Build, pack & automation tool: npm
+- Data Base NoSQL: Mongo
+- Segurity, authentication & authorization: Keyckloak
+- Backend Frameworks & libraries: NodeJS, NestJS
+- Validatio data: avj, typebox
+- Documentation: Swagger
+- HTTP Client: Axios
 
 ## License
 
