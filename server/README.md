@@ -60,9 +60,9 @@ git clone https://github.com/dariopalminio/daro-web-app.git
 Install MongoDB local
 Version 5.0.10-rc0 from https://www.mongodb.com/try/download/community
 
-Server: C:\Program Files\MongoDB\Server\6.0\bin\mongod
-Client: C:\Program Files\MongoDB\Server\6.0\bin\mongo
-Data: C:\Program Files\MongoDB\Server\6.0\data\
+- Server: C:\Program Files\MongoDB\Server\6.0\bin\mongod
+- Client: C:\Program Files\MongoDB\Server\6.0\bin\mongo
+- Data: C:\Program Files\MongoDB\Server\6.0\data\
 
 Install Keycloak 13.0.1 from https://www.keycloak.org/archive/downloads-13.0.1.html
 
