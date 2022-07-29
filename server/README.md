@@ -31,23 +31,28 @@
 Install Visual Studio Code
 Install extension: ES7+ React/Redux/React-Native snippets
 Install Node.js version LTS 
->node -v
+```bash
+node -v
 v16.16.0
->npm -v
+npm -v
 npm WARN config global `--global`, `--local` are deprecated. Use `--location=global` instead.
 8.11.0
->npx -v
+npx -v
 npm WARN config global `--global`, `--local` are deprecated. Use `--location=global` instead.
 8.11.0
+```
 
+```bash
 npm i -g @nestjs/cli
+```
 
 Install Git from https://git-scm.com/
-$ git --version
+```bash
+git --version
 git version 2.37.1.windows.1
 
 Clone repo (example git clone https://github.com/dariopalminio/daro-web-app.git)
-
+```
 
 Install MongoDB local
 Version 5.0.10-rc0 from https://www.mongodb.com/try/download/community
@@ -60,8 +65,10 @@ Install Keycloak 13.0.1 from https://www.keycloak.org/archive/downloads-13.0.1.h
 
 Install java JDK from https://jdk.java.net/
 Configure environment var JAVA_HOME and PATH
->javac -version
+```bash
+javac -version
 javac 17
+```
 
 Configure PATH and execute standalone.bat
 Server run on http://localhost:8080/auth/
@@ -76,13 +83,14 @@ Copy client ID d1dd32a1-1e54-4f8f-96d3-18c7a8466408
 
 Configure .env with Keycloak variables
 
+```bash
 sudo npm i -g @nestjs/cli\
 nest new daro-web-shop-backend\
 npm install dotenv\
 npm install nodemailer\
 npm i --save-dev @types/nodemailer\
 npm i @types/nodemailer-smtp-transport --save
-
+```
 
 ## Installation
 
