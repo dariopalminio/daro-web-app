@@ -45,10 +45,6 @@ npm WARN config global `--global`, `--local` are deprecated. Use `--location=glo
 8.11.0
 ```
 
-```bash
-npm i -g @nestjs/cli
-```
-
 Install Git from https://git-scm.com/
 ```bash
 git --version
