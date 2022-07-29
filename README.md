@@ -20,37 +20,6 @@ HTTP Client: Axios
 
 Nest is [MIT licensed](LICENSE).
 
-## Running the app
-=========================================================================
-Start Data Base Server 
-export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
-mongod --dbpath /Users/dariopalminio/data/db
-=========================================================================
-Start Keycloak Server 
-cd Applications/keycloak-13.0.1/bin
-sh standalone.sh
-http://127.0.0.1:8080/auth/
-admin admin
-=========================================================================
-Start server
-cd server
-npm start
-=========================================================================
-Start cliente http://localhost:3000/
-cd client
-npm start
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
 ## Referencias:
 - Code commits standard: https://www.conventionalcommits.org/en/v1.0.0/
 - HTTP Client, Axios :https://axios-http.com/docs/intro
@@ -60,6 +29,9 @@ $ npm run start:prod
 - Keycloak, Admin REST API: https://www.keycloak.org/docs-api/10.0/rest-api/index.html
 - Keycloak, with postman: https://documenter.getpostman.com/view/7294517/SzmfZHnd#intro
 - Keycloak, Create user: https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/
+- Keycloak, Video: https://www.youtube.com/watch?v=368WDlsF_Ow&ab_channel=ColmenaTEC
+- Keycloak, Video: https://www.youtube.com/watch?v=PY5xUgI_BDQ&list=PLRFOqDrY-6nuCMk2gORw-jSKtcnJX7Yam&index=2&ab_channel=ColmenaTEC
+- Keycloak, Video: https://www.youtube.com/watch?v=yz4lwsfUpVs&list=PLRFOqDrY-6nuCMk2gORw-jSKtcnJX7Yam&index=3&ab_channel=ColmenaTEC
 - Envía emails desde Node.js con Nodemailer (Gmail) tutorial español: https://www.youtube.com/watch?v=KjheexBLY4A
 - Node shop api with stripe payment:  https://github.com/safak/youtube/tree/node-shop-api
 - Responsive testing tool: https://responsivedesignchecker.com/
