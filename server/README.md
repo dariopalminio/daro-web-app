@@ -66,16 +66,18 @@ Version 5.0.10-rc0 from https://www.mongodb.com/try/download/community
 
 Install Keycloak 13.0.1 from https://www.keycloak.org/archive/downloads-13.0.1.html
 
-Install java JDK from https://jdk.java.net/
+Because Keycloak uses Java Install JDK from https://jdk.java.net/
 Configure environment var JAVA_HOME and PATH
 ```bash
 javac -version
 javac 17
 ```
 
-Configure PATH and execute standalone.bat
-Server run on http://localhost:8080/auth/
-
+Configure Keycloak PATH and execute 
+```bash
+standalone.bat
+```
+Server running and go to http://localhost:8080/auth/ 
 Create admin user with admin pass in Keykloak
 Login as admin
 
