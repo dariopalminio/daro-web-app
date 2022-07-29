@@ -56,8 +56,9 @@ Clone repo, by example:
 git clone https://github.com/dariopalminio/daro-web-app.git
 ```
 
-Install MongoDB local
-Version 5.0.10-rc0 from https://www.mongodb.com/try/download/community
+Install MongoDB in local machine Version 5.0.10-rc0 from https://www.mongodb.com/try/download/community
+
+Configure MongoDB PATH
 
 - Server: C:\Program Files\MongoDB\Server\6.0\bin\mongod
 - Client: C:\Program Files\MongoDB\Server\6.0\bin\mongo
