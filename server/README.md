@@ -1,8 +1,10 @@
 
 ## Description
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-[Nest](https://github.com/nestjs/nest) framework.
+  <p>A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable backend server-side applications.</p>
+  <p>Nest <a href="https://nestjs.com/" target="_blank">Node.js</a> framework for building backend.</p>
+
+
 
 ## Installation from zero
 
