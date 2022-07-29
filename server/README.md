@@ -66,7 +66,7 @@ Configure MongoDB PATH
 
 Install Keycloak 13.0.1 from https://www.keycloak.org/archive/downloads-13.0.1.html
 
-Because Keycloak uses Java, then nstall JDK from https://jdk.java.net/
+Because Keycloak uses Java, then install JDK from https://jdk.java.net/
 
 Configure environment var JAVA_HOME and PATH
 ```bash
@@ -79,22 +79,27 @@ Configure Keycloak PATH and execute
 standalone.bat
 ```
 Server running and go to http://localhost:8080/auth/ 
+
 Create admin user with admin pass in Keykloak
+
 Login as admin
 
-Create Realm  my-realm-test
-Create Client	rest-client-test
+Create Realm  with name: my-realm-test
 
-Copy client ID d1dd32a1-1e54-4f8f-96d3-18c7a8466408
+Create Client with name:	rest-client-test
+
+Copy client ID (example: d1dd32a1-1e54-4f8f-96d3-18c7a8466408)
 
 Configure .env with Keycloak variables
 
+Install NestJS as global
+
 ```bash
-sudo npm i -g @nestjs/cli\
-nest new daro-web-shop-backend\
-npm install dotenv\
-npm install nodemailer\
-npm i --save-dev @types/nodemailer\
+sudo npm i -g @nestjs/cli
+nest new daro-web-shop-backend
+npm install dotenv
+npm install nodemailer
+npm i --save-dev @types/nodemailer
 npm i @types/nodemailer-smtp-transport --save
 ```
 
