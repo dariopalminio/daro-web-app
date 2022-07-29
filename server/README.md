@@ -66,7 +66,8 @@ Configure MongoDB PATH
 
 Install Keycloak 13.0.1 from https://www.keycloak.org/archive/downloads-13.0.1.html
 
-Because Keycloak uses Java Install JDK from https://jdk.java.net/
+Because Keycloak uses Java, then nstall JDK from https://jdk.java.net/
+
 Configure environment var JAVA_HOME and PATH
 ```bash
 javac -version
