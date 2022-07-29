@@ -50,8 +50,11 @@ Install Git from https://git-scm.com/
 ```bash
 git --version
 git version 2.37.1.windows.1
+```
+Clone repo, by example:
 
-Clone repo (example git clone https://github.com/dariopalminio/daro-web-app.git)
+```bash
+git clone https://github.com/dariopalminio/daro-web-app.git
 ```
 
 Install MongoDB local
