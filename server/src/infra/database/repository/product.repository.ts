@@ -110,13 +110,21 @@ export class ProductRepository implements IRepository<IProduct> {
     conversorDocToCategory(Doc: ProductDocument): IProduct {
         return new Product(
             String(Doc._id),
+            String(Doc.sku),
+            String(Doc.barcode),
             String(Doc.name),
             String(Doc.description),
             String(Doc.imageURL),
+            String(Doc.category),
+            String(Doc.type),
+            String(Doc.brand),
+            String(Doc.color),
+            String(Doc.gender),
+            String(Doc.model),
+            String(Doc.size),
+            Number(Doc.cost),
             Number(Doc.price),
-            String(Doc.barcode),
-            Number(Doc.stock),
-            []
+            Number(Doc.stock)
             );
     };
 

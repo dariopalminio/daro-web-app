@@ -1,6 +1,7 @@
+//launch db server
 export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
 mongod --dbpath /Users/dariopalminio/data/db
-
+//launch db client
 export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
 mongo
 Mongo running in http://127.0.0.1:27017/

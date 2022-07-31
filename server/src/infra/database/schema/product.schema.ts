@@ -9,6 +9,12 @@ export class Product {
 
     //_id: holds an ObjectId.
 
+    @Prop()
+    sku:  String; //Stock-keeping unit of 12 digits
+    
+    @Prop()
+    barcode:  String; //UPC - Universal Product Code (EAN, ISBN, GTIN, Part number)
+
     @Prop({ required: true })
     name: String;
 
@@ -16,22 +22,37 @@ export class Product {
     description: String;
 
     @Prop()
-    imageURL: String;
+    imageURL: String; //image name
 
     @Prop()
-    price: Number;
+    category: String;
 
     @Prop()
-    sku:  String;
+    type: String; //Sub-category
     
     @Prop()
-    barcode:  String;
+    brand: String;
+
+    @Prop()
+    color: String;
+
+    @Prop()
+    model: String;
+
+    @Prop()
+    gender: String;
+
+    @Prop()
+    size: String;
+
+    @Prop()
+    cost: Number; //value of purchase to provider
+
+    @Prop()
+    price: Number; //price of sale
 
     @Prop({ required: true })
-    stock: number; //{ type: Number, required: true },
-
-    @Prop({type: [{ type: MongoSchema.Types.ObjectId, ref: 'Category'}] })
-    categories: Category[];
+    stock: number; //value of inventory existence 
 
 }
 
