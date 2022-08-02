@@ -146,7 +146,7 @@ export class ProductController {
   };
 
   @Get('generate/sku')
-  generateSKU(@Res() res, @Query('type') typeParam, @Query('brand') brandParam, @Query('model') modelParam, @Query('color') colorParam, @Query('size') sizeParam) {
+  async generateSKU(@Res() res, @Query('type') typeParam, @Query('brand') brandParam, @Query('model') modelParam, @Query('color') colorParam, @Query('size') sizeParam) {
     try {
       const type: string = typeParam.toString();
       const brand: string = brandParam.toString();
@@ -157,7 +157,7 @@ export class ProductController {
       if (!type || !brand || !model || !color || !size)
         throw new BadRequestException("There are an empty attribute!")
 
-      const skuNew = this.productService.generateSKU(type, brand, model, color, size);
+      const skuNew = await this.productService.generateSKU(type, brand, model, color, size);
       return res.status(HttpStatus.OK).json({ "sku": skuNew });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
