@@ -54,6 +54,8 @@ export class Product {
     @Prop({ required: true })
     stock: number; //value of inventory existence 
 
+    @Prop()
+    active: Boolean; //is active to sell?
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

@@ -13,10 +13,13 @@ export class ProductService implements IProductService<IProduct> {
   ) { }
 
 
-  // Get all category
   async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]> {
     const products: IProduct[] = await this.productRepository.getAll(page, limit, orderByField, isAscending);
-    //console.log(cats);
+    return products;
+  };
+
+  async getAllActives(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]> {
+    const products: IProduct[] = await this.productRepository.find({active:"true"}, page, limit, orderByField, isAscending);
     return products;
   };
 
@@ -25,7 +28,6 @@ export class ProductService implements IProductService<IProduct> {
     return products;
   };
 
-  // Get a single category
   async getById(id: string): Promise<IProduct> {
     const product: IProduct = await this.productRepository.getById(id);
     return product;
@@ -33,9 +35,9 @@ export class ProductService implements IProductService<IProduct> {
 
   async create(product: IProduct): Promise<boolean> {
     //console.log("product to create:",product);
-    const newProduct: Promise<boolean> = this.productRepository.create(product);
+    const newProductCreated: Promise<boolean> = this.productRepository.create(product);
     //console.log("product created:",newProducto);
-    return newProduct;
+    return newProductCreated;
   };
 
   // Delete category return this.labelModel.deleteOne({ osCode }).exec();
@@ -67,5 +69,20 @@ export class ProductService implements IProductService<IProduct> {
   async hasByQuery(query: any): Promise<boolean> {
     return await this.productRepository.hasByQuery(query);
   };
+
+  generateSKU(type: string, brand: string, model: string, color: string, size: string ): string {
+    if (!type || !brand || !model || !color || !size) 
+      throw new Error("Failed to generate SKU because empty attribute!");
+    const separator ="-";
+    let firstStr = type.substring(0, 4); 
+    let secondStr = brand.substring(0,3);
+    let thirdStr =model.substring(0,3);
+    let fourthStr = color.substring(0,3);
+    let fifthStr = size.substring(0,2);
+    let SixStr = Math.floor(Math.random() * 1000);
+    let sku = firstStr+separator+secondStr+separator+thirdStr+separator+fourthStr+separator+fifthStr+separator+SixStr;
+    sku = sku.toUpperCase();
+    return sku;
+};
 
 };

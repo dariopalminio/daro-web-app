@@ -17,5 +17,6 @@ export interface IProduct{
     cost: number; //{ type: Number, required: true },
     price: number; //{ type: Number, required: true },
     stock: number;
+    active:boolean;  //is active to sell?
 };
 

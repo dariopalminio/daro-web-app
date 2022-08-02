@@ -65,8 +65,10 @@ dbname
 > db.dbname.find();
 { "_id" : ObjectId("60d7ca3969457dacc82119d6"), "name" : "Test" }
 > db.createCollection("table");
+> db.table.insert({nombre:"laptop"});
 > db.table.drop();
 > bd.help();
+
 
 
 

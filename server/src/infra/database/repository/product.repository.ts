@@ -124,7 +124,8 @@ export class ProductRepository implements IRepository<IProduct> {
             String(Doc.size),
             Number(Doc.cost),
             Number(Doc.price),
-            Number(Doc.stock)
+            Number(Doc.stock),
+            Boolean(Doc.active)
             );
     };
 

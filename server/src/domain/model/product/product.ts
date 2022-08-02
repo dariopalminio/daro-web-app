@@ -18,7 +18,8 @@ export class Product implements IProduct {
         size: string,
         cost: number,
         price: number,
-        stock: number) {
+        stock: number,
+        active:boolean) {
 
         this._id = id;
         this.sku = sku;
@@ -36,6 +37,7 @@ export class Product implements IProduct {
         this.cost = 0;
         this.price = price;
         this.stock = stock;
+        this.active = active;
     };
 
     _id: string; //_id: holds an ObjectId.
@@ -54,6 +56,7 @@ export class Product implements IProduct {
     cost: number;
     price: number;
     stock: number;
+    active: boolean;
 };
 
 

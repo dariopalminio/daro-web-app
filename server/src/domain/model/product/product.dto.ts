@@ -16,4 +16,5 @@ export class ProductDTO {
     readonly size: string;
     readonly price: number;
     readonly stock: number;
+    readonly active:boolean;
 };
