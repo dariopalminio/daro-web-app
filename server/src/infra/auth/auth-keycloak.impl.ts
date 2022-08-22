@@ -5,7 +5,7 @@ import { stringify } from 'querystring';
 import { AxiosResponse } from 'axios';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
-
+import { DomainError } from '../../domain/error/domain-error';
 
 type NewAdminTokenRequestType = {
   client_id: string,
@@ -291,7 +291,7 @@ export class AuthKeycloakImpl implements IAuth {
    * @returns access_token JWT 
    */
   async login(username: string, pass: string): Promise<IServiceResponse> {
-    try {
+    
       const body: LoginRequestType = {
         username: username,
         password: pass,
@@ -313,17 +313,14 @@ export class AuthKeycloakImpl implements IAuth {
         }
         case HttpStatus.UNAUTHORIZED: {//401
           const msg = await this.i18n.translate('auth.ERROR.UNAUTHORIZED',);
-          return { isSuccess: false, status: response.status, message: msg, data: {}, error: response.data };
+          throw new DomainError(HttpStatus.UNAUTHORIZED,msg,response.data);
+          //return { isSuccess: false, status: response.status, message: msg, data: {}, error: response.data };
         }
         default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+          throw new DomainError(response.status,response.statusText,response);
+          //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
       }
-    } catch (error) {
-
-      const msg = error.message ? error.message : "Unknown error in login.";
-      //"connect ECONNREFUSED 127.0.0.1:8080"
-      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
-    }
+    
   };
 
   /**

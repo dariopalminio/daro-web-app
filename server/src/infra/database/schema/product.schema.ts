@@ -1,6 +1,5 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { Document, Schema as MongoSchema } from 'mongoose';
-import { Category } from './category.schema';
 
 export type ProductDocument = Product & Document;
 
@@ -22,7 +21,7 @@ export class Product {
     description: String;
 
     @Prop()
-    imageURL: String; //image name
+    images: [String]; //array of images name
 
     @Prop()
     category: String;
@@ -46,10 +45,22 @@ export class Product {
     size: String;
 
     @Prop()
-    cost: Number; //value of purchase to provider
+    netCost: Number; //purchase net price
 
     @Prop()
-    price: Number; //price of sale
+    ivaAmountOnCost: Number; //IVA value of purchase
+    
+    @Prop()
+    grossCost: Number; //gross value of purchase to provider
+
+    @Prop()
+    netPrice: Number; //gross price of sale
+
+    @Prop()
+    ivaAmountOnPrice: Number; //IVA value of sale
+
+    @Prop()
+    grossPrice: Number; //gross price of sale
 
     @Prop({ required: true })
     stock: number; //value of inventory existence 

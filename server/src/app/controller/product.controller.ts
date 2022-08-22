@@ -1,4 +1,5 @@
-import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, NotFoundException, Delete, Query, Put, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, 
+  NotFoundException, Delete, Query, Put, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 
 import { IProductService } from '../../domain/service/interface/product.service.interface';
 import { Product } from '../../domain/model/product/product';

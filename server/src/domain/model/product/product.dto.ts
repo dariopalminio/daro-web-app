@@ -6,7 +6,7 @@ export class ProductDTO {
     readonly barcode:  String;
     readonly name: string;
     readonly description: string;
-    readonly imageURL: string;
+    readonly images: string[];
     readonly category: string;
     readonly type: string;
     readonly brand: string;
@@ -14,7 +14,12 @@ export class ProductDTO {
     readonly model: string;
     readonly gender: string;
     readonly size: string;
-    readonly price: number;
+    readonly netCost: number; 
+    readonly ivaAmountOnCost: number;
+    readonly grossCost: number; 
+    readonly netPrice: number; 
+    readonly ivaAmountOnPrice: number;
+    readonly grossPrice: number;
     readonly stock: number;
     readonly active:boolean;
 };

@@ -21,6 +21,8 @@ import { ResponseCode } from '../../domain/model/service/response.code.enum';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { LoginFormDTOValidator } from '../../domain/validator/login-form-dto.validator'; 
 import { UserRegisterDataDTOValidator } from '../../domain/validator/user-register-data-dto.validator'; 
+import { DomainError } from '../../domain/error/domain-error';
+
 /**
  * Authorization service
  */
@@ -283,25 +285,27 @@ export class AuthService implements IAuthService {
 
 
     // Validate login form (error BadRequestException)
-    try {
+
       let loginFormDTOValidator = new LoginFormDTOValidator();
       if (!loginFormDTOValidator.validate(loginForm)){
-        throw new Error(await loginFormDTOValidator.traslateValidateErrorsText(this.i18n));
+        const msg = await loginFormDTOValidator.traslateValidateErrorsText(this.i18n);
+        // Error BadRequestException
+        throw new DomainError(ResponseCode.BAD_REQUEST,msg,{});
       };
 
-    } catch (error) {
-      // Error BadRequestException
-      return this.responseBadRequest(error);
-    };
-
     // TODO: Validate if user is disabled by 3 consecutive failed login attempts
+    let loginAuthResp;
+    try{
+     loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
+    }catch(error){
+      if (error instanceof DomainError) throw error;
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR,error.message,{});
+    }
 
-    const loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
-
-    if (!loginAuthResp.isSuccess) { //failed login attempt
+    //if (!loginAuthResp.isSuccess) { //failed login attempt
       // TODO: Save failed login attempt
       // TODO: Disable user account after 3 consecutive failed login attempts
-    }
+    //}
 
     return loginAuthResp;
   };

@@ -108,13 +108,17 @@ export class ProductRepository implements IRepository<IProduct> {
     * @returns 
     */
     conversorDocToCategory(Doc: ProductDocument): IProduct {
+        let imagesArray = [];
+        imagesArray = Doc.images.map(function(image) {
+            return String(image);
+        });
         return new Product(
             String(Doc._id),
             String(Doc.sku),
             String(Doc.barcode),
             String(Doc.name),
             String(Doc.description),
-            String(Doc.imageURL),
+            imagesArray,
             String(Doc.category),
             String(Doc.type),
             String(Doc.brand),
@@ -122,8 +126,12 @@ export class ProductRepository implements IRepository<IProduct> {
             String(Doc.gender),
             String(Doc.model),
             String(Doc.size),
-            Number(Doc.cost),
-            Number(Doc.price),
+            Number(Doc.netCost),
+            Number(Doc.ivaAmountOnCost),
+            Number(Doc.grossCost),
+            Number(Doc.netPrice),
+            Number(Doc.ivaAmountOnPrice),
+            Number(Doc.grossPrice),
             Number(Doc.stock),
             Boolean(Doc.active)
             );
