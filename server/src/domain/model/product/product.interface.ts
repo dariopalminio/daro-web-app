@@ -5,7 +5,7 @@ export interface IProduct{
     sku:  string;
     barcode:  string;
     name: string;
-    description: string; //{ type: String, required: true, },
+    description: string;
     images: string[];
     category: string;
     type: string;
@@ -14,12 +14,18 @@ export interface IProduct{
     model: string;
     gender: string;
     size: string;
+
+    //Purchase
     netCost: number; 
     ivaAmountOnCost: number;
     grossCost: number; 
+
+    //Sale
     netPrice: number; 
     ivaAmountOnPrice: number;
     grossPrice: number; 
+
+    //Inventory
     stock: number;
     active:boolean;  //is active to sell?
 };
