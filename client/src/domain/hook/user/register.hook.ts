@@ -64,7 +64,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                         setState({ isProcessing: false, hasError: false, msg: "", isSuccess: true });
 
             }).catch(err => {
-                console.log("Error: Request failed with status code 409 (Conflict) or 400 (Bad Request)!");
+                console.log("Error: Request failed with status code 409 (Conflict) or 400 (Bad Request) or 403 Forbidden!");
                 setState({ isProcessing: false, hasError: true, msg: err.message, isSuccess: false });
                 removeSessionValue();
             });

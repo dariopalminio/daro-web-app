@@ -33,6 +33,14 @@ export class User implements IUser {
     firstName: string;
     lastName: string;
     email: string;
+
+    docType: string;  //docType (RUT|DNI)
+    document: string;
+    telephone: string;
+    //birth: Date;
+    //gender: string;
+    language: string;
+
     verified: boolean;
     verificationCode: string;
     startVerificationCode: Date;

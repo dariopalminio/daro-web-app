@@ -57,7 +57,7 @@ type ConfirmEmailType = {
 export class AuthKeycloakImpl implements IAuth {
 
   constructor(
-    @Inject('HttpService') 
+    @Inject('HttpService')
     private readonly http: HttpService,
     @Inject('ITranslator')
     private readonly i18n: ITranslator,
@@ -127,6 +127,8 @@ export class AuthKeycloakImpl implements IAuth {
     email: string,
     password: string,
     adminToken: string): Promise<IServiceResponse> {
+
+    let response: AxiosResponse<any>
     try {
       const access_token = adminToken;
 
@@ -149,7 +151,7 @@ export class AuthKeycloakImpl implements IAuth {
       //User endpoint
       const URL = this.config.get<string>('Keycloak_path_users');
 
-      const response: AxiosResponse<any> = await this.http
+      response = await this.http
         .post(
           URL,
           JSON.stringify(body),
@@ -162,28 +164,33 @@ export class AuthKeycloakImpl implements IAuth {
         )
         .toPromise();
 
-      switch (response.status) {
-        case HttpStatus.CREATED: //201
-          return { isSuccess: true, status: response.status, message: null, data: response.data };
-        case HttpStatus.UNAUTHORIZED: //401
-          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
-        case HttpStatus.BAD_REQUEST: //400
-          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
-        case HttpStatus.CONFLICT: //409
-          return {
-            isSuccess: false,
-            status: response.status,
-            message: await this.i18n.translate('auth.ERROR.USER_CONFLICT',),
-            data: {},
-            error: response.data
-          };
-        default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
-      }
     } catch (error) {
       const msg = error.message ? error.message : "Unknown error when trying to register new user.";
       return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
     }
+    switch (response.status) {
+      case HttpStatus.CREATED: //201
+        return { isSuccess: true, status: response.status, message: null, data: response.data };
+      case HttpStatus.UNAUTHORIZED: //401
+        throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
+      //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+      case HttpStatus.FAILED_DEPENDENCY:
+        throw new DomainError(HttpStatus.FAILED_DEPENDENCY, response.statusText, response.data);
+      case HttpStatus.FORBIDDEN: //403: Keycloak Admin Rest API unknown_error for update user API. The admin user may be misconfigured. You haven't granted related permissions to your real.
+        throw new DomainError(HttpStatus.FORBIDDEN, response.statusText, response.data);
+      //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+      case HttpStatus.BAD_REQUEST: //400
+        //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+        throw new DomainError(HttpStatus.BAD_REQUEST, response.statusText, response.data);
+      case HttpStatus.CONFLICT: {//409
+        const msg = await this.i18n.translate('auth.ERROR.USER_CONFLICT',);
+        throw new DomainError(HttpStatus.CONFLICT, msg, response.data);
+      }
+      default:
+        //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+        throw new DomainError(response.status, response.statusText, response.data);
+    }
+
   };
 
   /**
@@ -220,7 +227,7 @@ export class AuthKeycloakImpl implements IAuth {
       return { isSuccess: false, status: result.status, message: result.statusText, data: {}, error: result.data };
     } catch (e: any) {
       const msg = e.message ? e.message : "Unknown error in get user by username";
-      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: e };
+      throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, msg, e);
     };
   };
 
@@ -291,36 +298,36 @@ export class AuthKeycloakImpl implements IAuth {
    * @returns access_token JWT 
    */
   async login(username: string, pass: string): Promise<IServiceResponse> {
-    
-      const body: LoginRequestType = {
-        username: username,
-        password: pass,
-        grant_type: 'password',
-        client_id: this.config.get<string>('Keycloak_client_id'),
-        client_secret: this.config.get<string>('Keycloak_client_secret')
-      };
 
-      //Login endpoint
-      const URL = this.config.get<string>('Keycloak_path_token');
+    const body: LoginRequestType = {
+      username: username,
+      password: pass,
+      grant_type: 'password',
+      client_id: this.config.get<string>('Keycloak_client_id'),
+      client_secret: this.config.get<string>('Keycloak_client_secret')
+    };
 
-      //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
-      const response: AxiosResponse<any> = await this.http.post(URL, stringify(body)).toPromise();
+    //Login endpoint
+    const URL = this.config.get<string>('Keycloak_path_token');
 
-      switch (response.status) {
-        case HttpStatus.OK: {//200
-          const msg = await this.i18n.translate('auth.MESSAGE.LOGGED_IN_OK',);
-          return { isSuccess: true, status: response.status, message: msg, data: response.data }; //successful
-        }
-        case HttpStatus.UNAUTHORIZED: {//401
-          const msg = await this.i18n.translate('auth.ERROR.UNAUTHORIZED',);
-          throw new DomainError(HttpStatus.UNAUTHORIZED,msg,response.data);
-          //return { isSuccess: false, status: response.status, message: msg, data: {}, error: response.data };
-        }
-        default:
-          throw new DomainError(response.status,response.statusText,response);
-          //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+    //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
+    const response: AxiosResponse<any> = await this.http.post(URL, stringify(body)).toPromise();
+
+    switch (response.status) {
+      case HttpStatus.OK: {//200
+        const msg = await this.i18n.translate('auth.MESSAGE.LOGGED_IN_OK',);
+        return { isSuccess: true, status: response.status, message: msg, data: response.data }; //successful
       }
-    
+      case HttpStatus.UNAUTHORIZED: {//401
+        const msg = await this.i18n.translate('auth.ERROR.UNAUTHORIZED',);
+        throw new DomainError(HttpStatus.UNAUTHORIZED, msg, response.data);
+        //return { isSuccess: false, status: response.status, message: msg, data: {}, error: response.data };
+      }
+      default:
+        throw new DomainError(response.status, response.statusText, response);
+      //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+    }
+
   };
 
   /**

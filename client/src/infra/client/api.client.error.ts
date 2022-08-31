@@ -77,6 +77,9 @@ export function handleAxiosError(e: any): ApiError {
                 case AuthStatusEnum.BAD_REQUEST:
                     return new ApiError(AuthStatusText.BAD_REQUEST.text, e.stack, status, txt);
 
+                case AuthStatusEnum.FORBIDDEN:
+                    return new ApiError(AuthStatusText.FORBIDDEN.text, e.stack, status, txt);
+
                 default:
                     return new ApiError(AuthStatusText.UNKNOWN.text, e.stack, status, txt);
             }

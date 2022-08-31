@@ -1,6 +1,6 @@
 import {
   Controller, Get, Res, Post, Headers, Delete, Put, Body, Param, Query, Inject,
-  HttpStatus, NotFoundException, BadRequestException, InternalServerErrorException, UnauthorizedException
+  HttpStatus, NotFoundException, BadRequestException, InternalServerErrorException, UnauthorizedException, ForbiddenException, ConflictException
 } from '@nestjs/common';
 import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
 import { IAuthService } from '../../domain/service/interface/auth.service.interface';
@@ -61,11 +61,27 @@ export class AuthController {
   })
   @Post('register')
   async register(@Res() res, @Body() userRegisterDTO: UserRegisterDataDTO): Promise<any> {
-
-    const result: ServiceResponseDTO = await this.authService.register(userRegisterDTO);
-    console.log("register controller:", result);
-    return res.status(result.status).json(result);
-
+    console.log("register controller init");
+    let result: ServiceResponseDTO;
+    try {
+      result = await this.authService.register(userRegisterDTO);
+      console.log("register controller:", result);
+    } catch (error) {
+      switch (error.code) {
+        case HttpStatus.UNAUTHORIZED: 
+          throw new UnauthorizedException(error.data);
+        case HttpStatus.FORBIDDEN:
+          throw new ForbiddenException(error.data);
+        case HttpStatus.BAD_REQUEST:
+          throw new BadRequestException(error);
+        case HttpStatus.CONFLICT: {
+          throw new ConflictException(error.data);
+        }
+        default:
+          throw new InternalServerErrorException(error);
+      }
+    };
+    return res.status(HttpStatus.OK).json(result);
   };
 
   @ApiOperation({
@@ -115,7 +131,7 @@ export class AuthController {
   @Post('login')
   async login(@Res() res, @Body() loginForm: LoginFormDTO) {
     let authResponse: ServiceResponseDTO;
-    
+
     try {
       authResponse = await this.authService.login(loginForm);
     } catch (error) {
@@ -124,9 +140,9 @@ export class AuthController {
       throw new InternalServerErrorException(error);
     };
 
-    if (authResponse.isSuccess) 
+    if (authResponse.isSuccess)
       return res.status(HttpStatus.OK).json(authResponse.data);
-   
+
     return res.status(HttpStatus.UNAUTHORIZED).json(authResponse);
   };
 

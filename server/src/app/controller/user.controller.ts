@@ -1,7 +1,7 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
 import { IUserService } from '../../domain/service/interface/user.service.interface';
 import { IUser } from '../../domain/model/user/user.interface';
-import { UserRegisterDTO } from '../../domain/model/auth/register/user-register.dto.type';
+import { UserDTO } from '../../domain/model/user/user-register.dto.type';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -67,7 +67,7 @@ export class UserController {
 
   // Add User: /user/create
   @Post('create')
-  async createUser(@Res() res, @Body() userRegisterDTO: UserRegisterDTO) {
+  async createUser(@Res() res, @Body() userRegisterDTO: UserDTO) {
     const categoryCreated = await this.userService.create(userRegisterDTO);
     if (!categoryCreated) throw new NotFoundException('User does not exist or canot delete user!');
     return res.status(HttpStatus.OK).json({
@@ -93,7 +93,7 @@ export class UserController {
     const updatedCategory = await this.userService.updateById(categoryID, user);
     if (!updatedCategory) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({
-      message: 'Category Updated Successfully',
+      message: 'User Updated Successfully',
       updatedCategory
     });
   };

@@ -3,7 +3,7 @@ import { IUserService } from '../service/interface/user.service.interface';
 import { IUser } from '../model/user/user.interface';
 import { User } from '../model/user/user';
 import { IRepository } from '../output-port/repository.interface';
-
+import { DomainError } from '../../domain/error/domain-error';
 
 @Injectable()
 export class UserService implements IUserService<IUser> {
@@ -18,7 +18,7 @@ export class UserService implements IUserService<IUser> {
     return users;
   };
 
-  async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]>{
+  async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]> {
     const users: IUser[] = await this.userRepository.find(query, page, limit, orderByField, isAscending);
     return users;
   };
@@ -37,20 +37,40 @@ export class UserService implements IUserService<IUser> {
 
   //Create new user with basic data
   async create(userRegisterDTO: IUser): Promise<boolean> {
+    try {
+      let newUser: IUser = new User();
+      newUser.authId = userRegisterDTO.authId;
+      newUser.userName = userRegisterDTO.userName;
+      newUser.email = userRegisterDTO.email;
+      newUser.firstName = userRegisterDTO.firstName;
+      newUser.lastName = userRegisterDTO.lastName;
 
-    let newUser: IUser = new User();
-    newUser.authId = userRegisterDTO.authId;
-    newUser.userName = userRegisterDTO.userName;
-    newUser.email = userRegisterDTO.email;
-    newUser.firstName = userRegisterDTO.firstName;
-    newUser.lastName = userRegisterDTO.lastName;
-    newUser.verified = false;
-    newUser.enable = true;
-    newUser.verificationCode = "";
-    
-    const newCat: Promise<boolean> = this.userRepository.create(newUser);
-    console.log(newCat);
-    return newCat;
+
+      newUser.docType = userRegisterDTO.docType,
+      newUser.document = userRegisterDTO.document,
+      newUser.telephone = userRegisterDTO.telephone,
+      //birth: Date;
+      //newUser.gender = userRegisterDTO.gender,
+      newUser.language = userRegisterDTO.language,
+
+      newUser.verified = false;
+      newUser.enable = true;
+      newUser.verificationCode = "";
+
+      const newCat: boolean = await this.userRepository.create(newUser);
+      console.log(newCat);
+      return newCat;
+    } catch (error) { //MongoError 
+      console.log("create error code:", error.code);
+      switch (error.code) {
+        case 11000:
+          //  duplicate key error collection
+          throw new DomainError(409, error.message, error);
+        default:
+          //Internal server error
+          throw new DomainError(500, error.message, error);
+      }
+    }
   };
 
   // Delete user return this.labelModel.deleteOne({ osCode }).exec();
@@ -66,7 +86,7 @@ export class UserService implements IUserService<IUser> {
   };
 
   async getByQuery(query: any): Promise<IUser> {
-    const user =  await this.userRepository.getByQuery(query);
+    const user = await this.userRepository.getByQuery(query);
     return user;
   };
 

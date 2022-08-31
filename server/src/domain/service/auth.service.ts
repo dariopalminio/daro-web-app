@@ -3,7 +3,7 @@ import { IAuthService } from '../service/interface/auth.service.interface';
 import { IAuth } from '../output-port/auth.interface';
 import { UserRegisterDataDTO } from '../model/auth/register/user-register-data.dto.type';
 import { IUserService } from '../../domain/service/interface/user.service.interface';
-import { UserRegisterDTO } from '../model/auth/register/user-register.dto.type';
+import { UserDTO } from '../model/user/user-register.dto.type';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
@@ -19,8 +19,8 @@ import { IUser } from '../model/user/user.interface';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
-import { LoginFormDTOValidator } from '../../domain/validator/login-form-dto.validator'; 
-import { UserRegisterDataDTOValidator } from '../../domain/validator/user-register-data-dto.validator'; 
+import { LoginFormDTOValidator } from '../../domain/validator/login-form-dto.validator';
+import { UserRegisterDataDTOValidator } from '../../domain/validator/user-register-data-dto.validator';
 import { DomainError } from '../../domain/error/domain-error';
 
 /**
@@ -55,84 +55,82 @@ export class AuthService implements IAuthService {
   async register(userRegisterData: UserRegisterDataDTO): Promise<IServiceResponse> {
 
     //Validate data
+    console.log("Validate data");
     try {
       let validator = new UserRegisterDataDTOValidator();
-      if (!validator.validate(userRegisterData)){
+      if (!validator.validate(userRegisterData)) {
         throw new Error(await validator.traslateValidateErrorsText(this.i18n));
       };
 
     } catch (error) {
       // Error BadRequestException
-      return this.responseBadRequest(error);
+      //return this.responseBadRequest(error);
+      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error.message });
     };
 
     // First: obtains admin access token
+    console.log("First: obtains admin access token");
     let adminToken;
     try {
       adminToken = await this.externalAuthService.getAdminToken();
     } catch (error) {
-      return {
-        isSuccess: false,
-        status: ResponseCode.INTERNAL_SERVER_ERROR,
-        message: await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',),
-        data: {}, error:
-          error
-      };
+      const msg = await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',);
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, { error: error.message });
     }
     // Second: creates a new user in authorization server using admin access token
+    console.log("Second: creates a new user in authorization server using admin access token");
     const authCreatedUserResp = await this.externalAuthService.register(userRegisterData.username,
       userRegisterData.firstName, userRegisterData.lastName, userRegisterData.email,
       userRegisterData.password, adminToken);
 
-    const { isSuccess } = authCreatedUserResp;
-    if (!isSuccess) {
-      // ERROR: User could not be created in auth server!
-      return authCreatedUserResp;
-    }
+    //const { isSuccess } = authCreatedUserResp;
 
     // Third: verifies that the user was created, asking for the information of the created user
+    console.log("Third: verifies that the user was created, asking for the information of the created user");
     const response: IServiceResponse = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
 
     if (!response.isSuccess) {
       // ERROR: User could not be created in auth server
-      return response;
+      const msg = "User could not be created in auth server or user get info not work! ";
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, response);
     }
 
     const authCreatedUser = response.data.user;
     const { id } = authCreatedUser; // ID in external authorization server
 
     // Four: create new user in user database
-    const userRegisterDTO: UserRegisterDTO = {
+    console.log("Four: create new user in user database");
+    const userRegisterDTO: UserDTO = {
       authId: id,
       userName: userRegisterData.email,
       firstName: userRegisterData.firstName,
       lastName: userRegisterData.lastName,
       email: userRegisterData.email,
+      docType: "",
+      document: "",
+      telephone: "",
+      //birth: Date;
+      //gender: "",
+      language: ""
     }
-    const wasCreated: boolean = await this.userService.create(userRegisterDTO);
 
-    if (!wasCreated) {
+    try {
+      const wasCreated: boolean = await this.userService.create(userRegisterDTO);
+    } catch (error) {
       // ERROR: User could not be created in user database
-      const errorMsg = await this.i18n.translate('auth.ERROR.USER_COULD_NOT_DELETED_IN_AUTH_SERVICE',);
+      
       //revert operation in auth server (keycloak)
       let deletedAuthUser = {};
       try {
         deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
+        //console.log("User was deleted in keycloak:", deletedAuthUser);
       } catch (error) {
-        console.log(errorMsg, error);
+        const errorMsg = await this.i18n.translate('auth.ERROR.USER_COULD_NOT_DELETED_IN_AUTH_SERVICE',);
+        //console.log(errorMsg, error);
         deletedAuthUser = { error: error }
       }
-      const errorData: any = {
-        message: errorMsg,
-        deleted: deletedAuthUser
-      };
-      return {
-        isSuccess: false,
-        status: ResponseCode.INTERNAL_SERVER_ERROR,
-        message: errorMsg,
-        data: {},
-        error: errorData
-      };
+
+      throw error;
     }
 
     return authCreatedUserResp;
@@ -286,25 +284,25 @@ export class AuthService implements IAuthService {
 
     // Validate login form (error BadRequestException)
 
-      let loginFormDTOValidator = new LoginFormDTOValidator();
-      if (!loginFormDTOValidator.validate(loginForm)){
-        const msg = await loginFormDTOValidator.traslateValidateErrorsText(this.i18n);
-        // Error BadRequestException
-        throw new DomainError(ResponseCode.BAD_REQUEST,msg,{});
-      };
+    let loginFormDTOValidator = new LoginFormDTOValidator();
+    if (!loginFormDTOValidator.validate(loginForm)) {
+      const msg = await loginFormDTOValidator.traslateValidateErrorsText(this.i18n);
+      // Error BadRequestException
+      throw new DomainError(ResponseCode.BAD_REQUEST, msg, {});
+    };
 
     // TODO: Validate if user is disabled by 3 consecutive failed login attempts
     let loginAuthResp;
-    try{
-     loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
-    }catch(error){
+    try {
+      loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
+    } catch (error) {
       if (error instanceof DomainError) throw error;
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR,error.message,{});
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, {});
     }
 
     //if (!loginAuthResp.isSuccess) { //failed login attempt
-      // TODO: Save failed login attempt
-      // TODO: Disable user account after 3 consecutive failed login attempts
+    // TODO: Save failed login attempt
+    // TODO: Disable user account after 3 consecutive failed login attempts
     //}
 
     return loginAuthResp;

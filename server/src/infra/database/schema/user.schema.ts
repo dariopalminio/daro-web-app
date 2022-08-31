@@ -30,6 +30,20 @@ export class User {
   })
   email: string;
 
+  @Prop()
+  docType: string;
+
+  @Prop()
+  document: string;
+
+  @Prop()
+  telephone: string;
+
+  @Prop()
+  language: string;
+
+  //addressInfo {address, department, region, comuna, additionalReferences}
+
   @Prop({
     default: false,
   })

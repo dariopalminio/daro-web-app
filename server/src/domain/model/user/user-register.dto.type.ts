@@ -1,6 +1,4 @@
-export interface IUser{
-    _id: string; //_id: holds an ObjectId.
-    enable: boolean;
+export type UserDTO = {
     authId: string;
     userName: string;
     firstName: string;
@@ -13,8 +11,4 @@ export interface IUser{
     //birth: Date;
     //gender: string;
     language: string;
-
-    verified: boolean;
-    verificationCode: string;
-    startVerificationCode: Date;
-};
+  };
