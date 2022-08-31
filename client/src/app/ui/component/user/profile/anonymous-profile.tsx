@@ -5,6 +5,7 @@ import clsx from "clsx";
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Link from "@material-ui/core/Link";
+import ProfileLanguage from "./profile-language";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,6 +42,9 @@ const AnonymousProfile: FunctionComponent = () => {
             <Link className={clsx(classes.linkClass)} href="/user/register/form">
                 {t('register.command.link')}
             </Link>
+
+            <ProfileLanguage/>
+            
         </div>
     );
 };

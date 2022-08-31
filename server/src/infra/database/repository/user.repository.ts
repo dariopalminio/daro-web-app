@@ -100,12 +100,15 @@ export class UserRepository implements IRepository<IUser> {
      * @returns 
      */
     async update(query: any, valuesToSet: any): Promise<boolean> {
-        const docUpdated: UserDocument = await this.userModel.findOneAndUpdate(query, valuesToSet,).exec();
+        //DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodify
+        //Replace update() with updateOne(), updateMany(), or replaceOne()
+        const docUpdated: UserDocument = await this.userModel.findOneAndUpdate(query, valuesToSet, {useFindAndModify: false}).exec();
         return !!docUpdated;
     };
 
 
     async delete(id: string): Promise<boolean> {
+        //Replace remove() with deleteOne() or deleteMany().
         const docDeleted = await this.userModel.findByIdAndDelete(id, {useFindAndModify: false}).exec();
         return !!docDeleted; //doc is not null
     };

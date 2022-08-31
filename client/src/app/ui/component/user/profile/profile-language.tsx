@@ -14,10 +14,11 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import FlagIcon from "@material-ui/icons/Flag";
 import StartIcon from "@material-ui/icons/StarOutline";
+
 /**
- * User Profile
+ * User Profile Language
  */
-const Profile: FunctionComponent = () => {
+const ProfileLanguage: FunctionComponent = () => {
   const { t, i18n } = useTranslation();
   const { session } = useContext(SessionContext) as ISessionContext;
 
@@ -27,13 +28,26 @@ const Profile: FunctionComponent = () => {
 
   return (
     <div>
-
-      {!session?.isLogged && <AnonymousProfile />}
-
-      {session?.isLogged && <UserProfile />}
-
+      <p>
+        {" "}
+        {t("language.current")}
+      </p>
+      
+      <List>
+        {supportedLngs.map((lng, index) => {
+          return (
+            <ListItem button key={index} onClick={() => changeLanguage(lng)}>
+              <ListItemIcon>
+              <FlagIcon />
+              { ((i18n.language) === lng) && <StartIcon />}
+              </ListItemIcon>
+              <ListItemText primary={lng} />
+            </ListItem>
+          );
+        })}
+      </List>
     </div>
   );
 };
 
-export default Profile;
+export default ProfileLanguage;

@@ -5,6 +5,7 @@ import { UserDTO } from '../../domain/model/user/user-register.dto.type';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UserProfileDTO } from 'src/domain/model/user/user-profile.dto.type';
 
 @Controller('users')
 export class UserController {
@@ -98,13 +99,24 @@ export class UserController {
   // Update user: /update?id=5c9d45e705ea4843c8d0e8f7
   @Put('update')
   async updateUser(@Res() res, @Body() user: IUser, @Query('id') id) {
-    const updatedCategory = await this.userService.updateById(id, user);
-    if (!updatedCategory) throw new NotFoundException('User does not exist!');
+    const updatedUser = await this.userService.updateById(id, user);
+    if (!updatedUser) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'User Updated Successfully',
-      updatedCategory
+      updatedUser
     });
   };
+
+  @Put('profile/update')
+  async updateProfile(@Res() res, @Body() userProfileDTO: UserProfileDTO){
+    const updatedUser = await this.userService.updateProfile(userProfileDTO);
+    if (!updatedUser) throw new NotFoundException('User does not exist!');
+    return res.status(HttpStatus.OK).json({
+      message: 'User Updated Successfully',
+      updatedUser
+    });
+  };
+
 
 
 }

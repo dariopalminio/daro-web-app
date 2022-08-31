@@ -92,7 +92,7 @@ export class CategoryRepository implements IRepository<ICategory> {
     };
 
     async update(query: any, valuesToSet: any): Promise<boolean> {
-        const docUpdated: CategoryDocument = await this.categoryModel.findOneAndUpdate(query, valuesToSet,).exec();
+        const docUpdated: CategoryDocument = await this.categoryModel.findOneAndUpdate(query, valuesToSet, {useFindAndModify: false}).exec();
         return !!docUpdated;
     };
 

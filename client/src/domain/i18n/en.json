@@ -71,6 +71,11 @@
     "profile.label.lastname": "lastname",
     "profile.label.firstname": "firstname",
     "profile.msg.hello": "Hello ",
+    "profile.title": "Profile ",
+    "profile.docType": "Identity document Type ",
+    "profile.document": "Identity Document ",
+    "profile.telephone": "Telephone ",
+    "profile.command.submit": "Update",
     "profile.msg.anonymous": "You are browsing as an anonymous user. You can log in or register at the following links.",
     "contact.label.message": "Message",
     "message.info.thank.you": "Thank you!"

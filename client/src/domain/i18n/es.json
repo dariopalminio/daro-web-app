@@ -72,6 +72,11 @@
     "profile.label.firstname": "Apellido",
     "profile.msg.anonymous": "Estás navegando como usuario anónimo. Puedes logearte o registrarte en los siguientes enlaces.",
     "profile.msg.hello": "Hola ",
+    "profile.title": "Datos de Perfil ",
+    "profile.docType": "Tipo de documento ",
+    "profile.document": "Documento de identidad ",
+    "profile.telephone": "Teléfono ",
+    "profile.command.submit": "Actualizar",
     "contact.label.message": "Mensaje",
     "message.info.thank.you": "¡Gracias!"
  }

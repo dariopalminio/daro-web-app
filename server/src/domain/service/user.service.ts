@@ -4,6 +4,7 @@ import { IUser } from '../model/user/user.interface';
 import { User } from '../model/user/user';
 import { IRepository } from '../output-port/repository.interface';
 import { DomainError } from '../../domain/error/domain-error';
+import { UserProfileDTO } from '../model/user/user-profile.dto.type';
 
 @Injectable()
 export class UserService implements IUserService<IUser> {
@@ -97,6 +98,13 @@ export class UserService implements IUserService<IUser> {
   };
 
   async update(query: any, valuesToSet: any): Promise<boolean> {
+    const updatedProduct: boolean = await this.userRepository.update(query, valuesToSet);
+    return updatedProduct;
+  };
+
+  async updateProfile(userProfileDTO: UserProfileDTO): Promise<boolean> {
+    const query = {userName: userProfileDTO.userName};
+    const valuesToSet = userProfileDTO;
     const updatedProduct: boolean = await this.userRepository.update(query, valuesToSet);
     return updatedProduct;
   };

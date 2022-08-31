@@ -92,7 +92,7 @@ export class ProductRepository implements IRepository<IProduct> {
     };
 
     async update(query: any, valuesToSet: any): Promise<boolean> {
-        const docUpdated: ProductDocument = await this.productModel.findOneAndUpdate(query, valuesToSet,).exec();
+        const docUpdated: ProductDocument = await this.productModel.findOneAndUpdate(query, valuesToSet, {useFindAndModify: false}).exec();
         return !!docUpdated;
     };
 
