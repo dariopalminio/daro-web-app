@@ -85,6 +85,12 @@ export class UserService implements IUserService<IUser> {
     return updatedUser;
   };
 
+  async getByUserName(userName: string): Promise<IUser> {
+    const query = {userName: userName};
+    const user = await this.userRepository.getByQuery(query);
+    return user;
+  };
+
   async getByQuery(query: any): Promise<IUser> {
     const user = await this.userRepository.getByQuery(query);
     return user;

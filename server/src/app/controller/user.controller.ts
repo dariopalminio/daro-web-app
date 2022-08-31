@@ -57,10 +57,18 @@ export class UserController {
     }
   };
 
-  // GET single Category: /product/5c9d46100e2e5c44c444b2d1
+
   @Get('/id/:userID')
   async getById(@Res() res, @Param('userID') userID) {
     const user = await this.userService.getById(userID);
+    if (!user) throw new NotFoundException('User does not exist!');
+    return res.status(HttpStatus.OK).json(user);
+  };
+
+  //Example http://localhost:3001/api/webshop/v1/users/username/dariopalminio@gmail.com
+  @Get('/username/:userName')
+  async getByUserName(@Res() res, @Param('userName') userName) {
+    const user = await this.userService.getByUserName(userName);
     if (!user) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json(user);
   };
@@ -76,7 +84,7 @@ export class UserController {
     });
   };
 
-  // Delete Category: /delete?id=5c9d45e705ea4843c8d0e8f7
+  // Delete user: /delete?id=5c9d45e705ea4843c8d0e8f7
   @Delete('delete')
   async deleteUser(@Res() res, @Query('id') id) {
     const categoryDeleted = await this.userService.delete(id);
@@ -87,10 +95,10 @@ export class UserController {
     });
   };
 
-  // Update Category: /update?id=5c9d45e705ea4843c8d0e8f7
+  // Update user: /update?id=5c9d45e705ea4843c8d0e8f7
   @Put('update')
-  async updateUser(@Res() res, @Body() user: IUser, @Query('id') categoryID) {
-    const updatedCategory = await this.userService.updateById(categoryID, user);
+  async updateUser(@Res() res, @Body() user: IUser, @Query('id') id) {
+    const updatedCategory = await this.userService.updateById(id, user);
     if (!updatedCategory) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json({
       message: 'User Updated Successfully',

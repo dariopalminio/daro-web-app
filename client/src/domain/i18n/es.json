@@ -70,6 +70,8 @@
     "profile.label.email": "email",
     "profile.label.lastname": "Nombre",
     "profile.label.firstname": "Apellido",
+    "profile.msg.anonymous": "Estás navegando como usuario anónimo. Puedes logearte o registrarte en los siguientes enlaces.",
+    "profile.msg.hello": "Hola ",
     "contact.label.message": "Mensaje",
     "message.info.thank.you": "¡Gracias!"
  }

@@ -1,8 +1,5 @@
-import { FunctionComponent, useContext } from "react";
+import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
-import SessionContext, {
-    ISessionContext,
-} from "../../../../../domain/context/session.context";
 import clsx from "clsx";
 
 //@material-ui
@@ -26,25 +23,26 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * User Profile
+ * Anonymous Profile
  */
-const UserProfile: FunctionComponent = () => {
+const AnonymousProfile: FunctionComponent = () => {
     const { t, i18n } = useTranslation();
-    const { session } = useContext(SessionContext) as ISessionContext;
     const classes = useStyles();
 
     return (
         <div>
+            {t("profile.msg.anonymous")}
 
-            <p>
-                {" "}
-                {t("profile.msg.hello")}
-                {session?.preferred_username}
-            </p>
-
-            
+            &nbsp;&nbsp;
+            <Link className={clsx(classes.linkClass)} href="/user/auth">
+                {t('login.command')}
+            </Link>
+            &nbsp;&nbsp;
+            <Link className={clsx(classes.linkClass)} href="/user/register/form">
+                {t('register.command.link')}
+            </Link>
         </div>
     );
 };
 
-export default UserProfile;
+export default AnonymousProfile;
