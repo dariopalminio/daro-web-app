@@ -7,6 +7,7 @@ import { IServiceResponse } from '../../domain/model/service/service-response.in
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { DomainError } from '../error/domain-error';
 
 @Injectable()
 export class NotificationService implements INotificationService {
@@ -37,14 +38,10 @@ export class NotificationService implements INotificationService {
         message: await this.i18n.translate('notification.MESSAGE.EMAIL_SENT_SUCCESS',),
         data: infoReturned
       };
-    } catch (error) {
-      const resp: IServiceResponse = {
-        isSuccess: false,
-        status: ResponseCode.INTERNAL_SERVER_ERROR,
-        message: await this.i18n.translate('notification.ERROR.EMAIL_COULD_NOT_SENT',),
-        data: {},
-        error: error};
       return resp;
+    } catch (error) {
+      const msg = await this.i18n.translate('notification.ERROR.EMAIL_COULD_NOT_SENT',);
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, error);
     };
   };
 

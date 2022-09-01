@@ -5,6 +5,8 @@ import { IAuthTokensClient } from './service/auth-tokens-client.interface';
 import { IAuthClient } from './service/auth-client.interface';
 import { NotificationApiClientFactory } from '../infra/client/factory/notification-api-client.factory';
 import { INotificationClient } from './service/notification-client.interface';
+import { IProfileClient } from './service/profile-client.interface';
+import { ProfileApiClientFactory } from '../infra/client/factory/profile-api-factory';
 
 const result = dotenv.config();
 
@@ -27,3 +29,6 @@ export const app_company_name = (process.env.REACT_APP_COMPANY_NAME ? process.en
 export const authorizationClient: IAuthTokensClient = AuthApiClientFactory.create(is_fake_mode);
 export const notificationClient: INotificationClient = NotificationApiClientFactory.create(is_fake_mode);
 export const userClient: IAuthClient = ApiAuthClientFactory.create(is_fake_mode);
+export const profileClient: IProfileClient = ProfileApiClientFactory.create(is_fake_mode);
+
+

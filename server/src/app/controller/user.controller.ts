@@ -67,8 +67,8 @@ export class UserController {
   };
 
   //Example http://localhost:3001/api/webshop/v1/users/username/dariopalminio@gmail.com
-  @Get('/username/:userName')
-  async getByUserName(@Res() res, @Param('userName') userName) {
+  @Get('/user')
+  async getByUserName(@Res() res, @Query('userName') userName) {
     const user = await this.userService.getByUserName(userName);
     if (!user) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json(user);

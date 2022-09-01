@@ -25,6 +25,7 @@ export const APIEndpoints = {
   authKeycloak: (process.env.REACT_APP_KEYCLOAK ? process.env.REACT_APP_KEYCLOAK : 'http://localhost:8080') as string,
   notifications: process.env.REACT_APP_NOTIFICATION_API as string,
   auth: process.env.REACT_APP_API_AUTH as string,
+  users: process.env.REACT_APP_API_USER as string,
 };
 
 export const Keycloak = {

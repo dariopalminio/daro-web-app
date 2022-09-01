@@ -1,4 +1,4 @@
-import { Controller, Res, Get, Post, Body, Inject, Headers, HttpStatus } from '@nestjs/common';
+import { Controller, Res, Get, Post, Body, Inject, Headers, HttpStatus, InternalServerErrorException } from '@nestjs/common';
 import { INotificationService } from '../../domain/service/interface/notification.service.interface';
 import { ContactMessage } from '../../domain/model/notification/contact.message';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
@@ -50,10 +50,15 @@ export class NotificationController {
     if (headers && headers.lang) {
       lang = headers.lang;
     }
+    let sentInfo;
 
-    const sentInfo = await this.supportService.sendContactEmail(contactMessage, lang);
-    if (sentInfo.isSuccess) return res.status(HttpStatus.OK).json(sentInfo);
-    return res.status(sentInfo.status).json(sentInfo);
+    try {
+      sentInfo = await this.supportService.sendContactEmail(contactMessage, lang);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+
+    return res.status(HttpStatus.OK).json(sentInfo);
   };
 
   @Post('sendEmail')
