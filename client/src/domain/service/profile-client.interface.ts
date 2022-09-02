@@ -6,4 +6,8 @@ export interface IProfileClient {
       accessToken: string
     ) => Promise<any>;
   
+    updateProfile: (    
+      userProfile: any,
+      token: string) => Promise<number>;
+
   };

@@ -43,7 +43,7 @@ const AnonymousProfile: FunctionComponent = () => {
                 {t('register.command.link')}
             </Link>
 
-            <ProfileLanguage/>
+            <ProfileLanguage onChange={(len: string)=> {}}/>
             
         </div>
     );

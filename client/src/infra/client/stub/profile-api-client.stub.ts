@@ -14,10 +14,20 @@ function getProfileService(userName: string,
      });
   };
 
-
+/**
+ * Stub function
+ */
+ function updateProfile(userProfile: any,
+    token: string): Promise<number>{
+    return new Promise<any>( (resolve, reject) => {
+           const resp: any = {};
+           resolve(resp);
+     });
+  };
 
 
 return {
     getProfileService,
+    updateProfile
 };
 };

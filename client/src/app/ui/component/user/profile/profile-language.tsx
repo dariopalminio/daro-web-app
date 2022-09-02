@@ -18,12 +18,14 @@ import StartIcon from "@material-ui/icons/StarOutline";
 /**
  * User Profile Language
  */
-const ProfileLanguage: FunctionComponent = () => {
+ export default function ProfileLanguage({onChange}: any) {
+//const ProfileLanguage: FunctionComponent = ({handleChange }) => {
   const { t, i18n } = useTranslation();
   const { session } = useContext(SessionContext) as ISessionContext;
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+    onChange(lng);
   };
 
   return (
@@ -50,4 +52,4 @@ const ProfileLanguage: FunctionComponent = () => {
   );
 };
 
-export default ProfileLanguage;
+

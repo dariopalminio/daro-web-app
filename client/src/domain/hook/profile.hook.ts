@@ -26,11 +26,6 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
     const getProfile = async (userName: string | undefined) => {
         setState({ isProcessing: true, hasError: false, msg: '', isSuccess: false });
 
-
-
-        console.log("getProfile...");
-        console.log(userName);
-
         if (!userName || userName == null) {
             console.log("userName is empty!");
             setState({ isProcessing: false, hasError: true, msg: "profile.error.userName.empty", isSuccess: false });
@@ -42,8 +37,6 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
             try {
 
                 let info = await profClient.getProfileService(userName, token);
-
-
                 console.log("Response sent info...");
                 console.log(info);
                 setState({ isProcessing: false, hasError: false, msg: "profile.get.user.success", isSuccess: true });
@@ -55,7 +48,7 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
                 //   getRefreshToken();
                 //}
                 const errorKey = "profile.error.cannot.get.user";
-                console.log("Can not send email!!!", error);
+                console.log("Can not getProfile!!!", error);
                 setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
                 throw error;
             }
@@ -65,11 +58,44 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
             setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
             throw err;
         };
-
-
     };
 
+    const updateProfile = async (userProfile: any | undefined) => {
+        setState({ isProcessing: true, hasError: false, msg: '', isSuccess: false });
 
+        if (!userProfile || userProfile == null) {
+            console.log("userProfile is empty!");
+            setState({ isProcessing: false, hasError: true, msg: "profile.error.userProfile.empty", isSuccess: false });
+            return;
+        };
+
+        try {
+            const token: string = await getToken();
+            try {
+
+                let info = await profClient.updateProfile(userProfile, token);
+                console.log("Response sent info...");
+                console.log(info);
+                setState({ isProcessing: false, hasError: false, msg: "profile.update.success", isSuccess: true });
+                return info;
+
+            } catch (error) {
+                console.error(error);
+                //if (error.status === 401) {
+                //   getRefreshToken();
+                //}
+                const errorKey = "profile.error.cannot.get.user";
+                console.log("Can not updateProfile!!!", error);
+                setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
+                throw error;
+            }
+        } catch (err) {
+            // Error Can not acquire App token from service
+            const errorKey = "profile.error.cannot.get.user.by.token.fail";
+            setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
+            throw err;
+        };
+    };
 
     return {
         isProcessing: state.isProcessing,
@@ -77,5 +103,6 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
         msg: state.msg,
         isSuccess: state.isSuccess,
         getProfile,
+        updateProfile
     };
 };

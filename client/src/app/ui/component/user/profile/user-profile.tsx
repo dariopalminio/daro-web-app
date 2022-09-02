@@ -78,44 +78,52 @@ const UserProfile: FunctionComponent = () => {
     const { t, i18n } = useTranslation();
     const { session } = useContext(SessionContext) as ISessionContext;
     const [profile, setProfile] = useState(initialEmptyProfile)
-    const { isProcessing, hasError, msg, isSuccess, getProfile } = useProfile();
+    const { isProcessing, hasError, msg, isSuccess, getProfile, updateProfile } = useProfile();
     const classes = useStyles();
 
+    const fetchData = async () => {
+        const username = session?.preferred_username;
+     
+            try {
+                const info = await getProfile(username);
+
+                if (info.language) i18n.changeLanguage(info.language.toLowerCase());
+
+                setProfile({
+                    ...profile,
+                    userName: info.userName,
+                    firstName: info.firstName,
+                    lastName: info.lastName,
+                    email: info.email,
+                    docType: info.docType.toUpperCase(),
+                    document: info.document,
+                    telephone: info.telephone,
+                    language: info.language.toLowerCase()
+                })
+            } catch (e) {
+                console.log(e);
+            }
+    };
+
     useEffect(() => {
-
-        const fetchData = async () => {
-            const username = session?.preferred_username;
-         
-                try {
-                    const info = await getProfile(username);
-
-                    if (info.language) i18n.changeLanguage(info.language.toLowerCase());
-
-                    setProfile({
-                        ...profile,
-                        userName: info.userName,
-                        firstName: info.firstName,
-                        lastName: info.lastName,
-                        email: info.email,
-                        docType: info.docType.toUpperCase(),
-                        document: info.document,
-                        telephone: info.telephone,
-                        language: info.language.toLowerCase()
-                    })
-                } catch (e) {
-                    console.log(e);
-                }
-            
-        }
-
         fetchData()
     }, []);
 
-    const handleUpdateSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleUpdateSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        //register(firstName, lastName, email, password);
-        //Redirect to Verify
+        try {
+            const info = await updateProfile(profile);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const handleLanguageChange = (len: string): void => {
+        setProfile({
+            ...profile,
+            language: len
+        })
     };
 
     const handleFirstNameChange = (firstNameValue: string): void => {
@@ -262,7 +270,8 @@ const UserProfile: FunctionComponent = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <ProfileLanguage />
+                        <ProfileLanguage 
+                        onChange={(len: string)=> handleLanguageChange(len)}/>
                     </Grid>
                     <Grid item xs={12}>
 
