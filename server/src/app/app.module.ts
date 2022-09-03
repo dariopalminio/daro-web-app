@@ -1,5 +1,5 @@
 
-import { HttpModule, HttpService, Module, OnModuleInit, MiddlewareConsumer } from '@nestjs/common';
+import { HttpModule, HttpService, Module, OnModuleInit, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { APP_FILTER } from '@nestjs/core';
 import { ExceptionsAllFilter } from '../app/filter/exception.filter';
@@ -42,6 +42,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 //i18n
 import { I18nModuleConfig } from '../infra/i18n/i18n-module-config';
 
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guard/roles.guard';
+
 console.log("DB_CONNECTION:", DB_CONNECTION);
 
 //Dependency Injector
@@ -59,6 +62,10 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
   ],
   controllers: [AppController, AuthController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
     {
       provide: 'IGlobalConfig',
       useClass: GlobalConfigImpl,
@@ -124,7 +131,8 @@ export class AppModule implements OnModuleInit {
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware)
-      .forRoutes(NotificationController);
+      .forRoutes(NotificationController, 
+        { path: 'users/update', method: RequestMethod.GET });
   };
 
   onModuleInit() {

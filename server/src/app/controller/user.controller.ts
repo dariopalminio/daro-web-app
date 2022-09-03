@@ -1,4 +1,4 @@
-import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, UseGuards } from '@nestjs/common';
 import { IUserService } from '../../domain/service/interface/user.service.interface';
 import { IUser } from '../../domain/model/user/user.interface';
 import { UserDTO } from '../../domain/model/user/user-register.dto.type';
@@ -6,6 +6,9 @@ import { IGlobalConfig } from '../../domain/output-port/global-config.interface'
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserProfileDTO } from 'src/domain/model/user/user-profile.dto.type';
+import { RolesGuard } from '../guard/roles.guard';
+import { SetMetadata } from '@nestjs/common';
+import { Roles } from '../guard/roles.decorator';
 
 @Controller('users')
 export class UserController {
@@ -41,7 +44,7 @@ export class UserController {
     return res.status(200).json(response);
   };
 
-  // Get Products /product/all
+  // Get Products /user/all
   @Get('all')
   async getAll(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
 
@@ -107,6 +110,9 @@ export class UserController {
     });
   };
 
+  
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Put('profile/update')
   async updateProfile(@Res() res, @Body() userProfileDTO: UserProfileDTO){
     const updatedUser = await this.userService.updateProfile(userProfileDTO);
@@ -119,4 +125,4 @@ export class UserController {
 
 
 
-}
+};

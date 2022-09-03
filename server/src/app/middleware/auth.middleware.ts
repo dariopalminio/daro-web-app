@@ -2,6 +2,7 @@ import { Injectable, NestMiddleware, Inject} from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import extractTokenFromHeader from '../helper/token.helper';
 
 /**
  * Middleware is called only before the route handler is called. You have access to the response object, 
@@ -51,18 +52,13 @@ export class AuthMiddleware implements NestMiddleware {
             throw e;
         } else {
 
-            var token = "";
-
-            if (req.headers.authorization.startsWith("Bearer ")) {
-                token = req.headers.authorization.substring(7, req.headers.authorization.length);
-            } else {
-                const e = new Error("Can't extract token string from Bearer token!");
-                throw e;
-            }
-
+            var token = extractTokenFromHeader(req);
+            console.log("AuthMiddleware.token:",token);
+            
             return jwt.verify(token, this.getPEMPublicKey(), { algorithms: ['RS256'] });
         }
     };
+
 
     /**
      * Create the PEM string base64 decode with auth public key
