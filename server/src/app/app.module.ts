@@ -127,12 +127,16 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
 
 
 export class AppModule implements OnModuleInit {
-  constructor(private readonly http: HttpService) {}
+  constructor(private readonly http: HttpService) { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware)
-      .forRoutes(NotificationController, 
-        { path: 'users/update', method: RequestMethod.GET });
+      .exclude({ path: 'login', method: RequestMethod.POST },
+      { path: 'auth/login', method: RequestMethod.POST },
+      { path: '/auth/login', method: RequestMethod.POST },
+      { path: '/auth/login/', method: RequestMethod.POST },
+      )
+      .forRoutes(AppController, AuthController, UserController, NotificationController, ProductController, CategoryController);
   };
 
   onModuleInit() {

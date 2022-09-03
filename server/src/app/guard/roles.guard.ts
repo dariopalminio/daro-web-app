@@ -20,14 +20,16 @@ export class RolesGuard implements CanActivate {
         }
         const request = context.switchToHttp().getRequest();
 
-        console.log("roles from controller:", requiredRoles);
+        console.log("RolesGuard for:", request.originalUrl);
+        console.log("Roles from controller:", requiredRoles);
         const userRoles = this.obtainRolesFromKeycloakJWT(request);
-        return this.matchRoles(requiredRoles, userRoles);
+        const authorized = this.matchRoles(requiredRoles, userRoles);
+        console.log("RolesGuard is this authorized?:", authorized);
+        return authorized;
     }
 
     matchRoles(requiredRoles: Array<string>, userRoles: Array<string>): boolean {
         let isMatch = userRoles.some(r => requiredRoles.indexOf(r) >= 0);
-        console.log("RolesGuard.request.toke manage-account?:", isMatch);
         return true;
     };
 

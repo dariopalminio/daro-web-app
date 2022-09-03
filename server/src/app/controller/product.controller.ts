@@ -1,5 +1,5 @@
 import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, 
-  NotFoundException, Delete, Query, Put, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+  NotFoundException, Delete, Query, Put, BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
 
 import { IProductService } from '../../domain/service/interface/product.service.interface';
 import { Product } from '../../domain/model/product/product';
@@ -7,7 +7,8 @@ import { IProduct } from '../../domain/model/product/product.interface';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import { RolesGuard } from '../guard/roles.guard';
+import { Roles } from '../guard/roles.decorator';
 
 @Controller('products')
 export class ProductController {
@@ -98,6 +99,8 @@ export class ProductController {
   };
 
   // Add Product: /product/create
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Post('create')
   async createProduct(@Res() res, @Body() createProductDTO: Product) {
     let productCreated: boolean;
@@ -114,6 +117,8 @@ export class ProductController {
   };
 
   // Delete Product: /delete?productID=5c9d45e705ea4843c8d0e8f7
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Delete('delete')
   async deleteProduct(@Res() res, @Query('id') productID) {
     let productDeleted: boolean;
@@ -130,6 +135,8 @@ export class ProductController {
   };
 
   // Update Product: /update?id=5c9d45e705ea4843c8d0e8f7
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Put('update')
   async updateProduct(@Res() res, @Body() createProductDTO: Product, @Query('id') id) {
     let updatedProduct: boolean;

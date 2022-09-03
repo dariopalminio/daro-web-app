@@ -7,7 +7,6 @@ import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserProfileDTO } from 'src/domain/model/user/user-profile.dto.type';
 import { RolesGuard } from '../guard/roles.guard';
-import { SetMetadata } from '@nestjs/common';
 import { Roles } from '../guard/roles.decorator';
 
 @Controller('users')
@@ -78,6 +77,8 @@ export class UserController {
   };
 
   // Add User: /user/create
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Post('create')
   async createUser(@Res() res, @Body() userRegisterDTO: UserDTO) {
     const categoryCreated = await this.userService.create(userRegisterDTO);
@@ -89,6 +90,8 @@ export class UserController {
   };
 
   // Delete user: /delete?id=5c9d45e705ea4843c8d0e8f7
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Delete('delete')
   async deleteUser(@Res() res, @Query('id') id) {
     const categoryDeleted = await this.userService.delete(id);
@@ -111,8 +114,6 @@ export class UserController {
   };
 
   
-  @UseGuards(RolesGuard)
-  @Roles('admin', 'manage-account')
   @Put('profile/update')
   async updateProfile(@Res() res, @Body() userProfileDTO: UserProfileDTO){
     const updatedUser = await this.userService.updateProfile(userProfileDTO);

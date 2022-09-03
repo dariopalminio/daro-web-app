@@ -1,6 +1,6 @@
 import {
   Controller, Get, Res, Post, Headers, Delete, Put, Body, Param, Query, Inject,
-  HttpStatus, NotFoundException, BadRequestException, InternalServerErrorException, UnauthorizedException, ForbiddenException, ConflictException
+  HttpStatus, NotFoundException, BadRequestException, InternalServerErrorException, UnauthorizedException, ForbiddenException, ConflictException, UseGuards
 } from '@nestjs/common';
 import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
 import { IAuthService } from '../../domain/service/interface/auth.service.interface';
@@ -14,7 +14,8 @@ import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
-
+import { RolesGuard } from '../guard/roles.guard';
+import { Roles } from '../guard/roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -59,6 +60,8 @@ export class AuthController {
       'Successfully created user',
     type: ServiceResponseDTO,
   })
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Post('register')
   async register(@Res() res, @Body() userRegisterDTO: UserRegisterDataDTO): Promise<any> {
     console.log("register controller init");

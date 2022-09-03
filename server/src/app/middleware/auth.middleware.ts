@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware, Inject} from '@nestjs/common';
+import { Injectable, NestMiddleware, Inject } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
@@ -14,7 +14,7 @@ export class AuthMiddleware implements NestMiddleware {
     constructor(
         @Inject('IGlobalConfig')
         private readonly globalConfig: IGlobalConfig,
-      ) { };
+    ) { };
 
     /**
      * In initialization phase microservice loads public key and signing algorithm
@@ -28,12 +28,18 @@ export class AuthMiddleware implements NestMiddleware {
      */
     use(req: Request, res: Response, next: () => void) {
         console.log("AUTH_MIDDLEWARE_ON=", this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON'));
+        console.log("req.originalUrl:", req.originalUrl);
+
+        var regularExpression = /\/((?!login).)*/; //auth/login is excluded
+        const isUrlExcluded = regularExpression.exec(req.originalUrl);
+
+        if (isUrlExcluded) return next();
 
         if (this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON')) {
             try {
                 const userVerified = this.verifyRequest(req);
             } catch (error) {
-                // Unauthorized
+                // Unauthorized, invalid signature
                 return res.status(401).send({ message: error.message });
             };
         };
@@ -53,8 +59,8 @@ export class AuthMiddleware implements NestMiddleware {
         } else {
 
             var token = extractTokenFromHeader(req);
-            console.log("AuthMiddleware.token:",token);
-            
+            console.log("AuthMiddleware.token:", token);
+
             return jwt.verify(token, this.getPEMPublicKey(), { algorithms: ['RS256'] });
         }
     };

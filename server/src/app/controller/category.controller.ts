@@ -1,10 +1,11 @@
-import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, InternalServerErrorException, UseGuards } from '@nestjs/common';
 import { ICategoryService } from '../../domain/service/interface/category.service.interface';
 import { ICategory } from '../../domain/model/category/category.interface';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import { RolesGuard } from '../guard/roles.guard';
+import { Roles } from '../guard/roles.decorator';
 
 @Controller('categories')
 export class CategoryController {
@@ -74,6 +75,8 @@ export class CategoryController {
   };
 
   // Add Category: /category/create
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Post('create')
   async createCategory(@Res() res, @Body() createCategoryDTO: ICategory) {
     let categoryCreated: boolean;
@@ -90,6 +93,8 @@ export class CategoryController {
   };
 
   // Delete Category: /delete?id=5c9d45e705ea4843c8d0e8f7
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Delete('delete')
   async deleteCategory(@Res() res, @Query('id') id) {
     let categoryDeleted: boolean;;
@@ -106,6 +111,8 @@ export class CategoryController {
   };
 
   // Update Category: /update?id=5c9d45e705ea4843c8d0e8f7
+  @UseGuards(RolesGuard)
+  @Roles('admin', 'manage-account')
   @Put('update')
   async updateProduct(@Res() res, @Body() categoryDTO: ICategory, @Query('id') categoryID) {
     let updatedCategory: boolean;
