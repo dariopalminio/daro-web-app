@@ -26,6 +26,7 @@ Nest is [MIT licensed](LICENSE).
 - Internationalization, react-i18next: https://github.com/andretorres00123/react-i18n-tutorial
 - Internationalization, i18next: https://www.i18next.com/overview/getting-started
 - Internationalization, i18next, video: https://www.youtube.com/watch?v=Nc2xWHONPjQ
+- Keycloak: https://medium.com/devops-dudes/secure-front-end-react-js-and-back-end-node-js-express-rest-api-with-keycloak-daf159f0a94e
 - Keycloak, Admin REST API: https://www.keycloak.org/docs-api/10.0/rest-api/index.html
 - Keycloak, with postman: https://documenter.getpostman.com/view/7294517/SzmfZHnd#intro
 - Keycloak, Create user: https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/

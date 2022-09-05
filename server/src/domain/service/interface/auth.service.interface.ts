@@ -7,6 +7,8 @@ import { IServiceResponse } from '../../../domain/model/service/service-response
 import { LoginFormDTO } from '../../../domain/model/auth/login/login-form.dto';
 import { LogoutFormDTO } from '../../../domain/model/auth/login/logout-form.dto';
 import { RecoveryUpdateDataDTO } from '../../../domain/model/auth/recovery/recovery-update-data.dto.type';
+import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
+import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
 
 export interface IAuthService {
     register (userRegisterData: UserRegisterDataDTO): Promise<any>;
@@ -16,4 +18,7 @@ export interface IAuthService {
     logout(logoutFormDTO: LogoutFormDTO): Promise<IServiceResponse>;
     sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO, lang:string): Promise<any>;
     recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang:string): Promise<IServiceResponse>;
+    getAppToken(authClientDTO: AuthClientDTO): Promise<any>;
+    getAdminToken(body: NewAdminTokenRequestType): Promise<any>;
+    getRefreshToken(body: RequesRefreshToken): Promise<any>;
 };

@@ -5,6 +5,7 @@ import * as StateConfig from '../../domain.config';
 import { Tokens } from '../../model/user/tokens.type';
 import { IAuthClient } from '../../service/auth-client.interface';
 
+
 var jws = require('jws');
 
 /**
@@ -30,6 +31,7 @@ export default function useLogin(
     const login = useCallback((email: string, password: string) => {
         const infoKey = "login.info.loading";
         setState({ isProcessing: true, hasError: false, msg: infoKey, isSuccess: false });
+
 
         // First: authenticate user and pass
         authClient.loginService(email, password)
@@ -68,12 +70,12 @@ export default function useLogin(
      */
     const convertJwtToSessionType = (tokens: Tokens) => {
         const jwtDecoded = jws.decode(tokens.access_token);
-        console.log("refresh_toke:",tokens.refresh_token);
+        //console.log("refresh_toke:",tokens.refresh_token);
         const errorJwtDecodedFail = "Decoded JWT fail! JWT decoded is null.";
         if (!jwtDecoded) throw Error(errorJwtDecodedFail);
-        console.log("jwtDecoded:",jwtDecoded);
+        //console.log("jwtDecoded:",jwtDecoded);
         const payload = jwtDecoded.payload;
-        console.log("payload:",payload);
+        //console.log("payload:",payload);
         // Authorizedaccess_token: (string | null),
         const userSessionData: SessionType = {
             createdTimestamp: '', //TODO

@@ -16,6 +16,8 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from '../guard/roles.decorator';
+import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
+import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -71,7 +73,7 @@ export class AuthController {
       console.log("register controller:", result);
     } catch (error) {
       switch (error.code) {
-        case HttpStatus.UNAUTHORIZED: 
+        case HttpStatus.UNAUTHORIZED:
           throw new UnauthorizedException(error.data);
         case HttpStatus.FORBIDDEN:
           throw new ForbiddenException(error.data);
@@ -161,9 +163,22 @@ export class AuthController {
   })
   @Post('logout')
   async logout(@Res() res, @Body() logoutFormDTO: LogoutFormDTO) {
-    const authResponse: ServiceResponseDTO = await this.authService.logout(logoutFormDTO);
-    if (authResponse.isSuccess) return res.status(HttpStatus.OK).json(authResponse);
+
+    let authResponse: ServiceResponseDTO;
+
+    try {
+      authResponse = await this.authService.logout(logoutFormDTO);
+    } catch (error) {
+      if (error.code == 400) throw new BadRequestException(error);
+      if (error.code == 401) throw new UnauthorizedException(error.data);
+      throw new InternalServerErrorException(error);
+    };
+
+    if (authResponse.isSuccess)
+      return res.status(HttpStatus.OK).json(authResponse.data);
+
     return res.status(HttpStatus.UNAUTHORIZED).json(authResponse);
+
   };
 
   @ApiOperation({
@@ -208,4 +223,58 @@ export class AuthController {
     return 'en';
   };
 
+  @Post('tokens/app')
+  async getAppToken(@Headers() headers, @Res() res, @Body() authClientDTO: AuthClientDTO) {
+
+
+    let authResponse: ServiceResponseDTO;
+    console.log('authClientDTO:', authClientDTO);
+    try {
+      authResponse = await this.authService.getAppToken(authClientDTO);
+    } catch (error) {
+      if (error.code == 400) throw new BadRequestException(error);
+      if (error.code == 401) throw new UnauthorizedException(error.data);
+      throw new InternalServerErrorException(error);
+    };
+
+
+    return res.status(HttpStatus.OK).json(authResponse);
+  };
+
+  @Post('tokens/admin')
+  async getAdminToken(@Headers() headers, @Res() res, @Body() body: NewAdminTokenRequestType) {
+
+
+    let authResponse: ServiceResponseDTO;
+    console.log('getAdminToken body:', body);
+    try {
+      authResponse = await this.authService.getAdminToken(body);
+    } catch (error) {
+      if (error.code == 400) throw new BadRequestException(error);
+      if (error.code == 401) throw new UnauthorizedException(error.data);
+      throw new InternalServerErrorException(error);
+    };
+
+
+    return res.status(HttpStatus.OK).json(authResponse);
+  };
+
+
+  @Post('tokens/refresh')
+  async getRefreshToken(@Headers() headers, @Res() res, @Body() body: RequesRefreshToken) {
+
+
+    let authResponse: ServiceResponseDTO;
+    
+    try {
+      authResponse = await this.authService.getRefreshToken(body);
+    } catch (error) {
+      if (error.code == 400) throw new BadRequestException(error);
+      if (error.code == 401) throw new UnauthorizedException(error.data);
+      throw new InternalServerErrorException(error);
+    };
+
+
+    return res.status(HttpStatus.OK).json(authResponse);
+  };
 };

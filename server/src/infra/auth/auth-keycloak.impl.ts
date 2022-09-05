@@ -6,15 +6,9 @@ import { AxiosResponse } from 'axios';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { DomainError } from '../../domain/error/domain-error';
+import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
+import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
 
-type NewAdminTokenRequestType = {
-  client_id: string,
-  grant_type: string,
-  username: string,
-  password: string,
-  scope: string,
-  client_secret: string,
-};
 
 type NewUserRepresentationType = {
   username: string
@@ -64,39 +58,6 @@ export class AuthKeycloakImpl implements IAuth {
     @Inject('IGlobalConfig')
     private readonly config: IGlobalConfig,
   ) { }
-
-  /**
-   * Get Admin Token
-   * 
-   * POST /auth/realms/{realm}/protocol/openid-connect/token
-   * 
-   * Get a admin access token (from auth server) for next time can create user or update user.
-   * same login url: `/auth/realms/${your-realm}/protocol/openid-connect/token`,
-   * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-  */
-  async getAdminToken(): Promise<string> {
-
-    const body: NewAdminTokenRequestType = {
-      client_id: this.config.get<string>('Keycloak_client_id'),
-      grant_type: 'password',
-      username: this.config.get<string>('Keycloak_username_admin'),
-      password: this.config.get<string>('Keycloak_password_admin'),
-      scope: 'openid roles',
-      client_secret: this.config.get<string>('Keycloak_client_secret'),
-    };
-
-    // Token endpoint
-    const URL = this.config.get<string>('Keycloak_path_token');
-
-    const res = await this.http.post(URL, stringify(body),
-      {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      },
-    ).toPromise();
-
-    const { access_token } = res.data;
-    return access_token;
-  };
 
   /**
    * Register 
@@ -530,5 +491,160 @@ export class AuthKeycloakImpl implements IAuth {
     }
   };
 
+  /**
+ * Get Admin Token
+ * 
+ * POST /auth/realms/{realm}/protocol/openid-connect/token
+ * 
+ * Get a admin access token (from auth server) for next time can create user or update user.
+ * same login url: `/auth/realms/${your-realm}/protocol/openid-connect/token`,
+ * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+*/
+  async getAdminToken(body: NewAdminTokenRequestType): Promise<any> {
+
+    // Token endpoint
+    const URL = this.config.get<string>('Keycloak_path_token');
+
+    const params = new URLSearchParams();
+    params.append('client_id', body.client_id);
+    params.append('grant_type', body.grant_type);
+    params.append('username', body.username);
+    params.append('password', body.password);
+    params.append('scope', body.scope);
+    params.append('client_secret', body.client_secret);
+
+    const response = await this.http.post(URL, params,
+    {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    },
+    ).toPromise();
+
+    switch (response.status) {
+      case HttpStatus.OK: //200
+          return response.data; //response.data.access_token
+      case HttpStatus.UNAUTHORIZED: //401
+        throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
+      case HttpStatus.FAILED_DEPENDENCY:
+        throw new DomainError(HttpStatus.FAILED_DEPENDENCY, response.statusText, response.data);
+      case HttpStatus.FORBIDDEN: //403: Keycloak Admin Rest API unknown_error for update user API. The admin user may be misconfigured. You haven't granted related permissions to your real.
+        throw new DomainError(HttpStatus.FORBIDDEN, response.statusText, response.data);
+      case HttpStatus.BAD_REQUEST: //400
+        throw new DomainError(HttpStatus.BAD_REQUEST, response.statusText, response.data);
+      default:
+        throw new DomainError(response.status, response.statusText, response.data);
+    }
+
+  };
+
+  //for local use
+  async getAdminStringToken(): Promise<string> {
+
+    const body: NewAdminTokenRequestType = {
+      client_id: this.config.get<string>('Keycloak_client_id'),
+      grant_type: 'password',
+      username: this.config.get<string>('Keycloak_username_admin'),
+      password: this.config.get<string>('Keycloak_password_admin'),
+      scope: 'openid roles',
+      client_secret: this.config.get<string>('Keycloak_client_secret'),
+    };
+
+    const data = await this.getAdminToken(body);
+    const { access_token } = data;
+    return access_token;
+  };
+
+  /**
+   * Get App Token
+   * 
+   * Get Access Token for application from auth server.
+   * 
+   * Obtain SAT (service account token).
+   * Method POST[SAT] Obtain accsess token from a service account. 
+   * Content-Type: application/x-www-form-urlencoded.
+   * Body with client_id, client_secret and grant_type.
+  */
+  async getAppToken(authClientDTO: AuthClientDTO): Promise<any> {
+
+    // Token endpoint
+    const URL = this.config.get<string>('Keycloak_path_token');
+
+    const params = new URLSearchParams();
+    params.append('client_id', authClientDTO.client_id);
+    params.append('client_secret', authClientDTO.client_secret);
+    params.append('grant_type', authClientDTO.grant_type);
+
+    const response = await this.http.post(URL, params,
+    {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    },
+    ).toPromise();
+
+    switch (response.status) {
+      case HttpStatus.OK: //200
+          return response.data; //response.data.access_token
+      case HttpStatus.UNAUTHORIZED: //401
+        throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
+      case HttpStatus.FAILED_DEPENDENCY:
+        throw new DomainError(HttpStatus.FAILED_DEPENDENCY, response.statusText, response.data);
+      case HttpStatus.FORBIDDEN: //403: Keycloak Admin Rest API unknown_error for update user API. The admin user may be misconfigured. You haven't granted related permissions to your real.
+        throw new DomainError(HttpStatus.FORBIDDEN, response.statusText, response.data);
+      case HttpStatus.BAD_REQUEST: //400
+        throw new DomainError(HttpStatus.BAD_REQUEST, response.statusText, response.data);
+      default:
+        throw new DomainError(response.status, response.statusText, response.data);
+    }
+  };
+
+
+  /**
+   * Get Refresh Token
+   * 
+   * getRefreshTokenService is used when you need to make the user keep login in the system 
+   * if the user's access_token get expired and user want to keep login. How can I get newly 
+   * updated access_token with this function.
+   * Use Refresh Tokens
+   * Method: POST
+   * URL: https://keycloak.example.com/auth/realms/myrealm/protocol/openid-connect/token
+   * Body type: x-www-form-urlencoded
+   * Form fields:
+   * client_id : <my-client-name>
+   * grant_type : refresh_token
+   * refresh_token: <my-refresh-token>
+   * 
+   * @param refresh_token 
+   * @returns 
+   */
+   async getRefreshToken(body: RequesRefreshToken): Promise<any> {
+
+    // Token endpoint
+    const URL = this.config.get<string>('Keycloak_path_token');
+
+    const params = new URLSearchParams();
+    params.append('client_id', body.client_id);
+    params.append('grant_type', 'refresh_token');
+    params.append('refresh_token', body.refresh_token);
+    params.append('client_secret', body.client_secret);
+
+    const response = await this.http.post(URL, params,
+    {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    },
+    ).toPromise();
+
+    switch (response.status) {
+      case HttpStatus.OK: //200
+          return response.data; //response.data.access_token
+      case HttpStatus.UNAUTHORIZED: //401
+        throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
+      case HttpStatus.FAILED_DEPENDENCY:
+        throw new DomainError(HttpStatus.FAILED_DEPENDENCY, response.statusText, response.data);
+      case HttpStatus.FORBIDDEN: //403: Keycloak Admin Rest API unknown_error for update user API. The admin user may be misconfigured. You haven't granted related permissions to your real.
+        throw new DomainError(HttpStatus.FORBIDDEN, response.statusText, response.data);
+      case HttpStatus.BAD_REQUEST: //400
+        throw new DomainError(HttpStatus.BAD_REQUEST, response.statusText, response.data);
+      default:
+        throw new DomainError(response.status, response.statusText, response.data);
+    }
+  };
 
 };

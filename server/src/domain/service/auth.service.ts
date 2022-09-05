@@ -22,6 +22,8 @@ import { IGlobalConfig } from '../../domain/output-port/global-config.interface'
 import { LoginFormDTOValidator } from '../../domain/validator/login-form-dto.validator';
 import { UserRegisterDataDTOValidator } from '../../domain/validator/user-register-data-dto.validator';
 import { DomainError } from '../../domain/error/domain-error';
+import { AuthClientDTO } from '../model/auth/token/auth.client.dto';
+import { RequesRefreshToken } from '../model/auth/token/auth.request.refresh.token.dto';
 
 /**
  * Authorization service
@@ -72,7 +74,7 @@ export class AuthService implements IAuthService {
     console.log("First: obtains admin access token");
     let adminToken;
     try {
-      adminToken = await this.externalAuthService.getAdminToken();
+      adminToken = await this.externalAuthService.getAdminStringToken();
     } catch (error) {
       const msg = await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',);
       throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, { error: error.message });
@@ -118,7 +120,7 @@ export class AuthService implements IAuthService {
       const wasCreated: boolean = await this.userService.create(userRegisterDTO);
     } catch (error) {
       // ERROR: User could not be created in user database
-      
+
       //revert operation in auth server (keycloak)
       let deletedAuthUser = {};
       try {
@@ -213,7 +215,7 @@ export class AuthService implements IAuthService {
     //Update in external auth server
     let adminToken;
     try {
-      adminToken = await this.externalAuthService.getAdminToken();
+      adminToken = await this.externalAuthService.getAdminStringToken();
     } catch (error) {
       this.responseInternalError(error);
     }
@@ -320,13 +322,13 @@ export class AuthService implements IAuthService {
       if (!userAuthId)
         throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_VALUE',));
     } catch (error) {
-      return this.responseBadRequest(error);
+      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error });
     };
 
     let adminToken: string = logoutFormDTO.adminToken;
     if (!logoutFormDTO.adminToken) {
       try {
-        adminToken = await this.externalAuthService.getAdminToken();
+        adminToken = await this.externalAuthService.getAdminStringToken();
       } catch (error) {
         this.responseInternalError(error);
       }
@@ -407,7 +409,7 @@ export class AuthService implements IAuthService {
     //Update in external auth server
     let adminToken;
     try {
-      adminToken = await this.externalAuthService.getAdminToken();
+      adminToken = await this.externalAuthService.getAdminStringToken();
     } catch (error) {
       return {
         isSuccess: false,
@@ -552,5 +554,71 @@ export class AuthService implements IAuthService {
     };
     return authResponse;
   };
+
+  async getAdminToken(body: NewAdminTokenRequestType): Promise<any> {
+
+    let data = await this.externalAuthService.getAdminToken(body);
+    console.log('token', data);
+    if (data == undefined) throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Token data undefined. Can not obtain token.", {});
+
+
+    const authResponse: IServiceResponse = {
+      isSuccess: true,
+      status: 200,
+      message: `AdminToken`,
+      data: data
+    };
+    return authResponse;
+  };
+
+
+  async getAppToken(authClientDTO: AuthClientDTO): Promise<any> {
+
+    try {
+      if (!authClientDTO.client_id || !authClientDTO.client_secret || !authClientDTO.grant_type)
+        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_VALUE',));
+    } catch (error) {
+      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error });
+    };
+
+
+
+    let data = await this.externalAuthService.getAppToken(authClientDTO);
+    console.log('token', data);
+    if (data == undefined) throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Token data undefined. Can not obtain token.", {});
+
+
+    const authResponse: IServiceResponse = {
+      isSuccess: true,
+      status: 200,
+      message: `AppToken to ${authClientDTO.client_id}`,
+      data: data
+    };
+    return authResponse;
+  };
+
+  async getRefreshToken(body: RequesRefreshToken): Promise<any> {
+
+    try {
+      if (!body)
+        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_VALUE',));
+    } catch (error) {
+      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error });
+    };
+
+    let data = await this.externalAuthService.getRefreshToken(body);
+
+    if (data == undefined) throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Token data undefined. Can not obtain token.", {});
+
+
+    const authResponse: IServiceResponse = {
+      isSuccess: true,
+      status: 200,
+      message: `RefreshToken to ${body.client_id}`,
+      data: data
+    };
+    return authResponse;
+  };
+
 
 };
