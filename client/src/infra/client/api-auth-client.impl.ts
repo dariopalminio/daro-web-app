@@ -167,20 +167,21 @@ export default function ApiAuthClientImpl(): IAuthClient {
    * @returns 
    */
   function loginService(username: string, pass: string): Promise<Tokens> {
-
+console.log('*******loginService');
     const body = {
       username: username,
       password: pass
     };
 
     //Login endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/login`;
+    const URL = `${InfraConfig.APIEndpoints.auth}/tokens/login`;
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
 
     // using .then, create a new promise which extracts the data
     const tokens: Promise<Tokens> = promise.then((response) => {
+      console.log('loginService.response',response);
       return {
         access_token: response.data.access_token,
         refresh_token: response.data.refresh_token,
@@ -191,6 +192,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
     }
     ).catch((error) => {
       // response.status !== 200
+      console.log('loginService.error',error);
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });

@@ -32,10 +32,11 @@ export default function useLogin(
         const infoKey = "login.info.loading";
         setState({ isProcessing: true, hasError: false, msg: infoKey, isSuccess: false });
 
-
+console.log('useLogin');
         // First: authenticate user and pass
         authClient.loginService(email, password)
             .then(tokens => {
+                console.log('useLogin.tokens',tokens);
                 try {
                     const userSessionValue: SessionType = convertJwtToSessionType(tokens);
                     

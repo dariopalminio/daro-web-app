@@ -258,7 +258,7 @@ export class AuthKeycloakImpl implements IAuth {
    * @param param0 loginRequestData LoginRequest
    * @returns access_token JWT 
    */
-  async login(username: string, pass: string): Promise<IServiceResponse> {
+  async login(username: string, pass: string): Promise<any> {
 
     const body: LoginRequestType = {
       username: username,
@@ -277,16 +277,14 @@ export class AuthKeycloakImpl implements IAuth {
     switch (response.status) {
       case HttpStatus.OK: {//200
         const msg = await this.i18n.translate('auth.MESSAGE.LOGGED_IN_OK',);
-        return { isSuccess: true, status: response.status, message: msg, data: response.data }; //successful
+        return response.data; //successful
       }
       case HttpStatus.UNAUTHORIZED: {//401
         const msg = await this.i18n.translate('auth.ERROR.UNAUTHORIZED',);
         throw new DomainError(HttpStatus.UNAUTHORIZED, msg, response.data);
-        //return { isSuccess: false, status: response.status, message: msg, data: {}, error: response.data };
       }
       default:
         throw new DomainError(response.status, response.statusText, response);
-      //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
     }
 
   };

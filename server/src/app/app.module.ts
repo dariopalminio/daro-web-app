@@ -44,6 +44,8 @@ import { I18nModuleConfig } from '../infra/i18n/i18n-module-config';
 
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guard/roles.guard';
+import { AuthTokensController } from './controller/auth.token.controller';
+import { AuthTokensService } from 'src/domain/service/auth.tokens.service';
 
 console.log("DB_CONNECTION:", DB_CONNECTION);
 
@@ -60,7 +62,7 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
     ]),
     I18nModuleConfig,
   ],
-  controllers: [AppController, AuthController, UserController, NotificationController, ProductController, CategoryController],
+  controllers: [AppController, AuthController, AuthTokensController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
     {
       provide: APP_GUARD,
@@ -77,6 +79,10 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
     {
       provide: 'IAuthService',
       useClass: AuthService,
+    },
+    {
+      provide: 'IAuthTokensService',
+      useClass: AuthTokensService,
     },
     {
       provide: 'IUserService',
@@ -132,9 +138,9 @@ export class AppModule implements OnModuleInit {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware)
       .exclude({ path: 'login', method: RequestMethod.POST },
-      { path: 'auth/login', method: RequestMethod.POST },
-      { path: '/auth/login', method: RequestMethod.POST },
-      { path: '/auth/login/', method: RequestMethod.POST },
+      { path: 'auth/tokens/login', method: RequestMethod.POST },
+      { path: '/auth/tokens/login', method: RequestMethod.POST },
+      { path: '/auth/tokens/login/', method: RequestMethod.POST },
       )
       .forRoutes(AppController, AuthController, UserController, NotificationController, ProductController, CategoryController);
   };

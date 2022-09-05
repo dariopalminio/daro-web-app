@@ -23,7 +23,7 @@ export interface IAuth {
 
     confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<IServiceResponse>;
 
-    login(username: string, pass: string): Promise<IServiceResponse>;
+    login(username: string, pass: string): Promise<any>;
 
     logout(userId: string, accessToken: string): Promise<IServiceResponse>;
 

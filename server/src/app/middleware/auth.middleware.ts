@@ -30,10 +30,9 @@ export class AuthMiddleware implements NestMiddleware {
         console.log("AUTH_MIDDLEWARE_ON=", this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON'));
         console.log("req.originalUrl:", req.originalUrl);
 
-        var regularExpression = /\/((?!login|tokens).)*/; //auth/login is excluded
-        const isUrlExcluded = regularExpression.exec(req.originalUrl);
-
-        if (isUrlExcluded) return next();
+        //var regularExpression = /\/((?!login|tokens).)*/; //auth/login is excluded
+        //const isUrlExcluded = regularExpression.exec(req.originalUrl);
+        //if (isUrlExcluded) return next();
 
         if (this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON')) {
             try {

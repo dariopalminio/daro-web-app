@@ -16,8 +16,6 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from '../guard/roles.decorator';
-import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
-import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -125,34 +123,6 @@ export class AuthController {
 
   @ApiOperation({
     summary:
-      'Authenticate user with username and password. Consumer cliente for login on Keycloak Server & Bearer Token & with client secret configured with OpenID Endpoint configuration, Login with email = true and Access Type = public',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Authenticated!',
-    type: ServiceResponseDTO,
-  })
-  @Post('login')
-  async login(@Res() res, @Body() loginForm: LoginFormDTO) {
-    let authResponse: ServiceResponseDTO;
-
-    try {
-      authResponse = await this.authService.login(loginForm);
-    } catch (error) {
-      if (error.code == 400) throw new BadRequestException(error);
-      if (error.code == 401) throw new UnauthorizedException(error.data);
-      throw new InternalServerErrorException(error);
-    };
-
-    if (authResponse.isSuccess)
-      return res.status(HttpStatus.OK).json(authResponse.data);
-
-    return res.status(HttpStatus.UNAUTHORIZED).json(authResponse);
-  };
-
-  @ApiOperation({
-    summary:
       'Remove all user sessions associated with the user in auth server. Also send notification to all clients that have an admin URL to invalidate the sessions for the particular user.',
   })
   @ApiResponse({
@@ -223,58 +193,4 @@ export class AuthController {
     return 'en';
   };
 
-  @Post('tokens/app')
-  async getAppToken(@Headers() headers, @Res() res, @Body() authClientDTO: AuthClientDTO) {
-
-
-    let authResponse: ServiceResponseDTO;
-    console.log('authClientDTO:', authClientDTO);
-    try {
-      authResponse = await this.authService.getAppToken(authClientDTO);
-    } catch (error) {
-      if (error.code == 400) throw new BadRequestException(error);
-      if (error.code == 401) throw new UnauthorizedException(error.data);
-      throw new InternalServerErrorException(error);
-    };
-
-
-    return res.status(HttpStatus.OK).json(authResponse);
-  };
-
-  @Post('tokens/admin')
-  async getAdminToken(@Headers() headers, @Res() res, @Body() body: NewAdminTokenRequestType) {
-
-
-    let authResponse: ServiceResponseDTO;
-    console.log('getAdminToken body:', body);
-    try {
-      authResponse = await this.authService.getAdminToken(body);
-    } catch (error) {
-      if (error.code == 400) throw new BadRequestException(error);
-      if (error.code == 401) throw new UnauthorizedException(error.data);
-      throw new InternalServerErrorException(error);
-    };
-
-
-    return res.status(HttpStatus.OK).json(authResponse);
-  };
-
-
-  @Post('tokens/refresh')
-  async getRefreshToken(@Headers() headers, @Res() res, @Body() body: RequesRefreshToken) {
-
-
-    let authResponse: ServiceResponseDTO;
-    
-    try {
-      authResponse = await this.authService.getRefreshToken(body);
-    } catch (error) {
-      if (error.code == 400) throw new BadRequestException(error);
-      if (error.code == 401) throw new UnauthorizedException(error.data);
-      throw new InternalServerErrorException(error);
-    };
-
-
-    return res.status(HttpStatus.OK).json(authResponse);
-  };
 };
