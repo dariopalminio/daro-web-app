@@ -12,18 +12,13 @@ import { ParamsRegisterStart } from '../model/auth/register/params-register-star
 import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
 import { VerificationCodeDataDTO } from '../model/auth/register/verification-code-data.dto.type';
 import { RecoveryUpdateDataDTO } from '../model/auth/recovery/recovery-update-data.dto.type';
-import { IServiceResponse } from '../../domain/model/service/service-response.interface';
-import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import { IUser } from '../model/user/user.interface';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
-import { LoginFormDTOValidator } from '../../domain/validator/login-form-dto.validator';
 import { UserRegisterDataDTOValidator } from '../../domain/validator/user-register-data-dto.validator';
 import { DomainError } from '../../domain/error/domain-error';
-import { AuthClientDTO } from '../model/auth/token/auth.client.dto';
-import { RequesRefreshToken } from '../model/auth/token/auth.request.refresh.token.dto';
 
 /**
  * Authorization service
@@ -54,7 +49,7 @@ export class AuthService implements IAuthService {
    * @param userRegisterData 
    * @returns 
    */
-  async register(userRegisterData: UserRegisterDataDTO): Promise<IServiceResponse> {
+  async register(userRegisterData: UserRegisterDataDTO): Promise<any> {
 
     //Validate data
     console.log("Validate data");
@@ -89,15 +84,15 @@ export class AuthService implements IAuthService {
 
     // Third: verifies that the user was created, asking for the information of the created user
     console.log("Third: verifies that the user was created, asking for the information of the created user");
-    const response: IServiceResponse = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
+    const data: any = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
 
-    if (!response.isSuccess) {
+    if (!data) {
       // ERROR: User could not be created in auth server
       const msg = "User could not be created in auth server or user get info not work! ";
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, response);
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, {});
     }
 
-    const authCreatedUser = response.data.user;
+    const authCreatedUser = data.user;
     const { id } = authCreatedUser; // ID in external authorization server
 
     // Four: create new user in user database
@@ -122,14 +117,12 @@ export class AuthService implements IAuthService {
       // ERROR: User could not be created in user database
 
       //revert operation in auth server (keycloak)
-      let deletedAuthUser = {};
+      let deletedAuthUser: boolean = false;
       try {
         deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
         //console.log("User was deleted in keycloak:", deletedAuthUser);
       } catch (error) {
         const errorMsg = await this.i18n.translate('auth.ERROR.USER_COULD_NOT_DELETED_IN_AUTH_SERVICE',);
-        //console.log(errorMsg, error);
-        deletedAuthUser = { error: error }
       }
 
       throw error;
@@ -145,7 +138,7 @@ export class AuthService implements IAuthService {
    * @param startConfirmEmailData 
    * @returns 
    */
-  async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailDataDTO, locale: string): Promise<IServiceResponse> {
+  async sendStartEmailConfirm(startConfirmEmailData: StartConfirmEmailDataDTO, locale: string): Promise<any> {
 
     // Data validation
     try {
@@ -154,7 +147,7 @@ export class AuthService implements IAuthService {
       if (!startConfirmEmailData.verificationPageLink)
         throw new Error(await this.i18n.translate('auth.ERROR.INVALID_LINK',));
     } catch (error) {
-      return this.responseBadRequest(error);
+      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, error);
     };
 
     try {
@@ -190,7 +183,7 @@ export class AuthService implements IAuthService {
       };
 
     } catch (error) {
-      this.responseInternalError(error);
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, error);
     };
   };
 
@@ -201,13 +194,13 @@ export class AuthService implements IAuthService {
    * @param verificationCodeData 
    * @returns 
    */
-  async confirmAccount(verificationCodeData: VerificationCodeDataDTO, lang: string): Promise<IServiceResponse> {
+  async confirmAccount(verificationCodeData: VerificationCodeDataDTO, lang: string): Promise<any> {
 
     let user: IUser = null;
     try {
       user = await this.verificateToken(verificationCodeData.token);
     } catch (error) {
-      return this.responseBadRequest(error);
+      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, error);
     };
 
     //Update user to verificated
@@ -217,12 +210,14 @@ export class AuthService implements IAuthService {
     try {
       adminToken = await this.externalAuthService.getAdminStringToken();
     } catch (error) {
-      this.responseInternalError(error);
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, error);
     }
-    const updetedAuthUser: IServiceResponse = await this.externalAuthService.confirmEmail(user.authId, user.email, adminToken);
+    let confirmed: boolean = false;
+    confirmed = await this.externalAuthService.confirmEmail(user.authId, user.email, adminToken);
 
-    if (!updetedAuthUser.isSuccess) {
-      return updetedAuthUser;
+    console.log('auth service confirmAccount:',confirmed);
+    if (!confirmed) {
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Internal Server Error in confirmAccount method!", {});
     }
 
     //Update in database
@@ -245,14 +240,8 @@ export class AuthService implements IAuthService {
     }
 
     //Successful response
-    const authResponse: IServiceResponse = {
-      isSuccess: true,
-      status: ResponseCode.OK,
-      message: await this.i18n.translate('auth.MESSAGE.CONFIRM_WAS_SUCCESS',),
-      data: { notificated: notificated }
-    };
-
-    return authResponse;
+    const message = await this.i18n.translate('auth.MESSAGE.CONFIRM_WAS_SUCCESS',);
+    return { message: message};
   };
 
   /**
@@ -277,45 +266,11 @@ export class AuthService implements IAuthService {
   };
 
   /**
-   * login
-   * @param loginForm 
-   * @returns 
-   */
-  async login(loginForm: LoginFormDTO): Promise<IServiceResponse> {
-
-
-    // Validate login form (error BadRequestException)
-
-    let loginFormDTOValidator = new LoginFormDTOValidator();
-    if (!loginFormDTOValidator.validate(loginForm)) {
-      const msg = await loginFormDTOValidator.traslateValidateErrorsText(this.i18n);
-      // Error BadRequestException
-      throw new DomainError(ResponseCode.BAD_REQUEST, msg, {});
-    };
-
-    // TODO: Validate if user is disabled by 3 consecutive failed login attempts
-    let loginAuthResp;
-    try {
-      loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
-    } catch (error) {
-      if (error instanceof DomainError) throw error;
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, {});
-    }
-
-    //if (!loginAuthResp.isSuccess) { //failed login attempt
-    // TODO: Save failed login attempt
-    // TODO: Disable user account after 3 consecutive failed login attempts
-    //}
-
-    return loginAuthResp;
-  };
-
-  /**
    * logout
    * @param logoutFormDTO 
    * @returns 
    */
-  async logout(logoutFormDTO: LogoutFormDTO): Promise<IServiceResponse> {
+  async logout(logoutFormDTO: LogoutFormDTO): Promise<boolean> {
 
     const userAuthId: string = logoutFormDTO.id;
     try {
@@ -330,7 +285,7 @@ export class AuthService implements IAuthService {
       try {
         adminToken = await this.externalAuthService.getAdminStringToken();
       } catch (error) {
-        this.responseInternalError(error);
+        throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, error);
       }
     }
 
@@ -346,13 +301,13 @@ export class AuthService implements IAuthService {
    * @param startRecoveryDataDTO 
    * @returns 
    */
-  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO, lang: string): Promise<IServiceResponse> {
+  async sendEmailToRecoveryPass(startRecoveryDataDTO: StartRecoveryDataDTO, lang: string): Promise<any> {
     console.log("sendEmailToRecoveryPass lang:", lang);
     try {
       if (!validEmail(startRecoveryDataDTO.email)) throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMAIL',));
       if (!startRecoveryDataDTO.recoveryPageLink) throw new Error(await this.i18n.translate('auth.ERROR.INVALID_LINK',));
     } catch (error) {
-      return this.responseBadRequest(error);
+      throw new DomainError(ResponseCode.BAD_REQUEST, "Can not Send Email To Recovery Pass.", error);
     };
 
     try {
@@ -386,7 +341,7 @@ export class AuthService implements IAuthService {
         data: emailResponse
       };
     } catch (error) {
-      this.responseInternalError(error);
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, error);
     };
   };
 
@@ -395,14 +350,14 @@ export class AuthService implements IAuthService {
    * @param recoveryUpdateDataDTO 
    * @returns 
    */
-  async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang: string): Promise<IServiceResponse> {
+  async recoveryUpdatePassword(recoveryUpdateDataDTO: RecoveryUpdateDataDTO, lang: string): Promise<any> {
 
     let user: IUser = null;
 
     try {
       user = await this.verificateToken(recoveryUpdateDataDTO.token);
     } catch (error) {
-      return this.responseBadRequest(error);
+      throw new DomainError(ResponseCode.BAD_REQUEST, "Token data undefined. Can not obtain token.", error);
     }
 
     //Update password in user
@@ -420,10 +375,11 @@ export class AuthService implements IAuthService {
       };
     }
     const newPassword = recoveryUpdateDataDTO.password;
-    const updetedAuthUser: IServiceResponse = await this.externalAuthService.resetPassword(user.authId, newPassword, adminToken);
-    console.log(updetedAuthUser);
-    if (!updetedAuthUser.isSuccess) {
-      return updetedAuthUser;
+    let reseted: boolean = false;
+    reseted = await this.externalAuthService.resetPassword(user.authId, newPassword, adminToken);
+  
+    if (!reseted) {
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Internal Server Error", {});
     }
 
     //Update in database
@@ -443,7 +399,7 @@ export class AuthService implements IAuthService {
       console.log(error);
     }
 
-    return updetedAuthUser;
+    return {reseted: true};
   };
 
   /**
@@ -519,105 +475,6 @@ export class AuthService implements IAuthService {
     const difference_ms = todate.getTime() - date.getTime();
     const difference_days = Math.round(difference_ms / 86400000); //number of days until today
     return difference_days > daysLimit;
-  };
-
-  /**
-   * Create IServiceResponse object with BAD_REQUEST error
-   * @param error 
-   * @returns IServiceResponse object with BAD_REQUEST error
-   */
-  private responseBadRequest(error: any): IServiceResponse {
-    //console.log(error);
-    const authResponse: IServiceResponse = {
-      isSuccess: false,
-      status: ResponseCode.BAD_REQUEST, //BAD_REQUEST
-      message: error.message,
-      data: {},
-      error: error
-    };
-    return authResponse;
-  };
-
-  /**
-   * Create IServiceResponse object with INTERNAL_SERVER_ERROR 
-   * @param error 
-   * @returns IServiceResponse object with INTERNAL_SERVER_ERROR
-   */
-  private responseInternalError(error: any): IServiceResponse {
-    //console.log(error);
-    const authResponse: IServiceResponse = {
-      isSuccess: false,
-      status: ResponseCode.INTERNAL_SERVER_ERROR,
-      message: error.message,
-      data: {},
-      error: error
-    };
-    return authResponse;
-  };
-
-  async getAdminToken(body: NewAdminTokenRequestType): Promise<any> {
-
-    let data = await this.externalAuthService.getAdminToken(body);
-    console.log('token', data);
-    if (data == undefined) throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Token data undefined. Can not obtain token.", {});
-
-
-    const authResponse: IServiceResponse = {
-      isSuccess: true,
-      status: 200,
-      message: `AdminToken`,
-      data: data
-    };
-    return authResponse;
-  };
-
-
-  async getAppToken(authClientDTO: AuthClientDTO): Promise<any> {
-
-    try {
-      if (!authClientDTO.client_id || !authClientDTO.client_secret || !authClientDTO.grant_type)
-        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_VALUE',));
-    } catch (error) {
-      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error });
-    };
-
-
-
-    let data = await this.externalAuthService.getAppToken(authClientDTO);
-    console.log('token', data);
-    if (data == undefined) throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Token data undefined. Can not obtain token.", {});
-
-
-    const authResponse: IServiceResponse = {
-      isSuccess: true,
-      status: 200,
-      message: `AppToken to ${authClientDTO.client_id}`,
-      data: data
-    };
-    return authResponse;
-  };
-
-  async getRefreshToken(body: RequesRefreshToken): Promise<any> {
-
-    try {
-      if (!body)
-        throw new Error(await this.i18n.translate('auth.ERROR.INVALID_EMPTY_VALUE',));
-    } catch (error) {
-      throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error });
-    };
-
-    let data = await this.externalAuthService.getRefreshToken(body);
-
-    if (data == undefined) throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Token data undefined. Can not obtain token.", {});
-
-
-    const authResponse: IServiceResponse = {
-      isSuccess: true,
-      status: 200,
-      message: `RefreshToken to ${body.client_id}`,
-      data: data
-    };
-    return authResponse;
   };
 
 

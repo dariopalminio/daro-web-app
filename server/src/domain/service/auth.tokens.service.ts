@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IAuth } from '../output-port/auth.interface';
 import IEmailSender from '../output-port/email-sender.interface';
-import { IServiceResponse } from '../../domain/model/service/service-response.interface';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
@@ -64,19 +63,23 @@ export class AuthTokensService implements IAuthTokensService {
     return loginAuthResp;
   };
 
-
+  /**
+    * Get a admin access token (from auth server) for next time can create user or update user.
+    */
   async getAdminToken(body: NewAdminTokenRequestType): Promise<any> {
 
     let data = await this.externalAuthService.getAdminToken(body);
-    console.log('service.getAdminToken.data',data);
+    console.log('service.getAdminToken.data', data);
     console.log('data', data);
-    if (data == undefined) 
+    if (data == undefined)
       throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Token data undefined. Can not obtain token.", {});
 
     return data;
   };
 
-
+  /**
+   * Obtain app accsess token from a service account
+   */
   async getAppToken(authClientDTO: AuthClientDTO): Promise<any> {
 
     try {
@@ -95,6 +98,13 @@ export class AuthTokensService implements IAuthTokensService {
     return data;
   };
 
+  /**
+   * Get Refresh Token
+   * 
+   * getRefreshToken is used when you need to make the user keep login in the system 
+   * if the user's access_token get expired and user want to keep login. How can I get newly 
+   * updated access_token with this function.
+   */
   async getRefreshToken(body: RequesRefreshToken): Promise<any> {
 
     try {

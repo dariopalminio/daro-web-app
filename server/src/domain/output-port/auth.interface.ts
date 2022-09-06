@@ -1,6 +1,5 @@
 import { AuthClientDTO } from '../model/auth/token/auth.client.dto';
 import { RequesRefreshToken } from '../model/auth/token/auth.request.refresh.token.dto';
-import { IServiceResponse } from '../model/service/service-response.interface';
   
 export interface IAuth {
 
@@ -15,22 +14,22 @@ export interface IAuth {
         lastName: string,
         email: string,
         password: string,
-        adminToken: string): Promise<IServiceResponse>;
+        adminToken: string): Promise<any>;
     
-    getUserInfoByAdmin(username: string, adminToken: string): Promise<IServiceResponse>;
+    getUserInfoByAdmin(username: string, adminToken: string): Promise<any>;
     
-    deleteAuthUser(authId: string, accessToken: string): Promise<IServiceResponse>;
+    deleteAuthUser(authId: string, accessToken: string): Promise<boolean>;
 
-    confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<IServiceResponse>;
+    confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<boolean>;
 
     login(username: string, pass: string): Promise<any>;
 
-    logout(userId: string, accessToken: string): Promise<IServiceResponse>;
+    logout(userId: string, accessToken: string): Promise<boolean>;
 
     resetPassword(
         userId: string,
         newPassword: string,
         adminToken: string
-      ): Promise<IServiceResponse>;
+      ): Promise<boolean>;
 
   }

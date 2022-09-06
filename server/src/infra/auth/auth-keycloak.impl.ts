@@ -1,6 +1,6 @@
 import { Injectable, HttpService, HttpStatus, Inject } from '@nestjs/common';
 import { IAuth } from '../../domain/output-port/auth.interface';
-import { IServiceResponse } from '../../domain/model/service/service-response.interface';
+//import { IServiceResponse } from '../../domain/model/service/service-response.interface';
 import { stringify } from 'querystring';
 import { AxiosResponse } from 'axios';
 import { ITranslator } from '../../domain/output-port/translator.interface';
@@ -87,7 +87,7 @@ export class AuthKeycloakImpl implements IAuth {
     lastName: string,
     email: string,
     password: string,
-    adminToken: string): Promise<IServiceResponse> {
+    adminToken: string): Promise<any> {
 
     let response: AxiosResponse<any>
     try {
@@ -127,28 +127,24 @@ export class AuthKeycloakImpl implements IAuth {
 
     } catch (error) {
       const msg = error.message ? error.message : "Unknown error when trying to register new user.";
-      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
+      throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", msg);
     }
     switch (response.status) {
       case HttpStatus.CREATED: //201
-        return { isSuccess: true, status: response.status, message: null, data: response.data };
+        return response.data;
       case HttpStatus.UNAUTHORIZED: //401
         throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
-      //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
       case HttpStatus.FAILED_DEPENDENCY:
         throw new DomainError(HttpStatus.FAILED_DEPENDENCY, response.statusText, response.data);
       case HttpStatus.FORBIDDEN: //403: Keycloak Admin Rest API unknown_error for update user API. The admin user may be misconfigured. You haven't granted related permissions to your real.
         throw new DomainError(HttpStatus.FORBIDDEN, response.statusText, response.data);
-      //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
       case HttpStatus.BAD_REQUEST: //400
-        //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         throw new DomainError(HttpStatus.BAD_REQUEST, response.statusText, response.data);
       case HttpStatus.CONFLICT: {//409
         const msg = await this.i18n.translate('auth.ERROR.USER_CONFLICT',);
         throw new DomainError(HttpStatus.CONFLICT, msg, response.data);
       }
       default:
-        //return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
         throw new DomainError(response.status, response.statusText, response.data);
     }
 
@@ -164,7 +160,9 @@ export class AuthKeycloakImpl implements IAuth {
    * @param adminToken 
    * @returns 
    */
-  async getUserInfoByAdmin(username: string, adminToken: string): Promise<IServiceResponse> {
+  async getUserInfoByAdmin(username: string, adminToken: string): Promise<any> {
+
+    let result: AxiosResponse<any>;
 
     try {
       let access_token = adminToken;
@@ -174,22 +172,36 @@ export class AuthKeycloakImpl implements IAuth {
       const headers = {
         Authorization: `Bearer ${access_token}`,
       };
-      const result: AxiosResponse<any> = await this.http
+      result = await this.http
         .get(URL, {
           params: { username: username },
           headers: headers,
         })
         .toPromise();
 
-      if (result.data && result.data[0]) {
-        const user = { user: result.data[0] };
-        return { isSuccess: true, status: result.status, message: result.statusText, data: user }; //successful
-      }
-      return { isSuccess: false, status: result.status, message: result.statusText, data: {}, error: result.data };
     } catch (e: any) {
       const msg = e.message ? e.message : "Unknown error in get user by username";
       throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, msg, e);
     };
+    switch (result.status) {
+      case HttpStatus.OK: {
+        if (result.data && result.data[0]) {
+          const user = { user: result.data[0] };
+          return user; //successful
+        }
+        throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, "Unknown error in get user by username", {});
+      }
+      case HttpStatus.UNAUTHORIZED: //401
+        throw new DomainError(HttpStatus.UNAUTHORIZED, result.statusText, result.data);
+      case HttpStatus.FAILED_DEPENDENCY:
+        throw new DomainError(HttpStatus.FAILED_DEPENDENCY, result.statusText, result.data);
+      case HttpStatus.FORBIDDEN: //403: Keycloak Admin Rest API unknown_error for update user API. The admin user may be misconfigured. You haven't granted related permissions to your real.
+        throw new DomainError(HttpStatus.FORBIDDEN, result.statusText, result.data);
+      case HttpStatus.BAD_REQUEST: //400
+        throw new DomainError(HttpStatus.BAD_REQUEST, result.statusText, result.data);
+      default:
+        throw new DomainError(result.status, result.statusText, result.data);
+    }
   };
 
   /**
@@ -201,29 +213,33 @@ export class AuthKeycloakImpl implements IAuth {
    * @param accessToken 
    * @returns 
    */
-  async deleteAuthUser(authId: string, accessToken: string): Promise<IServiceResponse> {
+  async deleteAuthUser(authId: string, accessToken: string): Promise<boolean> {
 
-    const URL = `${this.config.get<string>('Keycloak_path_users')}/${authId}`;
-    const header = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-
+    let eraseResult: any;
     try {
-      const eraseResult = await this.http.delete(URL, {
+      const URL = `${this.config.get<string>('Keycloak_path_users')}/${authId}`;
+      const header = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      eraseResult = await this.http.delete(URL, {
         headers: header,
       }).toPromise();
 
       switch (eraseResult.status) {
+        case HttpStatus.OK: //200
+          return true;
         case HttpStatus.NO_CONTENT: //204
-          return { isSuccess: true, status: eraseResult.status, message: undefined, data: null }; //successful
+          return true;
+        //return { isSuccess: true, status: eraseResult.status, message: undefined, data: null }; //successful
         case HttpStatus.NOT_FOUND: //404
-          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: {}, error: eraseResult.data };
+          throw new DomainError(HttpStatus.NOT_FOUND, eraseResult.statusText, eraseResult.data);
         default:
-          return { isSuccess: false, status: eraseResult.status, message: eraseResult.statusText, data: {}, error: eraseResult.data };
+          throw new DomainError(eraseResult.status, eraseResult.statusText, eraseResult.data);
       }
     } catch (error) {
       const msg = error.message ? error.message : "Unknown error in delete user.";
-      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
+      throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, msg, error);
     }
   };
 
@@ -299,7 +315,7 @@ export class AuthKeycloakImpl implements IAuth {
    * @param adminToken 
    * @returns 
    */
-  async logout(userId: string, adminToken: string): Promise<IServiceResponse> {
+  async logout(userId: string, adminToken: string): Promise<boolean> {
     try {
       //User endpoint
       const URL = `${this.config.get<string>('Keycloak_path_users')}/${userId}/logout`;
@@ -319,22 +335,22 @@ export class AuthKeycloakImpl implements IAuth {
       switch (response.status) {
         case HttpStatus.NO_CONTENT: {//204
           const msg = await this.i18n.translate('auth.MESSAGE.LOGGED_OUT_OK',);
-          return { isSuccess: true, status: response.status, message: msg, data: { message: msg } }; //successful
+          return true; //successful
         }
         case HttpStatus.UNAUTHORIZED: {//401
           const msg = await this.i18n.translate('auth.ERROR.UNAUTHORIZED',);
-          return { isSuccess: false, status: response.status, message: msg, data: {}, error: response.data };
+          throw new DomainError(HttpStatus.UNAUTHORIZED, msg, response.data);
         }
         case HttpStatus.NOT_FOUND: { //404
           const msg = await this.i18n.translate('auth.ERROR.NOT_FOUND',);
-          return { isSuccess: false, status: response.status, message: msg, data: {}, error: response.data };
+          throw new DomainError(HttpStatus.NOT_FOUND, msg, response.data);
         }
         default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+          throw new DomainError(response.status, response.statusText, response.data);
       }
     } catch (error) {
       const msg = error.message ? error.message : "Unknown error in login.";
-      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
+      throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, msg, error);
     }
   };
 
@@ -373,7 +389,7 @@ export class AuthKeycloakImpl implements IAuth {
    * @param userId 
    * @param adminToken 
    */
-  async confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<IServiceResponse> {
+  async confirmEmail(userId: string, userEmail: string, adminToken: string): Promise<boolean> {
     try {
       const body: ConfirmEmailType = {
         email: userEmail,
@@ -394,37 +410,20 @@ export class AuthKeycloakImpl implements IAuth {
             'Content-Type': 'application/json',
           },
         }).toPromise();
-
+      console.log('auth keicloak confirmEmail:', response);
       switch (response.status) {
         case HttpStatus.NO_CONTENT: //204 
-          return {
-            isSuccess: true,
-            status: response.status,
-            message: await this.i18n.translate('auth.MESSAGE.CONFIRMED_EMAIL',),
-            data: response.data
-          }; //successful
+          return true; //successful
         case HttpStatus.UNAUTHORIZED: //401
-          return {
-            isSuccess: false,
-            status: response.status,
-            message: await this.i18n.translate('auth.ERROR.UNAUTHORIZED',),
-            data: {},
-            error: response.data
-          };
+          throw new DomainError(HttpStatus.UNAUTHORIZED, await this.i18n.translate('auth.ERROR.UNAUTHORIZED',), response.data);
         case HttpStatus.NOT_FOUND: //404 
-          return {
-            isSuccess: false,
-            status: response.status,
-            message: await this.i18n.translate('auth.ERROR.NOT_FOUND',),
-            data: {},
-            error: response.data
-          };
+          throw new DomainError(HttpStatus.NOT_FOUND, await this.i18n.translate('auth.ERROR.NOT_FOUND',), response.data);
         default:
-          return { isSuccess: false, status: response.status, message: response.statusText, data: {}, error: response.data };
+          throw new DomainError(response.status, response.statusText, response.data);
       }
     } catch (error) {
       const msg = error.message ? error.message : "Unknown error in confirm email.";
-      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
+      throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, msg, error);
     }
   };
 
@@ -442,7 +441,7 @@ export class AuthKeycloakImpl implements IAuth {
     userId: string,
     newPassword: string,
     adminToken: string
-  ): Promise<IServiceResponse> {
+  ): Promise<boolean> {
     try {
       const body = {
         type: 'password',
@@ -468,24 +467,19 @@ export class AuthKeycloakImpl implements IAuth {
 
       switch (res.status) {
         case HttpStatus.NO_CONTENT: {//204
-          const msgSuccess = await this.i18n.translate('auth.MESSAGE.PASS_UPDATED_OK',);
-          return { isSuccess: true, status: res.status, message: msgSuccess, data: res.data }; //successful
+          //const msgSuccess = await this.i18n.translate('auth.MESSAGE.PASS_UPDATED_OK',);
+          return true; //successful
         }
         case HttpStatus.UNAUTHORIZED: //401
-          return {
-            isSuccess: false,
-            status: res.status,
-            message: await this.i18n.translate('auth.ERROR.UNAUTHORIZED',),
-            data: res.data
-          };
+          throw new DomainError(HttpStatus.UNAUTHORIZED, await this.i18n.translate('auth.ERROR.UNAUTHORIZED',), res.data);
         case HttpStatus.BAD_REQUEST: //400 no puede repetir contraseña
-          return { isSuccess: false, status: res.status, message: res.statusText, data: res.data };
+          throw new DomainError(HttpStatus.BAD_REQUEST, res.statusText, res.data);
         default:
-          return { isSuccess: false, status: res.status, message: res.statusText, data: res.data };
+          throw new DomainError(res.status, res.statusText, res.data);
       }
     } catch (error) {
       const msg = error.message ? error.message : "Unknown error in confirm email.";
-      return { isSuccess: false, status: HttpStatus.INTERNAL_SERVER_ERROR, message: msg, data: {}, error: error };
+      throw new DomainError(HttpStatus.INTERNAL_SERVER_ERROR, msg, error);
     }
   };
 
@@ -512,14 +506,14 @@ export class AuthKeycloakImpl implements IAuth {
     params.append('client_secret', body.client_secret);
 
     const response = await this.http.post(URL, params,
-    {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    },
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      },
     ).toPromise();
 
     switch (response.status) {
       case HttpStatus.OK: //200
-          return response.data; //response.data.access_token
+        return response.data; //response.data.access_token
       case HttpStatus.UNAUTHORIZED: //401
         throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
       case HttpStatus.FAILED_DEPENDENCY:
@@ -572,14 +566,14 @@ export class AuthKeycloakImpl implements IAuth {
     params.append('grant_type', authClientDTO.grant_type);
 
     const response = await this.http.post(URL, params,
-    {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    },
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      },
     ).toPromise();
 
     switch (response.status) {
       case HttpStatus.OK: //200
-          return response.data; //response.data.access_token
+        return response.data; //response.data.access_token
       case HttpStatus.UNAUTHORIZED: //401
         throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
       case HttpStatus.FAILED_DEPENDENCY:
@@ -612,7 +606,7 @@ export class AuthKeycloakImpl implements IAuth {
    * @param refresh_token 
    * @returns 
    */
-   async getRefreshToken(body: RequesRefreshToken): Promise<any> {
+  async getRefreshToken(body: RequesRefreshToken): Promise<any> {
 
     // Token endpoint
     const URL = this.config.get<string>('Keycloak_path_token');
@@ -624,14 +618,14 @@ export class AuthKeycloakImpl implements IAuth {
     params.append('client_secret', body.client_secret);
 
     const response = await this.http.post(URL, params,
-    {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    },
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      },
     ).toPromise();
 
     switch (response.status) {
       case HttpStatus.OK: //200
-          return response.data; //response.data.access_token
+        return response.data; //response.data.access_token
       case HttpStatus.UNAUTHORIZED: //401
         throw new DomainError(HttpStatus.UNAUTHORIZED, response.statusText, response.data);
       case HttpStatus.FAILED_DEPENDENCY:

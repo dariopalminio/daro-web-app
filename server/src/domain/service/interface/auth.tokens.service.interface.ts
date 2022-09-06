@@ -1,5 +1,4 @@
 
-import { IServiceResponse } from '../../model/service/service-response.interface';
 import { LoginFormDTO } from '../../model/auth/login/login-form.dto';
 import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
 import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';

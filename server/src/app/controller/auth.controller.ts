@@ -8,8 +8,6 @@ import { StartConfirmEmailDataDTO } from '../../domain/model/auth/register/start
 import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
 import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification-code-data.dto.type';
 import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery-update-data.dto.type';
-import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
-import { ServiceResponseDTO } from '../../domain/model/service/service-response.dto';
 import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -50,22 +48,13 @@ export class AuthController {
     return res.status(200).json(response);
   };
 
-  @ApiOperation({
-    summary:
-      'Create new user as register process.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Successfully created user',
-    type: ServiceResponseDTO,
-  })
+
   @UseGuards(RolesGuard)
   @Roles('admin', 'manage-account')
   @Post('register')
   async register(@Res() res, @Body() userRegisterDTO: UserRegisterDataDTO): Promise<any> {
     console.log("register controller init");
-    let result: ServiceResponseDTO;
+    let result;
     try {
       result = await this.authService.register(userRegisterDTO);
       console.log("register controller:", result);
@@ -87,105 +76,52 @@ export class AuthController {
     return res.status(HttpStatus.OK).json(result);
   };
 
-  @ApiOperation({
-    summary:
-      'Send email to user with a link to confirm account page.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'An email-verification was sent to the user with a link the user can click to verify their email address!',
-    type: ServiceResponseDTO,
-  })
   @Post('register/confirm/start')
   async sendStartEmailConfirm(@Headers() headers, @Res() res, @Body() startConfirmEmailData: StartConfirmEmailDataDTO) {
 
-    const result: ServiceResponseDTO = await this.authService.sendStartEmailConfirm(startConfirmEmailData, this.getLang(headers));
+    const result: any = await this.authService.sendStartEmailConfirm(startConfirmEmailData, this.getLang(headers));
     return res.status(result.status).json(result);
   };
 
-  @ApiOperation({
-    summary:
-      'Confirm account from an email-verification action by user.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Account confirmed!',
-    type: ServiceResponseDTO,
-  })
   @Post('register/confirm')
   async confirmAccount(@Headers() headers, @Res() res, @Body() verificationCodeData: VerificationCodeDataDTO): Promise<any> {
 
-    const authResponse: ServiceResponseDTO = await this.authService.confirmAccount(verificationCodeData, this.getLang(headers));
-    return res.status(authResponse.status).json(authResponse);
+    const confirmed: any = await this.authService.confirmAccount(verificationCodeData, this.getLang(headers));
+    return res.status(HttpStatus.OK).json(confirmed);
   };
 
-  @ApiOperation({
-    summary:
-      'Remove all user sessions associated with the user in auth server. Also send notification to all clients that have an admin URL to invalidate the sessions for the particular user.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'logout!',
-    type: ServiceResponseDTO,
-  })
   @Post('logout')
   async logout(@Res() res, @Body() logoutFormDTO: LogoutFormDTO) {
 
-    let authResponse: ServiceResponseDTO;
+    let authResponse: boolean;
 
     try {
       authResponse = await this.authService.logout(logoutFormDTO);
+      if (authResponse === true)
+        return res.status(HttpStatus.OK).json({});
     } catch (error) {
       if (error.code == 400) throw new BadRequestException(error);
       if (error.code == 401) throw new UnauthorizedException(error.data);
       throw new InternalServerErrorException(error);
     };
-
-    if (authResponse.isSuccess)
-      return res.status(HttpStatus.OK).json(authResponse.data);
-
-    return res.status(HttpStatus.UNAUTHORIZED).json(authResponse);
-
+    throw new InternalServerErrorException();
   };
 
-  @ApiOperation({
-    summary:
-      'Send Email with link To Recovery Password.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Email was sent To Recovery Password!',
-    type: ServiceResponseDTO,
-  })
   @Post('recovery/start')
   async sendEmailToRecoveryPass(@Headers() headers, @Res() res, @Body() startRecoveryDataDTO: StartRecoveryDataDTO) {
 
     console.log("sendEmailToRecoveryPass getLang:", this.getLang(headers));
     console.log("sendEmailToRecoveryPass startRecoveryDataDTO:", startRecoveryDataDTO);
 
-    const authResponse: ServiceResponseDTO = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO, this.getLang(headers));
+    const authResponse: any = await this.authService.sendEmailToRecoveryPass(startRecoveryDataDTO, this.getLang(headers));
     return res.status(authResponse.status).json(authResponse);
 
   };
 
-  @ApiOperation({
-    summary:
-      'Set up a new password for the user.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Password has been updated successful!',
-    type: ServiceResponseDTO,
-  })
   @Post('recovery/update')
   async recoveryUpdatePassword(@Headers() headers, @Res() res, @Body() recoveryUpdateDataDTO: RecoveryUpdateDataDTO) {
-    const authResponse: ServiceResponseDTO = await this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO, this.getLang(headers));
-    return res.status(authResponse.status).json(authResponse);
+    const data: any = await this.authService.recoveryUpdatePassword(recoveryUpdateDataDTO, this.getLang(headers));
+    return res.status(HttpStatus.OK).json(data);
   };
 
   private getLang(headers: any): string {

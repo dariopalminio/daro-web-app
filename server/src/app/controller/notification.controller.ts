@@ -5,7 +5,6 @@ import { IGlobalConfig } from '../../domain/output-port/global-config.interface'
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { EmailDataDTO } from '../../domain/model/notification/email-data-dto';
-import { IServiceResponse } from '../../domain/model/service/service-response.interface';
 
 
 @Controller('notifications')
@@ -64,7 +63,7 @@ export class NotificationController {
   @Post('sendEmail')
   async sendEmail(@Res() res, @Body() emailDataDTO: EmailDataDTO) {
 
-    const sentInfo: IServiceResponse = await this.supportService.sendEmail(emailDataDTO.subject, emailDataDTO.email, emailDataDTO.content);
+    const sentInfo: any = await this.supportService.sendEmail(emailDataDTO.subject, emailDataDTO.email, emailDataDTO.content);
     if (sentInfo.isSuccess) return res.status(HttpStatus.OK).json(sentInfo);
     return res.status(sentInfo.status).json(sentInfo);
 

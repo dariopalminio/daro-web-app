@@ -3,7 +3,6 @@ import {
     HttpStatus, NotFoundException, BadRequestException, InternalServerErrorException, UnauthorizedException, ForbiddenException, ConflictException, UseGuards
 } from '@nestjs/common';
 import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
-import { ServiceResponseDTO } from '../../domain/model/service/service-response.dto';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
@@ -47,16 +46,6 @@ export class AuthTokensController {
     /**
      * POST[UAT] Login to obtain access token for a user 
      */
-    @ApiOperation({
-        summary:
-            'Authenticate user with username and password. Consumer cliente for login on Keycloak Server & Bearer Token & with client secret configured with OpenID Endpoint configuration, Login with email = true and Access Type = public',
-    })
-    @ApiResponse({
-        status: 200,
-        description:
-            'Authenticated!',
-        type: ServiceResponseDTO,
-    })
     @Post('login')
     async login(@Res() res, @Body() loginForm: LoginFormDTO) {
         let authResponse: any;
@@ -82,7 +71,7 @@ export class AuthTokensController {
     async getAppToken(@Headers() headers, @Res() res, @Body() authClientDTO: AuthClientDTO) {
 
 
-        let authResponse: ServiceResponseDTO;
+        let authResponse: any;
         console.log('authClientDTO:', authClientDTO);
         try {
             authResponse = await this.authTokensService.getAppToken(authClientDTO);
@@ -102,7 +91,7 @@ export class AuthTokensController {
     @Post('admin')
     async getAdminToken(@Headers() headers, @Res() res, @Body() body: NewAdminTokenRequestType) {
 
-        let data: ServiceResponseDTO;
+        let data: any;
 
         try {
             data = await this.authTokensService.getAdminToken(body);
@@ -127,7 +116,7 @@ export class AuthTokensController {
     async getRefreshToken(@Headers() headers, @Res() res, @Body() body: RequesRefreshToken) {
 
 
-        let authResponse: ServiceResponseDTO;
+        let authResponse: any;
 
         try {
             authResponse = await this.authTokensService.getRefreshToken(body);

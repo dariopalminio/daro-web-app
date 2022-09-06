@@ -3,7 +3,6 @@ import { ContactMessage } from '../model/notification/contact.message';
 import { INotificationService } from '../service/interface/notification.service.interface';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
-import { IServiceResponse } from '../../domain/model/service/service-response.interface';
 import { ITranslator } from '../../domain/output-port/translator.interface';
 import { ResponseCode } from '../../domain/model/service/response.code.enum';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
@@ -25,14 +24,14 @@ export class NotificationService implements INotificationService {
    * @param contactMessage 
    * @returns 
    */
-  async sendContactEmail(contactMessage: ContactMessage, locale: string): Promise<IServiceResponse> {
+  async sendContactEmail(contactMessage: ContactMessage, locale: string): Promise<any> {
 
     if (!validEmail(contactMessage.email)) throw new Error(await this.i18n.translate('notification.ERROR.INVALID_EMAIL',));
 
     try {
       const subject: string = `[${this.globalConfig.get<string>('COMPANY_NAME')}] Support`;
       const infoReturned: any = await this.sender.sendEmailWithTemplate(subject, contactMessage.email, "contact", contactMessage, locale);
-      const resp: IServiceResponse = {
+      const resp: any = {
         isSuccess: true,
         status: ResponseCode.OK,
         message: await this.i18n.translate('notification.MESSAGE.EMAIL_SENT_SUCCESS',),
@@ -45,14 +44,14 @@ export class NotificationService implements INotificationService {
     };
   };
 
-  async sendEmail(subject: string, email: string, contentHTML: string): Promise<IServiceResponse> {
+  async sendEmail(subject: string, email: string, contentHTML: string): Promise<any> {
 
     if (!validEmail(email)) throw new Error("Invalid email!");
 
     try {
       const subject: string = `[${this.globalConfig.get<string>('COMPANY_NAME')}] Please verify your email`;
       const infoReturned: any = await this.sender.sendEmail(subject, email, contentHTML);
-      const resp: IServiceResponse = {
+      const resp: any = {
         isSuccess: true,
         status: ResponseCode.OK,
         message: await this.i18n.translate('notification.MESSAGE.EMAIL_SENT_SUCCESS',),
@@ -60,7 +59,7 @@ export class NotificationService implements INotificationService {
       };
       return resp;
     } catch (error) {
-      const resp: IServiceResponse = {
+      const resp: any = {
         isSuccess: false,
         status: ResponseCode.INTERNAL_SERVER_ERROR,
         message: await this.i18n.translate('notification.ERROR.EMAIL_COULD_NOT_SENT',),

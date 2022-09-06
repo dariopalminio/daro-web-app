@@ -1,8 +1,8 @@
-import { IPersistentAggregate } from '../../model/persistent.aggregate.interface';
+import { IPersistentAggregateService } from './persistent.aggregate.interface';
 
 
 
-export interface ICategoryService<T> extends IPersistentAggregate<T>{
+export interface ICategoryService<T> extends IPersistentAggregateService<T>{
 
 };
 
