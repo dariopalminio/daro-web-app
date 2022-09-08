@@ -1,3 +1,5 @@
+import { IAddress } from "./address.interface";
+
 export type UserProfileDTO = {
     userName: string;
     firstName: string;
@@ -7,4 +9,5 @@ export type UserProfileDTO = {
     document: string;
     telephone: string;
     language: string;
+    addresses: IAddress[];
   };

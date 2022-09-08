@@ -1,3 +1,5 @@
+import { IAddress } from "./address.interface";
+
 export interface IUser{
     _id: string; //_id: holds an ObjectId.
     enable: boolean;
@@ -14,6 +16,7 @@ export interface IUser{
     //gender: string;
     language: string;
 
+    addresses: IAddress[];
     verified: boolean;
     verificationCode: string;
     startVerificationCode: Date;

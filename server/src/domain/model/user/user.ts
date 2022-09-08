@@ -1,3 +1,4 @@
+import { IAddress } from './address.interface';
 import { IUser } from './user.interface';
 
 export class User implements IUser {
@@ -41,6 +42,8 @@ export class User implements IUser {
     //gender: string;
     language: string;
 
+    addresses: IAddress[];
+    
     verified: boolean;
     verificationCode: string;
     startVerificationCode: Date;

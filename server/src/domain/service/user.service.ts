@@ -54,6 +54,8 @@ export class UserService implements IUserService<IUser> {
       //newUser.gender = userRegisterDTO.gender,
       newUser.language = userRegisterDTO.language,
 
+      newUser.addresses = userRegisterDTO.addresses,
+
       newUser.verified = false;
       newUser.enable = true;
       newUser.verificationCode = "";

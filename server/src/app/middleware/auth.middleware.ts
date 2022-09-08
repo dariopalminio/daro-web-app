@@ -35,8 +35,17 @@ export class AuthMiddleware implements NestMiddleware {
         //if (isUrlExcluded) return next();
 
         if (this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON')) {
+
+            if (!req.headers || !req.headers.authorization) {
+                return res.status(400).json({ message: "Unauthorized! No authorization data in Header." });
+            }
+
             try {
-                const userVerified = this.verifyRequest(req);
+                var token = extractTokenFromHeader(req);
+                console.log("AuthMiddleware.token:", token);
+
+                jwt.verify(token, this.getPEMPublicKey(), { algorithms: ['RS256'] });
+
             } catch (error) {
                 // Unauthorized, invalid signature
                 return res.status(401).send({ message: error.message });
@@ -45,25 +54,6 @@ export class AuthMiddleware implements NestMiddleware {
 
         next();
     };
-
-    /**
-     * Verify if Jason Web Token is OK.
-     * @param req 
-     * @returns 
-     */
-    private verifyRequest(req: Request): any {
-        if (!req.headers || !req.headers.authorization) {
-            const e = new Error("Unauthorized! No authorization data in Header.");
-            throw e;
-        } else {
-
-            var token = extractTokenFromHeader(req);
-            console.log("AuthMiddleware.token:", token);
-
-            return jwt.verify(token, this.getPEMPublicKey(), { algorithms: ['RS256'] });
-        }
-    };
-
 
     /**
      * Create the PEM string base64 decode with auth public key

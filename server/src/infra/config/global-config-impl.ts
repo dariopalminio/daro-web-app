@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import * as pack from "../../../package.json"
+
 require('dotenv').config();
 
 /**
@@ -15,7 +17,15 @@ export class GlobalConfigImpl implements IGlobalConfig{
         this.loadDefaultValues();
     };
 
+    private loadAppInfo(){
+        this.set('APP_NAME', pack.name as string);
+        this.set('VERSION', pack.version as string);
+        this.set('DESCRIPTION', pack.description as string);
+        this.set('LICENSE', pack.license as string);
+    }
+
     private loadDefaultValues(){
+        this.loadAppInfo();
         this.set('environment', process.env.SERVER_BFF_ENV as string);
         this.set('DEBUG', ((process.env.SERVER_BFF_DEBUG === 'true') ? true : false) as boolean);
         this.set('COMPANY_NAME', process.env.SERVER_BFF_COMPANY_NAME as string);
@@ -24,8 +34,6 @@ export class GlobalConfigImpl implements IGlobalConfig{
 
         this.set('PREFIX_ROUTE', process.env.SERVER_BFF_PREFIX_ROUTE as string);
         this.set('AUTH_MIDDLEWARE_ON', (process.env.SERVER_BFF_AUTH_MIDDLEWARE_ON.toLowerCase() == 'true' ? true : false) as boolean); 
-        this.set('APP_NAME', process.env.SERVER_BFF_APP_NAME as string);
-        this.set('VERSION', process.env.SERVER_BFF_VERSION as string);
         this.set('EXPIRATION_DAYS_LIMIT', Number(process.env.SERVER_BFF_AUTH_EXPIRATION_DAYS_LIMIT) as number);
 
         // Data base params

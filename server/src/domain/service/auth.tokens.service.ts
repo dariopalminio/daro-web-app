@@ -38,7 +38,6 @@ export class AuthTokensService implements IAuthTokensService {
 
 
     // Validate login form (error BadRequestException)
-
     let loginFormDTOValidator = new LoginFormDTOValidator();
     if (!loginFormDTOValidator.validate(loginForm)) {
       const msg = await loginFormDTOValidator.traslateValidateErrorsText(this.i18n);
@@ -47,6 +46,8 @@ export class AuthTokensService implements IAuthTokensService {
     };
 
     // TODO: Validate if user is disabled by 3 consecutive failed login attempts
+    //if (user.enable == false) and if toDate<user.WaitTimeByFailedLoginAttempts throw exception
+
     let loginAuthResp;
     try {
       loginAuthResp = await this.externalAuthService.login(loginForm.username, loginForm.password);
@@ -57,7 +58,9 @@ export class AuthTokensService implements IAuthTokensService {
 
     //if (!loginAuthResp.isSuccess) { //failed login attempt
     // TODO: Save failed login attempt
+    // if user.failedLoginAttempt > MaxLoginFailures
     // TODO: Disable user account after 3 consecutive failed login attempts
+    //set user.enable=false and set user.WaitTimeByFailedLoginAttempts
     //}
 
     return loginAuthResp;

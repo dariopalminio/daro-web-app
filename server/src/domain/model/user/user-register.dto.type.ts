@@ -1,3 +1,5 @@
+import { IAddress } from "./address.interface";
+
 export type UserDTO = {
     authId: string;
     userName: string;
@@ -11,4 +13,5 @@ export type UserDTO = {
     //birth: Date;
     //gender: string;
     language: string;
+    addresses: IAddress[];
   };
