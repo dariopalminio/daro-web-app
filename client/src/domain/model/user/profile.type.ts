@@ -1,3 +1,5 @@
+import { Address } from "./address.type";
+
 export type Profile = {
     userName: string;
     firstName: string;
@@ -7,4 +9,5 @@ export type Profile = {
     document: string;
     telephone: string;
     language: string;
+    addresses: Address[];
   };

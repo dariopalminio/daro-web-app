@@ -6,6 +6,8 @@ export type UserDocument = User & Document;
 @Schema()
 export class User {
 
+  //_id: holds an ObjectId.
+
   @Prop()
   enable: boolean;
 
@@ -42,16 +44,15 @@ export class User {
   @Prop()
   language: string;
 
-  //addressInfo {address, department, region, comuna, additionalReferences}
   @Prop()
   addresses: [{
-    street: { type: String },
-    department: { type: String },
-    city: { type: String },
-    state: { type: String },
-    country: { type: String }
+    street: { type: String }, //street with number
+    department: { type: String }, //department, flat or office
+    neighborhood: { type: String }, //neighborhood or commune
+    city: { type: String }, //city
+    state: { type: String }, //state, region or province
+    country: { type: String } //country
   }]
-
 
   @Prop({
     default: false,
@@ -65,6 +66,15 @@ export class User {
     default: Date.now(),
   })
   startVerificationCode: Date;
+
+/*
+  createdAt: {
+    type: Date,
+    default: () => Date.now(),
+    immutable: true,
+  }*/
+
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

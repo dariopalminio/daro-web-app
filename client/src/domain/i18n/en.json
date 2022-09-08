@@ -76,6 +76,10 @@
     "profile.document": "Identity Document ",
     "profile.telephone": "Telephone ",
     "profile.command.submit": "Update",
+    "profile.my.addresses.title": "My addresses",
+    "profile.my.addresses.add": "Add new addresses",
+    "button.command.add": "Add",
+    "button.command.cancel": "Cancel",
     "profile.msg.anonymous": "You are browsing as an anonymous user. You can log in or register at the following links.",
     "contact.label.message": "Message",
     "message.info.thank.you": "Thank you!"

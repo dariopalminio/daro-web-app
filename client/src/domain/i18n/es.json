@@ -77,6 +77,10 @@
     "profile.document": "Documento de identidad ",
     "profile.telephone": "Teléfono ",
     "profile.command.submit": "Actualizar",
+    "profile.my.addresses.title": "Mis direcciones",
+    "profile.my.addresses.add": "Agregar nueva dirección",
+    "button.command.add": "Agregar",
+    "button.command.cancel": "Cancelar",
     "contact.label.message": "Mensaje",
     "message.info.thank.you": "¡Gracias!"
  }
