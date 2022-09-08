@@ -16,32 +16,29 @@ import FlagIcon from "@material-ui/icons/Flag";
 import StartIcon from "@material-ui/icons/StarOutline";
 
 /**
- * User Profile Language
+ * User Profile Language component
  */
- export default function ProfileLanguage({onChange}: any) {
-//const ProfileLanguage: FunctionComponent = ({handleChange }) => {
+export default function ProfileLanguage({ onChange }: any) {
+
   const { t, i18n } = useTranslation();
   const { session } = useContext(SessionContext) as ISessionContext;
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
-    onChange(lng);
+    onChange(lng); //set language in parent
   };
 
   return (
     <div>
-      <p>
-        {" "}
-        {t("language.current")}
-      </p>
-      
+      {" "}
+      {t("language.current")}
       <List>
         {supportedLngs.map((lng, index) => {
           return (
             <ListItem button key={index} onClick={() => changeLanguage(lng)}>
               <ListItemIcon>
-              <FlagIcon />
-              { ((i18n.language) === lng) && <StartIcon />}
+                <FlagIcon />
+                {((i18n.language) === lng) && <StartIcon />}
               </ListItemIcon>
               <ListItemText primary={lng} />
             </ListItem>
