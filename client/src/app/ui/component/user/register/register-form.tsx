@@ -64,7 +64,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export const RegisterForm: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const [firstName, setFirstName] = useState("");
+  const [firstNameValid, setFirstNameValid] = useState(false);
   const [lastName, setLastName] = useState("");
+  const [lastNameValid, setLastNameValid] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -109,12 +111,15 @@ export const RegisterForm: FunctionComponent = () => {
     setConfirmPassValid(validator.confirmPassIsValid(passOne, passTwo));
   };
 
-  const handleFirstNameChange = (firstNameValue: string): void => {
+  const handleFirstNameChange = async (firstNameValue: string) => {
     setFirstName(firstNameValue);
+    setFirstNameValid(await validator.nameIsValid(firstNameValue));
+
   };
 
-  const handleLastNameChange = (lastNameValue: string): void => {
+  const handleLastNameChange = async (lastNameValue: string) => {
     setLastName(lastNameValue);
+    setLastNameValid(await validator.nameIsValid(lastNameValue));
   };
 
   return (
@@ -154,7 +159,7 @@ export const RegisterForm: FunctionComponent = () => {
                   placeholder=""
                   onChange={(e) => handleFirstNameChange(e.target.value)}
                   value={firstName}
-                  {...(false && { error: true, helperText: t('register.info.helper.text.required') })}
+                  {...(!firstNameValid && { error: true, helperText: t('register.info.helper.text.required') })}
                 />
               </Grid>
 
@@ -166,7 +171,10 @@ export const RegisterForm: FunctionComponent = () => {
                   placeholder=""
                   onChange={(e) => handleLastNameChange(e.target.value)}
                   value={lastName}
-                  {...(false && { error: true, helperText: t('register.info.helper.text.required') })}
+                  {...(!lastNameValid && { 
+                    error: true, 
+                    helperText: t('register.info.helper.text.required'),
+                   })}
                 />
               </Grid>
 

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Address } from "../../../../../domain/model/user/address.type";
+import IUserValidator from "../../../../../domain/helper/user-validator.interface";
+import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory"
 
 //@material-ui https://v4.mui.com/
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -74,10 +76,17 @@ const initialNewAddress: Address = {
     country: ''
 };
 
+interface IMyProps {
+    addresses: Array<Address>,
+    onChange: (newAddresses: Array<any>) => void //is used as: onChange={(newAddresses: Array<any>) => handleAddClose(newAddresses)}
+}
+
 /**
  * My Address component
  */
-export default function MyAddress({ addresses, onChange }: any) {
+const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
+
+    const { addresses, onChange } = props;
     const { t, i18n } = useTranslation();
     const classes = useStyles();
     const [dense, setDense] = useState(false);
@@ -85,26 +94,24 @@ export default function MyAddress({ addresses, onChange }: any) {
     const [newAddress, setNewAddress] = React.useState(initialNewAddress);
     const [openDialog, setOpenDialog] = React.useState(false);
     const [myAddresses, setMyAddresses] = useState<Array<Address>>(addresses);
-
-    useEffect(() => {
-        console.log('MyAddress.useEffect start');
-      
-        console.log('MyAddress.useEffect end');
-        //setMyAddresses(addresses);
-    }, []);
+    const validator: IUserValidator = UserValidatorFactory.create();
+    const [streetValid, setStreetValid] = useState(false);
+    const [departmentValid, setDepartmentValid] = useState(false);
 
     const handleStreetChange = async (value: string) => {
         setNewAddress({
             ...newAddress,
             street: value
-        })
+        });
+        setStreetValid(await validator.nameWithNumberIsValid(value));
     };
 
     const handleDepartmentChange = async (value: string) => {
         setNewAddress({
             ...newAddress,
             department: value
-        })
+        });
+        setDepartmentValid(await validator.nameWithNumberIsValid(value));
     };
 
     const handleNeighborhoodChange = async (value: string) => {
@@ -163,6 +170,10 @@ export default function MyAddress({ addresses, onChange }: any) {
         onChange(myAddresses); //set addresses array in parent
     };
 
+    const ifFieldsAreInvalid = (): boolean => {
+        return streetValid && departmentValid;
+    };
+    
     return (
         <div>
             <Typography variant="h6" className={classes.title}>
@@ -204,6 +215,10 @@ export default function MyAddress({ addresses, onChange }: any) {
                         value={newAddress.street}
                         onChange={(e) => handleStreetChange(e.target.value)}
                         fullWidth
+                        {...(!streetValid && {
+                            error: true,
+                            helperText: t('register.info.helper.text.required')
+                        })}
                     />
                     <TextField
                         autoFocus
@@ -213,6 +228,10 @@ export default function MyAddress({ addresses, onChange }: any) {
                         value={newAddress.department}
                         onChange={(e) => handleDepartmentChange(e.target.value)}
                         fullWidth
+                        {...(!departmentValid && {
+                            error: true,
+                            helperText: t('register.info.helper.text.required')
+                        })}
                     />
                     <TextField
                         autoFocus
@@ -255,11 +274,22 @@ export default function MyAddress({ addresses, onChange }: any) {
                     <Button onClick={handleClose} color="primary">
                         {t('button.command.cancel')}
                     </Button>
-                    <Button onClick={handleAddClose} color="primary">
-                        {t('button.command.add')}
-                    </Button>
+
+                    {ifFieldsAreInvalid() &&
+                        <Button onClick={handleAddClose} color="primary">
+                            {t('button.command.add')}
+                        </Button>
+                    }
+
+                    {!ifFieldsAreInvalid() &&
+                        <Button disabled>
+                            {t('button.command.add')}
+                        </Button>
+                    }
                 </DialogActions>
             </Dialog>
         </div>
     );
 };
+
+export default MyAddresses;

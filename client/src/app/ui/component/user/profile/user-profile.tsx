@@ -6,7 +6,9 @@ import SessionContext, {
 import clsx from "clsx";
 import { Profile } from "../../../../../domain/model/user/profile.type";
 import { Address } from "../../../../../domain/model/user/address.type";
-import MyAddress from "./my-address";
+import MyAddresses from "./my-addresses";
+import IUserValidator from "../../../../../domain/helper/user-validator.interface";
+import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory"
 
 //@material-ui https://v4.mui.com/
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -17,6 +19,7 @@ import ProfileLanguage from "./profile-language";
 import useProfile from "../../../../../domain/hook/profile.hook";
 import { CircularProgress, FormControl, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
 import AlertError from "../alert-error";
+
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -66,9 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const initialNewAddress: Address = {
-    street: 'a',
-    department: 'a',
-    neighborhood: 'a',
+    street: '',
+    department: '',
+    neighborhood: '',
     city: '',
     state: '',
     country: ''
@@ -95,9 +98,13 @@ const UserProfile: FunctionComponent = () => {
     const { session } = useContext(SessionContext) as ISessionContext;
     const [profile, setProfile] = useState(initialEmptyProfile);
     const [initialized, setInitialized] = useState(false);
-
+    const [errorMessage, setErrorMessage] = useState(false);
     const { isProcessing, hasError, msg, isSuccess, getProfile, updateProfile } = useProfile();
     const classes = useStyles();
+
+    const validator: IUserValidator = UserValidatorFactory.create();
+    const [firstNameValid, setFirstNameValid] = useState(false);
+    const [lastNameValid, setLastNameValid] = useState(false);
 
     const fetchData = async () => {
         const username = session?.preferred_username;
@@ -118,7 +125,11 @@ const UserProfile: FunctionComponent = () => {
                 telephone: info.telephone,
                 language: info.language.toLowerCase(),
                 addresses: info.addresses
-            })
+            });
+
+            setFirstNameValid(await validator.nameIsValid(info.firstName));
+            setLastNameValid(await validator.nameIsValid(info.lastName));
+
         } catch (e) {
             console.log(e);
         }
@@ -127,9 +138,9 @@ const UserProfile: FunctionComponent = () => {
     };
 
     useEffect(() => {
-        console.log('UserProfile.useEffect start');
+
         fetchData();
-        console.log('UserProfile.useEffect end');
+
     }, []);
 
     const handleUpdateSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -149,18 +160,20 @@ const UserProfile: FunctionComponent = () => {
         })
     };
 
-    const handleFirstNameChange = (firstNameValue: string): void => {
+    const handleFirstNameChange = async (firstNameValue: string) => {
         setProfile({
             ...profile,
             firstName: firstNameValue
-        })
+        });
+        setFirstNameValid(await validator.nameIsValid(firstNameValue));
     };
 
-    const handleLastNameChange = (lastNameValue: string): void => {
+    const handleLastNameChange = async (lastNameValue: string) => {
         setProfile({
             ...profile,
             lastName: lastNameValue
-        })
+        });
+        setLastNameValid(await validator.nameIsValid(lastNameValue));
     };
 
     const handleDocTypeChange = async (docTypeValue: string) => {
@@ -184,7 +197,8 @@ const UserProfile: FunctionComponent = () => {
         })
     };
 
-    const handleAddClose = (newAddresses: Array<any>) => {
+
+    const handleAddClose = (newAddresses: Array<any>): void => {
 
         setProfile({
             ...profile,
@@ -193,139 +207,160 @@ const UserProfile: FunctionComponent = () => {
 
     };
 
+    const ifFieldsAreInvalid = (): boolean => {
+        return firstNameValid && lastNameValid;
+    };
+
     return (
         <div>
-
-            <form
-                id="RegisterForm"
-                data-testid="RegisterForm"
-                action="#"
-                onSubmit={handleUpdateSubmit}
-            >
-
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                    spacing={2}
+            {!hasError &&
+                <form
+                    id="RegisterForm"
+                    data-testid="RegisterForm"
+                    action="#"
+                    onSubmit={handleUpdateSubmit}
                 >
-                    <Grid item xs={12}>
 
-                        <h1 className={clsx(classes.h1Custom)}>
-                            {t('profile.title')}
-                        </h1>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="center"
+                        alignItems="center"
+                        spacing={2}
+                    >
+                        <Grid item xs={12}>
 
-                    </Grid>
+                            <h1 className={clsx(classes.h1Custom)}>
+                                {t('profile.title')}
+                            </h1>
 
-                    <Grid item xs={12}>
-                        <TextField
-                            id="standard-basic-1"
-                            className={clsx(classes.textfieldCustom)}
-                            label={t('profile.label.firstname')}
-                            placeholder=""
-                            onChange={(e) => handleFirstNameChange(e.target.value)}
-                            value={profile.firstName}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <TextField
-                            id="standard-basic-2"
-                            className={clsx(classes.textfieldCustom)}
-                            label={t('profile.label.lastname')}
-                            placeholder=""
-                            onChange={(e) => handleLastNameChange(e.target.value)}
-                            value={profile.lastName}
-
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <TextField
-                            id="standard-basic-3"
-                            className={clsx(classes.textfieldCustom)}
-                            label={t('profile.label.email')}
-                            placeholder="you@email.com"
-                            disabled={true}
-                            value={profile.email}
-
-                        />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <FormControl className={clsx(classes.textfieldCustom)}>
-                            <InputLabel id="demo-select-small">{t('profile.docType')}</InputLabel>
-                            <Select
-                                labelId="demo-select-small"
-                                id="demo-select-small"
-                                value={profile.docType}
-                                label={t('profile.docType')}
-                                onChange={(e) => handleDocTypeChange(e.target.value as string)}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={'RUT'}>RUT</MenuItem>
-                                <MenuItem value={'DNI'}>DNI</MenuItem>
-                                <MenuItem value={'OTHER'}>OTHER</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12}>
-
-                        <TextField
-                            id="standard-basic-5"
-                            className={clsx(classes.textfieldCustom)}
-                            label={t('profile.document')}
-                            onChange={(e) => handleDocumentChange(e.target.value)}
-                            value={profile.document}
-
-                        />
-
-                    </Grid>
-
-                    <Grid item xs={12}>
-
-                        <TextField
-                            id="standard-basic-5"
-                            className={clsx(classes.textfieldCustom)}
-                            label={t('profile.telephone')}
-                            onChange={(e) => handleTelephoneChange(e.target.value)}
-                            value={profile.telephone}
-
-                        />
-
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <ProfileLanguage
-                            onChange={(len: string) => handleLanguageChange(len)} />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Grid item xs={12} md={6}>
-                            {initialized &&
-                                <MyAddress addresses={profile.addresses}
-                                    onChange={(newAddresses: Array<any>) => handleAddClose(newAddresses)}>
-                                </MyAddress>
-                            }
                         </Grid>
 
-                        <Button
-                            className={clsx(classes.buttonCustom)}
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                        >
-                            {t('profile.command.submit')}
-                        </Button>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="standard-basic-1"
+                                className={clsx(classes.textfieldCustom)}
+                                label={t('profile.label.firstname')}
+                                placeholder=""
+                                onChange={(e) => handleFirstNameChange(e.target.value)}
+                                value={profile.firstName}
+                                {...(!firstNameValid && {
+                                    error: true,
+                                    helperText: t('register.info.helper.text.required')
+                                })}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <TextField
+                                id="standard-basic-2"
+                                className={clsx(classes.textfieldCustom)}
+                                label={t('profile.label.lastname')}
+                                placeholder=""
+                                onChange={(e) => handleLastNameChange(e.target.value)}
+                                value={profile.lastName}
+                                {...(!lastNameValid && {
+                                    error: true,
+                                    helperText: t('register.info.helper.text.required'),
+                                })}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <TextField
+                                id="standard-basic-3"
+                                className={clsx(classes.textfieldCustom)}
+                                label={t('profile.label.email')}
+                                placeholder="you@email.com"
+                                disabled={true}
+                                value={profile.email}
+
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <FormControl className={clsx(classes.textfieldCustom)}>
+                                <InputLabel id="demo-select-small">{t('profile.docType')}</InputLabel>
+                                <Select
+                                    labelId="demo-select-small"
+                                    id="demo-select-small"
+                                    value={profile.docType}
+                                    label={t('profile.docType')}
+                                    onChange={(e) => handleDocTypeChange(e.target.value as string)}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={'RUT'}>RUT</MenuItem>
+                                    <MenuItem value={'DNI'}>DNI</MenuItem>
+                                    <MenuItem value={'OTHER'}>OTHER</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12}>
+
+                            <TextField
+                                id="standard-basic-5"
+                                className={clsx(classes.textfieldCustom)}
+                                label={t('profile.document')}
+                                onChange={(e) => handleDocumentChange(e.target.value)}
+                                value={profile.document}
+
+                            />
+
+                        </Grid>
+
+                        <Grid item xs={12}>
+
+                            <TextField
+                                id="standard-basic-5"
+                                className={clsx(classes.textfieldCustom)}
+                                label={t('profile.telephone')}
+                                onChange={(e) => handleTelephoneChange(e.target.value)}
+                                value={profile.telephone}
+
+                            />
+
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <ProfileLanguage
+                                onChange={(len: string) => handleLanguageChange(len)} />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Grid item xs={12} md={6}>
+                                {initialized &&
+                                    <MyAddresses addresses={profile.addresses}
+                                        onChange={(newAddresses: Array<any>) => handleAddClose(newAddresses)}>
+                                    </MyAddresses>
+                                }
+                            </Grid>
+
+                            {ifFieldsAreInvalid() &&
+                                <Button
+                                    className={clsx(classes.buttonCustom)}
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                >
+                                    {t('profile.command.submit')}
+                                </Button>
+                            }
+                            {!ifFieldsAreInvalid() &&
+                                <Button
+                                    disabled
+                                >
+                                    {t('profile.command.submit')}
+                                </Button>
+                            }
+
+                        </Grid>
 
                     </Grid>
-                </Grid>
-            </form>
-
+                </form>
+            }
             <br />
 
             {isProcessing && (

@@ -90,17 +90,19 @@ export function isTokenExpired(expires_in: number, firstDate: Date, today: Date)
   const secondsDiff = getSecondsBetweenTwoDates(firstDate,today);
   const expireIn = (expires_in > 10) ? expires_in - 10 : expires_in;
   const expired: boolean = (( expireIn - secondsDiff ) <= 0);
-  return expired; 
+  return expired;
 };
 
 export function getSecondsBetweenTwoDates( date1: Date, date2: Date ) {
+  console.log('date1:',date1);
   // Convert both dates to milliseconds
-  var date1_ms = date1.getTime();
-  var date2_ms = date2.getTime();
+  var date1_ms = new Date(date1).getTime();
+  var date2_ms = new Date(date2).getTime();
 
   // Calculate the difference in milliseconds
   var difference_ms = date2_ms - date1_ms;
-    
+  console.log('difference_ms:',difference_ms);
+  console.log('Math.round(difference_ms/1000):',Math.round(difference_ms/1000));
   // Convert back to days and return
   return Math.round(difference_ms/1000); 
 };

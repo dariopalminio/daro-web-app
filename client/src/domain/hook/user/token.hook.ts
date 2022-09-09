@@ -27,6 +27,9 @@ export default function useToken(authClientInjected: IAuthTokensClient | null = 
             // Obtains access token from session local data
             token = session.access_token ? session.access_token : '';
 
+            console.log('session.expires_in:',session.expires_in);
+            console.log('session.date:',session.date);
+            console.log('new Date():',new Date());
             const expired: boolean = isTokenExpired(session.expires_in, session.date, new Date());
             
             if (expired) {

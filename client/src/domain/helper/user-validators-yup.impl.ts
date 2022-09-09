@@ -6,6 +6,26 @@ import IUserValidators from './user-validator.interface';
  */
 export class UserValidatorsYupImpl implements IUserValidators {
 
+  /**
+   * Check if a String Contains Only Letters, Spaces and is not Empty 
+   */
+  public nameIsValid = async (nameToValidate: string): Promise<boolean> => {
+    if  (!nameToValidate || 
+      nameToValidate.trim().length === 0 || 
+      !(/^[A-Za-z\s]*$/.test(nameToValidate))) return false;
+    return true;
+  };
+
+    /**
+   * Check if a String Contains Only Letters, Spaces, numbers and is not Empty 
+   */
+     public nameWithNumberIsValid = async (strToValidate: string): Promise<boolean> => {
+      if  (!strToValidate || 
+        strToValidate.trim().length === 0 || 
+        !(/^[0-9a-zA-Z\s]*$/.test(strToValidate))) return false;
+      return true;
+    };
+
 /**
  * Validate if the email is in the correct format
  * @param emailValue 

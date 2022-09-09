@@ -179,14 +179,12 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
 
     // Token endpoint
     const URL = OriginConfig.KeycloakPath.token
-    //console.log("GlobalConfig.URLPath.TOKEN:");
-    //console.log(OriginConfig.URLPath.token);
 
-    //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
 
     // using .then, create a new promise which extracts the data
     const tokens: Promise<Tokens> = promise.then((response) => {
+      
       return {
         access_token: response.data.access_token,
         refresh_token: response.data.refresh_token,
@@ -196,6 +194,7 @@ export default function AuthKeycloakApiClientImpl(): IAuthTokensClient {
       }
     }
     ).catch((error) => {
+      console.log("getRefreshTokenServiceerror:",error);
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
