@@ -17,18 +17,30 @@ const Auth: FunctionComponent = () => {
   const { t } = useTranslation();
 
 
+  const isNotLogged = () => {
+    return session && !session.isLogged;
+  };
+
+  const isLogged = () => {
+    return session && session.isLogged;
+  };
+
+  const needToVerifyEmail = () => {
+    return false //((session && session.isLogged) && !session.email_verified);
+  };
+
   return (
     <div id="LoginFormContainer" data-testid="LoginFormContainer">
-      {!session().isLogged && <Login />}
+      {isNotLogged() && <Login />}
 
-      {session().isLogged && !session().email_verified && 
+      {needToVerifyEmail() &&
         <Alert severity="warning">
           Warning: {t('auth.info.must.verify.email')}
           <br />{" "}
         </Alert>
-        }
-  
-      {session().isLogged && <Logout />}
+      }
+
+      {isLogged() && <Logout />}
 
 
     </div>

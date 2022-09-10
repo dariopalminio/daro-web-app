@@ -80,6 +80,11 @@ export const setSessionToStorage = (sessionToLoad: SessionType): void => {
     }
   };
 
+  export const clearSessionToStorage = (): void =>{
+    setInSession(SESSION_ITEM_NAME, '');
+
+  };
+
   export const getAccessToken = (): string => {
     const session: SessionType = recoverySessionFromStorage();
     return session.access_token ? session.access_token : '';

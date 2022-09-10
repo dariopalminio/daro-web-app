@@ -13,7 +13,6 @@ import { IProfileClient } from '../service/profile-client.interface';
 export default function useProfile(authClientInjected: IAuthTokensClient | null = null,
     profileClientInjected: IProfileClient | null = null) {
 
-    const { session, setSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
     const profClient: IProfileClient = profileClientInjected ? profileClientInjected : StateConfig.profileClient;
 

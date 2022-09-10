@@ -12,7 +12,7 @@ import { IAuthClient } from '../../service/auth-client.interface';
 export default function useRegister(authServiceInjected: IAuthTokensClient | null = null,
     userClientInjected: IAuthClient | null = null) {
 
-    const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
+    const { session, setNewSession, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, isSuccess: false, hasError: false, msg: '' });
     const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authTokensClient;
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
@@ -59,7 +59,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                             userId: "",
                         };
                         
-                        setSessionValue(userValue);
+                        setNewSession(userValue);
                         setState({ isProcessing: false, hasError: false, msg: "", isSuccess: true });
 
             }).catch(err => {
@@ -75,7 +75,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
             removeSessionValue();
         });
 
-    }, [setState, setSessionValue, removeSessionValue, authTokenService, authClient]);
+    }, [setState, setNewSession, removeSessionValue, authTokenService, authClient]);
 
    /**
      * Start Confirm Email function
@@ -91,7 +91,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
             const email: string = userEmail;
             setState({ isProcessing: true, hasError: false, msg: "Trying to send Email to Confirm!", isSuccess: false }); console.log();
 
-            console.log("session:", session());
+            console.log("startConfirmEmail logged:", session);
             const verificationPageLink = `${StateConfig.app_url}/user/register/confirm/`;
 
 

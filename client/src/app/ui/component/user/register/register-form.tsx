@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName UserRegister View
  */
 export const RegisterForm: FunctionComponent = () => {
-  const { session } = useContext(SessionContext) as ISessionContext;
+
   const [firstName, setFirstName] = useState("");
   const [firstNameValid, setFirstNameValid] = useState(false);
   const [lastName, setLastName] = useState("");

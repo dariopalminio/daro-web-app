@@ -20,7 +20,7 @@ var jws = require('jws');
  */
 export default function useLogin(
     userClientInjected: IAuthClient | null = null) {
-    const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
+    const { session, setNewSession, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
     
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
@@ -49,7 +49,7 @@ console.log('useLogin');
                         const msgkey = "login.success.authorized";
                         setState({ isProcessing: false, hasError: false, msg: msgkey, isSuccess: true });
                     }
-                    setSessionValue(userSessionValue);
+                    setNewSession(userSessionValue);
                 } catch (e: any) {
                     // Unauthorized by error in decoding JWT
                     const msgkeyUnauth = "login.error.unauthorized.decoding.JWT";
@@ -62,7 +62,7 @@ console.log('useLogin');
                 setState({ isProcessing: false, hasError: true, msg: err.message, isSuccess: false });
                 removeSessionValue();
             });
-    }, [setState, setSessionValue, removeSessionValue, authClient]);
+    }, [setState, setNewSession, removeSessionValue, authClient]);
 
     /**
      * Decode JWT and return data from payload in SessionType value.

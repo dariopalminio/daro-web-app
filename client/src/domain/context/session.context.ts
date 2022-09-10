@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-import { atom } from "jotai";
 import * as Storage from '../../infra/storage/browser.storage';
 import { SessionType } from '../model/auth/session.type';
 
@@ -22,8 +21,8 @@ export const SessionDefaultValue: SessionType = {
 
 // Global user session context interface
 export interface ISessionContext {
-  session:  () => SessionType 
-  setSessionValue: (newSession: SessionType) => void
+  session:  SessionType 
+  setNewSession: (newSession: SessionType) => void
   removeSessionValue: () => void
 };
 
@@ -50,22 +49,18 @@ export const setSessionToStorage = (sessionToLoad: SessionType): void => {
     Storage.setSessionToStorage(sessionToLoad);
   }
 };
-
-/**
- * Define the atom for your global state variable.
- * A piece of state in Jotai is represented by an atom. An atom accepts an
- * initial value, be it a primitive type like a number, string, or more
- * complex structures like arrays and objects.
- */
- export const SessionAtom = atom(SessionDefaultValue);
  
 // Initial values for global user context 
 export const SessionContextDefaultValues: ISessionContext = {
-  session: () => {return SessionDefaultValue},
-  setSessionValue: () => { },
+  session: SessionDefaultValue,
+  setNewSession: () => { },
   removeSessionValue: () => { }
 };
 
+export const clearSessionToStorage = (): void =>{
+  Storage.clearSessionToStorage();
+
+}
 
 // Global session context
 const SessionContext = createContext<ISessionContext>(SessionContextDefaultValues);

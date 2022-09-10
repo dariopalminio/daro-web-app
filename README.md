@@ -42,4 +42,5 @@ Nest is [MIT licensed](LICENSE).
 - MONGO Deprecation Warnings: https://mongoosejs.com/docs/deprecations.html#findandmodify
 - Ajv and JWT: https://github.com/Desarrollo-Util/express-example
 - API Guide: https://github.com/byrondover/api-guidelines/blob/master/Guidelines.md#errors
+- Axios and refresh token: https://javascript.plainenglish.io/handle-refresh-token-with-axios-1e0f45e9afa
 

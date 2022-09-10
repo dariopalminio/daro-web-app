@@ -70,14 +70,18 @@ const RegisterConfirmStart: FunctionComponent = () => {
   } = useRegister();
 
 
+  const needToVerifyEmail = () => {
+    return ((session && session.isLogged) && !session.email_verified);
+  };
+
 
   /**
    * Handle send email with verification link.
    */
   const handleSendEmail = async () => {
 
-      const userName = session().given_name ? session().given_name : "";
-      const userEmail: string | undefined = session().email;
+      const userName = 'TODO' // session ? session.given_name : "";
+      const userEmail= 'TODO' // : string | undefined = session ? session.email : undefined;
       console.log("startConfirmEmail with ", userEmail);
       startConfirmEmail(userName, userEmail, i18n.language);
   };
@@ -86,7 +90,7 @@ const RegisterConfirmStart: FunctionComponent = () => {
     <div>
       {isSuccess && (<Redirect to='/user/auth' />)}
 
-      {!session().email_verified && (
+      {(needToVerifyEmail()) && (
 
           <Paper className={clsx(classes.paperLoginForm)}>
             <Alert severity="success">

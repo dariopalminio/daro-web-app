@@ -21,7 +21,7 @@ import StartIcon from "@material-ui/icons/StarOutline";
 export default function ProfileLanguage({ onChange }: any) {
 
   const { t, i18n } = useTranslation();
-  const { session } = useContext(SessionContext) as ISessionContext;
+
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);

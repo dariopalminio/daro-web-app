@@ -95,7 +95,7 @@ const initialEmptyProfile: Profile = {
  */
 const UserProfile: FunctionComponent = () => {
     const { t, i18n } = useTranslation();
-    const { session } = useContext(SessionContext) as ISessionContext;
+
     const [profile, setProfile] = useState(initialEmptyProfile);
     const [initialized, setInitialized] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
@@ -107,7 +107,7 @@ const UserProfile: FunctionComponent = () => {
     const [lastNameValid, setLastNameValid] = useState(false);
 
     const fetchData = async () => {
-        const username = session().preferred_username;
+        const username = ''//TODO session ? session.preferred_username : '';
 
         try {
             const info = await getProfile(username);

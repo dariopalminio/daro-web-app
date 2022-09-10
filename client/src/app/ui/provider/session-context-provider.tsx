@@ -1,10 +1,10 @@
-import { FC, useEffect, useMemo } from "react";
-import { useAtom } from "jotai";
+import { FC, useEffect, useMemo, useState } from "react";
+
 import SessionContext, {
   recoverySessionFromStorage,
   SessionDefaultValue,
   setSessionToStorage,
-  SessionAtom,
+  clearSessionToStorage
 } from "../../../domain/context/session.context";
 import { SessionType } from "../../../domain/model/auth/session.type";
 
@@ -16,41 +16,51 @@ import { SessionType } from "../../../domain/model/auth/session.type";
  * @returns 
  */
 const UserContextProvider: FC = ({ children }) => {
-  //const [session, setSession] = useAtom(SessionAtom);
-let localsession;
+  const [session, setSession] = useState<SessionType>(SessionDefaultValue);
 
-  //useEffect(() => {
+
+  useEffect(() => {
+    console.log('useEffect:',session);
     // Recovery session from storage when is rendered
-    //setSession(recoverySessionFromStorage);
-  //}, [setSession]);
+    const sessionLoaded: SessionType = recoverySessionFromStorage();
+    console.log('sessionLoaded:',sessionLoaded);
+    setSession(sessionLoaded);
+    console.log('logged:',session);
+  }, [setSession]);
 
-  const sharedValue = useMemo(()=>{
+  //const sharedValue = useMemo(()=>{
 
-    function setSessionValue(s: SessionType) {
-      setSessionToStorage(s);
-      //setSession(s);
-    }
   
     function removeSessionValue() {
       setSessionToStorage(SessionDefaultValue);
-      //setSession(SessionDefaultValue);
+      clearSessionToStorage();
+      setSession(SessionDefaultValue);
+      console.log(' UserContextProvider-->removeSessionValue_>recoverySessionFromStorage():', recoverySessionFromStorage());
+      console.log('UserContextProvider-->session:',session);
     }
 
-    function session() {
-      return recoverySessionFromStorage();
-      //setSession(SessionDefaultValue);
+    function setNewSession(newSession: SessionType) {
+      setSession(newSession);
+      setSessionToStorage(newSession);
+      console.log(' UserContextProvider-->setNewSession->recoverySessionFromStorage:', recoverySessionFromStorage());
+      console.log('UserContextProvider-->session:',session);
     }
-
+    
+/*
     return({
       session,
-      setSessionValue,
+      setNewSession,
       removeSessionValue
     })
-  },[]);
-
+  },[session, setSession]);
+*/
   return (
     <SessionContext.Provider
-      value={sharedValue}
+      value={{
+        session,
+        setNewSession,
+        removeSessionValue
+      }}
     >
       {children}
     </SessionContext.Provider>

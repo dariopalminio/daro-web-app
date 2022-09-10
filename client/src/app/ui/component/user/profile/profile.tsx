@@ -25,12 +25,20 @@ const Profile: FunctionComponent = () => {
     i18n.changeLanguage(lng);
   };
 
+  const isNotLogged = () => {
+    return session && !session.isLogged;
+  };
+
+  const isLogged = () => {
+    return session && session.isLogged;
+  };
+
   return (
     <div>
 
-      {!session().isLogged && <AnonymousProfile />}
+      {isNotLogged() && <AnonymousProfile />}
 
-      {session().isLogged && <UserProfile />}
+      {isLogged() && <UserProfile />}
 
     </div>
   );

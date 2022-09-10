@@ -30,6 +30,9 @@ export default function useLogout(authServiceInjected: IAuthTokensClient | null 
     const logout = useCallback((loggedUser: SessionType | undefined) => {
         setState({ isProcessing: true, hasError: false, msg: "logout.info.loading", isSuccess: false });
 
+        console.log('logout...');
+        removeSessionValue();
+
         const userId = loggedUser?.userId ? loggedUser?.userId : null;
         let msgKey = "";
 
@@ -58,7 +61,6 @@ export default function useLogout(authServiceInjected: IAuthTokensClient | null 
             setState({ isProcessing: false, hasError: true, msg: "logout.error.not.logged" , isSuccess: false });
         };
 
-        removeSessionValue();
     }, [setState, removeSessionValue, authTokenService, authClient]);
 
     return {
