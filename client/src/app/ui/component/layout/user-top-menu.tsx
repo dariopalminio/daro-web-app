@@ -47,13 +47,13 @@ const UserTopMenu: FunctionComponent = () => {
   };
 
   const getLoginMenuText = () => {
-    if (session && !session?.isLogged) {
+    if (session && !session().isLogged) {
       return t('login.command');
     } else return t('logout.command');
   };
 
   const getUserProfileIcon = () => {
-    if (session && session?.isLogged) {
+    if (session && session().isLogged) {
       return <AccountCircle />;
     } else return <AccountCircleOutlined />;
   };
@@ -89,7 +89,7 @@ const UserTopMenu: FunctionComponent = () => {
           {getLoginMenuText()}
         </MenuItem>
 
-        {session && !session?.isRegistered && (
+        {session && !session().isLogged && (
           <MenuItem component={Link} to="/user/register/form" onClick={handleClose}>
             {t('register.command')}
           </MenuItem>

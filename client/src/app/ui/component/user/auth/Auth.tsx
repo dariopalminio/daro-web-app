@@ -19,16 +19,16 @@ const Auth: FunctionComponent = () => {
 
   return (
     <div id="LoginFormContainer" data-testid="LoginFormContainer">
-      {!session?.isLogged && <Login />}
+      {!session().isLogged && <Login />}
 
-      {session?.isLogged && !session?.email_verified && 
+      {session().isLogged && !session().email_verified && 
         <Alert severity="warning">
           Warning: {t('auth.info.must.verify.email')}
           <br />{" "}
         </Alert>
         }
   
-      {session?.isLogged && <Logout />}
+      {session().isLogged && <Logout />}
 
 
     </div>

@@ -3,7 +3,7 @@ import { ContactType } from '../model/notification/contact.type';
 import { INotificationClient } from '../service/notification-client.interface';
 import * as StateConfig from '../domain.config';
 import { IAuthTokensClient } from '../service/auth-tokens-client.interface';
-import useToken from './user/token.hook';
+
 
 /**
  * use Notification 
@@ -12,13 +12,13 @@ import useToken from './user/token.hook';
  * @returns 
  */
 export default function useNotification(
+    authTokensClientInjected: IAuthTokensClient | null = null,
     authClientInjected: IAuthTokensClient | null = null,
     notifClientInjected: INotificationClient | null = null) {
 
     const [state, setState] = useState({ sending: false, hasError: false, msg: '', wasSent: false });
     const notifClient: INotificationClient = notifClientInjected ? notifClientInjected : StateConfig.notificationClient;
-    
-    const { getToken, getRefreshToken } = useToken(authClientInjected);
+    const authTokenService: IAuthTokensClient = authTokensClientInjected ? authTokensClientInjected : StateConfig.authTokensClient;
 
     /**
      * sendContactEmail
@@ -35,9 +35,9 @@ export default function useNotification(
             return;
         };
 
-        let promise: Promise<string> = getToken();
+        const responseAdminToken: Promise<any> = authTokenService.getAdminTokenService();
 
-        promise.then(token => {
+        responseAdminToken.then(token => {
             // Second: send email with authorization using app access token    
             notifClient.sendContactEmailService(contact, token).then(info => {
                 console.log("Response sent info...");
@@ -46,7 +46,7 @@ export default function useNotification(
             })
                 .catch(err => {
                     if (err.status === 401) {
-                        getRefreshToken();
+                        //getRefreshToken();
                     }
                     const errorKey = "notification.error.cannot.send.email";
                     console.log("Can not send email!!!", err.message);
@@ -58,7 +58,6 @@ export default function useNotification(
             setState({ sending: false, hasError: true, msg: errorKey, wasSent: false });
             return;
         });
-
 
     };
 

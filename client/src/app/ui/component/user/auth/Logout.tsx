@@ -36,15 +36,19 @@ const Logout: FunctionComponent = () => {
    * Logout
    */
   const onClickLogoutHandler = (): void => {
-    logout(session);
+    logout(session());
   };
 
   return (
     <div >
+      
+      {session().isLogged && 
       <Alert severity="success">
-        {session && session.given_name}  {t('logout.success.already.logged')} {" "}
+        {session && session().given_name}  {t('logout.success.already.logged')} {" "}
       </Alert>
+      }
       <br />
+      {session().isLogged && 
       <div className={clsx(classes.wrapperCenter)}>
         <Button
           variant="contained"
@@ -54,6 +58,7 @@ const Logout: FunctionComponent = () => {
           {t('logout.command')}
         </Button>
       </div>
+       }
     </div>
   );
 };

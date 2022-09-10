@@ -1,8 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
-import { SessionType } from '../../model/user/session.type';
+import { SessionType } from '../../model/auth/session.type';
 import * as StateConfig from '../../domain.config';
-import { Tokens } from '../../model/user/tokens.type';
+import { Tokens } from '../../model/auth/tokens.type';
 import { IAuthClient } from '../../service/auth-client.interface';
 
 
@@ -23,7 +23,7 @@ export default function useLogin(
     const { setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
     
-    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 
     /**
      * login
@@ -86,7 +86,6 @@ console.log('useLogin');
             refresh_expires_in: tokens.refresh_expires_in,
             date: tokens.date,
             isLogged: payload.email_verified, //If email ferified is logged
-            isRegistered: payload.email_verified, //If email ferified is registered
             email: payload.email,
             email_verified: payload.email_verified,
             given_name: payload.given_name,

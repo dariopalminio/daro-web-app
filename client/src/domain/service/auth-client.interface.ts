@@ -1,4 +1,4 @@
-import { Tokens } from '../model/user/tokens.type';
+import { Tokens } from '../model/auth/tokens.type';
 
 //Interface to do dependency inversion
 export interface IAuthClient {
@@ -33,7 +33,7 @@ export interface IAuthClient {
     email: string,
     recoveryPageLink: string,
     lang: string,
-    accessToken: string
+    adminToken: string
   ) => Promise<any>;
 
   updatePassword: (

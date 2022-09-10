@@ -6,8 +6,7 @@ export default function ProfileClientStub(): IProfileClient {
 /**
  * Stub function
  */
-function getProfileService(userName: string,
-    accessToken: string): Promise<any>{
+function getProfileService(userName: string): Promise<any>{
     return new Promise<any>( (resolve, reject) => {
            const resp: any = {};
            resolve(resp);
@@ -17,8 +16,7 @@ function getProfileService(userName: string,
 /**
  * Stub function
  */
- function updateProfile(userProfile: any,
-    token: string): Promise<number>{
+ function updateProfile(userProfile: any): Promise<number>{
     return new Promise<any>( (resolve, reject) => {
            const resp: any = {};
            resolve(resp);

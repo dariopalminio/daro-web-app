@@ -28,9 +28,9 @@ const Profile: FunctionComponent = () => {
   return (
     <div>
 
-      {!session?.isLogged && <AnonymousProfile />}
+      {!session().isLogged && <AnonymousProfile />}
 
-      {session?.isLogged && <UserProfile />}
+      {session().isLogged && <UserProfile />}
 
     </div>
   );

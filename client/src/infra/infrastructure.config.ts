@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import { IAuthTokensClient } from '../domain/service/auth-tokens-client.interface';
+import { AuthApiClientFactory } from './client/factory/auth-api-client.factory';
 
 /**
  * Config file for infrastructure layer
@@ -19,7 +21,6 @@ console.log(result.parsed);
 export const environment = process.env.REACT_APP_ENV;
 
 export const is_fake_mode = ((process.env.REACT_APP_FAKE === 'true') ? true : false) as boolean;
-
 
 export const APIEndpoints = {
   authKeycloak: (process.env.REACT_APP_KEYCLOAK ? process.env.REACT_APP_KEYCLOAK : 'http://localhost:8080') as string,
@@ -42,4 +43,5 @@ export const KeycloakPath = {
   users: `${APIEndpoints.authKeycloak}/auth/admin/realms/${Keycloak.realm}/users`,
   token: `${APIEndpoints.authKeycloak}/auth/realms/${Keycloak.realm}/protocol/openid-connect/token`,
 };
+
 

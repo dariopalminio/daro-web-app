@@ -14,7 +14,6 @@ export interface SessionType {
     // Date is the date the access_token was obtained.
     date: Date;
     isLogged: boolean;
-    isRegistered: boolean;
     email: string;
     email_verified: boolean;
     given_name: string;

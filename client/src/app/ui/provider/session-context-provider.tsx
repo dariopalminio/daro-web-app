@@ -5,9 +5,9 @@ import SessionContext, {
   SessionDefaultValue,
   setSessionToStorage,
   SessionAtom,
-  isTokenExpired,
 } from "../../../domain/context/session.context";
-import { SessionType } from '../../../domain/model/user/session.type';
+import { SessionType } from "../../../domain/model/auth/session.type";
+
 
 
 /**
@@ -16,32 +16,37 @@ import { SessionType } from '../../../domain/model/user/session.type';
  * @returns 
  */
 const UserContextProvider: FC = ({ children }) => {
-  const [session, setSession] = useAtom(SessionAtom);
+  //const [session, setSession] = useAtom(SessionAtom);
+let localsession;
 
-  useEffect(() => {
+  //useEffect(() => {
     // Recovery session from storage when is rendered
-    setSession(recoverySessionFromStorage);
-  }, [setSession]);
+    //setSession(recoverySessionFromStorage);
+  //}, [setSession]);
 
   const sharedValue = useMemo(()=>{
 
     function setSessionValue(s: SessionType) {
       setSessionToStorage(s);
-      setSession(s);
+      //setSession(s);
     }
   
     function removeSessionValue() {
       setSessionToStorage(SessionDefaultValue);
-      setSession(SessionDefaultValue);
+      //setSession(SessionDefaultValue);
+    }
+
+    function session() {
+      return recoverySessionFromStorage();
+      //setSession(SessionDefaultValue);
     }
 
     return({
       session,
       setSessionValue,
-      removeSessionValue,
-      isTokenExpired,
+      removeSessionValue
     })
-  },[session, setSession]);
+  },[]);
 
   return (
     <SessionContext.Provider

@@ -76,8 +76,8 @@ const RegisterConfirmStart: FunctionComponent = () => {
    */
   const handleSendEmail = async () => {
 
-      const userName = session?.given_name ? session?.given_name : "";
-      const userEmail: string | undefined = session?.email;
+      const userName = session().given_name ? session().given_name : "";
+      const userEmail: string | undefined = session().email;
       console.log("startConfirmEmail with ", userEmail);
       startConfirmEmail(userName, userEmail, i18n.language);
   };
@@ -86,7 +86,7 @@ const RegisterConfirmStart: FunctionComponent = () => {
     <div>
       {isSuccess && (<Redirect to='/user/auth' />)}
 
-      {!session?.email_verified && (
+      {!session().email_verified && (
 
           <Paper className={clsx(classes.paperLoginForm)}>
             <Alert severity="success">

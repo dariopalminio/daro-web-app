@@ -14,8 +14,8 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
 
     //const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, isSuccess: false, hasError: false, msg: '' });
-    const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
-    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authTokensClient;
+    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 
     /**
      * sendEmailToRecovery

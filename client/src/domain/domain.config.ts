@@ -26,9 +26,9 @@ export const app_company_name = (process.env.REACT_APP_COMPANY_NAME ? process.en
 
 
 //Injection of services from origin
-export const authorizationClient: IAuthTokensClient = AuthApiClientFactory.create(is_fake_mode);
+export const authTokensClient: IAuthTokensClient = AuthApiClientFactory.create(is_fake_mode);
 export const notificationClient: INotificationClient = NotificationApiClientFactory.create(is_fake_mode);
-export const userClient: IAuthClient = ApiAuthClientFactory.create(is_fake_mode);
+export const userAuthClient: IAuthClient = ApiAuthClientFactory.create(is_fake_mode);
 export const profileClient: IProfileClient = ProfileApiClientFactory.create(is_fake_mode);
 
 

@@ -128,7 +128,7 @@ export const RegisterForm: FunctionComponent = () => {
         <Redirect to='/user/register/confirm/start'/>
       )}
 
-      {!session?.isRegistered && (
+      {!isSuccess && (
         <form
           id="RegisterForm"
           data-testid="RegisterForm"

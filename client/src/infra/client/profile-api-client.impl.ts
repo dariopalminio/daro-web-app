@@ -1,27 +1,27 @@
 import * as InfraConfig from '../infrastructure.config';
-import axios, { AxiosPromise } from 'axios';
+import { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import { IProfileClient } from '../../domain/service/profile-client.interface';
+import axiosInstance from './interceptor/axios.interceptor';
 
 
 
 export default function ProfileApiClientImpl(): IProfileClient {
 
   async function getProfileService(
-    userName: string,
-    accessToken: string
+    userName: string
   ): Promise<any> {
 
     //users endpoint
     const URL = `${InfraConfig.APIEndpoints.users}/user`;
 
     const config = {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      //headers: { Authorization: `Bearer ${accessToken}` },
       params: {
         userName: userName
       },
     }
-    const promise: AxiosPromise<any> = axios.get(URL, config)
+    const promise: AxiosPromise<any> = axiosInstance.get(URL, config)
 
     // Using .then, create a new promise which extracts the data
     const info: Promise<any> = promise
@@ -29,10 +29,10 @@ export default function ProfileApiClientImpl(): IProfileClient {
       .catch((error) => {
         const authError: ApiError = handleAxiosError(error);
         if (authError.status === AuthStatusEnum.UNAUTHORIZED) {
-          console.log("sendContactEmailService-->UNAUTHORIZED!!!");
+          console.log("getProfileService-->UNAUTHORIZED!!!",authError);
           throw authError;
         } else {
-          console.log("sendContactEmailService-->throw authError!!!");
+          console.log("getProfileService-->throw authError!!!");
           authError.message = "Can not send email. ";
           throw authError;
         };
@@ -44,17 +44,16 @@ export default function ProfileApiClientImpl(): IProfileClient {
   };
 
   async function updateProfile(
-    userProfile: any,
-    token: string): Promise<number> {
+    userProfile: any): Promise<number> {
 
     try {
       //User endpoint
       const URL = `${InfraConfig.APIEndpoints.users}/profile/update`;
 
-      const response = await axios({
+      const response = await axiosInstance({
         method: 'put',
         url: URL,
-        headers: { 'Authorization': `Bearer ${token}` },
+        //headers: { 'Authorization': `Bearer ${token}` },
         data: userProfile
       });
 

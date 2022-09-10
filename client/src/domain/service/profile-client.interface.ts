@@ -2,12 +2,10 @@
 export interface IProfileClient {
 
     getProfileService: (
-      userName: string,
-      accessToken: string
+      userName: string
     ) => Promise<any>;
   
     updateProfile: (    
-      userProfile: any,
-      token: string) => Promise<number>;
+      userProfile: any) => Promise<number>;
 
   };

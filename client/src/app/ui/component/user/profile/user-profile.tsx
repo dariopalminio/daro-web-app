@@ -107,28 +107,32 @@ const UserProfile: FunctionComponent = () => {
     const [lastNameValid, setLastNameValid] = useState(false);
 
     const fetchData = async () => {
-        const username = session?.preferred_username;
+        const username = session().preferred_username;
 
         try {
             const info = await getProfile(username);
 
             if (info.language) i18n.changeLanguage(info.language.toLowerCase());
 
-            setProfile({
-                ...profile,
-                userName: info.userName,
-                firstName: info.firstName,
-                lastName: info.lastName,
-                email: info.email,
-                docType: info.docType.toUpperCase(),
-                document: info.document,
-                telephone: info.telephone,
-                language: info.language.toLowerCase(),
-                addresses: info.addresses
-            });
 
-            setFirstNameValid(await validator.nameIsValid(info.firstName));
-            setLastNameValid(await validator.nameIsValid(info.lastName));
+            console.log('fetchData.info.userName',info.userName);
+            if (info.userName) {
+                setProfile({
+                    ...profile,
+                    userName: info.userName,
+                    firstName: info.firstName,
+                    lastName: info.lastName,
+                    email: info.email,
+                    docType: info.docType ? info.docType.toUpperCase() : '',
+                    document: info.document,
+                    telephone: info.telephone,
+                    language: info.language ? info.language.toLowerCase(): '',
+                    addresses: info.addresses
+                });
+
+                setFirstNameValid(await validator.nameIsValid(info.firstName));
+                setLastNameValid(await validator.nameIsValid(info.lastName));
+            }
 
         } catch (e) {
             console.log(e);

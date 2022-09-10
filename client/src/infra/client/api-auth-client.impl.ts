@@ -3,7 +3,7 @@ import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
 import qs from 'querystring';
 import { IAuthClient } from '../../domain/service/auth-client.interface';
-import { Tokens } from '../../domain/model/user/tokens.type';
+import { Tokens } from '../../domain/model/auth/tokens.type';
 import { AxiosError } from 'axios';
 
 /**
@@ -75,7 +75,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
     email: string,
     verificationPageLink: string,
     lang: string,
-    accessToken: string
+    adminToken: string
     ): Promise<any> {
 
     //Notification endpoint
@@ -85,7 +85,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
       method: 'post',
       url: URL,
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${adminToken}`,
         'Content-Type': `application/json`,
         'lang': lang,
       },
@@ -167,7 +167,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
    * @returns 
    */
   function loginService(username: string, pass: string): Promise<Tokens> {
-console.log('*******loginService');
+
     const body = {
       username: username,
       password: pass
@@ -247,7 +247,7 @@ console.log('*******loginService');
     email: string,
     recoveryPageLink: string,
     lang: string,
-    accessToken: string): Promise<any> {
+    adminToken: string): Promise<any> {
 
     //Notification endpoint
     const URL = `${InfraConfig.APIEndpoints.auth}/recovery/start`;
@@ -256,7 +256,7 @@ console.log('*******loginService');
       method: 'post',
       url: URL,
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${adminToken}`,
         'Content-Type': `application/json`,
         'lang': lang, 
       },

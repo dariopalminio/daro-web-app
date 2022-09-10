@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
-import { SessionType } from '../../model/user/session.type';
+import { SessionType } from '../../model/auth/session.type';
 import * as StateConfig from '../../domain.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IAuthClient } from '../../service/auth-client.interface';
@@ -14,8 +14,8 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
 
     const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, isSuccess: false, hasError: false, msg: '' });
-    const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authorizationClient;
-    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userClient;
+    const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authTokensClient;
+    const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 
     /**
      * Register function
@@ -52,7 +52,6 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                             refresh_expires_in: 0,
                             date: new Date(),
                             isLogged: false,
-                            isRegistered: true,
                             email: email,
                             email_verified: false,
                             given_name: firstname,
@@ -92,7 +91,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
             const email: string = userEmail;
             setState({ isProcessing: true, hasError: false, msg: "Trying to send Email to Confirm!", isSuccess: false }); console.log();
 
-            console.log("session:", session);
+            console.log("session:", session());
             const verificationPageLink = `${StateConfig.app_url}/user/register/confirm/`;
 
 
