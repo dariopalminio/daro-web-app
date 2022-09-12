@@ -1,6 +1,6 @@
 import * as OriginConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError } from './api.client.error';
+import { handleAxiosError, ApiError } from './api.error';
 import qs from 'querystring';
 import { IAuthTokensClient } from '../../domain/service/auth-tokens-client.interface';
 import { Tokens } from '../../domain/model/auth/tokens.type';
@@ -146,16 +146,9 @@ export default function AuthKeycloakTokensClientImpl(): IAuthTokensClient {
     // using .then, create a new promise which extracts the data
     const tokens: Promise<any> = promise.then((response) => {
       console.log('getRefreshTokenService.response',response);
-      return response;/*{
-        access_token: response.data.access_token,
-        refresh_token: response.data.refresh_token,
-        expires_in: response.data.expires_in,
-        refresh_expires_in: response.data.refresh_expires_in,
-        date: new Date()
-      }*/
+      return response;
     }
     ).catch((error) => {
-      console.log("getRefreshTokenService.error:",error);
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;

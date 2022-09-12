@@ -36,12 +36,8 @@ const Logout: FunctionComponent = () => {
    * Logout
    */
   const onClickLogoutHandler = (): void => {
-    logout(undefined);
+    logout(session);
   };
-
-  const givenName = () => {
-    return 'to do'; //session.given_name
-  }
 
   return (
     <div >

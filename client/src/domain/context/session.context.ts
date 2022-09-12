@@ -1,39 +1,33 @@
 import { createContext } from 'react';
-import * as Storage from '../../infra/storage/browser.storage';
+import * as SessionStorage from '../../infra/storage/session.storage';
 import { SessionType } from '../model/auth/session.type';
-
-// Global user default value
-export const SessionDefaultValue: SessionType = {
-  createdTimestamp: '',
-  access_token: null,
-  refresh_token: null,
-  expires_in: 0,
-  refresh_expires_in: 0,
-  date: new Date(),
-  isLogged: false,
-  email: "",
-  email_verified: false,
-  given_name: "",
-  preferred_username: "",
-  userId: "", // sub is the ID userId
-};
+import { DefaultSession as SessionDefaultValue} from '../../domain/model/auth/default-session';
 
 
-// Global user session context interface
+// Global user session context interface for provider
 export interface ISessionContext {
   session:  SessionType 
   setNewSession: (newSession: SessionType) => void
   removeSessionValue: () => void
 };
 
+// Initial values for global user context 
+export const SessionContextDefaultValues: ISessionContext = {
+  session: SessionDefaultValue,
+  setNewSession: () => { },
+  removeSessionValue: () => { }
+};
+
+// Global session context
+const SessionContext = createContext<ISessionContext>(SessionContextDefaultValues);
+
 /**
  * Function: Recovery session data from web browser Storage (storage)
- * @returns 
  */
-export const recoverySessionFromStorage = (): SessionType => {
+ export const recoverySessionFromStorage = (): SessionType => {
 
-  if (typeof Storage !== "undefined") {
-    return Storage.recoverySessionFromStorage();
+  if (typeof SessionStorage !== "undefined") {
+    return SessionStorage.recoverySessionFromStorage();
   }
   //Code when Storage is NOT supported
   return SessionDefaultValue;
@@ -44,25 +38,18 @@ export const recoverySessionFromStorage = (): SessionType => {
  * @param sessionToLoad 
  */
 export const setSessionToStorage = (sessionToLoad: SessionType): void => {
-  if (typeof Storage !== "undefined") {
+  if (typeof SessionStorage !== "undefined") {
     // Code when Storage is supported
-    Storage.setSessionToStorage(sessionToLoad);
+    SessionStorage.setSessionToStorage(sessionToLoad);
   }
 };
- 
-// Initial values for global user context 
-export const SessionContextDefaultValues: ISessionContext = {
-  session: SessionDefaultValue,
-  setNewSession: () => { },
-  removeSessionValue: () => { }
-};
 
+/**
+ * Function: clear Session To Storage
+ */
 export const clearSessionToStorage = (): void =>{
-  Storage.clearSessionToStorage();
+  SessionStorage.clearSessionToStorage();
 
 }
-
-// Global session context
-const SessionContext = createContext<ISessionContext>(SessionContextDefaultValues);
 
 export default SessionContext;

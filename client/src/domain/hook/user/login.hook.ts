@@ -20,9 +20,9 @@ var jws = require('jws');
  */
 export default function useLogin(
     userClientInjected: IAuthClient | null = null) {
-    const { session, setNewSession, removeSessionValue } = useContext(SessionContext) as ISessionContext;
+    const { setNewSession, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
-    
+
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 
     /**
@@ -32,19 +32,19 @@ export default function useLogin(
         const infoKey = "login.info.loading";
         setState({ isProcessing: true, hasError: false, msg: infoKey, isSuccess: false });
 
-console.log('useLogin');
+        console.log('useLogin');
         // First: authenticate user and pass
         authClient.loginService(email, password)
             .then(tokens => {
-                console.log('useLogin.tokens',tokens);
+                console.log('useLogin.tokens', tokens);
                 try {
                     const userSessionValue: SessionType = convertJwtToSessionType(tokens);
-                    
+
                     if (userSessionValue && userSessionValue.email_verified === false) {
                         //Need to verify the email
                         const errorKey = "login.error.unconfirmed.account";
                         setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
-                    }else{
+                    } else {
                         // Authorized
                         const msgkey = "login.success.authorized";
                         setState({ isProcessing: false, hasError: false, msg: msgkey, isSuccess: true });

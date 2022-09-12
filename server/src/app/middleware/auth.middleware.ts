@@ -37,7 +37,8 @@ export class AuthMiddleware implements NestMiddleware {
         if (this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON')) {
 
             if (!req.headers || !req.headers.authorization) {
-                return res.status(400).json({ message: "Unauthorized! No authorization data in Header." });
+                console.log("401 Unauthorized! No authorization data in Header." );
+                return res.status(401).json({ message: "Unauthorized! No authorization data in Header." });
             }
 
             try {

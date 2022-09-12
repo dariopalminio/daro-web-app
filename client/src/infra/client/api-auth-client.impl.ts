@@ -1,6 +1,6 @@
 import * as InfraConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
+import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
 import qs from 'querystring';
 import { IAuthClient } from '../../domain/service/auth-client.interface';
 import { Tokens } from '../../domain/model/auth/tokens.type';
@@ -272,19 +272,8 @@ export default function ApiAuthClientImpl(): IAuthClient {
       .then((response) => response.data)
       .catch((error) => {
         const authError: ApiError = handleAxiosError(error);
-        if (authError.status === AuthStatusEnum.UNAUTHORIZED) {
-          
-          // Request a new token
-          //const newAccessToken = accessToken;
-          // Do a retry with a new token
-          //return sendContactEmailService(contactData, newAccessToken, false);
           throw authError;
-        } else {
-          throw authError;
-        };
       });
-
-    console.log(info);
 
     return info;
   };
@@ -322,11 +311,8 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
       return response.data;
     } catch (err: any) {
-      if (err.isAxiosError) {
-        const axiosError: AxiosError = err;
-        if (axiosError.response?.status === 400) throw Error("recovery.password.error.bad.request");;
-      }
-      throw err;
+      const authError: ApiError = handleAxiosError(err);
+      throw authError;
     }
   };
 

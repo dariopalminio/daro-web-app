@@ -17,7 +17,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ProfileLanguage from "./profile-language";
 import useProfile from "../../../../../domain/hook/profile.hook";
-import { CircularProgress, FormControl, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
+import { CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 import AlertError from "../alert-error";
 
 
@@ -95,10 +95,9 @@ const initialEmptyProfile: Profile = {
  */
 const UserProfile: FunctionComponent = () => {
     const { t, i18n } = useTranslation();
-
+    const { session } = useContext(SessionContext) as ISessionContext;
     const [profile, setProfile] = useState(initialEmptyProfile);
     const [initialized, setInitialized] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(false);
     const { isProcessing, hasError, msg, isSuccess, getProfile, updateProfile } = useProfile();
     const classes = useStyles();
 
@@ -107,7 +106,7 @@ const UserProfile: FunctionComponent = () => {
     const [lastNameValid, setLastNameValid] = useState(false);
 
     const fetchData = async () => {
-        const username = ''//TODO session ? session.preferred_username : '';
+        const username = session ? session.preferred_username : '';
 
         try {
             const info = await getProfile(username);
@@ -151,7 +150,7 @@ const UserProfile: FunctionComponent = () => {
         e.preventDefault();
 
         try {
-            const info = await updateProfile(profile);
+            await updateProfile(profile);
         } catch (e) {
             console.log(e);
         }
@@ -215,9 +214,13 @@ const UserProfile: FunctionComponent = () => {
         return firstNameValid && lastNameValid;
     };
 
+    const isLogged = () => {
+        return session && session.isLogged;
+      };
+
     return (
         <div>
-            {!hasError &&
+            {(!hasError) &&
                 <form
                     id="RegisterForm"
                     data-testid="RegisterForm"

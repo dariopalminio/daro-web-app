@@ -17,6 +17,8 @@
     "auth.error.request.timeout": "Error: ¡Tiempo agotado de petición (Request Timeout)!",
     "auth.error.unsupported.media.type": "Error: Unsupported Media Type.",
     "auth.error.no.content": "Error: No content.",
+    "auth.error.expired.token": "Tu sesión ha expirado. Debes logearte nuevamente. Tu debes volver a logearte o seguir navegando como usuario anónimo.",
+    "auth.error.not.logged": "No estás logeado. Debes logearte o seguir navegando como anónimo.",
     "auth.info.must.verify.email": "Necesitas verificar el email",
     "logout.success.already.logged": "¡Ya estás logeado! ¿Quieres salir de la sesión?",
     "logout.command": "Logout",

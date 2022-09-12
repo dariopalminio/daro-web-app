@@ -1,49 +1,38 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import SessionContext, {
   recoverySessionFromStorage,
-  SessionDefaultValue,
   setSessionToStorage,
   clearSessionToStorage
 } from "../../../domain/context/session.context";
 import { SessionType } from "../../../domain/model/auth/session.type";
-
-
+import { DefaultSession as SessionDefaultValue} from '../../../domain/model/auth/default-session';
 
 /**
- * UserContext Provider
- * @param param0 
- * @returns 
+ * Session Context Provider
  */
-const UserContextProvider: FC = ({ children }) => {
+const SessionContextProvider: FC = ({ children }) => {
   const [session, setSession] = useState<SessionType>(SessionDefaultValue);
 
 
   useEffect(() => {
-    console.log('useEffect:',session);
     // Recovery session from storage when is rendered
     const sessionLoaded: SessionType = recoverySessionFromStorage();
-    console.log('sessionLoaded:',sessionLoaded);
     setSession(sessionLoaded);
-    console.log('logged:',session);
   }, [setSession]);
 
   //const sharedValue = useMemo(()=>{
 
   
     function removeSessionValue() {
-      setSessionToStorage(SessionDefaultValue);
+      //setSessionToStorage(SessionDefaultValue);
       clearSessionToStorage();
       setSession(SessionDefaultValue);
-      console.log(' UserContextProvider-->removeSessionValue_>recoverySessionFromStorage():', recoverySessionFromStorage());
-      console.log('UserContextProvider-->session:',session);
     }
 
     function setNewSession(newSession: SessionType) {
       setSession(newSession);
       setSessionToStorage(newSession);
-      console.log(' UserContextProvider-->setNewSession->recoverySessionFromStorage:', recoverySessionFromStorage());
-      console.log('UserContextProvider-->session:',session);
     }
     
 /*
@@ -67,4 +56,4 @@ const UserContextProvider: FC = ({ children }) => {
   );
 };
 
-export default UserContextProvider;
+export default SessionContextProvider;

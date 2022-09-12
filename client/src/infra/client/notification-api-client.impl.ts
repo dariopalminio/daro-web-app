@@ -1,7 +1,7 @@
 
 import * as InfraConfig from '../infrastructure.config';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
+import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
 import { ContactType } from '../../domain/model/notification/contact.type';
 import { INotificationClient } from '../../domain/service/notification-client.interface';
 

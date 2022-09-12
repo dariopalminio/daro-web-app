@@ -1,11 +1,6 @@
-import { FunctionComponent, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { supportedLngs } from "../../../../../domain/i18n/supported-lngs";
-import SessionContext, {
-  ISessionContext,
-} from "../../../../../domain/context/session.context";
-import AnonymousProfile from "./anonymous-profile";
-import UserProfile from "./user-profile";
+
 
 //@material-ui https://v4.mui.com/
 import List from "@material-ui/core/List";

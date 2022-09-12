@@ -1,6 +1,6 @@
 import * as InfraConfig from '../infrastructure.config';
 import { AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError, AuthStatusEnum } from './api.client.error';
+import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
 import { IProfileClient } from '../../domain/service/profile-client.interface';
 import axiosInstance from './interceptor/axios.interceptor';
 

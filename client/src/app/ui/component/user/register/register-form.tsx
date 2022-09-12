@@ -3,7 +3,6 @@ import { FunctionComponent } from "react";
 import IUserValidator from '../../../../../domain/helper/user-validator.interface';
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import useRegister from "../../../../../domain/hook/user/register.hook";
-import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';

@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import axios, {AxiosError} from 'axios';
 
 // See https://es.wikipedia.org/wiki/Anexo:C%C3%B3digos_de_estado_HTTP
 export enum AuthStatusEnum {
@@ -43,7 +43,7 @@ export class ApiError extends Error {
     status: number;
     statusText: string;
 
-    constructor(message: string, stack: string, status: number, statusText: string) {
+    constructor(message: string, stack: string | undefined, status: number, statusText: string) {
         super(message);
         this.stack = stack;
         this.name = 'AuthError';
@@ -59,14 +59,15 @@ export class ApiError extends Error {
  * @param e Error as any
  * @returns AuthError
  */
-export function handleAxiosError(e: any): ApiError {
-
-    if (e.isAxiosError) {
+export function handleAxiosError(e: Error | AxiosError): ApiError {
+    console.log("------ handleAxiosError");
+    if (axios.isAxiosError(e)) {
+        console.log("isAxiosError");
         const axiosError: AxiosError = e;
         if (e.response) {
             const status: number = axiosError.response?.status ? axiosError.response?.status : 0
             const txt: string = axiosError.response?.statusText ? axiosError.response?.statusText : "Unknown"
-
+            console.log("isAxiosError.response.status", status);
             switch (status) {
                 case AuthStatusEnum.UNAUTHORIZED:
                     return new ApiError(AuthStatusText.UNAUTHORIZED.text, e.stack, status, txt);
@@ -85,7 +86,10 @@ export function handleAxiosError(e: any): ApiError {
             }
         }
     }
+    
+    if (e instanceof ApiError) return e;
 
+    console.log("is NOT AxiosError");
     if (e.message === "Network Error") {
         return new ApiError(AuthStatusText.ERR_CONNECTION_REFUSED.text, e.stack, AuthStatusEnum.ERR_CONNECTION_REFUSED, "Network Error");
     }

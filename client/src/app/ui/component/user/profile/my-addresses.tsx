@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Address } from "../../../../../domain/model/user/address.type";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
@@ -87,7 +87,7 @@ interface IMyProps {
 const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
 
     const { addresses, onChange } = props;
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const classes = useStyles();
     const [dense, setDense] = useState(false);
     const [secondary, setSecondary] = useState(false);

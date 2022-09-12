@@ -1,6 +1,6 @@
 import * as InfraConfig from '../../infrastructure.config';
 import axios from 'axios';
-import * as Storage from '../../storage/browser.storage';
+import * as SessionStorage from '../../storage/session.storage';
 import { IAuthTokensClient } from '../../../domain/service/auth-tokens-client.interface';
 import { AuthApiClientFactory } from '../factory/auth-api-client.factory';
 
@@ -17,7 +17,7 @@ let axiosInstance = axios.create();
  */
 axiosInstance.interceptors.request.use((config) => {
 
-  const accessToken = Storage.getAccessToken();
+  const accessToken = SessionStorage.getAccessToken();
   config.headers = { 'Authorization': `Bearer ${accessToken}` };
   console.log("axios_instance.config:", config);
 
@@ -39,25 +39,25 @@ axiosInstance.interceptors.response.use((response) => {
   if (error.response) {
 
     if (error.response && error.response.status === 401 && !config._retry) {
+      //Request new access token with refresh token
+      //console.log("Request new access token with refresh token:");
       config._retry = true;
       try {
-        const localRefreshToken: string = Storage.getRefreshToken();
+        const localRefreshToken: string = SessionStorage.getRefreshToken();
         const res = await authTokensClient.getRefreshTokenService(localRefreshToken);
 
         if (res?.status === 200) {
-          console.log("New acces token was recovery using refresh token!");
           const { access_token, refresh_token } = res.data;
-          const session = Storage.recoverySessionFromStorage();
+          const session = SessionStorage.recoverySessionFromStorage();
           let newSession = { ...session };
           newSession.access_token = access_token;
           newSession.refresh_token = refresh_token;
-          Storage.setSessionToStorage(newSession);
+          SessionStorage.setSessionToStorage(newSession);
           config.headers = { 'Authorization': `Bearer ${access_token}` };
         }
         return axiosInstance(config);
 
       } catch (err) {
-        console.log("axiosInstance. catch errs", err);
         return Promise.reject(err)
       }
     }
