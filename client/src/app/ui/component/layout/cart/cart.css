@@ -1,0 +1,21 @@
+
+
+  .cart-circle {
+    position: relative;
+  }
+
+  #cart_count {
+    position: absolute;
+    bottom: 0;
+    right: -20px;
+    background: rgb(21, 201, 102);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 2px;
+    font-size: 10px;
+  }

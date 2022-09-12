@@ -10,11 +10,11 @@ import Menu from "@material-ui/core/Menu";
 
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import AccountCircleOutlined from "@material-ui/icons/AccountCircleOutlined";
-//import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-//import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import CartIconButton from "./cart/cart-icon-button";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,17 +58,27 @@ const UserTopMenu: FunctionComponent = () => {
     } else return <AccountCircleOutlined />;
   };
 
+  const handleViewCart = () => {
+    alert("view cart");
+  };
+
   return (
     <div className={clsx(classes.menuItem)}>
+
       <IconButton
-        aria-label= {t('account.current.user')}
+        aria-label={t('account.current.user')}
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenu}
         color="inherit"
       >
+
         {getUserProfileIcon()}
+
       </IconButton>
+
+      <CartIconButton/>
+
       <Menu
         id="menu-appbar"
         anchorEl={anchorEl}
@@ -84,7 +94,7 @@ const UserTopMenu: FunctionComponent = () => {
         open={openAnchorEl}
         onClose={handleClose}
       >
-        
+
         <MenuItem component={Link} to="/user/auth" onClick={handleClose}>
           {getLoginMenuText()}
         </MenuItem>
