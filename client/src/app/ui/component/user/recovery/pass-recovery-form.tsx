@@ -4,7 +4,6 @@ import { UserValidatorFactory } from "../../../../../domain/helper/user-validato
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import useRecovery from "../../../../../domain/hook/user/recovery.hook";
-import button_background from "../../../style/buttonbackground";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -50,7 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonCustom: {
       margin: "0 auto auto auto",
-      background: button_background
     },
   })
 );
@@ -166,7 +164,7 @@ function PassRecoveryForm({ token }: TParams) {
               <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
                   <Button
-                    className={clsx(classes.buttonCustom)}
+                    className='gradient-button-salmon'
                     variant="contained"
                     color="primary"
                     type="submit"
