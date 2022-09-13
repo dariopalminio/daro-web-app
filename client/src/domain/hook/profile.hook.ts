@@ -35,7 +35,7 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
 
         } catch (error: any | ApiError) {
             let errorKey = error.message;
-            if (error instanceof ApiError && (error.status==400 || error.status==401)) {
+            if (error instanceof ApiError && (error.status===400 || error.status===401)) {
                 errorKey = "auth.error.expired.token";
                 removeSessionValue();
             }
@@ -62,7 +62,7 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
 
         } catch (error: any | ApiError) {
             let errorKey = error.message;
-            if (error instanceof ApiError && (error.status==400 || error.status==401)) {
+            if (error instanceof ApiError && (error.status===400 || error.status===401)) {
                 errorKey = 'auth.error.expired.token';
                 removeSessionValue();
             }

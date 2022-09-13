@@ -10,6 +10,7 @@ import useRegister from "../../../../../domain/hook/user/register.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useTranslation } from 'react-i18next';
+import button_background from "../../../style/buttonbackground";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -47,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonCustom: {
       margin: "0 auto auto auto",
+      background: button_background
     },
   })
 );

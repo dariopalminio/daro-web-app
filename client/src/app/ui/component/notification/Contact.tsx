@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonCustom: {
       margin: "0 auto auto auto",
+      background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
     },
     h1Custom: {
       fontSize: "1.5em",
@@ -66,6 +67,7 @@ const Contact: FunctionComponent = () => {
   const [contact, setContact] = useState(defaultContact);
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
   const [emailErrorText] = useState("Invalid Email");
+  const [fullnameValid, setFullnameValid] = useState(false);
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { t } = useTranslation();
@@ -79,11 +81,12 @@ const Contact: FunctionComponent = () => {
     sendContactEmail(contact);
   };
 
-  const handleNameChange = (firstNameValue: string): void => {
+  const handleNameChange = async (fullname: string) => {
     setContact((prevState) => ({
       ...prevState,
-      name: firstNameValue,
+      name: fullname,
     }));
+    setFullnameValid(await validator.nameIsValid(fullname));
   };
 
   /**
@@ -143,7 +146,7 @@ const Contact: FunctionComponent = () => {
               placeholder=""
               onChange={(e) => handleNameChange(e.target.value)}
               value={contact.name}
-              {...(false && { error: true, helperText: t('register.info.helper.text.required') })}
+              {...(!fullnameValid && { error: true, helperText: t('register.info.helper.text.required') })}
             />
             <TextField
               id="standard-basic"

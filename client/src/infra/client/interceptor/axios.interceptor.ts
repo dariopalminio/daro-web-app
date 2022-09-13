@@ -19,6 +19,7 @@ axiosInstance.interceptors.request.use((config) => {
 
   const accessToken = SessionStorage.getAccessToken();
   config.headers = { 'Authorization': `Bearer ${accessToken}` };
+   // 'lang': lang,}; //i18n.language
   console.log("axios_instance.config:", config);
 
   return config

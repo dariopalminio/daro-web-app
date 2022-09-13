@@ -1,20 +1,17 @@
 import React, { FunctionComponent, useContext } from "react";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
-import SessionContext, { ISessionContext } from "../../../../domain/context/session.context";
+import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import { useTranslation } from 'react-i18next';
 
 //@material-ui
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import AccountCircleOutlined from "@material-ui/icons/AccountCircleOutlined";
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import CartIconButton from "./cart/cart-icon-button";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,8 +73,6 @@ const UserTopMenu: FunctionComponent = () => {
         {getUserProfileIcon()}
 
       </IconButton>
-
-      <CartIconButton/>
 
       <Menu
         id="menu-appbar"

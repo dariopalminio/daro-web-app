@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { FunctionComponent } from "react";
 import IUserValidator from '../../../../../domain/helper/user-validator.interface';
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
@@ -6,6 +6,7 @@ import useRegister from "../../../../../domain/hook/user/register.hook";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import button_background from "../../../style/buttonbackground";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buttonCustom: {
       margin: "0 auto auto auto",
+      background: button_background,
     },
   })
 );

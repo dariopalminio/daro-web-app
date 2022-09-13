@@ -13,6 +13,7 @@ import Link from "@material-ui/core/Link";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import button_background from "../../../style/buttonbackground";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,6 +46,10 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "1.5em",
       color: "#525252",
       paddingLeft: "1rem",
+    },
+    buttonCustom: {
+      margin: "0 auto auto auto",
+      background: button_background,
     },
   })
 );
@@ -145,7 +150,8 @@ const Login: FunctionComponent = () => {
             </div>
 
             <div className={clsx(classes.wrapperCenterForButton)}>
-              <Button variant="contained" color="primary" type="submit">
+              <Button className={clsx(classes.buttonCustom)}
+              variant="contained" color="primary" type="submit">
               {t('login.command')}
               </Button>
             </div>

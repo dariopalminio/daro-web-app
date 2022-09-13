@@ -3,7 +3,6 @@ import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError } from './api.error';
 import qs from 'querystring';
 import { IAuthTokensClient } from '../../domain/service/auth-tokens-client.interface';
-import { Tokens } from '../../domain/model/auth/tokens.type';
 
 type NewAdminTokenRequestType = {
   client_id: string,

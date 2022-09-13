@@ -1,6 +1,5 @@
 import { FunctionComponent, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import { supportedLngs } from "../../../../../domain/i18n/supported-lngs";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";

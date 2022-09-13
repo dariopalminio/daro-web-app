@@ -60,14 +60,14 @@ export class ApiError extends Error {
  * @returns AuthError
  */
 export function handleAxiosError(e: Error | AxiosError): ApiError {
-    console.log("------ handleAxiosError");
+  
     if (axios.isAxiosError(e)) {
-        console.log("isAxiosError");
+        
         const axiosError: AxiosError = e;
         if (e.response) {
             const status: number = axiosError.response?.status ? axiosError.response?.status : 0
             const txt: string = axiosError.response?.statusText ? axiosError.response?.statusText : "Unknown"
-            console.log("isAxiosError.response.status", status);
+           
             switch (status) {
                 case AuthStatusEnum.UNAUTHORIZED:
                     return new ApiError(AuthStatusText.UNAUTHORIZED.text, e.stack, status, txt);
@@ -89,7 +89,6 @@ export function handleAxiosError(e: Error | AxiosError): ApiError {
     
     if (e instanceof ApiError) return e;
 
-    console.log("is NOT AxiosError");
     if (e.message === "Network Error") {
         return new ApiError(AuthStatusText.ERR_CONNECTION_REFUSED.text, e.stack, AuthStatusEnum.ERR_CONNECTION_REFUSED, "Network Error");
     }

@@ -9,6 +9,7 @@ import { Address } from "../../../../../domain/model/user/address.type";
 import MyAddresses from "./my-addresses";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory"
+import button_background from "../../../style/buttonbackground";
 
 //@material-ui https://v4.mui.com/
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         buttonCustom: {
             margin: "0 auto auto auto",
+            background: button_background,
         },
         demo: {
             backgroundColor: theme.palette.background.paper,
@@ -213,10 +215,6 @@ const UserProfile: FunctionComponent = () => {
     const ifFieldsAreInvalid = (): boolean => {
         return firstNameValid && lastNameValid;
     };
-
-    const isLogged = () => {
-        return session && session.isLogged;
-      };
 
     return (
         <div>

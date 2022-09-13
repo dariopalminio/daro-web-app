@@ -10,7 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 /**
  * Cart Icon Button
  */
-const CartIconButton: FunctionComponent = () => {
+const CartTopMenu: FunctionComponent = () => {
   const { t } = useTranslation();
 
   const handleViewCart = () => {
@@ -29,10 +29,11 @@ const CartIconButton: FunctionComponent = () => {
     <div className="cart-circle" >
       <span id="cart_count" data-action="cart-can" className="badge rounded-circle">5</span>
     </div>
+    
     <ShoppingCartOutlinedIcon />
 
   </IconButton>
   );
 };
 
-export default CartIconButton;
+export default CartTopMenu;

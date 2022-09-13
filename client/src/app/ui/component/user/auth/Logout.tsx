@@ -4,6 +4,7 @@ import SessionContext, {
 } from "../../../../../domain/context/session.context";
 import useLogout from "../../../../../domain/hook/user/logout.hook";
 import { useTranslation } from 'react-i18next';
+import button_background from "../../../style/buttonbackground";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
@@ -16,6 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
     wrapperCenter: {
       display: "flex",
       justifyContent: "center",
+    },
+    buttonCustom: {
+      margin: "0 auto auto auto",
+      background: button_background,
     },
   })
 );
@@ -51,6 +56,7 @@ const Logout: FunctionComponent = () => {
 
       <div className={clsx(classes.wrapperCenter)}>
         <Button
+        className={clsx(classes.buttonCustom)}
           variant="contained"
           color="primary"
           onClick={() => onClickLogoutHandler()}

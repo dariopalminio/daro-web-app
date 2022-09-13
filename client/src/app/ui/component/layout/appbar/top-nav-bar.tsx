@@ -1,10 +1,11 @@
 import { FunctionComponent } from "react";
 import { useAtom } from "jotai";
 import clsx from "clsx";
-import logo from "../../image/logo_app.png";
+import logo from "../../../image/logo_app.png";
 import styled from "styled-components";
-import { openLeftStatus } from "./app-layout";
+import { openLeftStatus } from "../app-layout";
 import UserTopMenu from "./user-top-menu";
+import CartTopMenu from "./cart-top-menu";
 
 //@material-ui
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -20,6 +21,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
+      background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
       transition: theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
     },
     toolBar: {
-     
+      
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -69,6 +71,7 @@ const TopNavBar: FunctionComponent = () => {
 
   return (
     <AppBar  
+      color="transparent"
       data-testid="AppBar"
       position="fixed"
       className={clsx(classes.appBar, {
@@ -77,8 +80,6 @@ const TopNavBar: FunctionComponent = () => {
     >
       <Toolbar className={clsx(classes.toolBar)}>
       
-      
-
         <IconButton
           color="inherit"
           aria-label="open drawer"
@@ -91,6 +92,7 @@ const TopNavBar: FunctionComponent = () => {
 
     
         <UserTopMenu />
+        <CartTopMenu/>
         <div className={clsx(classes.containerTopMenu)}>
         <LogoImg className={clsx(classes.logo)} src={logo} />
         </div>

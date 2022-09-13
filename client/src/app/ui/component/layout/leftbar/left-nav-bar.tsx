@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import { useAtom } from "jotai";
-import { openLeftStatus } from "./app-layout";
+import { openLeftStatus } from "../app-layout";
 import { Link } from "react-router-dom";
 import { LeftMenuData } from "./left-menu-data";
 

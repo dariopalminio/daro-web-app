@@ -2,10 +2,10 @@ import { FunctionComponent } from "react";
 import { atom, useAtom } from "jotai";
 import clsx from "clsx";
 import MainContainer from "./main-container";
-import TopNavBar from "./top-nav-bar";
-import LeftNavBar from "./left-nav-bar";
+import TopNavBar from "./appbar/top-nav-bar";
+import LeftNavBar from "./leftbar/left-nav-bar";
 
-//@material-ui
+//@material-ui https://v4.mui.com/
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
