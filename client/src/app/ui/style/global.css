@@ -88,7 +88,7 @@ code {
   height:400px;
   position: absolute;
   background: #13ff13;
-  background-image: linear-gradient(-225deg, #231557 30%, #44107A 29%, #ff1361 67%, #fff800 100%);
+  background-image: linear-gradient(-225deg, #231557 30%, #8549c5 29%, #f06191 67%, #fff800 100%);
   z-index: -1;
   transition: transform 0.5s ease;
 }

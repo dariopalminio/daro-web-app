@@ -1,6 +1,12 @@
 import { FunctionComponent } from 'react'
 
-export const CartPage: FunctionComponent = () => {
-    return <div className="content-page">Cart Page</div>
-};
 
+// Components
+import CartItem from "../../component/cart/cart-item";
+import Cart from '../../component/cart/cart';
+
+export const CartPage: FunctionComponent = () => {
+  return (
+    <Cart />
+  );
+};

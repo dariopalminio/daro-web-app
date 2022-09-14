@@ -9,9 +9,11 @@ import { PassRecoveryMsgPage } from "../../page/user/recovery/pass-recovery-msg.
 import { PassRecoveryFormPage } from "../../page/user/recovery/pass-recovery-form.page";
 import { ProfilePage } from "../../page/user/profile/profile.page";
 import { CartPage } from "../../page/cart/cart.page";
-import { HomePage } from "../../page/subpage01/home.page";
+import { HomePage } from "../../page/home/home.page";
 import { ContactPage } from "../../page/contact/contact.page";
 import Footer from './footer';
+import { CatalogPage } from "../../page/catalog/catalog.page";
+import { ProductDetailPage } from "../../page/catalog/product-detail.page";
 
 /**
  * MainContainer Function Component
@@ -26,6 +28,8 @@ const MainContainer: FunctionComponent = () => {
         <Route path="/" component={HomePage} exact></Route>
         <Route path="/user/auth" component={AuthPage} exact></Route>
         <Route path="/cart" component={CartPage} exact></Route>
+        <Route path="/catalog" component={CatalogPage} exact></Route>
+        <Route path="/catalog/product/detail/:id" component={ProductDetailPage} exact></Route>
         <Route path="/contact" component={ContactPage} exact></Route>
         <Route path="/user/register/form" component={RegisterPage} exact></Route>
         <Route path="/user/register/confirm/start" component={RegisterConfirmStartPage} exact></Route>
