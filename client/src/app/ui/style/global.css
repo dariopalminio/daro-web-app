@@ -1,79 +1,103 @@
 body {
-    position: relative;
-    min-width: 320px;
-    min-height: 100%;
-    margin: 0;
-    height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  position: relative;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
-  }
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
 
-  @media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-      animation: App-logo-spin infinite 20s linear;
-    }
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
   }
-  
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-  
-  .content-page {
-    display: flex;
-    height: 90vh;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-  }
+}
 
-  .main-container{
-    flex: 1 0 auto;
-    padding: 2rem;
-    width: 100%;
-    margin: 0 auto;
-  }
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
 
-  .footer{
-    display: flow;
-    width: 100%;
-    bottom: 0;
-    margin-bottom: 0px;
-    vertical-align: middle;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
+.content-page {
+  display: flex;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
 
-  .sidebar-social li {
-    text-align: center;
-    width: 31.9%;
-    margin-bottom: 3px !important;
-    display: inline-block;
-    font-size: 10px;
-    padding: 0;
-  }
+.main-container {
+  flex: 1 0 auto;
+  padding: 2rem;
+  width: 100%;
+  margin: 0 auto;
+}
 
-  .gradient-button-salmon {
-    background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-    margin: 0 auto auto auto;
+.footer {
+  display: flow;
+  width: 100%;
+  bottom: 0;
+  margin-bottom: 0px;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.sidebar-social li {
+  text-align: center;
+  width: 31.9%;
+  margin-bottom: 3px !important;
+  display: inline-block;
+  font-size: 10px;
+  padding: 0;
+}
+
+.gradient-button-salmon {
+  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+  box-shadow: 0 0 0 0 rgba(145, 64, 248, 0.5), 0 0 0 0 rgba(39, 200, 255, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
 }
 
 .gradient-button-light-blue {
   background: linear-gradient(45deg, #2196F3 30%, #21CBF3 90%);
-  margin: 0 auto auto auto;
+  box-shadow: 0 0 0 0 rgba(145, 64, 248, 0.5), 0 0 0 0 rgba(39, 200, 255, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.gradient-button-salmon::after{
+  content: "";
+  width: 400px;
+  height:400px;
+  position: absolute;
+  background: #13ff13;
+  background-image: linear-gradient(-225deg, #231557 30%, #44107A 29%, #ff1361 67%, #fff800 100%);
+  z-index: -1;
+  transition: transform 0.5s ease;
+}
+
+.gradient-button-salmon:hover{
+  transform: translate(0, 0);
+  box-shadow: 10px -10px 25px 0 rgba(16, 226, 256, 0.5), -10px 10px 25px 0 rgba(183, 0, 255, 0.7);
+}
+
+.gradient-button-salmon:hover::after{
+  transform: rotate(150deg);
 }
