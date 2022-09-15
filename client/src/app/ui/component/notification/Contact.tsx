@@ -180,7 +180,7 @@ const Contact: FunctionComponent = () => {
             />
             <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
               <Button
-                className={clsx(classes.buttonCustom)}
+                className='gradient-button-salmon'
                 variant="contained"
                 color="primary"
                 type="submit"

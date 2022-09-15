@@ -1,46 +1,39 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext, useState } from 'react'
 import "./cart.css";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
-
-
 // Components
 import CartItem from "./cart-item";
+import { Button } from '@material-ui/core';
+import CartContext, { ICartContext } from '../../../../domain/context/cart.context';
+
 
 const Cart: FunctionComponent = () => {
 
-    const CART_INITIAL_STATE = {
-        cartItems: [
-            { imageUrl: "urlImage", name: "Product Name", price: 23, product: "1", qty: 1, countInStock: 1 }
-        ],
-    };
-    const { cartItems } = CART_INITIAL_STATE;
+    const { cartItems,
+        cartTotal,
+        setCartItems,
+        setCartTotal,
+        addToCart,
+        removeFromCart,
+        getCartCount,
+        changeItemQuantity } = useContext(CartContext) as ICartContext;
 
-    const removeItem = (e: any) => {
-        console.log(e);
-    };
 
-    // @ts-ignore
-    const qtyChangeHandler = (id, qty) => {
-        console.log("qtyChangeHandler");
-    };
+    useEffect(() => {
 
-    // @ts-ignore
-    const removeFromCartHandler = (id) => {
-        console.log("removeFromCartHandler");
-    };
+    }, []);
 
-    const getCartCount = () => {
-        //return cartItems.reduce((qty, item) => Number(item.qty) + qty, 0);
-        return 1;
-    };
+
 
     const getCartSubTotal = () => {
-        //return cartItems
-        //  .reduce((price, item) => price + item.price * item.qty, 0)
-        //  .toFixed(2);
-        return 10;
+        return cartTotal;
+    };
+
+
+    const handleContinue = () => {
+        console.log('handleContinue... TODO');
     };
 
 
@@ -48,21 +41,34 @@ const Cart: FunctionComponent = () => {
         <>
             <div className="cartscreen">
                 <div className="cartscreen__left">
-                    <h2>Carrito de compras</h2>
+                    <h2>Shopping Cart</h2>
 
                     {cartItems.length === 0 ? (
                         <div>
                             Tu carrito esta vacio <Link to="/">Volver</Link>
                         </div>
                     ) : (
-                        cartItems.map((item) => (
-                            <CartItem
-                                key={item.product}
-                                item={item}
-                                qtyChangeHandler={qtyChangeHandler}
-                                removeHandler={removeFromCartHandler}
-                            />
-                        ))
+                        <div>
+
+                            <div className="cartitems-header">
+                                <p ></p>
+                                <p >Name</p>
+                                <p >Price</p>
+                                <p >Quantity</p>
+                                <p >Amount</p>
+                                <p ></p>
+                            </div>
+
+                            {cartItems.map((item) => (
+                                <CartItem
+                                    key={item.id}
+                                    item={item}
+                                    qtyChangeHandler={changeItemQuantity}
+                                    removeHandler={removeFromCart}
+                                />
+                            ))}
+
+                        </div>
                     )}
                 </div>
 
@@ -72,7 +78,10 @@ const Cart: FunctionComponent = () => {
                         <p>${getCartSubTotal()}</p>
                     </div>
                     <div>
-                        <button>Pagar</button>
+                        <Button className='gradient-button-salmon'
+                             onClick={handleContinue}>
+                            Continue
+                        </Button>
                     </div>
                 </div>
             </div>

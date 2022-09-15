@@ -25,35 +25,46 @@
   
   .info__price {
     font-weight: bold;
+    color:rgb(5, 5, 5)
   }
   
   .info__name {
     font-size: 1rem;
     margin-top: 10px;
+    color:rgb(5, 5, 5)
   }
   
   .info__description {
     font-size: 0.8rem;
+    color:rgba(16, 17, 16, 0.678)
   }
   
   .info__button {
     display: block;
     text-decoration: none;
     text-align: center;
-    color: #81c784;
     width: 100%;
     padding: 8px 16px;
-    background-color: #f4f4f4;
-    border: 1px solid #81c784;
+    background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
     border-radius:3px;
     font-size: 1rem;
   }
   
   .info__button:hover {
-    background: #81c784;
-    color: #f4f4f4;
+    background: linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%);
   }
   
+.linkframe:link { text-decoration: none; }
+
+
+.linkframe:visited { text-decoration: none; }
+
+
+.linkframe:hover { text-decoration: none; }
+
+
+.linkframe:active { text-decoration: none; }
+
   @media (max-width: 1232px) {
     .product {
       width: 360px;
@@ -106,4 +117,10 @@
     .product {
       width: 300px;
     }
+  }
+
+  .frame_product_buttons {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }

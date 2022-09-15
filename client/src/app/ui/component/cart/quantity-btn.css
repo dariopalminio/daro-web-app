@@ -1,0 +1,35 @@
+.qty_div {
+    display: flex;
+      text-align: center;
+      padding: 5px;
+      margin: 2%;
+  }
+  
+  .qty {
+      width: 40px;
+      height: 25px;
+      text-align: center;
+      border: 0px;
+  }
+  
+  input.qtyplus { 
+    width:25px; 
+    height:25px;
+    background-color: rgb(250, 164, 204);
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    border: 0px;
+    cursor: pointer;
+  }
+  input.qtyminus { 
+    width:25px; 
+    height:25px;
+    background-color: rgb(250, 164, 204);
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    border: 0px;
+    cursor: pointer;
+  }
+  

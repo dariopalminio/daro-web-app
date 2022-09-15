@@ -92,7 +92,9 @@ const TopNavBar: FunctionComponent = () => {
 
     
         <UserTopMenu />
+
         <CartTopMenu/>
+        
         <div className={clsx(classes.containerTopMenu)}>
         <LogoImg className={clsx(classes.logo)} src={logo} />
         </div>

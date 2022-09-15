@@ -1,48 +1,20 @@
-import { FC, useEffect, useState } from "react";
-
-import SessionContext, {
-  recoverySessionFromStorage,
-  setSessionToStorage,
-  clearSessionToStorage
-} from "../../../domain/context/session.context";
-import { SessionType } from "../../../domain/model/auth/session.type";
-import { DefaultSession as SessionDefaultValue} from '../../../domain/model/auth/default-session';
+import { FC, useEffect } from "react";
+import { useCart } from "../../../domain/hook/cart/cart.hook";
+import SessionContext from "../../../domain/context/session.context";
+import { useSession } from "../../../domain/hook/user/session.hook";
 
 /**
  * Session Context Provider
  */
 const SessionContextProvider: FC = ({ children }) => {
-  const [session, setSession] = useState<SessionType>(SessionDefaultValue);
-
+  const {session,
+    setNewSession,
+    removeSessionValue} = useSession();
 
   useEffect(() => {
-    // Recovery session from storage when is rendered
-    const sessionLoaded: SessionType = recoverySessionFromStorage();
-    setSession(sessionLoaded);
-  }, [setSession]);
 
-  //const sharedValue = useMemo(()=>{
+  }, []);
 
-  
-    function removeSessionValue() {
-      //setSessionToStorage(SessionDefaultValue);
-      clearSessionToStorage();
-      setSession(SessionDefaultValue);
-    }
-
-    function setNewSession(newSession: SessionType) {
-      setSession(newSession);
-      setSessionToStorage(newSession);
-    }
-    
-/*
-    return({
-      session,
-      setNewSession,
-      removeSessionValue
-    })
-  },[session, setSession]);
-*/
   return (
     <SessionContext.Provider
       value={{
