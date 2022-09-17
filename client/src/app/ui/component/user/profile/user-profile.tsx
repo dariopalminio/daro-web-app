@@ -8,17 +8,19 @@ import { Profile } from "../../../../../domain/model/user/profile.type";
 import { Address } from "../../../../../domain/model/user/address.type";
 import MyAddresses from "./my-addresses";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
-import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory"
+import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
+import Button from "../../../common/button/button";
+import CircularProgress from "../../../common/progress/circular-progress";
+import Alert from "../../../common/alert/alert";
 
 //@material-ui https://v4.mui.com/
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import ProfileLanguage from "./profile-language";
 import useProfile from "../../../../../domain/hook/profile.hook";
-import { CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
-import AlertError from "../alert-error";
+import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+
 
 
 
@@ -343,9 +345,6 @@ const UserProfile: FunctionComponent = () => {
 
                             {ifFieldsAreInvalid() &&
                                 <Button
-                                    className='gradient-button-salmon'
-                                    variant="contained"
-                                    color="primary"
                                     type="submit"
                                 >
                                     {t('profile.command.submit')}
@@ -373,7 +372,7 @@ const UserProfile: FunctionComponent = () => {
                 </div>
             )}
 
-            {hasError && <AlertError msg={t(msg)} />}
+            {hasError && <Alert severity="error">{t(msg)}</Alert>}
 
         </div>
     );

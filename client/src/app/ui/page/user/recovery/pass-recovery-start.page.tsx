@@ -3,9 +3,9 @@ import PassRecoveryStart from "../../../component/user/recovery/pass-recovery-st
 
 export const PassRecoveryStartPage: FunctionComponent = () => {
   return (
-    <>
+    <div className="container-page">
       <br />
       <PassRecoveryStart />
-    </>
+    </div>
   );
 };

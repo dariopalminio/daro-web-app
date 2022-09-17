@@ -1,11 +1,12 @@
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import Link from "../../../common/link/link";
 
 //@material-ui https://v4.mui.com/
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Link from "@material-ui/core/Link";
 import ProfileLanguage from "./profile-language";
+import Paper from "../../../common/paper/paper";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,7 +32,7 @@ const AnonymousProfile: FunctionComponent = () => {
     const classes = useStyles();
 
     return (
-        <div>
+        <Paper>
             {t("profile.msg.anonymous")}
 
             &nbsp;&nbsp;
@@ -45,7 +46,7 @@ const AnonymousProfile: FunctionComponent = () => {
 
             <ProfileLanguage onChange={(len: string)=> {}}/>
             
-        </div>
+        </Paper>
     );
 };
 

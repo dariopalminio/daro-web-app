@@ -9,7 +9,7 @@ import Auth from "../../../component/user/auth/auth";
 export const AuthPage: FunctionComponent = () => {
   return (
     <>
-      <div>
+     <div className="container-page">
       <br />
       <Auth />
       </div>

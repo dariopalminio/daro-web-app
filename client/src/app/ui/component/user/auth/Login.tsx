@@ -2,17 +2,18 @@ import React, { FunctionComponent, useState } from "react";
 import useLogin from "../../../../../domain/hook/user/login.hook";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
-import AlertError from "../alert-error";
+import Alert from "../../../common/alert/alert";
 import clsx from "clsx";
 import { useTranslation } from 'react-i18next';
+import CircularProgress from "../../../common/progress/circular-progress";
+import Button from "../../../common/button/button";
+import TextField from "../../../common/text-field/text-field";
+import Link from "../../../common/link/link";
+import Paper from "../../../common/paper/paper";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Link from "@material-ui/core/Link";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import CircularProgress from "@material-ui/core/CircularProgress";
+
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     paperLoginForm: {
       width: "300px",
-      margin: "0 auto 0 auto",
+      margin: "0 auto",
       padding: "0px 0px 0px 0px",
     },
     wrapperCenter: {
@@ -106,7 +107,7 @@ const Login: FunctionComponent = () => {
           action="#"
           onSubmit={handleLoginSubmit}
         >
-          <Paper className={clsx(classes.paperLoginForm)}>
+          <Paper>
             <div className={clsx(classes.wrapperCenter)}>
               <h1 className={clsx(classes.h1Custom)}>
               {t('login.title')}
@@ -115,7 +116,6 @@ const Login: FunctionComponent = () => {
             <div className={clsx(classes.wrapperCenter)}>
               <TextField
                 id="standard-basic"
-                className="textfield-custom"
                 label="Email"
                 placeholder="your@email.com"
                 onChange={(e) => handleEmailChange(e.target.value)}
@@ -129,7 +129,6 @@ const Login: FunctionComponent = () => {
             <div className={clsx(classes.wrapperCenter)}>
               <TextField
                 id="standard-basic-2"
-                className="textfield-custom"
                 label={t('login.label.password')}
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
@@ -149,8 +148,7 @@ const Login: FunctionComponent = () => {
             </div>
 
             <div className={clsx(classes.wrapperCenterForButton)}>
-              <Button className='gradient-button-salmon'
-              variant="contained" color="primary" type="submit">
+              <Button type="submit">
               {t('login.command')}
               </Button>
             </div>
@@ -161,13 +159,10 @@ const Login: FunctionComponent = () => {
       <br />
 
       {isProcessing && (
-        <div className="box">
-          <strong>{t('login.info.loading')}</strong>
-          <CircularProgress />
-        </div>
+          <CircularProgress>{t('login.info.loading')}</CircularProgress>
       )}
 
-      {hasError && <AlertError msg={t(msg)} />}
+      {hasError && <Alert severity="error">{t(msg)}</Alert>}
 
     </div>
   );

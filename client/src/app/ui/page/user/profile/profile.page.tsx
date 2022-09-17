@@ -5,7 +5,7 @@ import Profile from "../../../component/user/profile/profile";
 export const ProfilePage: FunctionComponent = () => {
     return (
       <>
-        <div>
+        <div className="container-page">
         <Profile />
         </div>
       </>

@@ -1,10 +1,11 @@
 import "./cart-item.css";
 import { Link } from "react-router-dom";
+import ButtonQuantity from "../../common/button-quantity/button-quantity";
 
 //https://v4.mui.com/
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import QuantityBtn from "./quantity-btn";
+
 
 
 
@@ -30,7 +31,7 @@ const CartItem = ({ item, qtyChangeHandler, removeHandler }: any) => {
       <p className="cartitem__price">${item.price}</p>
 
       
-      <QuantityBtn value={item.qty} onChange={(newQuantityValue:number) => handlerNewQuantityValue(newQuantityValue)} />
+      <ButtonQuantity value={item.qty} onChange={(newQuantityValue:number) => handlerNewQuantityValue(newQuantityValue)} />
 
       <p className="cartitem__price">${item.amount}</p>
 

@@ -10,14 +10,14 @@ import useRegister from "../../../../../domain/hook/user/register.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useTranslation } from 'react-i18next';
-
+import Button from "../../../common/button/button";
+import CircularProgress from "../../../common/progress/circular-progress";
+import Paper from "../../../common/paper/paper";
+import Alert from "../../../common/alert/alert";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import Alert from "@material-ui/lab/Alert";
-import CircularProgress from "@material-ui/core/CircularProgress";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -109,9 +109,6 @@ const RegisterConfirmStart: FunctionComponent = () => {
 
             <div className={clsx(classes.wrapperCenter)}>
               <Button
-                className='gradient-button-salmon'
-                variant="contained"
-                color="primary"
                 onClick={() => handleSendEmail()}
               >
                 {t('register.command.email.send')}

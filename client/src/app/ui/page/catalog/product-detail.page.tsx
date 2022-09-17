@@ -11,9 +11,9 @@ export function ProductDetailPage({
     match,
   }: RouteComponentProps<TParams>) {
     return (
-      <>
+      <div className="container-page">
         ProductDetailPage {match.params.productId}
         <ProductDetail id={match.params.productId} />
-      </>
+      </div>
     );
   }

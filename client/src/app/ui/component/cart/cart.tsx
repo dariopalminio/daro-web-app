@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 // Components
 import CartItem from "./cart-item";
-import { Button } from '@material-ui/core';
+import Button from "../../common/button/button";
 import CartContext, { ICartContext } from '../../../../domain/context/cart.context';
 
 
@@ -78,7 +78,7 @@ const Cart: FunctionComponent = () => {
                         <p>${getCartSubTotal()}</p>
                     </div>
                     <div>
-                        <Button className='gradient-button-salmon'
+                        <Button 
                              onClick={handleContinue}>
                             Continue
                         </Button>

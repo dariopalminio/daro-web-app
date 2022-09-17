@@ -1,0 +1,44 @@
+.gradient-button-salmon-1 {
+    color: rgb(255, 255, 255);
+    background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+    box-shadow: 0 0 0 0 rgba(145, 64, 248, 0.5), 0 0 0 0 rgba(39, 200, 255, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    border: 0px;
+    border-radius: 5px;
+    cursor: pointer;
+    height:30px;
+    width: 100%;
+  }
+
+  .gradient-button-salmon-1-disabled {
+    color: rgb(255, 255, 255);
+    background: linear-gradient(45deg, #8a8a8a 30%, #bebebe 90%);
+    opacity: 0.5;
+    box-shadow: 0 0 0 0 rgba(145, 64, 248, 0.5), 0 0 0 0 rgba(39, 200, 255, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    border: 0px;
+    border-radius: 5px;
+    height:30px;
+    width: 100%;
+  }
+
+  .gradient-button-salmon-1::after{
+    color: rgb(255, 255, 255);
+    content: "";
+    position: absolute;
+    z-index: -1;
+    transition: transform 0.5s ease;
+  }
+  
+  .gradient-button-salmon-1:hover{
+    color: rgb(255, 255, 255);
+    transform: translate(0, 0);
+    background: linear-gradient(45deg,  #FF8E53 30%, #FE6B8B 90%);
+    box-shadow: 10px -10px 25px 0 rgba(16, 226, 256, 0.5), -10px 10px 25px 0 rgba(183, 0, 255, 0.7);
+  }
+  
+  .gradient-button-salmon-1:hover::after{
+    transform: rotate(150deg);
+  }

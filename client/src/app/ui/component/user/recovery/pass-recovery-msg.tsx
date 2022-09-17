@@ -2,10 +2,11 @@ import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import emailSentImage from "../../../image/email_sent.png";
+import Paper from "../../../common/paper/paper";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
+
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -55,7 +56,7 @@ const PassRecoveryMsg: FunctionComponent = () => {
   return (
     <div>
 
-          <Paper className={clsx(classes.paperLoginForm)}>
+          <Paper>
             <div className={clsx(classes.wrapperCenter)}>
               <h1 className={clsx(classes.h1Custom)}>{t('message.info.thank.you')}</h1>
             </div>

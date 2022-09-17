@@ -1,16 +1,23 @@
-import "./quantity-btn.css";
+import "./button-quantity.css";
 
+interface Props {
+  value: number;
+  onChange: (newQuantityValue: number) => void;
+}
 
-const QuantityBtn = ({ value, onChange }: any) => {
+/**
+ * Customized button for quantity number selection
+ */
+const ButtonQuantity: React.FC<Props> = ({ value, onChange }) => {
 
   const handlerQtyminus = () => {
-    let newValue: number = parseInt(value);
-    if (value>0) newValue = (parseInt(value) - 1);
+    let newValue: number = value;
+    if (value>0) newValue = (value - 1);
     onChange(newValue);
   };
 
   const handlerQtyplus = () => {
-    const newValue = (parseInt(value) + 1);
+    const newValue = (value + 1);
     onChange(newValue);
   };
 
@@ -23,4 +30,4 @@ const QuantityBtn = ({ value, onChange }: any) => {
   );
 };
 
-export default QuantityBtn;
+export default ButtonQuantity;

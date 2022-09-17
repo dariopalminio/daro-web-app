@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { Address } from "../../../../../domain/model/user/address.type";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory"
+import Button from "../../../common/button/button";
 
 //@material-ui https://v4.mui.com/
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import { Typography } from "@material-ui/core";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -197,7 +197,7 @@ const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
                 </List>
             </div>
 
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+            <Button onClick={handleClickOpen}>
                 {t('my.addresses.add')}
             </Button>
 
@@ -272,14 +272,12 @@ const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
                 </DialogContent>
                 <DialogActions>
                     <Button 
-                    className='gradient-button-salmon'
                     onClick={handleClose}>
                         {t('button.command.cancel')}
                     </Button>
 
                     {ifFieldsAreInvalid() &&
                         <Button 
-                        className='gradient-button-salmon'
                         onClick={handleAddClose}>
                             {t('button.command.add')}
                         </Button>

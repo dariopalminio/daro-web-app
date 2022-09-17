@@ -1,0 +1,40 @@
+.qty_div {
+  display: flex;
+  text-align: center;
+  padding: 5px;
+  margin: 2%;
+  justify-content: center;
+}
+
+.qty {
+  width: 40px;
+  height: 25px;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(206, 206, 206);
+}
+
+input.qtyplus {
+  width: 25px;
+  height: 25px;
+  background-color: rgb(235, 235, 235);
+  border: 0px;
+  cursor: pointer;
+}
+
+input.qtyminus {
+  width: 25px;
+  height: 25px;
+  background-color: rgb(235, 235, 235);
+  border: 0px;
+  cursor: pointer;
+}
+
+input.qtyplus:hover {
+  background-color: rgb(140, 195, 231);
+}
+
+input.qtyminus:hover {
+  background-color: rgb(140, 195, 231);
+}

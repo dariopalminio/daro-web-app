@@ -4,14 +4,14 @@ import { UserValidatorFactory } from "../../../../../domain/helper/user-validato
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import useRecovery from "../../../../../domain/hook/user/recovery.hook";
+import Button from "../../../common/button/button";
+import Paper from "../../../common/paper/paper";
+import TextField from "../../../common/text-field/text-field";
+import Alert from "../../../common/alert/alert";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -105,34 +105,22 @@ function PassRecoveryForm({ token }: TParams) {
           action="#"
           onSubmit={handleSubmit}
         >
-          <Paper className={clsx(classes.papperRegisterForm)}>
-            <Grid
-              container
-              direction="row"
-              justify="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item xs={12}>
+          <Paper>
+              
                 <div className={clsx(classes.wrapperCenter)}>
                   <h1 className={clsx(classes.h1Custom)}>
                     {t("recovery.form.title")}
                   </h1>
                 </div>
-              </Grid>
-
-              <Grid item xs={12}>
+            
                 <div className={clsx(classes.wrapperCenter)}>
                   <label className={clsx(classes.labelForPass)}>
                     {t("register.info.password.pattern")}
                   </label>
                 </div>
-              </Grid>
-
-              <Grid item xs={12}>
+             
                 <TextField
                   id="standard-basic-4"
-                  className={clsx(classes.textfieldCustom)}
                   label="Password"
                   type="password"
                   onChange={(e) => handlePasswordChange(e.target.value)}
@@ -142,13 +130,10 @@ function PassRecoveryForm({ token }: TParams) {
                     helperText: passErrorText,
                   })}
                 />
-              </Grid>
-
-              <Grid item xs={12}>
+             
                 <div className={clsx(classes.wrapperCenter)}>
                   <TextField
                     id="standard-basic-5"
-                    className={clsx(classes.textfieldCustom)}
                     label="Confirm Password"
                     type="password"
                     onChange={(e) => handleConfirmPassChange(e.target.value)}
@@ -159,21 +144,15 @@ function PassRecoveryForm({ token }: TParams) {
                     })}
                   />
                 </div>
-              </Grid>
 
-              <Grid item xs={12}>
                 <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
                   <Button
-                    className='gradient-button-salmon'
-                    variant="contained"
-                    color="primary"
                     type="submit"
                   >
                     {t("recovery.form.command.change")}
                   </Button>
                 </div>
-              </Grid>
-            </Grid>
+             
           </Paper>
         </form>
       )}

@@ -8,9 +8,9 @@ export const CatalogPage: FunctionComponent = () => {
 
 
   return (
-    <>
+    <div className="container-page">
       <div>catalog</div>
       <Products/>
-    </>
+    </div>
   );
 };

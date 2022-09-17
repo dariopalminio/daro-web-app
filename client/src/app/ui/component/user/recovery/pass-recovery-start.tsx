@@ -6,13 +6,14 @@ import emailToSendImage from "../../../image/email_to_send.png";
 import useRecovery from "../../../../../domain/hook/user/recovery.hook";
 import { Redirect } from "react-router";
 import { useTranslation } from 'react-i18next';
+import Button from "../../../common/button/button";
+import Paper from "../../../common/paper/paper";
+import TextField from "../../../common/text-field/text-field";
+import Alert from "../../../common/alert/alert";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Alert from "@material-ui/lab/Alert";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,6 +44,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     h1Custom: {
       fontSize: "1.5em",
+      color: "#525252",
+      paddingLeft: "1rem",
+    },
+    paragraph: {
+      fontSize: "1em",
       color: "#525252",
       paddingLeft: "1rem",
     },
@@ -99,7 +105,7 @@ const PassRecoveryStart: FunctionComponent = () => {
         action="#"
         onSubmit={handleSubmit}
       >
-        <Paper className={clsx(classes.paperLoginForm)}>
+        <Paper>
           <div className={clsx(classes.wrapperCenter)}>
             <h1 className={clsx(classes.h1Custom)}>
               {t('recovery.start.title')}
@@ -107,21 +113,22 @@ const PassRecoveryStart: FunctionComponent = () => {
           </div>
 
           <div className={clsx(classes.wrapperCenter)}>
+          <p className={clsx(classes.paragraph)}>
           {t('recovery.start.info.enter.email')}
+          </p>
           </div>
 
           <div className={clsx(classes.wrapperCenter)}>
             <img
               src={String(emailToSendImage)}
               alt="emailSentImage"
-              style={{ width: "45%", height: "45%" }}
+              style={{ width: "30%", height: "30%" }}
             />
           </div>
 
           <div className={clsx(classes.wrapperCenter)}>
             <TextField
               id="standard-basic"
-              className="textfield-custom"
               label={t('profile.label.email')}
               placeholder="your@email.com"
               onChange={(e) => handleEmailChange(e.target.value)}
@@ -134,9 +141,7 @@ const PassRecoveryStart: FunctionComponent = () => {
           </div>
 
           <div className={clsx(classes.wrapperCenterForButton)}>
-            <Button 
-            className='gradient-button-salmon'
-            variant="contained" color="primary" type="submit">
+            <Button type="submit">
             {t('recovery.start.command.send')}
             </Button>
           </div>

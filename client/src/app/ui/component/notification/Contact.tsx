@@ -3,17 +3,18 @@ import IUserValidator from '../../../../domain/helper/user-validator.interface';
 import { UserValidatorFactory } from "../../../../domain/helper/user-validator.factory";
 import { ContactType } from "../../../../domain/model/notification/contact.type";
 import useNotification from "../../../../domain/hook/notification.hook";
-import AlertError from "../user/alert-error";
+import Alert from "../../common/alert/alert";
 import { useTranslation } from 'react-i18next';
+import CircularProgress from "../../common/progress/circular-progress";
+import Button from "../../common/button/button";
+import Paper from "../../common/paper/paper";
+import TextField from "../../common/text-field/text-field";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Alert from "@material-ui/lab/Alert";
 import clsx from "clsx";
+
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,10 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     multilineCustom: {
       width: "290px",
-    },
-    buttonCustom: {
-      margin: "0 auto auto auto",
-      background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
     },
     h1Custom: {
       fontSize: "1.5em",
@@ -122,88 +119,98 @@ const Contact: FunctionComponent = () => {
 
   return (
     <div>
-      {(!sending && !wasSent)  && (
-        <form
-          id="ContactForm"
-          data-testid="ContactForm"
-          action="#"
-          onSubmit={handleSendSubmit}
-        >
-          <Paper className={clsx(classes.paperLoginForm)}>
+      {(!sending && !wasSent) && (
 
-          <div className={clsx(classes.wrapperCenter)}>
-                  <h1 className={clsx(classes.h1Custom)}>
-                  {t('contact.title')}
-                  </h1>
-                </div>
-                
+        <Paper>
+          <form
+            id="ContactForm"
+            data-testid="ContactForm"
+            action="#"
+            onSubmit={handleSendSubmit}
+          >
+            <div className={clsx(classes.wrapperCenter)}>
+              <h1 className={clsx(classes.h1Custom)}>
+                {t('contact.title')}
+              </h1>
+            </div>
+
+            <div className={clsx(classes.wrapperCenter)}>
             {t('contact.info.call.to.action')}
+            </div>
 
-            <TextField
-              id="standard-basic-1"
-              className={clsx(classes.textfieldCustom)}
-              label={t('contact.label.fullname')}
-              placeholder=""
-              onChange={(e) => handleNameChange(e.target.value)}
-              value={contact.name}
-              {...(!fullnameValid && { error: true, helperText: t('register.info.helper.text.required') })}
-            />
-            <TextField
-              id="standard-basic"
-              className={clsx(classes.textfieldCustom)}
-              label={t('profile.label.email')}
-              placeholder="daro@email.com"
-              onChange={(e) => handleEmailChange(e.target.value)}
-              value={contact.email}
-              {...(emailIsInvalid && {
-                error: true,
-                helperText: emailErrorText,
-              })}
-            />
-            <TextField
-              id="standard-basic"
-              className={clsx(classes.textfieldCustom)}
-              label="Phone"
-              placeholder="0000000000"
-              onChange={(e) => handlePhoneChange(e.target.value)}
-              value={contact.phone}
-            />
-            <TextField
-              id="outlined-textarea"
-              className={clsx(classes.multilineCustom)}
-              label={t('contact.label.message')}
-              placeholder="Placeholder"
-              onChange={(e) => handleMessageChange(e.target.value)}
-              multiline
-              rows={4}
-              variant="outlined"
-            />
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic-1"
+                label={t('contact.label.fullname')}
+                placeholder=""
+                onChange={(e) => handleNameChange(e.target.value)}
+                value={contact.name}
+                {...(!fullnameValid && { error: true, helperText: t('register.info.helper.text.required') })}
+              />
+            </div>
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic"
+                label={t('profile.label.email')}
+                placeholder="daro@email.com"
+                onChange={(e) => handleEmailChange(e.target.value)}
+                value={contact.email}
+                {...(emailIsInvalid && {
+                  error: true,
+                  helperText: emailErrorText,
+                })}
+              />
+            </div>
+
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic"
+                label="Phone"
+                placeholder="0000000000"
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                value={contact.phone}
+              />
+            </div>
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="outlined-textarea"
+                label={t('contact.label.message')}
+                placeholder="Placeholder"
+                onChange={(e) => handleMessageChange(e.target.value)}
+                value={contact.message}
+                multiline={true}
+              />
+            </div>
+
             <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
               <Button
-                className='gradient-button-salmon'
-                variant="contained"
-                color="primary"
                 type="submit"
+                style={{ margin: "20px 20px 20px 20px" }}
               >
                 {t('contact.command.send')}
               </Button>
             </div>
-          </Paper>
-        </form>
-      )}
-      
-      {sending && (
-        <div className="box">
-          <strong>
-            {t('contact.info.sending.email')}
-          </strong>
-          <CircularProgress />
-        </div>
-      )}
-      
-      {hasError && <AlertError msg={t(msg)} />}
+
+          </form>
+        </Paper>
+
+      )
+      }
+
+      {
+        sending && (
+          <div className="box">
+            <strong>
+              {t('contact.info.sending.email')}
+            </strong>
+            <CircularProgress />
+          </div>
+        )
+      }
+
+      {hasError && <Alert severity="error">{t(msg)} </Alert>}
       {wasSent && <Alert severity="success">{t('contact.success.sent.email')}</Alert>}
-    </div>
+    </div >
   );
 };
 

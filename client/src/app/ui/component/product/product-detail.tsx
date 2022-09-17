@@ -1,6 +1,6 @@
 import "./product-detail.css";
 import { useState, useEffect, useContext } from "react";
-import { Button } from "@material-ui/core";
+import Button from "../../common/button/button";
 import CartContext, { ICartContext } from '../../../../domain/context/cart.context';
 
 // Actions
@@ -67,7 +67,7 @@ const ProductDetail = ({ id }) => {
               </p>
               <p>
 
-                <Button className='gradient-button-salmon'
+                <Button
                   onClick={addToCartHandler}>
                   Add to Cart
                 </Button>

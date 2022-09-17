@@ -6,27 +6,20 @@ import useRegister from "../../../../../domain/hook/user/register.hook";
 import clsx from "clsx";
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import Button from "../../../common/button/button";
+import Paper from "../../../common/paper/paper";
+import TextField from "../../../common/text-field/text-field";
+import Alert from "../../../common/alert/alert";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "../../../common/progress/circular-progress";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-    },
-    papperRegisterForm: {
-      width: "400px",
-      height: "570px",
-      margin: "0 auto 0 auto",
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
     },
     wrapperCenter: {
       display: "flex",
@@ -78,7 +71,7 @@ export const RegisterForm: FunctionComponent = () => {
   const classes = useStyles();
   const validator: IUserValidator = UserValidatorFactory.create();
   const { t } = useTranslation();
-  
+
   const { isProcessing, isSuccess, hasError, msg, register } =
     useRegister();
 
@@ -124,7 +117,7 @@ export const RegisterForm: FunctionComponent = () => {
   return (
     <div>
       {isSuccess && (
-        <Redirect to='/user/register/confirm/start'/>
+        <Redirect to='/user/register/confirm/start' />
       )}
 
       {!isSuccess && (
@@ -134,124 +127,111 @@ export const RegisterForm: FunctionComponent = () => {
           action="#"
           onSubmit={handleLoginSubmit}
         >
-          <Paper className={clsx(classes.papperRegisterForm)}>
-            <Grid
-              container
-              direction="row"
-              justify="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <div className={clsx(classes.wrapperCenter)}>
-                  <h1 className={clsx(classes.h1Custom)}>
-                  {t('register.title')}
-                  </h1>
-                </div>
-              </Grid>
+          <Paper>
 
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-basic-1"
-                  className={clsx(classes.textfieldCustom)}
-                  label={t('profile.label.firstname')}
-                  placeholder=""
-                  onChange={(e) => handleFirstNameChange(e.target.value)}
-                  value={firstName}
-                  {...(!firstNameValid && { error: true, helperText: t('register.info.helper.text.required') })}
-                />
-              </Grid>
+            <div className={clsx(classes.wrapperCenter)}>
+              <h1 className={clsx(classes.h1Custom)}>
+                {t('register.title')}
+              </h1>
+            </div>
 
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-basic-2"
-                  className={clsx(classes.textfieldCustom)}
-                  label={t('profile.label.lastname')}
-                  placeholder=""
-                  onChange={(e) => handleLastNameChange(e.target.value)}
-                  value={lastName}
-                  {...(!lastNameValid && { 
-                    error: true, 
-                    helperText: t('register.info.helper.text.required'),
-                   })}
-                />
-              </Grid>
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic-1"
+                
+                label={t('profile.label.firstname')}
+                placeholder=""
+                onChange={(e) => handleFirstNameChange(e.target.value)}
+                value={firstName}
+                {...(!firstNameValid && { error: true, helperText: t('register.info.helper.text.required') })}
+              />
+            </div>
 
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-basic-3"
-                  className={clsx(classes.textfieldCustom)}
-                  label={t('profile.label.email')}
-                  placeholder="you@email.com"
-                  onChange={(e) => handleEmailChange(e.target.value)}
-                  value={email}
-                  {...(!emailValid && {
-                    error: true,
-                    helperText: emailErrorText,
-                  })}
-                />
-              </Grid>
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic-2"
+               
+                label={t('profile.label.lastname')}
+                placeholder=""
+                onChange={(e) => handleLastNameChange(e.target.value)}
+                value={lastName}
+                {...(!lastNameValid && {
+                  error: true,
+                  helperText: t('register.info.helper.text.required'),
+                })}
+              />
+            </div>
 
-              <Grid item xs={12}>
-                <div className={clsx(classes.wrapperCenter)}>
-                  <label className={clsx(classes.labelForPass)}>
-                  {t('register.info.password.pattern')}
-                  </label>
-                </div>
-              </Grid>
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic-3"
+              
+                label={t('profile.label.email')}
+                placeholder="you@email.com"
+                onChange={(e) => handleEmailChange(e.target.value)}
+                value={email}
+                {...(!emailValid && {
+                  error: true,
+                  helperText: emailErrorText,
+                })}
+              />
+            </div>
 
-              <Grid item xs={12}>
-                <TextField
-                  id="standard-basic-4"
-                  className={clsx(classes.textfieldCustom)}
-                  label={t('login.label.password')}
-                  type="password"
-                  onChange={(e) => handlePasswordChange(e.target.value)}
-                  value={password}
-                  {...(!passValid && {
-                    error: true,
-                    helperText: passErrorText,
-                  })}
-                />
-              </Grid>
+            <div className={clsx(classes.wrapperCenter)}>
+              <label className={clsx(classes.labelForPass)}>
+                {t('register.info.password.pattern')}
+              </label>
+            </div>
 
-              <Grid item xs={12}>
-                <div className={clsx(classes.wrapperCenter)}>
-                  <TextField
-                    id="standard-basic-5"
-                    className={clsx(classes.textfieldCustom)}
-                    label={t('register.label.confirm.password')}
-                    type="password"
-                    onChange={(e) => handleConfirmPassChange(e.target.value)}
-                    value={confirmPassword}
-                    {...(!confirmPassValid && {
-                      error: true,
-                      helperText: confirmPassErrorText,
-                    })}
-                  />
-                </div>
-              </Grid>
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic-4"
+              
+                label={t('login.label.password')}
+                type="password"
+                onChange={(e) => handlePasswordChange(e.target.value)}
+                value={password}
+                {...(!passValid && {
+                  error: true,
+                  helperText: passErrorText,
+                })}
+              />
+            </div>
 
-              <Grid item xs={12}>
-                <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
-                  <Button
-                    className='gradient-button-salmon'
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                  >
-                    {t('register.command')}
-                  </Button>
-                </div>
-              </Grid>
-            </Grid>
+            <div className={clsx(classes.wrapperCenter)}>
+              <TextField
+                id="standard-basic-5"
+               
+                label={t('register.label.confirm.password')}
+                type="password"
+                onChange={(e) => handleConfirmPassChange(e.target.value)}
+                value={confirmPassword}
+                {...(!confirmPassValid && {
+                  error: true,
+                  helperText: confirmPassErrorText,
+                })}
+              />
+            </div>
+
+            <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
+              <Button
+                type="submit"
+                style={{ margin: "20px 20px 20px 20px" }}
+              >
+                {t('register.command')}
+              </Button>
+            </div>
+
           </Paper>
         </form>
       )}
 
       {hasError && <Alert severity="error">{t(msg)}</Alert>}
 
-      {isProcessing && <Alert severity="info">{t(msg)}</Alert>}
+      {isProcessing && (
+          <CircularProgress>{t(msg)}</CircularProgress>
+      )}
+
     </div>
   );
 };

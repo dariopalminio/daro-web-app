@@ -11,9 +11,9 @@ export function PassRecoveryFormPage({
 }: RouteComponentProps<TParams>)
  {
   return (
-    <>
+    <div className="container-page">
       <br />
       <PassRecoveryForm token={match.params.token}/>
-    </>
+    </div>
   );
 };

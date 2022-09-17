@@ -4,11 +4,11 @@ import SessionContext, {
 } from "../../../../../domain/context/session.context";
 import useLogout from "../../../../../domain/hook/user/logout.hook";
 import { useTranslation } from 'react-i18next';
+import Button from "../../../common/button/button";
+import Alert from "../../../common/alert/alert";
 
 //@material-ui
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
 import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -54,9 +54,6 @@ const Logout: FunctionComponent = () => {
 
       <div className={clsx(classes.wrapperCenter)}>
         <Button
-        className='gradient-button-salmon'
-          variant="contained"
-          color="primary"
           onClick={() => onClickLogoutHandler()}
         >
           {t('logout.command')}

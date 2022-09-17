@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import useRegister from "../../../../../domain/hook/user/register.hook";
 import emailOkImage from "../../../image/email_ok.png";
 import { useTranslation } from 'react-i18next';
+import CircularProgress from "../../../common/progress/circular-progress";
+import Alert from "../../../common/alert/alert";
 
-//@material-ui
-import Alert from "@material-ui/lab/Alert";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 type TParams = { token: string };

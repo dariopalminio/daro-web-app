@@ -7,6 +7,8 @@ import Cart from '../../component/cart/cart';
 
 export const CartPage: FunctionComponent = () => {
   return (
-    <Cart />
+    <div className="container-page">
+      <Cart />
+    </div>
   );
 };
