@@ -26,14 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             flexGrow: 1,
         },
-        papperRegisterForm: {
-            width: "400px",
-            height: "570px",
-            margin: "0 auto 0 auto",
-            padding: theme.spacing(2),
-            textAlign: "center",
-            color: theme.palette.text.secondary,
-        },
         wrapperCenter: {
             display: "flex",
             justifyContent: "center",
@@ -54,9 +46,6 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: "1.5em",
             color: "#525252",
             paddingLeft: "1rem",
-        },
-        buttonCustom: {
-            margin: "0 auto auto auto",
         },
         demo: {
             backgroundColor: theme.palette.background.paper,
@@ -201,7 +190,10 @@ const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
                 {t('my.addresses.add')}
             </Button>
 
-            <Dialog open={openDialog} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <Dialog 
+                open={openDialog} 
+                onClose={handleClose} 
+                aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">{t('my.addresses.title')}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
