@@ -113,3 +113,9 @@ code {
 .gradient-button-salmon:hover::after {
   transform: rotate(150deg);
 }
+
+.h1 {
+  font-size: 1.5em;
+  color: #525252;
+  padding-left: 1rem;
+}

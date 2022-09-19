@@ -1,3 +1,4 @@
+import "./user-profile.css";
 import React, { FunctionComponent, useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import SessionContext, {
@@ -12,63 +13,11 @@ import { UserValidatorFactory } from "../../../../../domain/helper/user-validato
 import Button from "../../../common/button/button";
 import CircularProgress from "../../../common/progress/circular-progress";
 import Alert from "../../../common/alert/alert";
-
-//@material-ui https://v4.mui.com/
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
+import TextField from "../../../common/text-field/text-field";
 import ProfileLanguage from "./profile-language";
 import useProfile from "../../../../../domain/hook/profile.hook";
-import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import ListBox from "../../../common/list-box/list-box";
 
-
-
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        papperRegisterForm: {
-            width: "400px",
-            height: "570px",
-            margin: "0 auto 0 auto",
-            padding: theme.spacing(2),
-            textAlign: "center",
-            color: theme.palette.text.secondary,
-        },
-        wrapperCenter: {
-            display: "flex",
-            justifyContent: "center",
-        },
-        wrapperCenterWithPaddingTop: {
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: "20px",
-        },
-        labelForPass: {
-            color: "#888888",
-            width: "250px",
-        },
-        textfieldCustom: {
-            width: "250px",
-        },
-        h1Custom: {
-            fontSize: "1.5em",
-            color: "#525252",
-            paddingLeft: "1rem",
-        },
-        buttonCustom: {
-            margin: "0 auto auto auto",
-        },
-        demo: {
-            backgroundColor: theme.palette.background.paper,
-        },
-        title: {
-            margin: theme.spacing(4, 0, 2),
-        },
-    })
-);
 
 const initialNewAddress: Address = {
     street: '',
@@ -101,11 +50,10 @@ const UserProfile: FunctionComponent = () => {
     const [profile, setProfile] = useState(initialEmptyProfile);
     const [initialized, setInitialized] = useState(false);
     const { isProcessing, hasError, msg, isSuccess, getProfile, updateProfile } = useProfile();
-    const classes = useStyles();
-
     const validator: IUserValidator = UserValidatorFactory.create();
     const [firstNameValid, setFirstNameValid] = useState(false);
     const [lastNameValid, setLastNameValid] = useState(false);
+    const docTypeOptions = ["RUT", "DNI", "OTHER", "None"];
 
     const fetchData = async () => {
         const username = session ? session.preferred_username : '';
@@ -116,7 +64,7 @@ const UserProfile: FunctionComponent = () => {
             if (info.language) i18n.changeLanguage(info.language.toLowerCase());
 
 
-            console.log('fetchData.info.userName',info.userName);
+            console.log('fetchData.info.userName', info.userName);
             if (info.userName) {
                 setProfile({
                     ...profile,
@@ -127,7 +75,7 @@ const UserProfile: FunctionComponent = () => {
                     docType: info.docType ? info.docType.toUpperCase() : '',
                     document: info.document,
                     telephone: info.telephone,
-                    language: info.language ? info.language.toLowerCase(): '',
+                    language: info.language ? info.language.toLowerCase() : '',
                     addresses: info.addresses
                 });
 
@@ -218,150 +166,120 @@ const UserProfile: FunctionComponent = () => {
 
     return (
         <div>
-            {(!hasError) &&
+            {(!hasError) && <div >
                 <form
                     id="RegisterForm"
                     data-testid="RegisterForm"
                     action="#"
                     onSubmit={handleUpdateSubmit}
                 >
+                    <div className="wrapper-user-profile">
+                        <div className="wrapper-user-data">
 
-                    <Grid
-                        container
-                        direction="row"
-                        justify="center"
-                        alignItems="center"
-                        spacing={2}
-                    >
-                        <Grid item xs={12}>
-
-                            <h1 className={clsx(classes.h1Custom)}>
+                            <h1>
                                 {t('profile.title')}
                             </h1>
 
-                        </Grid>
+                            <div className="wrapper-centerer">
+                                <TextField
+                                    id="standard-basic-1"
+                                    label={t('profile.label.firstname')}
+                                    placeholder=""
+                                    onChange={(e) => handleFirstNameChange(e.target.value)}
+                                    value={profile.firstName}
+                                    {...(!firstNameValid && {
+                                        error: true,
+                                        helperText: t('register.info.helper.text.required')
+                                    })}
+                                />
+                            </div>
+                            <div className="wrapper-centerer">
+                                <TextField
+                                    id="standard-basic-2"
+                                    label={t('profile.label.lastname')}
+                                    placeholder=""
+                                    onChange={(e) => handleLastNameChange(e.target.value)}
+                                    value={profile.lastName}
+                                    {...(!lastNameValid && {
+                                        error: true,
+                                        helperText: t('register.info.helper.text.required'),
+                                    })}
+                                />
+                            </div>
+                            <div className="wrapper-centerer">
+                                <TextField
+                                    id="standard-basic-3"
+                                    label={t('profile.label.email')}
+                                    placeholder="you@email.com"
+                                    onChange={(e) => { }}
+                                    value={profile.email}
+                                />
+                            </div>
+                            <div className="wrapper-centerer">
 
-                        <Grid item xs={12}>
-                            <TextField
-                                id="standard-basic-1"
-                                className={clsx(classes.textfieldCustom)}
-                                label={t('profile.label.firstname')}
-                                placeholder=""
-                                onChange={(e) => handleFirstNameChange(e.target.value)}
-                                value={profile.firstName}
-                                {...(!firstNameValid && {
-                                    error: true,
-                                    helperText: t('register.info.helper.text.required')
-                                })}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                id="standard-basic-2"
-                                className={clsx(classes.textfieldCustom)}
-                                label={t('profile.label.lastname')}
-                                placeholder=""
-                                onChange={(e) => handleLastNameChange(e.target.value)}
-                                value={profile.lastName}
-                                {...(!lastNameValid && {
-                                    error: true,
-                                    helperText: t('register.info.helper.text.required'),
-                                })}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                id="standard-basic-3"
-                                className={clsx(classes.textfieldCustom)}
-                                label={t('profile.label.email')}
-                                placeholder="you@email.com"
-                                disabled={true}
-                                value={profile.email}
-
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <FormControl className={clsx(classes.textfieldCustom)}>
-                                <InputLabel id="demo-select-small">{t('profile.docType')}</InputLabel>
-                                <Select
-                                    labelId="demo-select-small"
+                                <ListBox
                                     id="demo-select-small"
-                                    value={profile.docType}
                                     label={t('profile.docType')}
-                                    onChange={(e) => handleDocTypeChange(e.target.value as string)}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={'RUT'}>RUT</MenuItem>
-                                    <MenuItem value={'DNI'}>DNI</MenuItem>
-                                    <MenuItem value={'OTHER'}>OTHER</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                                    value={profile.docType}
+                                    options={docTypeOptions}
+                                    onChange={(selectedOption) => handleDocTypeChange(selectedOption)}
+                                />
 
-                        <Grid item xs={12}>
+                            </div>
 
-                            <TextField
-                                id="standard-basic-5"
-                                className={clsx(classes.textfieldCustom)}
-                                label={t('profile.document')}
-                                onChange={(e) => handleDocumentChange(e.target.value)}
-                                value={profile.document}
+                            <div className="wrapper-centerer">
+                                <TextField
+                                    id="standard-basic-5"
+                                    label={t('profile.document')}
+                                    onChange={(e) => handleDocumentChange(e.target.value)}
+                                    value={profile.document}
+                                />
+                            </div>
 
-                            />
+                            <div className="wrapper-centerer">
+                                <TextField
+                                    id="standard-basic-5"
+                                    label={t('profile.telephone')}
+                                    onChange={(e) => handleTelephoneChange(e.target.value)}
+                                    value={profile.telephone}
 
-                        </Grid>
+                                />
+                            </div>
+                            <div className="wrapper-centerer">
+                                <ProfileLanguage
+                                    onChange={(len: string) => handleLanguageChange(len)} />
+                            </div>
 
-                        <Grid item xs={12}>
-
-                            <TextField
-                                id="standard-basic-5"
-                                className={clsx(classes.textfieldCustom)}
-                                label={t('profile.telephone')}
-                                onChange={(e) => handleTelephoneChange(e.target.value)}
-                                value={profile.telephone}
-
-                            />
-
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <ProfileLanguage
-                                onChange={(len: string) => handleLanguageChange(len)} />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Grid item xs={12} md={6}>
-                                {initialized &&
-                                    <MyAddresses addresses={profile.addresses}
-                                        onChange={(newAddresses: Array<any>) => handleAddClose(newAddresses)}>
-                                    </MyAddresses>
-                                }
-                            </Grid>
-
-                            {ifFieldsAreInvalid() &&
-                                <Button
-                                    type="submit"
-                                >
-                                    {t('profile.command.submit')}
-                                </Button>
-                            }
-                            {!ifFieldsAreInvalid() &&
-                                <Button
-                                    disabled
-                                >
-                                    {t('profile.command.submit')}
-                                </Button>
+                        </div>
+                        <div className="wrapper-user-address">
+                            {initialized &&
+                                <MyAddresses addresses={profile.addresses}
+                                    onChange={(newAddresses: Array<any>) => handleAddClose(newAddresses)}>
+                                </MyAddresses>
                             }
 
-                        </Grid>
-
-                    </Grid>
+                        </div>
+                    </div>
+                    <div className="wrapper-user-action">
+                        {ifFieldsAreInvalid() &&
+                            <Button
+                                type="submit"
+                                style={{ "margin-top": "5px" }}
+                            >
+                                {t('profile.command.submit')}
+                            </Button>
+                        }
+                        {!ifFieldsAreInvalid() &&
+                            <Button
+                                style={{ "margin-top": "5px" }}
+                                disabled
+                            >
+                                {t('profile.command.submit')}
+                            </Button>
+                        }
+                    </div>
                 </form>
+            </div>
             }
             <br />
 

@@ -1,14 +1,14 @@
 import { useState } from 'react';
 
 const useModalDialog = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   function toggle() {
-    setIsOpen(!isOpen);
+    setIsDialogOpen(!isDialogOpen);
   }
 
   return {
-    isOpen,
+    isDialogOpen,
     toggle,
   }
 };

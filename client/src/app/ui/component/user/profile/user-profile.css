@@ -1,0 +1,56 @@
+.wrapper-user-profile {
+    display: flex;
+    width: 100%;
+}
+
+.wrapper-user-data {
+    display: block;
+    width: 50%;
+}
+
+.wrapper-user-address {
+    display: block;
+    width: 50%;
+}
+
+.wrapper-user-action {
+    margin: 0px auto;
+    left: 0;
+}
+
+.wrapper-centerer {
+    display: flex;
+    justify-content: center;
+}
+
+.text-field-custom {
+    width: 250px;
+}
+
+/* Tablet */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+
+    .paper-container {
+        width: 70%;
+        margin: 0px auto;
+    }
+
+}
+
+/* smartphone */
+@media screen and (max-width: 767px) {
+
+    .wrapper-user-profile {
+        display: block;
+        width: 100%;
+    }
+
+    .wrapper-user-data {
+        width: 100%;
+    }
+    
+    .wrapper-user-address {
+        width: 100%;
+    }
+
+}

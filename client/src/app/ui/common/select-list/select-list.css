@@ -1,0 +1,59 @@
+.select-list-group {
+    color: #333;
+    float: left;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    width: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+  }
+  
+  .label-select-list {
+    display: block;
+    margin-bottom: 2px;
+  }
+  
+  .select-list-ul {
+    list-style-type: none;
+    padding: 0 0 0 0;
+    margin:  0 0 0 0;
+    border: #C5C6C7 solid 1px;
+    width: 100%;
+}
+
+.select-list-ul .select-list-li {
+    display: in-line;
+    cursor: pointer;
+    text-align: left;
+    background: white;
+    border-top: #C5C6C7 solid 1px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    height: 33px;
+    line-height: 33px;
+    width: 100%;
+}
+
+.select-list-li:hover {
+    background: rgb(235, 235, 235);
+}
+
+.select-list-delete {
+    cursor: pointer;
+    position: relative;
+    float: right;
+    top: 9px;
+    right: 0;
+    margin-right: 0px;
+    border: 0px;
+    color: rgb(237, 148, 148);
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 15px;
+    text-align: right;
+}
+
+.select-list-delete:hover {
+    color: red;
+}
