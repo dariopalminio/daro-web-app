@@ -8,6 +8,8 @@ import useModal from "../../common/dialog/use-modal-dialog";
 import ModalDialog from "../../common/dialog/modal-dialog";
 import useModalDialog from "../../common/dialog/use-modal-dialog";
 import ListBox from "../../common/list-box/list-box";
+import MenuList from "../../common/menu-list/menu-list";
+import { LeftMenuData } from "../../layout/core/left-menu-data";
 
 export const HomePage: FunctionComponent = () => {
   const { t } = useTranslation();
@@ -15,19 +17,11 @@ const [selected, setSelected] = useState("Manzana");
 
   
   return (
-    <div className="container-page">
+    <div >
       <div>{t('home.title')}</div>
 
-      
-<ListBox 
-id="listbox"
-label="seleccion"
-value={selected}
-options={["Banana","Manzana","Pera","Coco"]}
-onChange={(selectedOption)=> setSelected(selectedOption)}
-      />
-
       <Products/>
+
     </div>
   );
 };

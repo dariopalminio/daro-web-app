@@ -1,3 +1,5 @@
+
+
 body {
   position: relative;
   min-width: 320px;
@@ -9,6 +11,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.unstyle {
+  all: unset;
 }
 
 .container-page {
@@ -52,20 +58,8 @@ code {
 
 .main-container {
   flex: 1 0 auto;
-  padding: 2rem;
   width: 100%;
-  margin: 0 auto;
-}
-
-.footer {
-  display: flow;
-  width: 100%;
-  bottom: 0;
-  margin-bottom: 0px;
-  vertical-align: middle;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  margin-left: 5px;
 }
 
 .sidebar-social li {
@@ -77,45 +71,11 @@ code {
   padding: 0;
 }
 
-.gradient-button-salmon {
-  color: rgb(255, 255, 255);
-  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-  box-shadow: 0 0 0 0 rgba(145, 64, 248, 0.5), 0 0 0 0 rgba(39, 200, 255, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
-}
-
-.gradient-button-light-blue {
-  background: linear-gradient(45deg, #2196F3 30%, #21CBF3 90%);
-  box-shadow: 0 0 0 0 rgba(145, 64, 248, 0.5), 0 0 0 0 rgba(39, 200, 255, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
-}
-
-.gradient-button-salmon::after {
-  color: rgb(255, 255, 255);
-  content: "";
-  width: 400px;
-  height: 400px;
-  position: absolute;
-  background: #8a4ff7;
-  background-image: linear-gradient(-225deg, #231557 30%, #8549c5 29%, #f06191 67%, #fff800 100%);
-  z-index: -1;
-  transition: transform 0.5s ease;
-}
-
-.gradient-button-salmon:hover {
-  color: rgb(255, 255, 255);
-  transform: translate(0, 0);
-  box-shadow: 10px -10px 25px 0 rgba(16, 226, 256, 0.5), -10px 10px 25px 0 rgba(183, 0, 255, 0.7);
-}
-
-.gradient-button-salmon:hover::after {
-  transform: rotate(150deg);
-}
-
 .h1 {
   font-size: 1.5em;
   color: #525252;
   padding-left: 1rem;
+}
+.positionfixed {
+position: "fixed";
 }

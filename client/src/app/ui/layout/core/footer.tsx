@@ -1,5 +1,6 @@
 import React from "react";
 import * as StateConfig from '../../../../domain/domain.config';
+import "./footer.css";
 
 const Footer = () => {
   return (

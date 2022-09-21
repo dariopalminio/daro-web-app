@@ -6,8 +6,9 @@
 
   #cart_count {
     position: absolute;
-    bottom: 0;
-    right: -20px;
+
+    top: -7px;
+    right: -5px;
     background: rgb(21, 201, 102);
     width: 15px;
     height: 15px;

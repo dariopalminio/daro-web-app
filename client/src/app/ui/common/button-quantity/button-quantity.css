@@ -8,7 +8,7 @@
 
 .qty {
   width: 40px;
-  height: 25px;
+  height: 26px;
   text-align: center;
   border-width: 1px;
   border-style: solid;
@@ -16,16 +16,16 @@
 }
 
 input.qtyplus {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   background-color: rgb(235, 235, 235);
   border: 0px;
   cursor: pointer;
 }
 
 input.qtyminus {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   background-color: rgb(235, 235, 235);
   border: 0px;
   cursor: pointer;

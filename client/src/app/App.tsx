@@ -1,8 +1,21 @@
 import { FunctionComponent } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 import SessionContextProvider from "./ui/provider/session-context-provider"
-import AppLayout from "./ui/component/layout/app-layout"
 import CartContextProvider from "./ui/provider/cart-context-provider"
+import Layout from "./ui/layout/core/layout"
+import LayoutContextProvider from "./ui/layout/core/layout-context-provider"
+import { ThemeProvider } from "styled-components"
+import MainContainer from "./ui/layout/main-container"
+
+// Define what props.theme will look like
+const theme = {
+  sidebarWidth: 240,
+  headerHeight: 50,
+  colors: {
+    BGRDMain: `linear-gradient(to right, rgba(0, 224, 255, 1), rgba(0, 133, 255, 1))`,
+    BGRDbutton: "",
+  }
+};
 
 /**
  * Dario Palminio
@@ -15,11 +28,17 @@ const App: FunctionComponent = () => {
 
   return (
     <SessionContextProvider>
-      <CartContextProvider>
-      <Router>
-        <AppLayout />
-      </Router>
-      </CartContextProvider>
+      <ThemeProvider theme={theme}>
+        <CartContextProvider>
+          <LayoutContextProvider>
+            <Router>
+              <Layout>
+                <MainContainer />
+              </Layout>
+            </Router>
+          </LayoutContextProvider>
+        </CartContextProvider>
+      </ThemeProvider>
     </SessionContextProvider>
   )
 }

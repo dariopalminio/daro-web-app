@@ -1,0 +1,19 @@
+.circular-icon-button {
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    color: black;
+ width: 32px;
+ height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.circular-icon-button:hover {
+    background-color: #BFE0FC;
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+}

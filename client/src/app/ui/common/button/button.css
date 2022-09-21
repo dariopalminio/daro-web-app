@@ -8,7 +8,6 @@
     border-radius: 5px;
     cursor: pointer;
     height:30px;
-    
   }
 
   .gradient-button-salmon-1-disabled {
@@ -21,7 +20,6 @@
     border: 0px;
     border-radius: 5px;
     height:30px;
-   
   }
 
   .gradient-button-salmon-1::after{

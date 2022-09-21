@@ -3,15 +3,14 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import { useTranslation } from 'react-i18next';
+import IconButton from "../../../common/icon-button/icon-button";
+import { RiUserFill } from "react-icons/ri";
+import { RiUserLine } from "react-icons/ri";
 
 //@material-ui
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import AccountCircleOutlined from "@material-ui/icons/AccountCircleOutlined";
-import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,8 +50,8 @@ const UserTopMenu: FunctionComponent = () => {
 
   const getUserProfileIcon = () => {
     if (session?.isLogged) {
-      return <AccountCircle />;
-    } else return <AccountCircleOutlined />;
+      return <RiUserLine size={20}/>;
+    } else return <RiUserFill size={20}/>;
   };
 
   const handleViewCart = () => {
@@ -63,15 +62,9 @@ const UserTopMenu: FunctionComponent = () => {
     <div className={clsx(classes.menuItem)}>
 
       <IconButton
-        aria-label={t('account.current.user')}
-        aria-controls="menu-appbar"
-        aria-haspopup="true"
         onClick={handleMenu}
-        color="inherit"
       >
-
         {getUserProfileIcon()}
-
       </IconButton>
 
       <Menu
