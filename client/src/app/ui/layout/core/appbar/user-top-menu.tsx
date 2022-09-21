@@ -1,25 +1,11 @@
 import React, { FunctionComponent, useContext } from "react";
-import clsx from "clsx";
-import { Link } from "react-router-dom";
 import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import { useTranslation } from 'react-i18next';
 import IconButton from "../../../common/icon-button/icon-button";
-import { RiUserFill } from "react-icons/ri";
-import { RiUserLine } from "react-icons/ri";
-
-//@material-ui
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    menuItem: {
-      position: "relative",
-      rigt: "1em",
-    },
-  })
-);
+import { RiAccountCircleFill, RiAccountCircleLine } from "react-icons/ri";
+import MenuListFloat from "../../../common/menu-list-float/menu-list-float";
+import { TopMenuDataForLogged, TopMenuDataForNotLogged } from "../top-menu-data";
+import styled from "styled-components";
 
 /**
  * UserTopMenu Function Component
@@ -27,78 +13,45 @@ const useStyles = makeStyles((theme: Theme) =>
  * @visibleName UserTopMenu View
  */
 const UserTopMenu: FunctionComponent = () => {
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  
+  const [isOpen, setIsOpen] = React.useState(false);
   const { session } = useContext(SessionContext) as ISessionContext;
   const { t } = useTranslation();
 
-  const openAnchorEl = Boolean(anchorEl);
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const getLoginMenuText = () => {
+  const getMenuData = () => {
     if (!session?.isLogged) {
-      return t('login.command');
-    } else return t('logout.command');
+      return TopMenuDataForNotLogged;
+    } else return TopMenuDataForLogged;
   };
 
   const getUserProfileIcon = () => {
     if (session?.isLogged) {
-      return <RiUserLine size={20}/>;
-    } else return <RiUserFill size={20}/>;
+      return <RiAccountCircleLine size={20}/>;
+    } else return <RiAccountCircleFill size={20}/>;
   };
 
-  const handleViewCart = () => {
-    alert("view cart");
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
   };
 
+  const UserMenuContainer = styled.div`
+  position: relative;
+  rigt: 1em;
+  display: flex;
+  `;
+  
   return (
-    <div className={clsx(classes.menuItem)}>
+    <UserMenuContainer>
 
       <IconButton
-        onClick={handleMenu}
+        onClick={()=>toggleMenu()}
       >
         {getUserProfileIcon()}
       </IconButton>
 
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={openAnchorEl}
-        onClose={handleClose}
-      >
+      <MenuListFloat isOpen={isOpen} menuList={getMenuData()} onClick={()=>toggleMenu()}/>
 
-        <MenuItem component={Link} to="/user/auth" onClick={handleClose}>
-          {getLoginMenuText()}
-        </MenuItem>
-
-        {!session?.isLogged && (
-          <MenuItem component={Link} to="/user/register/form" onClick={handleClose}>
-            {t('register.command')}
-          </MenuItem>
-        )}
-
-        <MenuItem component={Link} to="/user/profile" onClick={handleClose}>
-          {t('profile.command')}
-        </MenuItem>
-
-      </Menu>
-    </div>
+    </UserMenuContainer>
   );
 };
 

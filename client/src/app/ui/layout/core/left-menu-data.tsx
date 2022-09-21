@@ -5,6 +5,10 @@ import { RiHome2Fill } from "react-icons/ri";
 import { RiShoppingCart2Fill } from "react-icons/ri";
 import { RiFunctionFill } from "react-icons/ri";
 import { RiMailSendFill} from "react-icons/ri";
+//RiShieldUserFill -->Usuario login
+//RiUserAddFill --> register
+//RiDoorClosedLine --> logout
+
 
 /**
  * Data of Menu List for Left Nav Bar

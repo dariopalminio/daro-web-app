@@ -1,6 +1,8 @@
 import React from "react";
 import "./select-list.css";
 
+import { RiDeleteBin7Fill} from "react-icons/ri";
+
 /**
 <div>
 <ul class="select-list-ul">
@@ -42,7 +44,9 @@ const SelectList: React.FC<Props> = ({ id, label, list, onClickSelect, onClickDe
                             onClick={() => selectItem(index)}>{item}
                             <span className="select-list-delete"
                                 aria-hidden="true"
-                                onClick={() => deleteItem(index)}>&times;</span>
+                                onClick={() => deleteItem(index)}>
+                                    <RiDeleteBin7Fill onClick={() => deleteItem(index)} size={20}/>
+                                </span>
                         </li>
                     )
                 }

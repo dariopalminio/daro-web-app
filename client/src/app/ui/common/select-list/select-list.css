@@ -32,7 +32,7 @@
     font-size: 13px;
     height: 33px;
     line-height: 33px;
-    width: 100%;
+    width: 98%;
 }
 
 .select-list-li:hover {
@@ -43,11 +43,11 @@
     cursor: pointer;
     position: relative;
     float: right;
-    top: 9px;
+    top: 4px;
     right: 0;
     margin-right: 0px;
     border: 0px;
-    color: rgb(237, 148, 148);
+    color: rgb(124, 124, 124);
     font-size: 25px;
     font-weight: 600;
     line-height: 15px;
@@ -55,5 +55,5 @@
 }
 
 .select-list-delete:hover {
-    color: red;
+    color: rgb(24, 23, 23);
 }
