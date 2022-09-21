@@ -1,6 +1,6 @@
 require('@testing-library/react');
 import { renderHook, act } from '@testing-library/react-hooks';
-import useLogin from "../../../../domain/hook/user/login.hook";
+import useLogin from "../../../../domain/hook/auth/login.hook";
 import  AuthApiClienOkMock  from '../../../../infra/client/stub/auth-api-client-ok.stub';
 import  AuthApiClientFailMock  from '../../../../infra/client/stub/auth-api-client-fail.stub';
 

@@ -4,6 +4,7 @@ import { SessionType } from '../../model/auth/session.type';
 import * as StateConfig from '../../domain.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IAuthClient } from '../../service/auth-client.interface';
+import { IHookState, InitialState } from '../hook.type';
 
 /**
  * use Logout 
@@ -20,7 +21,7 @@ import { IAuthClient } from '../../service/auth-client.interface';
 export default function useLogout(authServiceInjected: IAuthTokensClient | null = null,
     userClientInjected: IAuthClient | null = null) {
     const { removeSessionValue } = useContext(SessionContext) as ISessionContext;
-    const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
+    const [state, setState] = useState<IHookState>(InitialState);
     const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authTokensClient;
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 

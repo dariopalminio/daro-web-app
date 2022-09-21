@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
-import useLogin from "../../../../../domain/hook/user/login.hook";
+import useLogin from "../../../../../domain/hook/auth/login.hook";
 import IUserValidator from "../../../../../domain/helper/user-validator.interface";
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import Alert from "../../../common/alert/alert";

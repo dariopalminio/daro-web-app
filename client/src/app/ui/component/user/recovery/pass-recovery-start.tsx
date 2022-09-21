@@ -3,7 +3,7 @@ import IUserValidator from "../../../../../domain/helper/user-validator.interfac
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
 import emailToSendImage from "../../../image/email_to_send.png";
-import useRecovery from "../../../../../domain/hook/user/recovery.hook";
+import useRecovery from "../../../../../domain/hook/auth/recovery.hook";
 import { Redirect } from "react-router";
 import { useTranslation } from 'react-i18next';
 import Button from "../../../common/button/button";

@@ -3,7 +3,7 @@ import IUserValidator from "../../../../../domain/helper/user-validator.interfac
 import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-import useRecovery from "../../../../../domain/hook/user/recovery.hook";
+import useRecovery from "../../../../../domain/hook/auth/recovery.hook";
 import Button from "../../../common/button/button";
 import Paper from "../../../common/paper/paper";
 import TextField from "../../../common/text-field/text-field";

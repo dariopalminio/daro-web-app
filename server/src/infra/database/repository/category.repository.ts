@@ -25,10 +25,13 @@ export class CategoryRepository implements IRepository<ICategory> {
         if (page && limit && orderByField) {
             // All with pagination and sorting
             console.log(`getAll page ${page} /limit ${limit} orderByField ${orderByField}`);
+            const sort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
             const direction: number = isAscending ? 1 : -1;
-            const mysort = [[orderByField, direction]];
+
+            //const mysort = [[orderByField, direction]]; //'string | { [key: string]: SortOrder | { $meta: "textScore"; }; }'
             const gap: number = (page - 1) * limit;
-            arrayDoc = await this.categoryModel.find({}).sort(mysort).skip(gap).limit(limit).exec();
+            arrayDoc = await this.categoryModel.find({}).sort(sort).skip(gap).limit(limit).exec();
+            //rgument of type '(string | number)[][]' is not assignable to parameter of type 'string | { [key: string]: SortOrder | { $meta: "textScore"; }; }'.
             //similar to arrayDoc.slice((page - 1) * limit, page * limit);
         } else {
             // All without pagination and without sorting
@@ -44,7 +47,8 @@ export class CategoryRepository implements IRepository<ICategory> {
         if (page && limit && orderByField) {
             // All with pagination and sorting
             const direction: number = isAscending ? 1 : -1;
-            const mysort = [[orderByField, direction]];
+            //const mysort = [[orderByField, direction]];
+            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
             const gap: number = (page - 1) * limit;
             arrayDoc = await this.categoryModel.find(query).sort(mysort).skip(gap).limit(limit).exec();
         } else {

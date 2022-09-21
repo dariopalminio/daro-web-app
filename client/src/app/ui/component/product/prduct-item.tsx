@@ -5,8 +5,14 @@ import { useContext, useState } from "react";
 import Button from "../../common/button/button";
 import ButtonQuantity from "../../common/button-quantity/button-quantity";
 
-// @ts-ignore
-const ProductItem = ({ imageUrl, description, price, name, productId }) => {
+interface Props {
+  images?: Array<string>;
+  description?: string;
+  grossPrice?: number;
+  name?: string;
+  productId?: string
+}
+const ProductItem: React.FC<Props> = ({ images, description, grossPrice, name, productId }) => {
 
   const [quantity, setQuantity] = useState(1);
 
@@ -24,17 +30,29 @@ const ProductItem = ({ imageUrl, description, price, name, productId }) => {
 
   };
 
+  const getImage = () => {
+    return images? images[0] : "jpg";
+  }
+
+  const getDescription = () => {
+    return description? description.substring(0, 100) : "No description!";
+  }
+
+  const getPrice = () => {
+    return grossPrice? grossPrice : "No price!";
+  }
+
   return (
 
     <div className="product">
-      <img src={imageUrl} alt={name} />
+      <img src={getImage()} alt={name} />
 
       <div className="product__info">
         <p className="info__name">{name}</p>
 
-        <p className="info__description">{description.substring(0, 100)}...</p>
+        <p className="info__description">{getDescription()}...</p>
 
-        <p className="info__price">${price}</p>
+        <p className="info__price">${getPrice()}</p>
 
       </div>
 

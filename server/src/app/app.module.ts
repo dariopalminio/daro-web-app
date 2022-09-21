@@ -1,5 +1,6 @@
 
-import { HttpModule, HttpService, Module, OnModuleInit, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Module, OnModuleInit, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { TerminusModule } from '@nestjs/terminus';
 import { APP_FILTER } from '@nestjs/core';
 import { ExceptionsAllFilter } from '../app/filter/exception.filter';
@@ -46,6 +47,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './guard/roles.guard';
 import { AuthTokensController } from './controller/auth.token.controller';
 import { AuthTokensService } from 'src/domain/service/auth.tokens.service';
+//import { I18nRequestScopeService } from 'nestjs-i18n';
+import { TranslatorI18nImpl } from 'src/infra/i18n/TraslatorI18Impl';
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { join } from 'path';
 
 console.log("DB_CONNECTION:", DB_CONNECTION);
 
@@ -61,6 +66,14 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
       { name: 'User', schema: UserSchema },
     ]),
     I18nModuleConfig,
+    /*ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '../../public'),
+      exclude: ['/api*'],
+      serveStaticOptions:{
+        extensions:  ['html', 'jpg', 'png'],
+        index: false
+      }
+    }),*/
   ],
   controllers: [AppController, AuthController, AuthTokensController, UserController, NotificationController, ProductController, CategoryController],
   providers: [
@@ -74,7 +87,7 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
     },
     {
       provide: 'ITranslator',
-      useClass: TranslatorNestjsI18nImpl,
+      useClass: TranslatorI18nImpl,
     },
     {
       provide: 'IAuthService',

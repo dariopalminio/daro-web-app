@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import IUserValidator from '../../../../domain/helper/user-validator.interface';
 import { UserValidatorFactory } from "../../../../domain/helper/user-validator.factory";
 import { ContactType } from "../../../../domain/model/notification/contact.type";
-import useNotification from "../../../../domain/hook/notification.hook";
+import useNotification from "../../../../domain/hook/contact/notification.hook";
 import Alert from "../../common/alert/alert";
 import { useTranslation } from 'react-i18next';
 import CircularProgress from "../../common/progress/circular-progress";
@@ -59,7 +59,8 @@ const defaultContact: ContactType = {
  * @visibleName Contact View
  */
 const Contact: FunctionComponent = () => {
-  const { sending, hasError, msg, wasSent, sendContactEmail } =
+
+  const { isProcessing, hasError, msg, isSuccess, sendContactEmail } =
     useNotification();
   const [contact, setContact] = useState(defaultContact);
   const [emailIsInvalid, setEmailIsInvalid] = useState(false);
@@ -119,7 +120,7 @@ const Contact: FunctionComponent = () => {
 
   return (
     <div>
-      {(!sending && !wasSent) && (
+      {(!isProcessing && !isSuccess) && (
 
         <Paper>
           <form
@@ -198,7 +199,7 @@ const Contact: FunctionComponent = () => {
       }
 
       {
-        sending && (
+        isProcessing && (
           <div className="box">
             <strong>
               {t('contact.info.sending.email')}
@@ -209,7 +210,7 @@ const Contact: FunctionComponent = () => {
       }
 
       {hasError && <Alert severity="error">{t(msg)} </Alert>}
-      {wasSent && <Alert severity="success">{t('contact.success.sent.email')}</Alert>}
+      {isSuccess && <Alert severity="success">{t('contact.success.sent.email')}</Alert>}
     </div >
   );
 };

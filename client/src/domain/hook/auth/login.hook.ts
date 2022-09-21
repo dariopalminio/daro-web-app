@@ -4,6 +4,7 @@ import { SessionType } from '../../model/auth/session.type';
 import * as StateConfig from '../../domain.config';
 import { Tokens } from '../../model/auth/tokens.type';
 import { IAuthClient } from '../../service/auth-client.interface';
+import { IHookState, InitialState } from '../hook.type';
 
 
 var jws = require('jws');
@@ -21,7 +22,7 @@ var jws = require('jws');
 export default function useLogin(
     userClientInjected: IAuthClient | null = null) {
     const { setNewSession, removeSessionValue } = useContext(SessionContext) as ISessionContext;
-    const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
+    const [state, setState] = useState<IHookState>(InitialState);
 
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 

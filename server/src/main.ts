@@ -4,6 +4,7 @@ import { AppModule } from './app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { setupDocModule } from './infra/document/setup-doc-module';
 require('dotenv').config();
+import { join } from 'path';
 
 async function bootstrap() {
   //const app = await NestFactory.create(AppModule);
@@ -17,6 +18,9 @@ async function bootstrap() {
   //CORS proxy to avoid “No Access-Control-Allow-Origin header” problems
   app.enableCors();
 
+  app.useStaticAssets(join(__dirname, '..', '/public/img'), {
+    prefix: '/public/img',
+  });
 
   console.log('SET app route', process.env.SERVER_BFF_PREFIX_ROUTE);
   app.setGlobalPrefix(process.env.SERVER_BFF_PREFIX_ROUTE);

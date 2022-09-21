@@ -1,38 +1,52 @@
 import "./products.css";
 import { useEffect } from "react";
 import ProductItem from "./prduct-item";
+import CircularProgress from "../../common/progress/circular-progress";
+import Alert from "../../common/alert/alert";
+import useProducts from "../../../../domain/hook/products/products.hook";
 
 
+const Products: React.FC = ({}) => {
+
+    const { isProcessing, hasError, msg, isSuccess, products, getCatalog } = useProducts();
+ 
 
 
-const Products = () => {
-
-
-
-    const getProducts = {products:[
-        {_id: "1", name: "name", imageUrl:"https://i0.wp.com/historiasdelahistoria.com/wordpress-2.3.1-ES-0.1-FULL/wp-content/uploads/2015/09/manzana.jpg", price:0,description:"description1", countInStock:1},
-        {_id: "2", name: "name2", imageUrl:"https://i0.wp.com/historiasdelahistoria.com/wordpress-2.3.1-ES-0.1-FULL/wp-content/uploads/2015/09/manzana.jpg", price:0,description:"description2", countInStock:1},
-        {_id: "3", name: "name3", imageUrl:"https://i0.wp.com/historiasdelahistoria.com/wordpress-2.3.1-ES-0.1-FULL/wp-content/uploads/2015/09/manzana.jpg", price:0,description:"description3", countInStock:1},
-        {_id: "4", name: "name4", imageUrl:"https://i0.wp.com/historiasdelahistoria.com/wordpress-2.3.1-ES-0.1-FULL/wp-content/uploads/2015/09/manzana.jpg", price:0,description:"description4", countInStock:1},
-    ], loading: false, error:false};
-    const { products, loading, error } = getProducts;
-  
+    useEffect(() => {
+        // declare the async data fetching function
+        const fetchData = async () => {
+          function sleep(ms: number) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+          }
+          // waits for 1000ms
+          await sleep(200);
+          await getCatalog();
+          return 'Hello World';
+        };
+      
+        const result = fetchData()
+          // make sure to catch any error
+          .catch(console.error);;
+        
+        // what will be logged to the console?
+        console.log(result);
+      }, [])
 
     return (
         <div className="homescreen">
             <div className="homescreen__products">
-                {loading ? (
-                <h2>Cargando...</h2>
-                ) : error ? (
-                <h2>{error}</h2>
+                {isProcessing ? (
+                <CircularProgress>{"Loading..."}</CircularProgress>
+                ) : hasError ? (
+                    <Alert severity="error">{msg}</Alert>
                 ) : (
                 products.map((product) => (
                     <ProductItem
                     key={product._id}
                     name={product.name}
                     description={product.description}
-                    price={product.price}
-                    imageUrl={product.imageUrl}
+                    grossPrice={product.grossPrice}
+                    images={product.images}
                     productId={product._id}
                     />
                 ))

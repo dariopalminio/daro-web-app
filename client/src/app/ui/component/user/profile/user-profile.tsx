@@ -15,7 +15,7 @@ import CircularProgress from "../../../common/progress/circular-progress";
 import Alert from "../../../common/alert/alert";
 import TextField from "../../../common/text-field/text-field";
 import ProfileLanguage from "./profile-language";
-import useProfile from "../../../../../domain/hook/profile.hook";
+import useProfile from "../../../../../domain/hook/user/profile.hook";
 import ListBox from "../../../common/list-box/list-box";
 
 

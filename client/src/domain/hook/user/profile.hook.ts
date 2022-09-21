@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
-import { ApiError } from '../../infra/client/api.error';
-import SessionContext, { ISessionContext } from '../context/session.context';
-import * as StateConfig from '../domain.config';
-import { IAuthTokensClient } from '../service/auth-tokens-client.interface';
-import { IProfileClient } from '../service/profile-client.interface';
+import { ApiError } from '../../../infra/client/api.error';
+import SessionContext, { ISessionContext } from '../../context/session.context';
+import * as StateConfig from '../../domain.config';
+import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
+import { IProfileClient } from '../../service/profile-client.interface';
+import { IHookState, InitialState } from '../hook.type';
 
 /**
  * use Profile
@@ -14,7 +15,7 @@ import { IProfileClient } from '../service/profile-client.interface';
 export default function useProfile(authClientInjected: IAuthTokensClient | null = null,
     profileClientInjected: IProfileClient | null = null) {
 
-    const [state, setState] = useState({ isProcessing: false, hasError: false, msg: '', isSuccess: false });
+    const [state, setState] = useState<IHookState>(InitialState);
     const profClient: IProfileClient = profileClientInjected ? profileClientInjected : StateConfig.profileClient;
     const { session, removeSessionValue } = useContext(SessionContext) as ISessionContext;
 

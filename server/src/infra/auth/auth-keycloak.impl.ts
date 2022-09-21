@@ -1,4 +1,5 @@
-import { Injectable, HttpService, HttpStatus, Inject } from '@nestjs/common';
+import { Injectable, HttpStatus, Inject } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import { IAuth } from '../../domain/output-port/auth.interface';
 //import { IServiceResponse } from '../../domain/model/service/service-response.interface';
 import { stringify } from 'querystring';
@@ -51,7 +52,7 @@ type ConfirmEmailType = {
 export class AuthKeycloakImpl implements IAuth {
 
   constructor(
-    @Inject('HttpService')
+    
     private readonly http: HttpService,
     @Inject('ITranslator')
     private readonly i18n: ITranslator,

@@ -6,7 +6,7 @@ import clsx from "clsx";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
-import useRegister from "../../../../../domain/hook/user/register.hook";
+import useRegister from "../../../../../domain/hook/auth/register.hook";
 import { Redirect } from 'react-router';
 import emailToConfirmImage from "../../../image/email_to_confirm.png";
 import { useTranslation } from 'react-i18next';

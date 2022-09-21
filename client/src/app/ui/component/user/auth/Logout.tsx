@@ -2,7 +2,7 @@ import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   ISessionContext,
 } from "../../../../../domain/context/session.context";
-import useLogout from "../../../../../domain/hook/user/logout.hook";
+import useLogout from "../../../../../domain/hook/auth/logout.hook";
 import { useTranslation } from 'react-i18next';
 import Button from "../../../common/button/button";
 import Alert from "../../../common/alert/alert";

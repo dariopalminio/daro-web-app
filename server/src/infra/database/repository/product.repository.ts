@@ -24,7 +24,8 @@ export class ProductRepository implements IRepository<IProduct> {
         if (page && limit && orderByField) {
             // All with pagination and sorting
             const direction: number = isAscending ? 1 : -1;
-            const mysort = [[orderByField, direction]];
+            //const mysort = [[orderByField, direction]];
+            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
             const gap: number = (page - 1) * limit;
             arrayDoc = await this.productModel.find({}).sort(mysort).skip(gap).limit(limit).exec();
             //similar to arrayDoc.slice((page - 1) * limit, page * limit);
@@ -41,7 +42,8 @@ export class ProductRepository implements IRepository<IProduct> {
         if (page && limit && orderByField) {
             // All with pagination and sorting
             const direction: number = isAscending ? 1 : -1;
-            const mysort = [[orderByField, direction]];
+            //const mysort = [[orderByField, direction]];
+            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
             const gap: number = (page - 1) * limit;
             arrayDoc = await this.productModel.find(query).sort(mysort).skip(gap).limit(limit).exec();
         } else {

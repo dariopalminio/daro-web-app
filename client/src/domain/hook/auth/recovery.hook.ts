@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import * as StateConfig from '../../domain.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IAuthClient } from '../../service/auth-client.interface';
+import { IHookState, InitialState } from '../hook.type';
 
 
 
@@ -13,7 +14,7 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
     userClientInjected: IAuthClient | null = null) {
 
     //const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
-    const [state, setState] = useState({ isProcessing: false, isSuccess: false, hasError: false, msg: '' });
+    const [state, setState] = useState<IHookState>(InitialState);
     const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authTokensClient;
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 
