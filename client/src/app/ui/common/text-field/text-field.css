@@ -1,11 +1,10 @@
 .input-text-field-group {
   color: #333;
-  float: left;
   font-family: Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 20px;
-  margin: 0 20px 10px;
-  width: 100%;
+  margin: 0 5px 5px;
+  display: block;
 }
 
 .label-text-field {
@@ -14,7 +13,7 @@
 }
 
 .input-text-field {
-  width: 100%;
+  width: 97%;
   border: 1px solid #999;
 }
 

@@ -7,6 +7,8 @@ import { NotificationApiClientFactory } from '../infra/client/factory/notificati
 import { INotificationClient } from './service/notification-client.interface';
 import { IProfileClient } from './service/profile-client.interface';
 import { ProfileApiClientFactory } from '../infra/client/factory/profile-api-factory';
+import { ProductApiClientFactory } from '../infra/client/factory/product-api.factory';
+import { IProductClient } from './service/product-client.interface';
 
 const result = dotenv.config();
 
@@ -24,11 +26,14 @@ export const app_url = (process.env.REACT_APP_URL ? process.env.REACT_APP_URL : 
 
 export const app_company_name = (process.env.REACT_APP_COMPANY_NAME ? process.env.REACT_APP_COMPANY_NAME : 'Daro 2021') as string;
 
+export const urlImages = (process.env.REACT_APP_URL_STATIC_IMG ? process.env.REACT_APP_URL_STATIC_IMG : 'No_URL_Configured') as string;
+
 
 //Injection of services from origin
 export const authTokensClient: IAuthTokensClient = AuthApiClientFactory.create(is_fake_mode);
 export const notificationClient: INotificationClient = NotificationApiClientFactory.create(is_fake_mode);
 export const userAuthClient: IAuthClient = ApiAuthClientFactory.create(is_fake_mode);
 export const profileClient: IProfileClient = ProfileApiClientFactory.create(is_fake_mode);
+export const productClient: IProductClient = ProductApiClientFactory.create(is_fake_mode);
 
 

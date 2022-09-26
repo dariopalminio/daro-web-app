@@ -11,6 +11,7 @@ interface Props {
     error?: boolean;
     helperText?: string;
     multiline?: boolean;
+    style?: any;
 }
 
 /**
@@ -26,7 +27,8 @@ const TextField: React.FC<Props> = ({
     type,
     error,
     helperText,
-    multiline
+    multiline,
+    style
 }) => {
 
     const getType = () => {
@@ -46,9 +48,10 @@ const TextField: React.FC<Props> = ({
                 placeholder={placeholder ? placeholder : ''}
                 value={value}
                 onChange={(e) => onChange(e)}
+                style={style? style : {}}
             />)}
             {multiline && (<textarea className='input-text-field' id={id} name={id}
-                style={{ width: "10%%", height: "100%" }}
+                style={style? style : { width: "98%", height: "100px" }}
                 value={value}
                 onChange={(e) => onChange(e)}
             />)}

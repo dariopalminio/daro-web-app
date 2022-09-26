@@ -5,11 +5,21 @@ import ButtonQuantity from "../../common/button-quantity/button-quantity";
 //https://v4.mui.com/
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
+import Cart from "./cart";
 
 
+interface Props {
+  item: any;
+  qtyChangeHandler: (id: string, qty: number) => void;
+  removeHandler: (id: string) => void;
+}
 
-
-const CartItem = ({ item, qtyChangeHandler, removeHandler }: any) => {
+/**
+ * CartItem
+ * 
+ * Pattern: Compound Component, Presentation Component and Controled Component
+ */
+ const CartItem: React.FC<Props> = ({ item, qtyChangeHandler, removeHandler}) => {
 
 
   const handlerNewQuantityValue = (newQuantityValue: number) => {
@@ -20,20 +30,19 @@ const CartItem = ({ item, qtyChangeHandler, removeHandler }: any) => {
   return (
     <div className="cartitem">
 
-      <div className="cartitem__image">
+      <div className="cartitem_image">
         <img src={item.imageUrl} alt={item.name} width="100px" height="100px"/>
       </div>
 
-      <Link to={`/catalog/product/detail/${item.product}`} className="cartItem__name">
+      <Link to={`/catalog/product/detail/${item.product}`} className="cartItem_name">
         <p>{item.name}</p>
       </Link>
 
-      <p className="cartitem__price">${item.price}</p>
+      <p className="cartitem_price">${item.price}</p>
 
-      
       <ButtonQuantity value={item.qty} onChange={(newQuantityValue:number) => handlerNewQuantityValue(newQuantityValue)} />
 
-      <p className="cartitem__price">${item.amount}</p>
+      <p className="cartitem_price">${item.amount}</p>
 
       <IconButton size="small" edge="end" aria-label="delete" onClick={() => removeHandler(item.id)}>
         <DeleteIcon />

@@ -19,5 +19,11 @@ export interface SessionType {
     given_name: string;
     preferred_username: string;
     userId: string;
+    //roles: Array<string> | null
   };
 
+  export enum PermissionType {
+    ANONYMOUS = "ANONYMOUS",
+    USER = "USER",
+    ADMIN = "ADMIN",
+  }

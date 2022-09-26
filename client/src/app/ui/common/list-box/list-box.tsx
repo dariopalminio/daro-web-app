@@ -23,8 +23,12 @@ const ListBox: React.FC<Props> = ({ id, label, onChange, style, value, options }
     }
 
     return (
-        <div className="list-box-select-group">
-        
+        <div className="list-box-select-group"
+            {...(style &&
+                (style = { style })
+            )}
+        >
+
             <label className='list-box-label'>{label}</label>
 
             <div id={id} className="list-box-select" tabIndex={2}>

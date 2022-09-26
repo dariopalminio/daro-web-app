@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import IconButton from "../../../common/icon-button/icon-button";
 import { RiAccountCircleFill, RiAccountCircleLine } from "react-icons/ri";
 import MenuListFloat from "../../../common/menu-list-float/menu-list-float";
-import { TopMenuDataForLogged, TopMenuDataForNotLogged } from "../top-menu-data";
+import { TopMenuDataForNotLogged } from "../top-menu-data";
 import styled from "styled-components";
+import { AccessType } from "../../../common/menu-list/menu-item.type";
 
 /**
  * UserTopMenu Function Component
@@ -13,21 +14,15 @@ import styled from "styled-components";
  * @visibleName UserTopMenu View
  */
 const UserTopMenu: FunctionComponent = () => {
-  
+
   const [isOpen, setIsOpen] = React.useState(false);
-  const { session } = useContext(SessionContext) as ISessionContext;
+  const { session, permission } = useContext(SessionContext) as ISessionContext;
   const { t } = useTranslation();
 
   const getMenuData = () => {
     if (!session?.isLogged) {
       return TopMenuDataForNotLogged;
-    } else return TopMenuDataForLogged;
-  };
-
-  const getUserProfileIcon = () => {
-    if (session?.isLogged) {
-      return <RiAccountCircleLine size={20}/>;
-    } else return <RiAccountCircleFill size={20}/>;
+    } else return TopMenuDataForNotLogged;
   };
 
   const toggleMenu = () => {
@@ -39,17 +34,22 @@ const UserTopMenu: FunctionComponent = () => {
   rigt: 1em;
   display: flex;
   `;
-  
+
   return (
     <UserMenuContainer>
 
       <IconButton
-        onClick={()=>toggleMenu()}
+        onClick={() => toggleMenu()}
       >
-        {getUserProfileIcon()}
+        <RiAccountCircleFill size={24} />
       </IconButton>
 
-      <MenuListFloat isOpen={isOpen} menuList={getMenuData()} onClick={()=>toggleMenu()}/>
+      <MenuListFloat
+        isOpen={isOpen}
+        permission={permission}
+        menuList={getMenuData()}
+        onClick={() => toggleMenu()}
+      />
 
     </UserMenuContainer>
   );

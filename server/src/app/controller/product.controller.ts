@@ -85,6 +85,26 @@ export class ProductController {
       };
     };
 
+        // Example: http://localhost:3001/api/webshop/v1/products/catalog?page=1&limit=100&orderBy=name&isAsc=true
+        @Get('catalog')
+    async getCatalog(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
+          try {
+            if (pageParam && limitParam && orderBy && isAsc) {
+              const page: number = parseInt(pageParam);
+              const limit: number = parseInt(limitParam);
+              const orderByField: string = orderBy.toString();
+              const isAscending: boolean = (isAsc === 'true') ? true : false;
+              const list = await this.productService.getCatalog(page, limit, orderByField, isAscending);
+              return res.status(HttpStatus.OK).json(list);
+            } else {
+              throw new InternalServerErrorException("No params");
+            }
+          } catch (error) {
+            throw new InternalServerErrorException(error);
+          };
+        };
+
+        
   // GET single product: /product/5c9d46100e2e5c44c444b2d1
   @Get('/id/:productID')
   async getProduct(@Res() res, @Param('productID') productID) {

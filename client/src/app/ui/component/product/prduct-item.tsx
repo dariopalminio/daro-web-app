@@ -4,15 +4,16 @@ import CartContext, { ICartContext } from '../../../../domain/context/cart.conte
 import { useContext, useState } from "react";
 import Button from "../../common/button/button";
 import ButtonQuantity from "../../common/button-quantity/button-quantity";
+import noImage from "../../image/no_image.png";
 
 interface Props {
-  images?: Array<string>;
+  image?: string;
   description?: string;
   grossPrice?: number;
   name?: string;
   productId?: string
 }
-const ProductItem: React.FC<Props> = ({ images, description, grossPrice, name, productId }) => {
+const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, productId }) => {
 
   const [quantity, setQuantity] = useState(1);
 
@@ -21,7 +22,7 @@ const ProductItem: React.FC<Props> = ({ images, description, grossPrice, name, p
   const addToCartHandler = () => {
     const item = { id: "3", imageUrl: "https://www.criollitos.com/wp-content/uploads/2020/01/manzanaVerde-600x600.jpg", name: "Product Name3", price: 4, qty: 3, countInStock: 4, amount: 12 };
 
-    addToCart(item);
+    addToCart(item);////product
     console.log("addToCartHandler");
   };
 
@@ -31,7 +32,7 @@ const ProductItem: React.FC<Props> = ({ images, description, grossPrice, name, p
   };
 
   const getImage = () => {
-    return images? images[0] : "jpg";
+    return image ? image : '';
   }
 
   const getDescription = () => {
@@ -45,14 +46,16 @@ const ProductItem: React.FC<Props> = ({ images, description, grossPrice, name, p
   return (
 
     <div className="product">
-      <img src={getImage()} alt={name} />
+      <img style={{position: "relative", margin: "2px", width: "100%"}} src={getImage()} alt={name} />
+     
 
-      <div className="product__info">
-        <p className="info__name">{name}</p>
 
-        <p className="info__description">{getDescription()}...</p>
+      <div className="product_info">
+        <p className="info_name">{name}</p>
 
-        <p className="info__price">${getPrice()}</p>
+        <p className="info_description">{getDescription()}...</p>
+
+        <p className="info_price">${getPrice()}</p>
 
       </div>
 

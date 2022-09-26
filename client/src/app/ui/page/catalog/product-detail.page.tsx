@@ -1,19 +1,50 @@
 
+import { useEffect } from "react";
 import {
-    RouteComponentProps,
-  } from "react-router-dom";
+  RouteComponentProps,
+} from "react-router-dom";
+import useProducts from "../../../../domain/hook/products/products.hook";
 import ProductDetail from "../../component/product/product-detail";
 
-  type TParams = { productId: string };
+type TParams = { productId: string };
 
-
+/**
+ * ProductDetailPage to search and show product detail data by productId passed as page parameter
+ * 
+ * Pattern: Container Component and Conditional Rendering
+ */
 export function ProductDetailPage({
-    match,
-  }: RouteComponentProps<TParams>) {
-    return (
-      <div className="container-page">
-        ProductDetailPage {match.params.productId}
-        <ProductDetail id={match.params.productId} />
-      </div>
-    );
-  }
+  match,
+}: RouteComponentProps<TParams>) {
+
+  const { isProcessing, hasError, msg, isSuccess, product, getDetail } = useProducts();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      return await getDetail(match.params.productId); //search data
+    };
+
+    const result = fetchData()
+      .catch(console.error);;
+
+    console.log(result);
+  }, [])
+
+
+  return (
+    <div className="container-page">
+      ProductDetailPage {match.params.productId}
+
+      {isProcessing &&
+        <h2>Cargando...</h2>
+      }
+
+      {hasError &&
+        <h2>{hasError}</h2>
+      }
+
+      {isSuccess && <ProductDetail product={product} />
+      }
+    </div>
+  );
+}

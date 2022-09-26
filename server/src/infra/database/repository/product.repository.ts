@@ -25,7 +25,7 @@ export class ProductRepository implements IRepository<IProduct> {
             // All with pagination and sorting
             const direction: number = isAscending ? 1 : -1;
             //const mysort = [[orderByField, direction]];
-            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
+            const mysort: Record<string, | 1 | -1 | { $meta: "textScore" }> = { reference: 1 };
             const gap: number = (page - 1) * limit;
             arrayDoc = await this.productModel.find({}).sort(mysort).skip(gap).limit(limit).exec();
             //similar to arrayDoc.slice((page - 1) * limit, page * limit);
@@ -43,9 +43,41 @@ export class ProductRepository implements IRepository<IProduct> {
             // All with pagination and sorting
             const direction: number = isAscending ? 1 : -1;
             //const mysort = [[orderByField, direction]];
-            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
+            const mysort: Record<string, | 1 | -1 | { $meta: "textScore" }> = { reference: 1 };
             const gap: number = (page - 1) * limit;
             arrayDoc = await this.productModel.find(query).sort(mysort).skip(gap).limit(limit).exec();
+        } else {
+            // All without pagination and without sorting
+            arrayDoc = await this.productModel.find(query).exec();
+        }
+
+        return this.castArrayDocToProduct(arrayDoc);
+    }
+
+    /**
+     * To exclude fields in response choose to return object with the field excluded with cero value. For example:
+     * const fieldsToExclude = {_id:0,title:0}
+     * const filter= {“name”:“Jeff Bridges”}
+     * db.collecion.find(filter,fieldsToExclude)
+     * To not exclude fields use empty object: fieldsToExclude={}
+     * @param query filter
+     * @param projection fieldsToExclude
+     * @param page 
+     * @param limit 
+     * @param orderByField 
+     * @param isAscending 
+     * @returns 
+     */
+    async findExcludingFields(query: any, fieldsToExclude: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<any[]> {
+        let arrayDoc: ProductDocument[];
+
+        if (page && limit && orderByField) {
+            // All with pagination and sorting
+            const direction: number = isAscending ? 1 : -1;
+            //const mysort = [[orderByField, direction]];
+            const mysort: Record<string, | 1 | -1 | { $meta: "textScore" }> = { reference: 1 };
+            const gap: number = (page - 1) * limit;
+            arrayDoc = await this.productModel.find(query, fieldsToExclude).sort(mysort).skip(gap).limit(limit).exec();
         } else {
             // All without pagination and without sorting
             arrayDoc = await this.productModel.find(query).exec();
@@ -58,15 +90,26 @@ export class ProductRepository implements IRepository<IProduct> {
      * getById
      * If it does not find it, it returns null
      */
-    async getById(id: string): Promise<IProduct> {
+    async getById(id: string, fieldsToExclude?: any): Promise<IProduct> {
+        if (fieldsToExclude) {
+            const prodDoc: ProductDocument = await this.productModel.findById(id, fieldsToExclude).exec();
+            const objCasted: IProduct = JSON.parse(JSON.stringify(prodDoc));
+            return objCasted;
+        }
         const prodDoc: ProductDocument = await this.productModel.findById(id).exec();
         const objCasted: IProduct = JSON.parse(JSON.stringify(prodDoc));
         return objCasted;
-        //return this.conversorDocToCategory(catDoc);
     };
 
-    async getByQuery(query: any): Promise<IProduct> {
-        const prodDoc: ProductDocument =  await this.productModel.findOne(query);
+    async getByQuery(query: any, fieldsToExclude?: any): Promise<IProduct> {
+
+        if (fieldsToExclude) {
+            const prodDoc: ProductDocument = await this.productModel.findOne(query, fieldsToExclude);
+            const objCasted: IProduct = JSON.parse(JSON.stringify(prodDoc));
+            return objCasted;
+        }
+
+        const prodDoc: ProductDocument = await this.productModel.findOne(query);
         const objCasted: IProduct = JSON.parse(JSON.stringify(prodDoc));
         return objCasted;
     }
@@ -78,7 +121,7 @@ export class ProductRepository implements IRepository<IProduct> {
     }
 
     async hasByQuery(query: any): Promise<boolean> {
-        const prodDoc: ProductDocument  =  await this.productModel.findOne(query);
+        const prodDoc: ProductDocument = await this.productModel.findOne(query);
         if (!prodDoc) return false;
         return true;
     }
@@ -89,17 +132,17 @@ export class ProductRepository implements IRepository<IProduct> {
     };
 
     async updateById(id: string, prod: Product): Promise<boolean> {
-        const docUpdated: ProductDocument = await this.productModel.findByIdAndUpdate(id, prod, {useFindAndModify: false}).exec();
+        const docUpdated: ProductDocument = await this.productModel.findByIdAndUpdate(id, prod, { useFindAndModify: false }).exec();
         return !!docUpdated;
     };
 
     async update(query: any, valuesToSet: any): Promise<boolean> {
-        const docUpdated: ProductDocument = await this.productModel.findOneAndUpdate(query, valuesToSet, {useFindAndModify: false}).exec();
+        const docUpdated: ProductDocument = await this.productModel.findOneAndUpdate(query, valuesToSet, { useFindAndModify: false }).exec();
         return !!docUpdated;
     };
 
     async delete(id: string): Promise<boolean> {
-        const docDeleted = await this.productModel.findByIdAndDelete(id, {useFindAndModify: false}).exec();
+        const docDeleted = await this.productModel.findByIdAndDelete(id, { useFindAndModify: false }).exec();
         return !!docDeleted; //doc is not null
     };
 
@@ -111,7 +154,7 @@ export class ProductRepository implements IRepository<IProduct> {
     */
     conversorDocToCategory(Doc: ProductDocument): IProduct {
         let imagesArray = [];
-        imagesArray = Doc.images.map(function(image) {
+        imagesArray = Doc.images.map(function (image) {
             return String(image);
         });
         return new Product(
@@ -136,7 +179,7 @@ export class ProductRepository implements IRepository<IProduct> {
             Number(Doc.grossPrice),
             Number(Doc.stock),
             Boolean(Doc.active)
-            );
+        );
     };
 
     /**

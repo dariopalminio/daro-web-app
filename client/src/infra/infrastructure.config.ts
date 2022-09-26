@@ -22,11 +22,14 @@ export const environment = process.env.REACT_APP_ENV;
 
 export const is_fake_mode = ((process.env.REACT_APP_FAKE === 'true') ? true : false) as boolean;
 
+export const urlImages = (process.env.REACT_APP_URL_STATIC_IMG ? process.env.REACT_APP_URL_STATIC_IMG : 'No_URL_Configured') as string;
+
 export const APIEndpoints = {
   authKeycloak: (process.env.REACT_APP_KEYCLOAK ? process.env.REACT_APP_KEYCLOAK : 'http://localhost:8080') as string,
   notifications: process.env.REACT_APP_NOTIFICATION_API as string,
   auth: process.env.REACT_APP_API_AUTH as string,
   users: process.env.REACT_APP_API_USER as string,
+  products:  process.env.REACT_APP_API_PRODUCTS as string,
 };
 
 export const Keycloak = {

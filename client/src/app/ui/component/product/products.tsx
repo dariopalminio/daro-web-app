@@ -6,51 +6,31 @@ import Alert from "../../common/alert/alert";
 import useProducts from "../../../../domain/hook/products/products.hook";
 
 
-const Products: React.FC = ({}) => {
+interface Props {
+    productList: Array<any>;
+}
 
-    const { isProcessing, hasError, msg, isSuccess, products, getCatalog } = useProducts();
- 
+/**
+ * Customized IconButton
+ */
+const Products: React.FC<Props> = ({ productList }) => {
 
-
-    useEffect(() => {
-        // declare the async data fetching function
-        const fetchData = async () => {
-          function sleep(ms: number) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-          }
-          // waits for 1000ms
-          await sleep(200);
-          await getCatalog();
-          return 'Hello World';
-        };
-      
-        const result = fetchData()
-          // make sure to catch any error
-          .catch(console.error);;
-        
-        // what will be logged to the console?
-        console.log(result);
-      }, [])
 
     return (
-        <div className="homescreen">
-            <div className="homescreen__products">
-                {isProcessing ? (
-                <CircularProgress>{"Loading..."}</CircularProgress>
-                ) : hasError ? (
-                    <Alert severity="error">{msg}</Alert>
-                ) : (
-                products.map((product) => (
+        <div className="product_container">
+            <div className="product_catalog">
+               {
+                    productList.map((product:any) => (
                     <ProductItem
                     key={product._id}
                     name={product.name}
                     description={product.description}
                     grossPrice={product.grossPrice}
-                    images={product.images}
+                    image={product.images[0]}
                     productId={product._id}
                     />
                 ))
-                )}
+                }
             </div>
         </div>
     )

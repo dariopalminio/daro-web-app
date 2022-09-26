@@ -9,7 +9,8 @@ import { useSession } from "../../../domain/hook/auth/session.hook";
 const SessionContextProvider: FC = ({ children }) => {
   const {session,
     setNewSession,
-    removeSessionValue} = useSession();
+    removeSessionValue,
+    permission} = useSession();
 
   useEffect(() => {
 
@@ -20,7 +21,8 @@ const SessionContextProvider: FC = ({ children }) => {
       value={{
         session,
         setNewSession,
-        removeSessionValue
+        removeSessionValue,
+        permission
       }}
     >
       {children}

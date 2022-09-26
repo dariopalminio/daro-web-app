@@ -1,16 +1,47 @@
 
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
+import useProducts from "../../../../domain/hook/products/products.hook";
+import Alert from "../../common/alert/alert";
+import CircularProgress from "../../common/progress/circular-progress";
 import Products from "../../component/product/products";
 
+/**
+ * CatalogPage for to list products as catalog
+ * 
+ * Pattern: Container Component, Conditional Rendering and Custom Hooks
+ */
 export const CatalogPage: FunctionComponent = () => {
   const { t } = useTranslation();
+  const { isProcessing, hasError, msg, isSuccess, products, getCatalog } = useProducts();
 
+  useEffect(() => {
+    // declare the async data fetching function
+    const fetchData = async () => {
+
+      return await getCatalog(); //search data
+    };
+
+    const result = fetchData()
+      // make sure to catch any error
+      .catch(console.error);;
+
+  }, []);
 
   return (
     <div className="container-page">
       <div>catalog</div>
-      <Products/>
+
+      {isProcessing &&
+        <CircularProgress>{"Loading..."}</CircularProgress>
+      }
+      {hasError &&
+        <Alert severity="error">{msg}</Alert>
+      }
+
+      {isSuccess &&
+        <Products productList={products} />
+      }
     </div>
   );
 };

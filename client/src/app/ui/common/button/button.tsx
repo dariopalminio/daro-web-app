@@ -29,7 +29,9 @@ const Button: React.FC<Props> = ({ children, onClick, type, style, disabled }) =
                     className='gradient-button-salmon-1'
                     onClick={onClick}
                     type={type}
-                    style={style ? style : {}}
+                    {...(style && 
+                        (style= {style})
+                      )}
                 >
                     {children}
                 </button>

@@ -17,6 +17,7 @@ export class UserRepository implements IRepository<IUser> {
         @InjectModel('User')
         private readonly userModel: Model<UserDocument>,
     ) { }
+   
 
     async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IUser[]> {
         let arrayDoc: UserDocument[];
@@ -56,15 +57,38 @@ export class UserRepository implements IRepository<IUser> {
         return this.castArrayDocToUser(arrayDoc);
     }
 
-    async getById(id: string): Promise<IUser> {
-        const userDoc: UserDocument = await this.userModel.findById(id).exec();
+    async findExcludingFields(query: any, fieldsToExclude: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<any[]> {
+        let arrayDoc: UserDocument[];
+
+        if (page && limit && orderByField) {
+            // All with pagination and sorting
+            const direction: number = isAscending ? 1 : -1;
+            //const mysort = [[orderByField, direction]];
+            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
+            const gap: number = (page - 1) * limit;
+            arrayDoc = await this.userModel.find(query, fieldsToExclude).sort(mysort).skip(gap).limit(limit).exec();
+        } else {
+            // All without pagination and without sorting
+            arrayDoc = await this.userModel.find(query).exec();
+        }
+
+        return this.castArrayDocToUser(arrayDoc);
+    };
+
+    async getById(id: string, fieldsToExclude?: any): Promise<IUser> {
+        const userDoc: UserDocument = await this.userModel.findById(id, fieldsToExclude).exec();
         //Doc has id name "_id"
         const objCasted: IUser = JSON.parse(JSON.stringify(userDoc));
         return objCasted;
         //return this.conversorDocToCategory(catDoc);
     };
 
-    async getByQuery(query: any): Promise<IUser> {
+    async getByQuery(query: any, fieldsToExclude?: any): Promise<IUser> {
+        if (fieldsToExclude) {
+            const userDoc: UserDocument =  await this.userModel.findOne(query, fieldsToExclude);
+            const objCasted: IUser = JSON.parse(JSON.stringify(userDoc));
+            return objCasted;
+        }
         const userDoc: UserDocument =  await this.userModel.findOne(query);
         const objCasted: IUser = JSON.parse(JSON.stringify(userDoc));
         return objCasted;

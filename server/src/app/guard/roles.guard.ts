@@ -14,6 +14,7 @@ export class RolesGuard implements CanActivate {
 
     canActivate(context: ExecutionContext): boolean {
         console.log("RolesGuard executed!");
+        if (!this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON')) return true;
         const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
         if (!requiredRoles) {
             return true;

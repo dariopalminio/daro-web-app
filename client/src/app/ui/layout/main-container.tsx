@@ -28,7 +28,7 @@ const MainContainer: FunctionComponent = () => {
         <Route path="/user/auth" component={AuthPage} exact></Route>
         <Route path="/cart" component={CartPage} exact></Route>
         <Route path="/catalog" component={CatalogPage} exact></Route>
-        <Route path="/catalog/product/detail/:id" component={ProductDetailPage} exact></Route>
+        <Route path="/catalog/product/detail/:productId" component={ProductDetailPage} exact></Route>
         <Route path="/contact" component={ContactPage} exact></Route>
         <Route path="/user/register/form" component={RegisterPage} exact></Route>
         <Route path="/user/register/confirm/start" component={RegisterConfirmStartPage} exact></Route>

@@ -59,7 +59,26 @@ export class CategoryRepository implements IRepository<ICategory> {
         return this.castArrayDocToCategory(arrayDoc);
     }
 
-    async getById(id: string): Promise<ICategory> {
+    
+    async findExcludingFields(query: any, fieldsToExclude: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<any[]> {
+        let arrayDoc: CategoryDocument[];
+
+        if (page && limit && orderByField) {
+            // All with pagination and sorting
+            const direction: number = isAscending ? 1 : -1;
+            //const mysort = [[orderByField, direction]];
+            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
+            const gap: number = (page - 1) * limit;
+            arrayDoc = await this.categoryModel.find(query, fieldsToExclude).sort(mysort).skip(gap).limit(limit).exec();
+        } else {
+            // All without pagination and without sorting
+            arrayDoc = await this.categoryModel.find(query).exec();
+        }
+
+        return this.castArrayDocToCategory(arrayDoc);
+    };
+    
+    async getById(id: string, fieldsToExclude?: any): Promise<ICategory> {
         const catDoc: CategoryDocument = await this.categoryModel.findById(id).exec();
         //Doc has id name "_id"
         const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
@@ -67,7 +86,12 @@ export class CategoryRepository implements IRepository<ICategory> {
         //return this.conversorDocToCategory(catDoc);
     };
 
-    async getByQuery(query: any): Promise<ICategory> {
+    async getByQuery(query: any, fieldsToExclude?: any): Promise<ICategory> {
+        if (fieldsToExclude) {
+            const catDoc: CategoryDocument = await this.categoryModel.findOne(query, fieldsToExclude);
+            const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
+            return objCasted;
+        }
         const catDoc: CategoryDocument = await this.categoryModel.findOne(query);
         const objCasted: ICategory = JSON.parse(JSON.stringify(catDoc));
         return objCasted;

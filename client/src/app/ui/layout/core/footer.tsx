@@ -1,11 +1,23 @@
 import React from "react";
-import * as StateConfig from '../../../../domain/domain.config';
 import "./footer.css";
 
-const Footer = () => {
+
+ interface Props {
+  companyName: string;
+  contactPhone?: string;
+  contactAddress?: string;
+}
+
+/**
+ * CartItem
+ * 
+ * Pattern: Presentation Component and Controled Component
+ */
+ const Footer: React.FC<Props> = ({ companyName, contactPhone, contactAddress}) => {
+
   return (
     <div className="footer">
-    <p>© 2021 {StateConfig.app_company_name}. Content is available under these licenses.
+    <p>© 2021 {companyName}. Content is available under these licenses.
         Power by Daro.</p>
   </div>
   );

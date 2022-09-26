@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { IProductService } from '../service/interface/product.service.interface';
 import { IProduct } from '../model/product/product.interface';
 import { IRepository } from '../output-port/repository.interface';
+import { CatalogDTO } from '../model/product/catalog.dto';
 
 
 @Injectable()
@@ -23,13 +24,50 @@ export class ProductService implements IProductService<IProduct> {
     return products;
   };
 
+  /**
+   * Catalog
+   */
+  async getCatalog(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<CatalogDTO[]> {
+
+    const fieldsToExclude = {
+      barcode: 0,
+      type: 0,
+      brand: 0,
+      color: 0,
+      model: 0,
+      gender: 0,
+      size: 0,
+      netCost: 0,
+      ivaAmountOnCost: 0,
+      grossCost: 0,
+      netPrice: 0,
+      ivaAmountOnPrice: 0,
+      active: 0,
+      __v: 0
+    };
+
+    console.log("***********************************getCatalog:");
+    const queryQuilter = { active: "true" };
+    const products: CatalogDTO[] = await this.productRepository.findExcludingFields(queryQuilter, fieldsToExclude, page, limit, orderByField, isAscending);
+    console.log("***********************************Catalog:", products);
+    return products;
+  };
+
   async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]> {
     const products: IProduct[] = await this.productRepository.find(query, page, limit, orderByField, isAscending);
     return products;
   };
 
   async getById(id: string): Promise<IProduct> {
-    const product: IProduct = await this.productRepository.getById(id);
+    const fieldsToExclude = {
+      netCost: 0,
+      ivaAmountOnCost: 0,
+      grossCost: 0,
+      netPrice: 0,
+      ivaAmountOnPrice: 0,
+    };
+
+    const product: IProduct = await this.productRepository.getById(id, fieldsToExclude);
     return product;
   };
 
@@ -74,7 +112,7 @@ export class ProductService implements IProductService<IProduct> {
    * Generate a unique Stock Keeping Unit
    */
   async generateSKU(type: string, brand: string, model: string, color: string, size: string): Promise<string> {
-    const maxNumber = 1000; 
+    const maxNumber = 1000;
     let attemps = 0;
     let alreadyExists: boolean = true;
     let skuGenerated: string;
@@ -87,7 +125,7 @@ export class ProductService implements IProductService<IProduct> {
     return skuGenerated;
   };
 
-  generateAnySKU(type: string, brand: string, model: string, color: string, size: string, numberRange: number ): string {
+  generateAnySKU(type: string, brand: string, model: string, color: string, size: string, numberRange: number): string {
     if (!type || !brand || !model || !color || !size)
       throw new Error("Failed to generate SKU because empty attribute!");
     const separator = "-";

@@ -1,5 +1,5 @@
 import * as InfraConfig from '../infrastructure.config';
-import { AxiosPromise } from 'axios';
+import { AxiosError, AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
 import { IProfileClient } from '../../domain/service/profile-client.interface';
 import axiosInstance from './interceptor/axios.interceptor';
@@ -58,7 +58,7 @@ export default function ProfileApiClientImpl(): IProfileClient {
       });
 
       return response.status;
-    } catch (error) {
+    } catch (error:any) {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;

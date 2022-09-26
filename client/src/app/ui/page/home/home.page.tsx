@@ -10,17 +10,19 @@ import useModalDialog from "../../common/dialog/use-modal-dialog";
 import ListBox from "../../common/list-box/list-box";
 import MenuList from "../../common/menu-list/menu-list";
 import { LeftMenuData } from "../../layout/core/left-menu-data";
+import { CatalogPage } from "../catalog/catalog.page";
+
 
 export const HomePage: FunctionComponent = () => {
   const { t } = useTranslation();
-const [selected, setSelected] = useState("Manzana");
+  const [selected, setSelected] = useState("Manzana");
 
-  
+
   return (
     <div >
       <div>{t('home.title')}</div>
 
-      <Products/>
+      <CatalogPage></CatalogPage>
 
     </div>
   );
