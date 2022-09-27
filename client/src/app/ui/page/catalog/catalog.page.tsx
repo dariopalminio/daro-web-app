@@ -30,7 +30,6 @@ export const CatalogPage: FunctionComponent = () => {
 
   return (
     <div className="container-page">
-      <div>catalog</div>
 
       {isProcessing &&
         <CircularProgress>{"Loading..."}</CircularProgress>

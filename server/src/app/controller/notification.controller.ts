@@ -18,16 +18,6 @@ export class NotificationController {
   ) { }
 
 
-  @ApiOperation({
-    summary:
-      'Hello world is get method to do Ping and test this service.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Succefully Ping',
-    type: HelloWorldDTO,
-  })
   @Get()
   getHello(@Res() res) {
     const response: HelloWorldDTO = {
@@ -50,7 +40,7 @@ export class NotificationController {
       lang = headers.lang;
     }
     let sentInfo;
-
+console.log("sendContactEmail-->", contactMessage);
     try {
       sentInfo = await this.supportService.sendContactEmail(contactMessage, lang);
     } catch (error) {

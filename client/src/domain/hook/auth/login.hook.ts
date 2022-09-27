@@ -77,6 +77,18 @@ export default function useLogin(
         if (!jwtDecoded) throw Error(errorJwtDecodedFail);
         //console.log("jwtDecoded:",jwtDecoded);
         const payload = jwtDecoded.payload;
+        console.log("payload:", payload);
+
+        //StateConfig.clientId
+        //const roles = payload.resource_access.rest-client-test.roles //  ['uma_protection', 'admin', 'user']
+
+        let theRoles = [];
+        try {
+            theRoles = payload.resource_access['rest-client-test'].roles;
+            console.log("ROLES:", theRoles);
+        } catch (err) {
+            console.log('Roles not found in JWT!');
+        }
         //console.log("payload:",payload);
         // Authorizedaccess_token: (string | null),
         const userSessionData: SessionType = {
@@ -92,6 +104,7 @@ export default function useLogin(
             given_name: payload.given_name,
             preferred_username: payload.preferred_username,
             userId: payload.sub,
+            roles: theRoles
         };
         return userSessionData;
     };

@@ -25,16 +25,6 @@ export class AuthController {
     private readonly globalConfig: IGlobalConfig,
   ) { }
 
-  @ApiOperation({
-    summary:
-      'Hello world is get method to do Ping and test this service.',
-  })
-  @ApiResponse({
-    status: 200,
-    description:
-      'Succefully Ping',
-    type: HelloWorldDTO,
-  })
   @Get()
   getHello(@Res() res) {
     const response: HelloWorldDTO = {
@@ -56,6 +46,7 @@ export class AuthController {
     console.log("register controller init");
     let result;
     try {
+      console.log("Controller register-->userRegisterDTO:",userRegisterDTO);
       result = await this.authService.register(userRegisterDTO);
       console.log("register controller:", result);
     } catch (error) {

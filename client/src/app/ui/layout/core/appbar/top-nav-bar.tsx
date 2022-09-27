@@ -1,14 +1,21 @@
 import { FunctionComponent, useContext } from "react";
 import logo from "../../../image/logo_app.png";
 import styled, { useTheme } from "styled-components";
-import UserTopMenu from "./user-top-menu";
 import CartTopMenu from "./cart-top-menu";
 import { RiMenuFill } from "react-icons/ri";
 import IconButton from "../../../common/icon-button/icon-button";
 import { ILayoutContext, LayoutContext } from "../layout-context-provider";
 import MenuIconButton from "../../../common/menu-icon-button/menu-icon-button";
 import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
-import { MenuItemType } from "../../../common/menu-list/menu-item.type";
+import { MenuItemType, AccessType } from "../../../common/menu-list/menu-item.type";
+
+//https://react-icons.github.io/react-icons/icons?name=ri
+import { RiAccountCircleFill, RiHome2Fill, RiShoppingCart2Fill } from "react-icons/ri";
+import { RiShieldUserFill } from "react-icons/ri";
+import { RiUserAddFill } from "react-icons/ri";
+import { RiUserSearchFill} from "react-icons/ri";
+import { useTranslation } from "react-i18next";
+
 
 const LogoImg = styled.img``;
 
@@ -20,7 +27,7 @@ const containerTopMenuStyle = {
 };
 
 interface Props {
-  menuList: MenuItemType[];
+  menuList?: MenuItemType[];
   style?: any;
 }
 
@@ -30,6 +37,7 @@ interface Props {
  * @visibleName TopNavBar View
  */
  const TopNavBar: React.FC<Props> = ({ menuList, style }) => {
+  const { t } = useTranslation();
   const theme: any = useTheme();
   const { sidebarWidth,
     isSidebarOpen,
@@ -55,6 +63,57 @@ interface Props {
   justify-content: right;
   `
 
+   const SubMenuUser: MenuItemType[] = [
+    {
+      key: "1",
+      title: t("menu.login"),
+      path: "/user/auth",
+      icon: <RiShieldUserFill />,
+      access: [AccessType.ANONYMOUS],
+      divider: false,
+      submenu: null
+    },
+    {
+      key: "1",
+      title: t("menu.logout"),
+      path: "/user/auth",
+      icon: <RiShieldUserFill />,
+      access: [AccessType.USER, AccessType.ADMIN],
+      divider: false,
+      submenu: null
+    },
+    {
+      key: "2",
+      title: t("menu.register"),
+      path: "/user/register/form",
+      icon: <RiUserAddFill />,
+      access: [AccessType.ANONYMOUS],
+      divider: false,
+      submenu: null
+    },
+    {
+      key: "3",
+      title: t("menu.profile"),
+      path: "/user/profile",
+      icon: <RiUserSearchFill />,
+      access: [AccessType.ANONYMOUS, AccessType.USER, AccessType.ADMIN],
+      divider: false,
+      submenu: null
+    },
+  ];
+  
+   const TopMenuData: MenuItemType[] = [
+    {
+      key: "1",
+      title: t("menu.user"),
+      path: "/",
+      icon: <RiAccountCircleFill size={24} />,
+      access: [AccessType.ANONYMOUS, AccessType.USER, AccessType.ADMIN],
+      divider: false,
+      submenu: SubMenuUser
+    },
+  ];
+
   return (
 
     <Topbar>
@@ -70,7 +129,7 @@ interface Props {
 
       <TopMenuContainer>
 
-        <MenuIconButton permission={permission} menuList={menuList} />
+        <MenuIconButton permission={permission} menuList={TopMenuData} />
 
         <CartTopMenu />
 

@@ -4,7 +4,6 @@ import Button from "../../../common/button/button";
 import TextField from "../../../common/text-field/text-field";
 import Link from "../../../common/link/link";
 import Paper from "../../../common/paper/paper";
-import styled from "styled-components";
 
 interface Props {
     onSubmit: (email: string, password: string) => void;
@@ -66,9 +65,10 @@ const LoginForm: React.FC<Props> = ({ onSubmit, style }) => {
             >
                 <Paper style={style? style : {}}>
 
-                    {t('login.title')}
+                    <h1>{t('login.title')}</h1>
 
-                    <div>
+                    <p>{t('login.message')}</p>
+
                         <TextField
                             id="standard-basic"
                             label="Email"
@@ -80,9 +80,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit, style }) => {
                                 helperText: emailErrorText,
                             })}
                         />
-                    </div>
 
-                    <div>
                         <TextField
                             id="standard-basic-2"
                             label={t('login.label.password')}
@@ -90,8 +88,7 @@ const LoginForm: React.FC<Props> = ({ onSubmit, style }) => {
                             onChange={(e) => handlePasswordChange(e.target.value)}
                             value={password}
                         />
-                    </div>
-
+                 
                     <div style={{marginTop: "35px", justifyContent: "center", alignItems: "center", display: "flex"}}>
                         <Link style={LinkStyle} href="/user/register/form">
                             {t('register.command.link')}
@@ -103,10 +100,11 @@ const LoginForm: React.FC<Props> = ({ onSubmit, style }) => {
                     </div>
 
                     <div style={{justifyContent: "center", alignItems: "center", display: "flex"}}>
-                    <Button style={{ marginTop: "15px" }} type="submit">
+                        <Button style={{ marginTop: "15px" }} type="submit">
                         {t('login.command')}
-                    </Button>
+                        </Button>
                     </div>
+
                 </Paper>
             </form>
 

@@ -11,7 +11,6 @@ import { ProfilePage } from "../page/user/profile/profile.page";
 import { CartPage } from "../page/cart/cart.page";
 import { HomePage } from "../page/home/home.page";
 import { ContactPage } from "../page/contact/contact.page";
-import Footer from './core/footer';
 import { CatalogPage } from "../page/catalog/catalog.page";
 import { ProductDetailPage } from "../page/catalog/product-detail.page";
 

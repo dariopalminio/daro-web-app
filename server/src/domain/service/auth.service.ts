@@ -128,7 +128,7 @@ export class AuthService implements IAuthService {
 
       throw error;
     }
-
+    console.log("service register-->end:", authCreatedUserResp);
     return authCreatedUserResp;
   };
 

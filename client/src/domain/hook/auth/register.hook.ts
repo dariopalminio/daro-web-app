@@ -44,7 +44,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                 password, jwtAdminToken);
             
             responseReg.then(resp => {
-                console.log("register response:", resp);
+                console.log("Register response promise then:", resp);
                         const userValue: SessionType = {
                             createdTimestamp: "",
                             access_token: null,
@@ -58,6 +58,7 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
                             given_name: firstname,
                             preferred_username: firstname,
                             userId: "",
+                            roles: []
                         };
                         
                         setNewSession(userValue);

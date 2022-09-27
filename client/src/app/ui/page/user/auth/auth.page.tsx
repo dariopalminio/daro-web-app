@@ -31,7 +31,7 @@ export const AuthPage: FunctionComponent = () => {
 
   return (
     <>
-      <div id="LoginFormContainer" data-testid="LoginFormContainer">
+      <div className="page_container" data-testid="page_container_auth">
       {isNotLogged() && <Login />}
 
       {needToVerifyEmail() &&

@@ -7,9 +7,6 @@ import LayoutContextProvider from "./ui/layout/core/layout-context-provider"
 import { ThemeProvider } from "styled-components"
 import MainContainer from "./ui/layout/main-container"
 import TopNavBar from "./ui/layout/core/appbar/top-nav-bar"
-import MenuList from "./ui/common/menu-list/menu-list"
-import { LeftMenuData } from "./ui/layout/core/left-menu-data"
-import { TopMenuData } from "./ui/layout/core/top-menu-data"
 import Footer from "./ui/layout/core/footer"
 import SideBar from "./ui/layout/core/sidebar"
 import * as StateConfig from '../domain/domain.config';
@@ -39,8 +36,8 @@ const App: FunctionComponent = () => {
           <LayoutContextProvider>
             <Router>
               <Layout
-                topbar={<TopNavBar  menuList={TopMenuData}/>}
-                leftbar={<SideBar style={{background: "#F9F9F9"}} menuList={LeftMenuData}></SideBar>}
+                topbar={<TopNavBar />}
+                leftbar={<SideBar style={{background: "#F9F9F9"}}></SideBar>}
                 footer={<Footer companyName={StateConfig.app_company_name}/>}
                 >
                 <MainContainer />

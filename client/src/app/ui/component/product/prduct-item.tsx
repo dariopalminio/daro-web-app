@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import Button from "../../common/button/button";
 import ButtonQuantity from "../../common/button-quantity/button-quantity";
 import noImage from "../../image/no_image.png";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   image?: string;
@@ -13,12 +14,17 @@ interface Props {
   name?: string;
   productId?: string
 }
+
+/**
+ * Product Item
+ * 
+ */
 const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, productId }) => {
 
   const [quantity, setQuantity] = useState(1);
-
   const { addToCart } = useContext(CartContext) as ICartContext;
-
+  const { t } = useTranslation();
+  
   const addToCartHandler = () => {
     const item = { id: "3", imageUrl: "https://www.criollitos.com/wp-content/uploads/2020/01/manzanaVerde-600x600.jpg", name: "Product Name3", price: 4, qty: 3, countInStock: 4, amount: 12 };
 
@@ -48,8 +54,6 @@ const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, pr
     <div className="product">
       <img style={{position: "relative", margin: "2px", width: "100%"}} src={getImage()} alt={name} />
      
-
-
       <div className="product_info">
         <p className="info_name">{name}</p>
 
@@ -67,7 +71,7 @@ const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, pr
         <ButtonQuantity value={quantity} onChange={(newQuantityValue: number) => handlerNewQuantityValue(newQuantityValue)} />
         <Button
           onClick={addToCartHandler}>
-          Add to Cart
+          {t('cart.button.add.to.cart')}
         </Button>
       </div>
       

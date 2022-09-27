@@ -1,11 +1,37 @@
 import { FunctionComponent } from "react";
-import PassRecoveryMsg from "../../../component/user/recovery/pass-recovery-msg";
+import { useTranslation } from "react-i18next";
+import emailSentImage from "../../../image/email_sent.png";
+import Paper from "../../../common/paper/paper";
 
+/**
+ * PassRecoveryCallToActionMsg
+ *
+ */
 export const PassRecoveryMsgPage: FunctionComponent = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className="container-page">
+    <div className="page_container">
+
+          <Paper>
+            <div>
+              <h1>{t('message.info.thank.you')}</h1>
+            </div>
+
+            <div>
+            {t('recovery.info.sent.pass')} 
+            </div>
+
+            <div>
+              <img src={String(emailSentImage)} alt="emailSentImage" style={{width:"45%", height:"45%"}}/>
+            </div>
+
+            <div>
+            {t('recovery.info.check.email.is.correct')}
+            </div>
+          </Paper>
       <br />
-      <PassRecoveryMsg />
+
     </div>
   );
 };

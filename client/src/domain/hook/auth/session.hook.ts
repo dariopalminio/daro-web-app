@@ -21,13 +21,22 @@ export const useSession = () => {
     clearSessionToStorage();
     setSession(SessionDefaultValue);
     setPermission('ANONYMOUS');
-  }
+  };
 
   function setNewSession(newSession: SessionType) {
     setSession(newSession);
     setSessionToStorage(newSession);
-    if (newSession.isLogged) setPermission(PermissionType.USER);
-  }
+
+    if (newSession.roles.includes('admin') || newSession.roles.includes('ADMIN') ) {
+      setPermission(PermissionType.ADMIN);
+      return;
+    }
+    if (newSession.isLogged) {
+      setPermission(PermissionType.USER);
+      return;
+    }
+    setPermission(PermissionType.ANONYMOUS);
+  };
 
   /**
 * Function: Recovery session data from web browser Storage (storage)

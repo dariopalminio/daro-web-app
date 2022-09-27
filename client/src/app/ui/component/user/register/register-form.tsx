@@ -1,238 +1,226 @@
 import React, { useState } from "react";
-import { FunctionComponent } from "react";
-import IUserValidator from '../../../../../domain/helper/user-validator.interface';
-import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
-import useRegister from "../../../../../domain/hook/auth/register.hook";
-import clsx from "clsx";
-import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import Button from "../../../common/button/button";
 import Paper from "../../../common/paper/paper";
 import TextField from "../../../common/text-field/text-field";
-import Alert from "../../../common/alert/alert";
 
-//@material-ui
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import CircularProgress from "../../../common/progress/circular-progress";
+const validationFlagInit = {
+  userName: true,
+  firstName: true,
+  lastName: true,
+  email: true,
+  password: true
+};
 
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    wrapperCenter: {
-      display: "flex",
-      justifyContent: "center",
-    },
-    wrapperCenterWithPaddingTop: {
-      display: "flex",
-      justifyContent: "center",
-      paddingTop: "20px",
-    },
-    labelForPass: {
-      color: "#888888",
-      width: "250px",
-    },
-    textfieldCustom: {
-      width: "250px",
-    },
-    h1Custom: {
-      fontSize: "1.5em",
-      color: "#525252",
-      paddingLeft: "1rem",
-    },
-    buttonCustom: {
-      margin: "0 auto auto auto",
-    },
-  })
-);
+interface Props {
+  user: any;
+  regExpressions?: any;
+  validationErrorMessages?: any;
+  onChange: (userUpdated: any) => void;
+  onSubmit: () => void;
+  style?: any;
+}
 
 /**
  * UserRegister Function Component
  *
- * @visibleName UserRegister View
+ * Pattern: Presentation Component, Controled Component and Extensible Style
  */
-export const RegisterForm: FunctionComponent = () => {
+const RegisterForm: React.FC<Props> = ({ user, regExpressions, validationErrorMessages, onChange, onSubmit, style }) => {
 
-  const [firstName, setFirstName] = useState("");
-  const [firstNameValid, setFirstNameValid] = useState(false);
-  const [lastName, setLastName] = useState("");
-  const [lastNameValid, setLastNameValid] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailValid, setEmailValid] = useState(true);
-  const [emailErrorText] = useState("Email inválido");
-  const [passValid, setPassValid] = useState(true);
-  const [passErrorText] = useState("Invalid Password");
-  const [confirmPassValid, setConfirmPassValid] = useState(true);
-  const [confirmPassErrorText] = useState("Pasword does not match!");
-  const classes = useStyles();
-  const validator: IUserValidator = UserValidatorFactory.create();
   const { t } = useTranslation();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [validationFlag, setValidationFlag] = useState(validationFlagInit);
+  const expressions = regExpressions ? regExpressions : {
+    firstName: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letters and spaces can carry accents.
+    lastName: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letters and spaces can carry accents.
+    email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+    password: /^.{4,12}$/, // 4 a 12 digitos.
+  };
+  const [confirmPassValid, setConfirmPassValid] = useState(true); //second password
 
-  const { isProcessing, isSuccess, hasError, msg, register } =
-    useRegister();
+  const errorText = validationErrorMessages ? validationErrorMessages : {
+    firstName: 'Value is invalid',
+    lastName: 'Value is invalid',
+    email: 'Value is invalid',
+    password: 'Value is invalid',
+    confirmPass: 'Value is invalid',
+  };
 
   /**
    * Register
    */
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (fieldsAreValid()) onSubmit(); //Parent execute the submit
+      else console.log("Cannot submit register form because any field is invalid.");
+  };
 
-    register(firstName, lastName, email, password);
-    //Redirect to Verify
+  const handleFirstNameChange = (firstNameValue: string) => {
+
+    onChange({
+      ...user,
+      firstName: firstNameValue
+    });
+
+    setValidationFlag({
+      ...validationFlag,
+      firstName: expressions.firstName.test(firstNameValue)
+    });
+  };
+
+  const handleLastNameChange = async (lastNameValue: string) => {
+    onChange({
+      ...user,
+      lastName: lastNameValue
+    });
+
+    setValidationFlag({
+      ...validationFlag,
+      lastName: expressions.lastName.test(lastNameValue)
+    });
   };
 
   const handleEmailChange = async (emailValue: string) => {
-    setEmail(emailValue);
-    setEmailValid(await validator.emailIsValid(emailValue));
+    onChange({
+      ...user,
+      email: emailValue
+    });
+    setValidationFlag({
+      ...validationFlag,
+      email: expressions.email.test(emailValue)
+    });
   };
 
   const handlePasswordChange = async (passOne: string) => {
-    setPassword(passOne);
-    setPassValid(
-      await validator.passIsValid(passOne)
-    );
+    onChange({
+      ...user,
+      password: passOne
+    });
+    setValidationFlag({
+      ...validationFlag,
+      password: expressions.password.test(passOne)
+    });
+  };
+
+  const confirmPassIsValid = (pasOne: string, passTwo: string): boolean => {
+    if (pasOne !== passTwo) {
+      return false
+    } else {
+      return true
+    }
   };
 
   const handleConfirmPassChange = (passTwo: string): void => {
     setConfirmPassword(passTwo);
-    const passOne = password;
-    setConfirmPassValid(validator.confirmPassIsValid(passOne, passTwo));
+    const passOne = user.password;
+    setConfirmPassValid(confirmPassIsValid(passOne, passTwo));
   };
 
-  const handleFirstNameChange = async (firstNameValue: string) => {
-    setFirstName(firstNameValue);
-    setFirstNameValid(await validator.nameIsValid(firstNameValue));
-
-  };
-
-  const handleLastNameChange = async (lastNameValue: string) => {
-    setLastName(lastNameValue);
-    setLastNameValid(await validator.nameIsValid(lastNameValue));
+  const fieldsAreValid = () => {
+    return (
+      expressions.firstName.test(user.firstName) &&
+      expressions.lastName.test(user.lastName) &&
+      expressions.email.test(user.email) &&
+      expressions.password.test(user.password) &&
+      confirmPassValid)
   };
 
   return (
-    <div>
-      {isSuccess && (
-        <Redirect to='/user/register/confirm/start' />
-      )}
+    <form
+      id="RegisterForm"
+      data-testid="RegisterForm"
+      action="#"
+      onSubmit={handleSubmit}
+    >
+      <Paper style={style ? style : {}}>
 
-      {!isSuccess && (
-        <form
-          id="RegisterForm"
-          data-testid="RegisterForm"
-          action="#"
-          onSubmit={handleLoginSubmit}
-        >
-          <Paper>
+        <h1>
+          {t('register.title')}
+        </h1>
 
-            <div className={clsx(classes.wrapperCenter)}>
-              <h1 className={clsx(classes.h1Custom)}>
-                {t('register.title')}
-              </h1>
-            </div>
+        <TextField
+          id="standard-basic-1"
 
-            <div className={clsx(classes.wrapperCenter)}>
-              <TextField
-                id="standard-basic-1"
-                
-                label={t('profile.label.firstname')}
-                placeholder=""
-                onChange={(e) => handleFirstNameChange(e.target.value)}
-                value={firstName}
-                {...(!firstNameValid && { error: true, helperText: t('register.info.helper.text.required') })}
-              />
-            </div>
+          label={t('profile.label.firstname')}
+          placeholder=""
+          onChange={(e) => handleFirstNameChange(e.target.value)}
+          value={user.firstName}
+          {...(!validationFlag.firstName && { error: true, helperText: errorText.firstName })}
+        />
 
-            <div className={clsx(classes.wrapperCenter)}>
-              <TextField
-                id="standard-basic-2"
-               
-                label={t('profile.label.lastname')}
-                placeholder=""
-                onChange={(e) => handleLastNameChange(e.target.value)}
-                value={lastName}
-                {...(!lastNameValid && {
-                  error: true,
-                  helperText: t('register.info.helper.text.required'),
-                })}
-              />
-            </div>
+        <TextField
+          id="standard-basic-2"
 
-            <div className={clsx(classes.wrapperCenter)}>
-              <TextField
-                id="standard-basic-3"
-              
-                label={t('profile.label.email')}
-                placeholder="you@email.com"
-                onChange={(e) => handleEmailChange(e.target.value)}
-                value={email}
-                {...(!emailValid && {
-                  error: true,
-                  helperText: emailErrorText,
-                })}
-              />
-            </div>
+          label={t('profile.label.lastname')}
+          placeholder=""
+          onChange={(e) => handleLastNameChange(e.target.value)}
+          value={user.lastName}
+          {...(!validationFlag.lastName && {
+            error: true,
+            helperText: errorText.lastName,
+          })}
+        />
 
-            <div className={clsx(classes.wrapperCenter)}>
-              <label className={clsx(classes.labelForPass)}>
-                {t('register.info.password.pattern')}
-              </label>
-            </div>
+        <TextField
+          id="standard-basic-3"
 
-            <div className={clsx(classes.wrapperCenter)}>
-              <TextField
-                id="standard-basic-4"
-              
-                label={t('login.label.password')}
-                type="password"
-                onChange={(e) => handlePasswordChange(e.target.value)}
-                value={password}
-                {...(!passValid && {
-                  error: true,
-                  helperText: passErrorText,
-                })}
-              />
-            </div>
+          label={t('profile.label.email')}
+          placeholder="you@email.com"
+          onChange={(e) => handleEmailChange(e.target.value)}
+          value={user.email}
+          {...(!validationFlag.email && {
+            error: true,
+            helperText: errorText.email,
+          })}
+        />
 
-            <div className={clsx(classes.wrapperCenter)}>
-              <TextField
-                id="standard-basic-5"
-               
-                label={t('register.label.confirm.password')}
-                type="password"
-                onChange={(e) => handleConfirmPassChange(e.target.value)}
-                value={confirmPassword}
-                {...(!confirmPassValid && {
-                  error: true,
-                  helperText: confirmPassErrorText,
-                })}
-              />
-            </div>
+        <div style={{ justifyContent: "center", alignItems: "center", textAlign: "center", display: "block" }}>
+          <label >
+            {t('register.info.password.pattern')}
+          </label>
+        </div>
 
-            <div className={clsx(classes.wrapperCenterWithPaddingTop)}>
-              <Button
-                type="submit"
-                style={{ margin: "20px 20px 20px 20px" }}
-              >
-                {t('register.command')}
-              </Button>
-            </div>
+        <TextField
+          id="standard-basic-4"
 
-          </Paper>
-        </form>
-      )}
+          label={t('login.label.password')}
+          type="password"
+          onChange={(e) => handlePasswordChange(e.target.value)}
+          value={user.password}
+          {...(!validationFlag.password && {
+            error: true,
+            helperText: errorText.password,
+          })}
+        />
 
-      {hasError && <Alert severity="error">{t(msg)}</Alert>}
+        <TextField
+          id="standard-basic-5"
 
-      {isProcessing && (
-          <CircularProgress>{t(msg)}</CircularProgress>
-      )}
+          label={t('register.label.confirm.password')}
+          type="password"
+          onChange={(e) => handleConfirmPassChange(e.target.value)}
+          value={confirmPassword}
+          {...(!confirmPassValid && {
+            error: true,
+            helperText: errorText.confirmPass,
+          })}
+        />
 
-    </div>
+        <div style={{ justifyContent: "center", alignItems: "center", textAlign: "center", display: "block" }}>
+
+          <br></br>
+            <Button
+              type="submit"
+              style={{ marginTop: "15px" }}
+            >
+              {t('register.command')}
+            </Button>
+     
+        </div>
+      </Paper>
+    </form>
   );
 };
 

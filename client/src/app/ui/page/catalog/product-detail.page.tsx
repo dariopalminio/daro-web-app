@@ -33,7 +33,6 @@ export function ProductDetailPage({
 
   return (
     <div className="container-page">
-      ProductDetailPage {match.params.productId}
 
       {isProcessing &&
         <h2>Cargando...</h2>

@@ -28,6 +28,7 @@ export const app_company_name = (process.env.REACT_APP_COMPANY_NAME ? process.en
 
 export const urlImages = (process.env.REACT_APP_URL_STATIC_IMG ? process.env.REACT_APP_URL_STATIC_IMG : 'No_URL_Configured') as string;
 
+export const clientId = process.env.REACT_APP_AUTH_CLIENT_ID;
 
 //Injection of services from origin
 export const authTokensClient: IAuthTokensClient = AuthApiClientFactory.create(is_fake_mode);

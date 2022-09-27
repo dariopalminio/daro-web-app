@@ -6,6 +6,7 @@ import ButtonQuantity from "../../common/button-quantity/button-quantity";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Button from "../../common/button/button";
+import { useTranslation } from "react-i18next";
 
 
 interface Props {
@@ -22,11 +23,12 @@ interface Props {
  * Pattern: Compound Component, Presentation Component and Controled Component
  */
  const Cart: React.FC<Props> = ({ empty, count, subtotal, onClick, children }) => {
-
+    const { t } = useTranslation();
+    
   return (
     <div className="cartscreen">
     <div className="cartscreen__left">
-        <h2>Shopping Cart</h2>
+        <h2>{t('cart.title.shoppingcart')}</h2>
 
         {empty ? (
             <div>
@@ -36,10 +38,10 @@ interface Props {
             <div>
                 <div className="cartitems-header">
                     <p ></p>
-                    <p >Name</p>
-                    <p >Price</p>
-                    <p >Quantity</p>
-                    <p >Amount</p>
+                    <p >{t('cart.name')}</p>
+                    <p >{t('cart.price')}</p>
+                    <p >{t('cart.quantity')}</p>
+                    <p >{t('cart.amount')}</p>
                     <p ></p>
                 </div>
                 {children}
@@ -49,13 +51,13 @@ interface Props {
 
     <div className="cartscreen__right">
         <div className="cartscreen__info">
-            <p>Subtotal ({count}) Productos</p>
-            <p>${subtotal}</p>
+            <p>{t('cart.you.have')} ({count}) {t('cart.products')}</p>
+            <p>{t('cart.subtotal')}: ${subtotal}</p>
         </div>
         <div>
             <Button 
                  onClick={onClick}>
-                Continue
+                {t('cart.button.checkout')}
             </Button>
         </div>
     </div>

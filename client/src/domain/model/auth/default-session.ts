@@ -14,4 +14,5 @@ export const DefaultSession: SessionType = {
     given_name: "",
     preferred_username: "",
     userId: "", // sub is the ID userId
+    roles: []
   };

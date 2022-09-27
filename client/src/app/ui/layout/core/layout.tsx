@@ -1,13 +1,10 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import IconButton from "../../common/icon-button/icon-button";
-import MenuList from "../../common/menu-list/menu-list";
-import Footer from "./footer";
-import { LeftMenuData } from "./left-menu-data";
 import { ILayoutContext, LayoutContext } from "./layout-context-provider";
 import { RiArrowLeftSLine, RiCloseFill } from "react-icons/ri"; //ChevronLeftIcon
 import { RiArrowRightSLine } from "react-icons/ri"; //ChevronRightIcon
-import TopNavBar from "./appbar/top-nav-bar";
+
 
 
 interface Props {
