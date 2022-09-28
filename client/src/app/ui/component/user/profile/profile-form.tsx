@@ -44,8 +44,8 @@ const ProfileForm: React.FC<Props> = ({ initialized, profile, onChange, onSubmit
   };
 
   const handleUpdateSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("handleUpdateSubmit...");
     e.preventDefault();
-
     onSubmit();
   };
 

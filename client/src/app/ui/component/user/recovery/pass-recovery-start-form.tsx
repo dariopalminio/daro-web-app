@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Button from "../../../common/button/button";
 import Paper from "../../../common/paper/paper";
 import TextField from "../../../common/text-field/text-field";
+import { CenteringContainer } from "../../../common/elements/centering-container";
 
 const validationFlagInit = {
   email: true
@@ -41,7 +42,7 @@ const PassRecoveryStartForm: React.FC<Props> = ({ email, title, message, validat
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (expressions.email.test(email)) onSubmit();
-      else console.log("Cannot submit! Email is invalid to submit.");
+    else console.log("Cannot submit! Email is invalid to submit.");
   };
 
   /**
@@ -66,21 +67,21 @@ const PassRecoveryStartForm: React.FC<Props> = ({ email, title, message, validat
         onSubmit={handleSubmit}
       >
         <Paper style={style ? style : {}}>
-          <div>
+          <CenteringContainer>
             <h1>{title}</h1>
-          </div>
+          </CenteringContainer>
 
-          <div>
+          <CenteringContainer>
             <p>{message}</p>
-          </div>
+          </CenteringContainer>
 
-          <div>
+          <CenteringContainer>
             <img
               src={String(emailToSendImage)}
               alt="emailSentImage"
               style={{ width: "30%", height: "30%" }}
             />
-          </div>
+           </CenteringContainer>
 
           <div>
             <TextField
@@ -98,20 +99,11 @@ const PassRecoveryStartForm: React.FC<Props> = ({ email, title, message, validat
 
           <br />
 
-          <div>
-
-            {validationFlag.email &&
-              <Button type="submit">
-                {t('recovery.start.command.send')}
-              </Button>
-            }
-            {!validationFlag.email &&
-              <Button type="submit" disabled>
-                {t('recovery.start.command.send')}
-              </Button>
-            }
-
-          </div>
+          <CenteringContainer>
+            <Button type="submit">
+              {t('recovery.start.command.send')}
+            </Button>
+            </CenteringContainer>
         </Paper>
       </form>
     </div>

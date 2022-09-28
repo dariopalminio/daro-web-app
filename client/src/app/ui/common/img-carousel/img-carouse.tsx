@@ -2,7 +2,6 @@ import { useState } from "react";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import styled from "styled-components";
 
-
 const ImgCarouselContainer = styled.div`
     width: 300px;
     height: 300px;
@@ -61,7 +60,7 @@ const ContainerImg = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    `;
+`;
 
 const ImgObject = styled.img`
     position:absolute;
@@ -71,21 +70,20 @@ const ImgObject = styled.img`
     margin: auto;
     min-height: 100%;
     height: 100%;
-    `;
+`;
 
-    interface Props {
-        uniqueId: string;
-        images: Array<string>; //Array of images URLs
-        width: string;
-        height: string;
-    }
+interface Props {
+    uniqueId: string;
+    images: Array<string>; //Array of images URLs
+    width: string;
+    height: string;
+}
 
 /**
  * Img Carousel
  */
 const ImgCarousel: React.FC<Props> = ({ uniqueId, images, width, height }) => {
     const [selected, setSelected] = useState(0); //Index of selected image at front
-
     const zIndexUp = 4; //Image in front has maximum zindex
     const zIndexDown = 3; //Image behind has lower zindex
 

@@ -9,11 +9,29 @@ import styled from "styled-components";
 //@material-ui https://v4.mui.com/
 //import IconButton from "@material-ui/core/IconButton";
 
+const CartCircle = styled.div`
+position: relative;
+`;
+
+const CartCount = styled.div`
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  background: rgb(21, 201, 102);
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 2px;
+  font-size: 10px;
+`;
 
 interface Props {
   style?: any;
 }
-
 
 
 /**
@@ -23,9 +41,9 @@ interface Props {
 
   const { t } = useTranslation();
   const { cartItems,
-    cartTotal,
+    cartSubTotal,
     setCartItems,
-    setCartTotal,
+    setCartSubTotal,
     addToCart,
     removeFromCart,
     getCartCount,
@@ -37,25 +55,6 @@ interface Props {
     history.push("/cart");
   };
 
-  const CartCircle = styled.div`
-  position: relative;
-  `;
-
-  const CartCount = styled.div`
-    position: absolute;
-    top: -7px;
-    right: -5px;
-    background: rgb(21, 201, 102);
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    padding: 2px;
-    font-size: 10px;
-  `;
 
   return (
     <IconButton

@@ -1,7 +1,29 @@
-import "./paper.css";
+import styled from "styled-components";
+
+export const PaperWrapper = styled.div`
+    width: fit-content;
+    max-width: 1000px;
+    height: fit-content;
+    border: ${props => props.theme.paper.border};
+    border-radius: 10px;
+    box-shadow: ${props => props.theme.paper.boxShadow};
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 23px;
+    background: white;
+    text-align: left;
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
+            margin: 0px auto;
+    }
+    @media screen and (max-width: 768px) {
+            width: 100%;
+            margin: 0px auto;
+            border:none;
+            box-shadow: none;
+    }
+`;
 
 interface Props {
-    className?: string;
     style?: any;
     children?: React.ReactNode;
 }
@@ -9,14 +31,15 @@ interface Props {
 /**
  * Paper for container
  */
+const Paper: React.FC<Props> = ({ children, style }) => {
 
-const Paper: React.FC<Props> = ({ className, children, style }) => {
 
     return (
-        <div className={className ? className : "paper-container"}
+        <PaperWrapper
             style={style ? style : {}}>
             {children}
-        </div>
+        </PaperWrapper>
+  
     );
 };
 

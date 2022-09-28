@@ -58,7 +58,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
-    //console.log(statusNumber);
+    console.log("******REGISTER:", r);
     return r;
   };
 
@@ -113,8 +113,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
         };
       });
 
-    console.log(info);
-
+    console.log("******sendStartEmailConfirm---info:",info);
     return info;
   };
 
@@ -157,6 +156,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
       throw authError;
     });
     console.log("resp:",resp);
+    console.log("******confirmAccount---resp:",resp);
     return resp;
   };
 
@@ -274,7 +274,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
         const authError: ApiError = handleAxiosError(error);
           throw authError;
       });
-
+      console.log("******sendEmailToRecoveryPass---info:",info);
     return info;
   };
 
@@ -308,7 +308,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
           'lang': lang,  },
         data: body
       });
-
+      console.log("******updatePassword---response.data:",response.data);
       return response.data;
     } catch (err: any) {
       const authError: ApiError = handleAxiosError(err);

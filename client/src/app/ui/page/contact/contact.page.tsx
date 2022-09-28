@@ -29,7 +29,8 @@ export const ContactPage: FunctionComponent = () => {
       <br />
 
       {(!isProcessing && !isSuccess) &&
-        <ContactForm onSubmit={(contact: ContactType) => handleSendSubmit(contact)} />
+        <ContactForm onSubmit={(contact: ContactType) => handleSendSubmit(contact)} 
+          style={{width: "300px", margin: "34px auto auto auto"}}/>
       }
 
       {

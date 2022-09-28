@@ -59,6 +59,11 @@ export class ProductService implements IProductService<IProduct> {
   };
 
   async getById(id: string): Promise<IProduct> {
+    const product: IProduct = await this.productRepository.getById(id);
+    return product;
+  };
+
+  async getDetailById(id: string): Promise<IProduct> {
     const fieldsToExclude = {
       netCost: 0,
       ivaAmountOnCost: 0,

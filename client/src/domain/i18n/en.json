@@ -82,6 +82,8 @@
     "profile.document": "Identity Document ",
     "profile.telephone": "Telephone ",
     "profile.command.submit": "Update",
+    "profile.update.success": "Your data have been updated successful!",
+    "profile.get.user.success": "You can update your data in this section.",
     "my.addresses.title": "My addresses",
     "my.addresses.add": "Add new addresses",
     "my.addresses.street": "Street",

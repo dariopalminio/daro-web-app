@@ -1,5 +1,43 @@
 import React from "react";
-import "./alert.css";
+import styled from "styled-components";
+//import "./alert.css";
+
+//Styled-components
+const AlertBox = styled.div`
+        width: 65%;
+        margin:0px auto;
+        margin-top: 1rem;
+        padding: 20px;
+        background-color: #12DBAD;
+        color: white;
+        border-radius: 10px;
+        @media screen and (min-width: 768px) and (max-width: 1023px) {
+            width: 70%;
+            margin: 0px auto;
+            margin-top: 1rem;
+        }
+        @media screen and (max-width: 767px) {
+            width: 100%;
+            margin: 0px auto;
+            margin-top: 1rem;
+        }
+        
+    `;
+
+//Styled-components
+const AlertCloseButton = styled.span`
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover{
+            color: black;
+        }
+    `;
 
 interface Props {
     children?: React.ReactNode;
@@ -26,7 +64,7 @@ const Alert: React.FC<Props> = ({ severity, children }) => {
             }
         }
         event.stopPropagation();
-    }
+    };
 
     const getBackgroundColor = () => {
         switch (severity) {
@@ -41,16 +79,13 @@ const Alert: React.FC<Props> = ({ severity, children }) => {
             default:
                 return '#42bdff';
         }
-    }
+    };
 
     return (
-        <>
-            <div className="alert-box" id={getId()} style={{ backgroundColor: getBackgroundColor() }}>
-                <span className="closebtn" onClick={(event) => handlerClick(event)}>&times;</span>
+        <AlertBox id={getId()} style={{ backgroundColor: getBackgroundColor() }}>
+            <AlertCloseButton className="closebtn" onClick={(event) => handlerClick(event)}>&times;</AlertCloseButton>
                 {children}
-            </div>
-
-        </>
+        </AlertBox>
     );
 };
 

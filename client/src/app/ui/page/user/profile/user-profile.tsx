@@ -123,6 +123,7 @@ const UserProfile: FunctionComponent = () => {
 
             {hasError && <Alert severity="error">{t(msg)}</Alert>}
 
+            {isSuccess && <Alert severity="success">{t(msg)}</Alert>}
         </div>
     );
 };

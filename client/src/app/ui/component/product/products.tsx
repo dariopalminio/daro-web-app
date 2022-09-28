@@ -4,10 +4,11 @@ import ProductItem from "./prduct-item";
 import CircularProgress from "../../common/progress/circular-progress";
 import Alert from "../../common/alert/alert";
 import useProducts from "../../../../domain/hook/products/products.hook";
+import { ProductType } from "../../../../domain/model/product/product.type";
 
 
 interface Props {
-    productList: Array<any>;
+    productList: Array<ProductType>;
 }
 
 /**
@@ -22,12 +23,7 @@ const Products: React.FC<Props> = ({ productList }) => {
                {
                     productList.map((product:any) => (
                     <ProductItem
-                    key={product._id}
-                    name={product.name}
-                    description={product.description}
-                    grossPrice={product.grossPrice}
-                    image={product.images[0]}
-                    productId={product._id}
+                    productItem={product}
                     />
                 ))
                 }

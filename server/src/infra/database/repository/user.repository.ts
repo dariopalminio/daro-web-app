@@ -76,7 +76,13 @@ export class UserRepository implements IRepository<IUser> {
     };
 
     async getById(id: string, fieldsToExclude?: any): Promise<IUser> {
-        const userDoc: UserDocument = await this.userModel.findById(id, fieldsToExclude).exec();
+        if (fieldsToExclude) {
+            const userDoc: UserDocument = await this.userModel.findById(id, fieldsToExclude).exec();
+            //Doc has id name "_id"
+            const objCasted: IUser = JSON.parse(JSON.stringify(userDoc));
+            return objCasted;
+        }
+        const userDoc: UserDocument = await this.userModel.findById(id).exec();
         //Doc has id name "_id"
         const objCasted: IUser = JSON.parse(JSON.stringify(userDoc));
         return objCasted;

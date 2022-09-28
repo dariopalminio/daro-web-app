@@ -6,17 +6,30 @@ import CarouselImg from "../../common/img-carousel/img-carouse";
 import useProducts from "../../../../domain/hook/products/products.hook";
 import ButtonQuantity from "../../common/button-quantity/button-quantity";
 import { useTranslation } from "react-i18next";
+import SingleAttrTable from "../../common/table/single-att-table";
+import { CenteringContainer } from "../../common/elements/centering-container";
+import { ProductType } from "../../../../domain/model/product/product.type";
+import { Alert } from "@material-ui/lab";
+import { Link } from "react-router-dom";
 // Actions
 
 
-// @ts-ignore
-const ProductDetail = ({ product }) => {
+interface Props {
+  product: ProductType | null;
+}
+
+/**
+ * Product Item
+ * 
+ */
+const ProductDetail: React.FC<Props> = ({ product }) => {
+
   const { t } = useTranslation();
   const [qty, setQty] = useState(1);
   const { cartItems,
-    cartTotal,
+    cartSubTotal,
     setCartItems,
-    setCartTotal,
+    setCartSubTotal,
     addToCart,
     removeFromCart,
     getCartCount,
@@ -24,11 +37,9 @@ const ProductDetail = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
 
   const addToCartHandler = () => {
-    const item = { id: "3", imageUrl: "https://www.criollitos.com/wp-content/uploads/2020/01/manzanaVerde-600x600.jpg", name: "Product Name3", price: 4, qty: 3, countInStock: 4, amount: 12 };
-
     console.log("addToCartHandler-->cartItems", cartItems);
-    addToCart(item); //product
-    console.log("addToCartHandler");
+    if (product && qty > 0) addToCart(product, qty);
+    else console.log("No tiene producto que agregar!");
   };
 
   const handlerNewQuantityValue = (newQuantityValue: number) => {
@@ -36,49 +47,73 @@ const ProductDetail = ({ product }) => {
 
   };
 
+  const getAttributes = () => {
+    if (product) {
+      const attrs: Array<{ label: string, value: string }> = [
+        { label: 'Category', value: product.category },
+        { label: 'Type', value: product.type },
+        { label: 'Brand', value: product.brand },
+        { label: 'Color', value: product.color },
+        { label: 'Size', value: product.size },
+        { label: 'Gender', value: product.gender },
+        { label: 'sku', value: product.sku }
+      ]
+      return attrs;
+    }
+    return [];
+  };
+
+
   return (
-    <div className="productscreen">
+    <div className="product_detail_container">
       <>
-        <div className="productscreen_left">
-          <div className="left_image">
-            <CarouselImg uniqueId={product._id} images={product.images} width={"100%"} height={"300px"}></CarouselImg>
+        {product && (
+          <>
+            <div className="product_detail">
+              <div className="frame_image">
+                <p className="product_name">{product.name}</p>
+                <CarouselImg uniqueId={product._id} images={product.images} width={"100%"} height={"300px"}></CarouselImg>
+                <p>{product.description}</p>
+              </div>
+              <div className="prod_info">
+                <p>{t('cart.price')}: ${product.grossPrice}</p>
 
-          </div>
-          <div className="left_info">
-            <p className="left_name">{product.name}</p>
-            <p>{t('cart.price')}: ${product.grossPrice}</p>
-            <p>{product.description}</p>
-            <p>detalle 2</p>
-          </div>
-        </div>
+                <div style={{ marginBottom: "10px" }}>Características principales:</div>
 
-        <div className="productscreen_right">
-          <div className="right_info">
-            <p>
-              {t('cart.price')}:
-              <span>${product.grossPrice}</span>
-            </p>
-            <p>
-              {t('cart.detail.state')}:
-              <span>
-                {product.stock > 0 ? "In Stock" : "Out of Stock"}
-              </span>
-            </p>
-            <p>
-              <ButtonQuantity value={quantity} onChange={(newQuantityValue: number) => handlerNewQuantityValue(newQuantityValue)} />
+                <SingleAttrTable rowDictionary={getAttributes()} />
+                <div className="call_to_action">
+                  <div className="call_to_action_info">
+                    <p>
+                      {t('cart.price')}:
+                      <span>${product.grossPrice}</span>
+                    </p>
+                    <p>
+                      {t('cart.detail.state')}:
+                      <span>
+                        {product.stock > 0 ? "In Stock" : "Out of Stock"}
+                      </span>
+                    </p>
 
-            </p>
-            <p>
+                    <CenteringContainer>
+                      <ButtonQuantity value={quantity} onChange={(newQuantityValue: number) => handlerNewQuantityValue(newQuantityValue)} />
+                    </CenteringContainer>
 
-              <Button onClick={addToCartHandler}>
-                {t('cart.button.add.to.cart')}
-              </Button>
+                    <p>
+                      <Button onClick={addToCartHandler}>
+                        {t('cart.button.add.to.cart')}
+                      </Button>
+                    </p>
+                  </div>
+                </div>
+              </div>
 
+            </div>
 
-            </p>
-          </div>
-        </div>
+          </>
+        )}
       </>
+
+      {!product && <Alert severity="error">No se ha podido cargar producto!</Alert>}
 
     </div>
   );

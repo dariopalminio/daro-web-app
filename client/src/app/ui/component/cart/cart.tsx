@@ -27,16 +27,16 @@ interface Props {
     
   return (
     <div className="cartscreen">
-    <div className="cartscreen__left">
-        <h2>{t('cart.title.shoppingcart')}</h2>
+    <div className="cartscreen_left">
+        <h1>{t('cart.title.shoppingcart')}</h1>
 
         {empty ? (
             <div>
-                Tu carrito esta vacio <Link to="/">Volver a página principal</Link>
+                Tu carrito esta vacio.
             </div>
         ) : (
             <div>
-                <div className="cartitems-header">
+                <div className="cartitems_header">
                     <p ></p>
                     <p >{t('cart.name')}</p>
                     <p >{t('cart.price')}</p>
@@ -49,8 +49,8 @@ interface Props {
         )}
     </div>
 
-    <div className="cartscreen__right">
-        <div className="cartscreen__info">
+    <div className="cartscreen_right">
+        <div className="cartscreen_info">
             <p>{t('cart.you.have')} ({count}) {t('cart.products')}</p>
             <p>{t('cart.subtotal')}: ${subtotal}</p>
         </div>

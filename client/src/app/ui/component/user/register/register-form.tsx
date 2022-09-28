@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import Button from "../../../common/button/button";
+import { CenteringContainer } from "../../../common/elements/centering-container";
 import Paper from "../../../common/paper/paper";
 import TextField from "../../../common/text-field/text-field";
 
@@ -54,7 +55,7 @@ const RegisterForm: React.FC<Props> = ({ user, regExpressions, validationErrorMe
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (fieldsAreValid()) onSubmit(); //Parent execute the submit
-      else console.log("Cannot submit register form because any field is invalid.");
+    else console.log("Cannot submit register form because any field is invalid.");
   };
 
   const handleFirstNameChange = (firstNameValue: string) => {
@@ -136,9 +137,9 @@ const RegisterForm: React.FC<Props> = ({ user, regExpressions, validationErrorMe
     >
       <Paper style={style ? style : {}}>
 
-        <h1>
+        <CenteringContainer><h1>
           {t('register.title')}
-        </h1>
+        </h1></CenteringContainer>
 
         <TextField
           id="standard-basic-1"
@@ -211,16 +212,16 @@ const RegisterForm: React.FC<Props> = ({ user, regExpressions, validationErrorMe
         <div style={{ justifyContent: "center", alignItems: "center", textAlign: "center", display: "block" }}>
 
           <br></br>
-            <Button
-              type="submit"
-              style={{ marginTop: "15px" }}
-            >
-              {t('register.command')}
-            </Button>
-     
+          <Button
+            type="submit"
+            style={{ marginTop: "15px" }}
+          >
+            {t('register.command')}
+          </Button>
+
         </div>
       </Paper>
-    </form>
+    </form >
   );
 };
 

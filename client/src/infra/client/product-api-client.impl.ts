@@ -2,6 +2,7 @@
 import * as InfraConfig from '../infrastructure.config';
 import axios from 'axios';
 import { IProductClient } from '../../domain/service/product-client.interface';
+import { ProductType } from '../../domain/model/product/product.type';
 
 
 export default function ProductApiClientImpl(): IProductClient {
@@ -10,7 +11,7 @@ export default function ProductApiClientImpl(): IProductClient {
     /**
      * http://localhost:3001/api/webshop/v1/products/catalog?page=1&limit=100&orderBy=name&isAsc=true
      */
-    async function getCatalog(accessToken: string): Promise<any> {
+    async function getCatalog(accessToken: string): Promise<Array<ProductType>> {
 
         //Notification endpoint
         const myURL = `${InfraConfig.APIEndpoints.products}/catalog`;
@@ -36,9 +37,9 @@ export default function ProductApiClientImpl(): IProductClient {
         return datacopy;
     };
 
-    async function getProductDetail(id: string, accessToken: string): Promise<any>{
+    async function getProductDetail(id: string, accessToken: string): Promise<ProductType>{
                 //Notification endpoint
-                const myURL = `${InfraConfig.APIEndpoints.products}/id/${id}`;
+                const myURL = `${InfraConfig.APIEndpoints.products}/detail/id/${id}`;
         
                 const resp = await axios.get(myURL);
                 console.log(resp);

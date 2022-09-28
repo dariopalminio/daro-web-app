@@ -6,7 +6,8 @@ export interface IProductService<T> extends IPersistentAggregateService<T>{
     
     getAllActives(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]>;
     generateSKU(type: string, brand: string, model: string, color: string, size: string ): Promise<string>;
-    getCatalog(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<CatalogDTO[]> ;
+    getCatalog(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<CatalogDTO[]>;
+    getDetailById(id: string): Promise<IProduct>;
 };
 
 

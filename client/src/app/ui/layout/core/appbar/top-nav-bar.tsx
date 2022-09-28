@@ -4,7 +4,7 @@ import styled, { useTheme } from "styled-components";
 import CartTopMenu from "./cart-top-menu";
 import { RiMenuFill } from "react-icons/ri";
 import IconButton from "../../../common/icon-button/icon-button";
-import { ILayoutContext, LayoutContext } from "../layout-context-provider";
+import { ILayoutContext, LayoutContext } from "../../../provider/layout-context-provider";
 import MenuIconButton from "../../../common/menu-icon-button/menu-icon-button";
 import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import { MenuItemType, AccessType } from "../../../common/menu-list/menu-item.type";
@@ -16,6 +16,25 @@ import { RiUserAddFill } from "react-icons/ri";
 import { RiUserSearchFill} from "react-icons/ri";
 import { useTranslation } from "react-i18next";
 
+const Topbar = styled.div`
+  position: relative;
+  display: flex; 
+  align-items: center;
+  background-image: ${props => props.theme.layout.headerBackgroundImage};
+  height: ${props => props.theme.layout.headerHeight}px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+`;
+
+const TopMenuContainer = styled.div`
+  position: relative;
+  width: 100%;
+  right: 30px;
+  margin-right: 30px;
+  left: 5px;
+  display: flex; 
+  align-items: center;
+  justify-content: right;
+`;
 
 const LogoImg = styled.img``;
 
@@ -43,25 +62,6 @@ interface Props {
     isSidebarOpen,
     toggleSidebar } = useContext(LayoutContext) as ILayoutContext;
     const { permission } = useContext(SessionContext) as ISessionContext;
-    
-  const Topbar = styled.div`
-  position: relative;
-  display: flex; 
-  align-items: center;
-  background-image: ${theme.colors.BGRDMain};
-  height: ${props => props.theme.headerHeight}px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  `
-  const TopMenuContainer = styled.div`
-  position: relative;
-  width: 100%;
-  right: 30px;
-  margin-right: 30px;
-  left: 5px;
-  display: flex; 
-  align-items: center;
-  justify-content: right;
-  `
 
    const SubMenuUser: MenuItemType[] = [
     {

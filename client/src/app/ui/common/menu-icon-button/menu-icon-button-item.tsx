@@ -7,6 +7,11 @@ import React from "react";
 import MenuListFloat from "../menu-list-float/menu-list-float";
 //<RiAccountCircleFill size={20} /> user
 
+const MenuIconButtonItemContainer = styled.div`
+    position: relative;
+    rigt: 1em;
+    display: flex;
+`;
 
 interface Props {
     permission?: string;
@@ -15,6 +20,9 @@ interface Props {
     style?: any;
 }
 
+/**
+ * Menu Item for Menu Icon-Button
+ */
 const MenuIconButtonItem: React.FC<Props> = ({ permission, item, onClick, style }) => {
 
     const [isOpen, setIsOpen] = React.useState(false);
@@ -37,12 +45,6 @@ const MenuIconButtonItem: React.FC<Props> = ({ permission, item, onClick, style 
     const handleClick = () => {
         history.push("/cart");
     };
-
-    const MenuIconButtonItemContainer = styled.div`
-    position: relative;
-    rigt: 1em;
-    display: flex;
-    `;
 
     return (<MenuIconButtonItemContainer
         {...(style && 

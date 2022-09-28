@@ -4,8 +4,7 @@ import emailSentImage from "../../../image/email_sent.png";
 import Paper from "../../../common/paper/paper";
 
 /**
- * PassRecoveryCallToActionMsg
- *
+ * PassRecoveryCallToActionMsg (Password recovery STEP 2)
  */
 export const PassRecoveryMsgPage: FunctionComponent = () => {
   const { t } = useTranslation();

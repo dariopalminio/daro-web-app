@@ -3,6 +3,7 @@ import { FunctionComponent, useContext } from 'react'
 import CartContext, { ICartContext } from '../../../../domain/context/cart.context';
 import CartItem from "../../component/cart/cart-item";
 import Cart from "../../component/cart/cart";
+import { Link } from 'react-router-dom';
 
 /**
  * CartPage
@@ -11,13 +12,13 @@ import Cart from "../../component/cart/cart";
  */
 export const CartPage: FunctionComponent = () => {
     const { cartItems,
-        cartTotal,
+        cartSubTotal,
         removeFromCart,
         getCartCount,
         changeItemQuantity } = useContext(CartContext) as ICartContext;
 
     const getCartSubTotal = () => {
-        return cartTotal;
+        return cartSubTotal;
     };
 
     const handleContinue = () => {
@@ -27,6 +28,7 @@ export const CartPage: FunctionComponent = () => {
 
     return (
         <div className="container-page">
+            <Link to="/">Volver al listado</Link>
             <Cart
                 empty={cartItems.length === 0}
                 count={getCartCount()}

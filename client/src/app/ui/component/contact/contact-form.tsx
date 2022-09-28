@@ -100,7 +100,7 @@ const ContactForm: React.FC<Props> = ({ onSubmit, style }) => {
 
     return (
         <div>
-            <Paper>
+            <Paper style={style? style : {}}>
                 <form
                     id="ContactForm"
                     data-testid="ContactForm"
@@ -164,11 +164,10 @@ const ContactForm: React.FC<Props> = ({ onSubmit, style }) => {
                             multiline={true}
                         />
                     </div>
-
-                    <div>
+                    <br/>
+                    <div style={{justifyContent: "center", alignItems: "center", display: "flex"}}>
                         <Button
                             type="submit"
-                            style={{ margin: "20px 20px 20px 20px" }}
                         >
                             {t('contact.command.send')}
                         </Button>

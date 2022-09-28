@@ -1,8 +1,13 @@
 import React from "react";
-import "./link.css";
+import styled from "styled-components";
+
+const LinkA = styled.a`
+    padding-top: "1.5em";
+    position: "relative";
+    right: "1em";
+`;
 
 interface Props {
-    className?: string;
     style?: any;
     children?: React.ReactNode;
     href: string;
@@ -11,17 +16,15 @@ interface Props {
 /**
  * Customized HTML Links
  */
-const Link: React.FC<Props> = ({ className, children, href, style }) => {
+const Link: React.FC<Props> = ({ children, href, style }) => {
+
 
     return (
-        <>
-            <a className={className ? className : "linkClass"}
+            <LinkA
                 style={style ? style : {}}
                 href={href} target="_self">
                 {children}
-            </a>
-
-        </>
+            </LinkA>
     );
 };
 

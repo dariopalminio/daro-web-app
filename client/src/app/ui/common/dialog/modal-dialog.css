@@ -1,4 +1,4 @@
-.modal {
+.modal-paper {
   z-index: 100;
   background: white;
   position: relative;
@@ -30,36 +30,4 @@
   overflow-y: auto;
   outline: 0;
   border-radius: 10px;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.modal-close-button {
-  cursor: pointer;
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  width: 30px;
-  height: 30px;
-  background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
-  border: 0px;
-  color: #fff;
-  font-size: 25px;
-  font-weight: 600;
-  line-height: 30px;
-  text-align: center;
-  border-radius: 50%;
-}
-
-.modal-crux {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  margin-top: 0;
-  margin-left: 0;
-  width: 30px;
-  height: 30px;
 }

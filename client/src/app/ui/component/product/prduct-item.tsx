@@ -4,32 +4,26 @@ import CartContext, { ICartContext } from '../../../../domain/context/cart.conte
 import { useContext, useState } from "react";
 import Button from "../../common/button/button";
 import ButtonQuantity from "../../common/button-quantity/button-quantity";
-import noImage from "../../image/no_image.png";
 import { useTranslation } from "react-i18next";
+import { ProductType } from "../../../../domain/model/product/product.type";
 
 interface Props {
-  image?: string;
-  description?: string;
-  grossPrice?: number;
-  name?: string;
-  productId?: string
+  productItem: ProductType;
 }
 
 /**
  * Product Item
  * 
  */
-const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, productId }) => {
+const ProductItem: React.FC<Props> = ({ productItem }) => {
 
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useContext(CartContext) as ICartContext;
   const { t } = useTranslation();
-  
-  const addToCartHandler = () => {
-    const item = { id: "3", imageUrl: "https://www.criollitos.com/wp-content/uploads/2020/01/manzanaVerde-600x600.jpg", name: "Product Name3", price: 4, qty: 3, countInStock: 4, amount: 12 };
 
-    addToCart(item);////product
-    console.log("addToCartHandler");
+  const addToCartHandler = () => {
+    if (productItem && quantity > 0) addToCart(productItem, quantity);
+    else console.log("No tiene prodiuctos que agregar!");
   };
 
   const handlerNewQuantityValue = (newQuantityValue: number) => {
@@ -38,24 +32,24 @@ const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, pr
   };
 
   const getImage = () => {
-    return image ? image : '';
+    return productItem.images ? productItem.images[0] : undefined;
   }
 
   const getDescription = () => {
-    return description? description.substring(0, 100) : "No description!";
+    return productItem.description ? productItem.description.substring(0, 100) : "No description!";
   }
 
   const getPrice = () => {
-    return grossPrice? grossPrice : "No price!";
+    return productItem.grossPrice ? productItem.grossPrice : "No price!";
   }
 
   return (
 
     <div className="product">
-      <img style={{position: "relative", margin: "2px", width: "100%"}} src={getImage()} alt={name} />
-     
+      <img style={{ position: "relative", margin: "2px", width: "100%" }} src={getImage()} alt={productItem.name} />
+
       <div className="product_info">
-        <p className="info_name">{name}</p>
+        <p className="info_name">{productItem.name}</p>
 
         <p className="info_description">{getDescription()}...</p>
 
@@ -63,7 +57,7 @@ const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, pr
 
       </div>
 
-      <Link to={`/catalog/product/detail/${productId}`} className="linkframe">
+      <Link to={`/catalog/product/detail/${productItem._id}`} className="linkframe">
         See Detail
       </Link>
 
@@ -74,7 +68,7 @@ const ProductItem: React.FC<Props> = ({ image, description, grossPrice, name, pr
           {t('cart.button.add.to.cart')}
         </Button>
       </div>
-      
+
     </div>
   );
 };

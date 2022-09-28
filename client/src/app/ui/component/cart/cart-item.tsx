@@ -6,10 +6,11 @@ import ButtonQuantity from "../../common/button-quantity/button-quantity";
 import { IconButton } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Cart from "./cart";
+import { CartItemType } from "../../../../domain/model/cart/cart-item.type";
 
 
 interface Props {
-  item: any;
+  item: CartItemType;
   qtyChangeHandler: (id: string, qty: number) => void;
   removeHandler: (id: string) => void;
 }
@@ -34,11 +35,11 @@ interface Props {
         <img src={item.imageUrl} alt={item.name} width="100px" height="100px"/>
       </div>
 
-      <Link to={`/catalog/product/detail/${item.product}`} className="cartItem_name">
+      <Link to={`/catalog/product/detail/${item.id}`} className="cartItem_name">
         <p>{item.name}</p>
       </Link>
 
-      <p className="cartitem_price">${item.price}</p>
+      <p className="cartitem_price">${item.grossPrice}</p>
 
       <ButtonQuantity value={item.qty} onChange={(newQuantityValue:number) => handlerNewQuantityValue(newQuantityValue)} />
 

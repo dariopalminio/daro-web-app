@@ -7,7 +7,9 @@ import CircularProgress from "../../../common/progress/circular-progress";
 import PassRecoveryStartForm from "../../../component/user/recovery/pass-recovery-start-form";
 
 
-
+/**
+ * Pass Recovery Start Page (Password recovery STEP 1)
+ */
 export const PassRecoveryStartPage: FunctionComponent = () => {
   const [email, setEmail] = useState("");
   const { isProcessing, isSuccess, hasError, msg, sendEmailToRecovery } = useRecovery();
@@ -21,6 +23,7 @@ export const PassRecoveryStartPage: FunctionComponent = () => {
   * Submit
   */
   const handleSubmit = () => {
+    console.log("handleSubmit");
     sendEmailToRecovery(email, i18n.language); //send to server
   };
 
@@ -35,7 +38,7 @@ export const PassRecoveryStartPage: FunctionComponent = () => {
         message={t('recovery.start.info.enter.email')}
         validationErrorMessages={errorText}
         onChange={(emailValue: string) => setEmail(emailValue)}
-        onSubmit={() => handleSubmit} 
+        onSubmit={() => handleSubmit()} 
         style={{width: "300px", margin: "34px auto auto auto"}}
         />
 

@@ -10,14 +10,11 @@ import PassRecoveryForm from "../../../component/user/recovery/pass-recovery-for
 type TParams = { token: string }; //match.params.token
 
 const passwordsInitialized = {
-  password: '',
-  confirmPassword: ''
+  password: ''
 };
 
 /**
- * PassRecoveryFormPage
- * 
- * Pattern: Container Component, Conditional Rendering and Custom Hooks
+ * PassRecoveryFormPage (Password recovery STEP 3)
  */
 export function PassRecoveryFormPage({ match, }: RouteComponentProps<TParams>) {
   const [passwords, setPasswords] = useState(passwordsInitialized);
@@ -32,7 +29,7 @@ export function PassRecoveryFormPage({ match, }: RouteComponentProps<TParams>) {
   };
 
   /**
-   * Submit update password
+   * Submit update password 
    */
   const handleSubmit = async () => {
     updatePassword(match.params.token, passwords.password, i18n.language);

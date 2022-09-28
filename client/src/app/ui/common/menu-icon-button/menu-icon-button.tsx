@@ -1,8 +1,4 @@
-
-import { Link } from "react-router-dom";
 import { MenuItemType } from "../menu-list/menu-item.type";
-import styled from "styled-components";
-import IconButton from "../icon-button/icon-button";
 import MenuIconButtonItem from "./menu-icon-button-item";
 
 interface Props {
@@ -13,6 +9,9 @@ interface Props {
     style?: any;
 }
 
+/**
+ * Menu Icon-Button
+ */
 const MenuIconButton: React.FC<Props> = ({ isOpen, permission, menuList, onClick, style }) => {
 
     const isShowed = (item: MenuItemType) => {
@@ -20,16 +19,17 @@ const MenuIconButton: React.FC<Props> = ({ isOpen, permission, menuList, onClick
     }
 
     return (<>
-
         {menuList.map((item, index) => {
             if (isShowed(item))
                 return (
-                        <MenuIconButtonItem permission={permission} item={item} style={style}/>
+                        <MenuIconButtonItem 
+                        permission={permission} 
+                        item={item} 
+                        style={style}
+                        />
 
                 );
         })}
-
-
     </>
     );
 };

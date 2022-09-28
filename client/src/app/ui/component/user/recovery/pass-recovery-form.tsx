@@ -45,7 +45,7 @@ const PassRecoveryForm: React.FC<Props> = ({ passwords, regExpressions, validati
 
     setValidationFlag({
       ...validationFlag,
-      password: expressions.firstName.test(passOne)
+      password: expressions.password.test(passOne)
     });
   };
 
@@ -58,17 +58,13 @@ const PassRecoveryForm: React.FC<Props> = ({ passwords, regExpressions, validati
   };
 
   const handleConfirmPassChange = async (passTwo: string) => {
-    onChange({
-      ...passwords,
-      confirmPassword: passTwo
-    });
+    setConfirmPassword(passTwo)
     const passOne = passwords.password;
     setConfirmPassValid(confirmPassIsValid(passOne, passTwo));
   };
 
   const fieldsAreValid = () => {
-    return (
-      expressions.passwords.test(passwords.password) &&
+    return ( expressions.password.test(passwords.password) &&
       confirmPassValid)
   };
 
@@ -125,6 +121,8 @@ const PassRecoveryForm: React.FC<Props> = ({ passwords, regExpressions, validati
               })}
             />
           </div>
+
+          <br/>
 
           <div>
             <Button

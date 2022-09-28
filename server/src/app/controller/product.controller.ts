@@ -105,7 +105,7 @@ export class ProductController {
         };
 
         
-  // GET single product: /product/5c9d46100e2e5c44c444b2d1
+  // GET single http://localhost:3001/api/webshop/v1/products/id/632ded6d5a88c40e4fa634e9
   @Get('/id/:productID')
   async getProduct(@Res() res, @Param('productID') productID) {
     let product: any;
@@ -117,6 +117,19 @@ export class ProductController {
     if (!product) throw new NotFoundException('Product does not exist!');
     return res.status(HttpStatus.OK).json(product);
   };
+
+    // GET single http://localhost:3001/api/webshop/v1/products/id/632ded6d5a88c40e4fa634e9
+    @Get('/detail/id/:productID')
+    async getDetailById(@Res() res, @Param('productID') productID) {
+      let product: any;
+      try {
+        product = await this.productService.getDetailById(productID);
+      } catch (error) {
+        throw new InternalServerErrorException(error);
+      };
+      if (!product) throw new NotFoundException('Product does not exist!');
+      return res.status(HttpStatus.OK).json(product);
+    };
 
   // Add Product: /product/create
   @UseGuards(RolesGuard)

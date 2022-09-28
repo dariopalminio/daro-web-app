@@ -1,6 +1,7 @@
 
 import { useEffect } from "react";
 import {
+  Link,
   RouteComponentProps,
 } from "react-router-dom";
 import useProducts from "../../../../domain/hook/products/products.hook";
@@ -33,7 +34,7 @@ export function ProductDetailPage({
 
   return (
     <div className="container-page">
-
+      <Link to="/">Volver al listado</Link>
       {isProcessing &&
         <h2>Cargando...</h2>
       }

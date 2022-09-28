@@ -8,9 +8,9 @@ import { useCart } from "../../../domain/hook/cart/cart.hook";
 const CartContextProvider: FC = ({ children }) => {
     const {
         cartItems,
-        cartTotal,
+        cartSubTotal,
         setCartItems,
-        setCartTotal,
+        setCartSubTotal,
         addToCart,
         removeFromCart,
         getCartCount,
@@ -26,9 +26,9 @@ const CartContextProvider: FC = ({ children }) => {
         <CartContext.Provider
             value={{
                 cartItems,
-                cartTotal,
+                cartSubTotal,
                 setCartItems,
-                setCartTotal,
+                setCartSubTotal,
                 addToCart,
                 removeFromCart,
                 getCartCount,

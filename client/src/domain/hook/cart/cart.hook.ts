@@ -1,54 +1,68 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { CartItemType } from '../../model/cart/cart-item.type';
+import { ProductType } from '../../model/product/product.type';
 
-const CART_INITIAL_STATE: Array<any> =
-    [
-        { id: "1", imageUrl: "https://i0.wp.com/historiasdelahistoria.com/wordpress-2.3.1-ES-0.1-FULL/wp-content/uploads/2015/09/manzana.jpg", name: "Product Name1", price: 34, qty: 1, countInStock: 3, amount: 34 },
-        { id: "2", imageUrl: "https://www.criollitos.com/wp-content/uploads/2020/01/manzanaVerde-600x600.jpg", name: "Product Name2", price: 5, qty: 2, countInStock: 4, amount: 10 }
-    ];
+const CART_ITEM_NAME = 'CART';
 
 /**
  * Cart Custom Hook
  */
 export const useCart = () => {
-    const [cartItems, setCartItems] = useState<Array<any>>(CART_INITIAL_STATE);
-    const [cartTotal, setCartTotal] = useState(0);
+    const [cartItems, setCartItems] = useState<Array<CartItemType>>([]);
+    const [cartSubTotal, setCartSubTotal] = useState(0);
 
     useEffect(() => {
-        // Actualiza el título del documento usando la API del navegador
-        console.log('useEffect of Cart Custom Hook...');
-        console.log("Cart!!!");
-        console.log("cartItems:", cartItems);
-        total();
+        const cartStorageItem = window.sessionStorage.getItem(CART_ITEM_NAME);
+        const cartJSONString: string = cartStorageItem ? cartStorageItem : "";
+        let myCartRecovered: Array<CartItemType>;
+        if (cartJSONString !== "") {
+            try {
+                myCartRecovered = JSON.parse(cartJSONString);
+                setCartItems(myCartRecovered);
+            } catch (error) {
+                setCartItems([]);
+                console.log('Cannot load cart items from storage. ', error);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        calculateTotals(); //update calculated values
     }, [cartItems]);
 
-    const total = () => {
+    const calculateTotals = () => {
         let totalVal = 0;
         for (let i = 0; i < cartItems.length; i++) {
             totalVal += cartItems[i].amount;
         }
-        setCartTotal(totalVal);
+        setCartSubTotal(totalVal);
     };
 
-    // @ts-ignore
-    const addToCart = (item) => setCartItems((currentCart) => [...currentCart, item]);
+    const addToCart = (productItem: ProductType, qty: number) => {
+        const newItem: CartItemType = { id: productItem._id, imageUrl: productItem.images[0], name: productItem.name, grossPrice: productItem.grossPrice, qty: qty, stock: productItem.stock, amount: (productItem.grossPrice * qty) };
+        const newCartItems = [...cartItems, newItem];
+        setCartItems(newCartItems);
+        saveCart(newCartItems);
+    }
 
-    // @ts-ignore
-    const removeFromCart = (id) => {
+    const removeFromCart = (id: string) => {
         setCartItems((currentCart) => {
             const indexOfItemToRemove = currentCart.findIndex((cartItem) => cartItem.id === id);
 
             if (indexOfItemToRemove === -1) {
                 return currentCart;
             }
-
-            return [
+            const newCartItems = [
                 ...currentCart.slice(0, indexOfItemToRemove),
                 ...currentCart.slice(indexOfItemToRemove + 1),
             ];
+            saveCart(newCartItems);
+            return newCartItems;
         });
+
     };
 
-    const getCartCount = () => {
+    const getCartCount = (): number => {
         let totalVal = 0;
         for (let i = 0; i < cartItems.length; i++) {
             totalVal += cartItems[i].qty;
@@ -56,40 +70,33 @@ export const useCart = () => {
         return totalVal;
     };
 
-    
-    // @ts-ignore
-    const changeItemQuantity = (id, qty) => {
-
+    const changeItemQuantity = (id: string, qty: number) => {
         const indexToUpdate = cartItems.findIndex((cartItem) => cartItem.id === id);
-        console.log("indexToUpdate:", indexToUpdate);
-
         const searchObject = cartItems[indexToUpdate];
-
         const itemChanged = {
             ...searchObject,
             qty: qty,
-            amount: qty * searchObject.price
+            amount: qty * searchObject.grossPrice
         }
-        console.log("itemChanged:", itemChanged);
+        let newCartItems = [...cartItems];
+        newCartItems[indexToUpdate] = itemChanged;
+        setCartItems(newCartItems);
+        saveCart(newCartItems);
+    };
 
-        let newarray = [...cartItems];
-
-        newarray[indexToUpdate] = itemChanged;
-
-        setCartItems(newarray);
-
-        console.log(`qtyChangeHandler id ${id} qty ${qty}`);
-        total();
+    const saveCart = (items: Array<CartItemType>) => {
+        const sessionStorageItem: string = JSON.stringify(items);
+        window.sessionStorage.setItem(CART_ITEM_NAME, sessionStorageItem);
     };
 
     return {
         cartItems,
-        cartTotal,
+        cartSubTotal,
         setCartItems,
-        setCartTotal,
+        setCartSubTotal,
         addToCart,
         removeFromCart,
         getCartCount,
         changeItemQuantity
-    }
-}
+    };
+};

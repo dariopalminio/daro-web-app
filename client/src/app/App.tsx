@@ -3,19 +3,20 @@ import { BrowserRouter as Router } from "react-router-dom"
 import SessionContextProvider from "./ui/provider/session-context-provider"
 import CartContextProvider from "./ui/provider/cart-context-provider"
 import Layout from "./ui/layout/core/layout"
-import LayoutContextProvider from "./ui/layout/core/layout-context-provider"
+import LayoutContextProvider from "./ui/provider/layout-context-provider"
 import { ThemeProvider } from "styled-components"
 import MainContainer from "./ui/layout/main-container"
 import TopNavBar from "./ui/layout/core/appbar/top-nav-bar"
 import Footer from "./ui/layout/core/footer"
 import SideBar from "./ui/layout/core/sidebar"
 import * as StateConfig from '../domain/domain.config';
+import Themes from "./ui/common/themes/themes"
 // Define what props.theme will look like
 const theme = {
   sidebarWidth: 240,
   headerHeight: 50,
   colors: {
-    BGRDMain: `linear-gradient(to right, rgba(0, 224, 255, 1), rgba(0, 133, 255, 1))`,
+    BGRDMainv: `linear-gradient(to right, rgba(0, 224, 255, 1), rgba(0, 133, 255, 1))`,
     BGRDbutton: "",
   }
 };
@@ -31,7 +32,7 @@ const App: FunctionComponent = () => {
 
   return (
     <SessionContextProvider>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={Themes.primary}>
         <CartContextProvider>
           <LayoutContextProvider>
             <Router>

@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { ApiError } from '../../../infra/client/api.error';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import * as StateConfig from '../../domain.config';
+import { ProductType } from '../../model/product/product.type';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IProductClient } from '../../service/product-client.interface';
 import { IHookState, InitialState } from '../hook.type';
@@ -16,8 +17,8 @@ export default function useProducts(authClientInjected: IAuthTokensClient | null
     productClientInjected: IProductClient | null = null) {
 
     const [state, setState] = useState<IHookState>(InitialState);
-    const [products, setProducts] = useState<Array<any>>([]);
-    const [product, setProduct] = useState<any>({});
+    const [products, setProducts] = useState<Array<ProductType>>([]);
+    const [product, setProduct] = useState<ProductType|null>(null);
     const { session, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const productClient: IProductClient = productClientInjected ? productClientInjected : StateConfig.productClient;
 
@@ -52,7 +53,7 @@ export default function useProducts(authClientInjected: IAuthTokensClient | null
         try {
             const data = await productClient.getProductDetail(id, "withOutAcces");
 
-            console.log("hook Detail data:", data.data);
+            console.log("hook Detail data:", data);
 
             setProduct(data);
 

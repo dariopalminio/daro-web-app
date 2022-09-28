@@ -14,7 +14,7 @@ import { IHookState, InitialState } from '../hook.type';
  */
 export default function useProfile(authClientInjected: IAuthTokensClient | null = null,
     profileClientInjected: IProfileClient | null = null) {
-
+        
     const [state, setState] = useState<IHookState>(InitialState);
     const profClient: IProfileClient = profileClientInjected ? profileClientInjected : StateConfig.profileClient;
     const { session, removeSessionValue } = useContext(SessionContext) as ISessionContext;
@@ -30,7 +30,7 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
         try {
 
             let info = await profClient.getProfileService(userName);
-            console.log(info);
+            
             setState({ isProcessing: false, hasError: false, msg: "profile.get.user.success", isSuccess: true });
             return info;
 
@@ -59,8 +59,7 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
 
             let info = await profClient.updateProfile(userProfile);
             setState({ isProcessing: false, hasError: false, msg: "profile.update.success", isSuccess: true });
-            return info;
-
+            return;
         } catch (error: any | ApiError) {
             let errorKey = error.message;
             if (error instanceof ApiError && (error.status===400 || error.status===401)) {
