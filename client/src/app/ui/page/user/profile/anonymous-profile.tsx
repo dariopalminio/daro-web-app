@@ -1,6 +1,5 @@
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
-import clsx from "clsx";
 import Link from "../../../common/link/link";
 import ProfileLanguage from "../../../component/user/profile/profile-language";
 import Paper from "../../../common/paper/paper";
@@ -13,7 +12,8 @@ const AnonymousProfile: FunctionComponent = () => {
     const { t, i18n } = useTranslation();
 
     return (
-        <Paper>
+        <div>
+        <Paper style={{width: "400px", margin: "34px auto auto auto"}}>
             {t("profile.msg.anonymous")}
 
             &nbsp;&nbsp;
@@ -25,9 +25,12 @@ const AnonymousProfile: FunctionComponent = () => {
                 {t('register.command.link')}
             </Link>
 
+            <br/>
+
             <ProfileLanguage onChange={(len: string)=> {}}/>
             
         </Paper>
+        </div>
     );
 };
 

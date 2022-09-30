@@ -9,9 +9,9 @@ import Products from "../../component/product/products";
 /**
  * CatalogPage for to list products as catalog
  * 
- * Pattern: Container Component, Conditional Rendering and Custom Hooks
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Custom hook
  */
-export const CatalogPage: FunctionComponent = () => {
+const CatalogPage: FunctionComponent = () => {
   const { t } = useTranslation();
   const { isProcessing, hasError, msg, isSuccess, products, getCatalog } = useProducts();
 
@@ -29,11 +29,12 @@ export const CatalogPage: FunctionComponent = () => {
   }, []);
 
   return (
-    <div className="container-page">
+    <div className="page_container">
 
       {isProcessing &&
-        <CircularProgress>{"Loading..."}</CircularProgress>
+        <CircularProgress>{t('progress.loading')}</CircularProgress>
       }
+      
       {hasError &&
         <Alert severity="error">{msg}</Alert>
       }
@@ -44,3 +45,5 @@ export const CatalogPage: FunctionComponent = () => {
     </div>
   );
 };
+
+export default CatalogPage;

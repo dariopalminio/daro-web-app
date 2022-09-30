@@ -51,6 +51,7 @@ interface Props {
 
 /**
  * MenuListFloat
+ * Stateless components and controlled component
  */
 /**
    <ListItem button key={item.key} component={Link} to={item.path}>

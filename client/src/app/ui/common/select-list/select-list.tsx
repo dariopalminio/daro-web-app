@@ -70,6 +70,7 @@ interface Props {
 
 /**
  * Select List components is used for collecting user provided information from a list of options.
+ * Stateless components, extensible Style and controlled component
  */
 const SelectList: React.FC<Props> = ({ id, label, list, onClickSelect, onClickDelete, style }) => {
 

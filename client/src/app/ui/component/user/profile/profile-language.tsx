@@ -1,14 +1,24 @@
 import { useTranslation } from "react-i18next";
 import { supportedLngs } from "../../../../../domain/i18n/supported-lngs";
+import ListBox from "../../../common/list-box/list-box";
+
+/**
+      <List>
+        {supportedLngs.map((lng, index) => {
+          return (
 
 
-//@material-ui https://v4.mui.com/
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import FlagIcon from "@material-ui/icons/Flag";
-import StartIcon from "@material-ui/icons/StarOutline";
+            <ListItem button key={index} onClick={() => changeLanguage(lng)}>
+              <ListItemIcon>
+                <FlagIcon />
+                {((i18n.language) === lng) && <StartIcon />}
+              </ListItemIcon>
+              <ListItemText primary={lng} />
+            </ListItem>
+          );
+        })}
+      </List>
+ */
 
 /**
  * User Profile Language component
@@ -25,21 +35,15 @@ export default function ProfileLanguage({ onChange }: any) {
 
   return (
     <div>
-      {" "}
-      {t("language.current")}
-      <List>
-        {supportedLngs.map((lng, index) => {
-          return (
-            <ListItem button key={index} onClick={() => changeLanguage(lng)}>
-              <ListItemIcon>
-                <FlagIcon />
-                {((i18n.language) === lng) && <StartIcon />}
-              </ListItemIcon>
-              <ListItemText primary={lng} />
-            </ListItem>
-          );
-        })}
-      </List>
+      <ListBox
+                id="demo-select-small"
+                label={t("language.current")}
+                value={i18n.language}
+                options={supportedLngs}
+                onChange={(selectedOption) => changeLanguage(selectedOption)}
+                style={{marginTop: "15px"}}
+              />
+              
     </div>
   );
 };

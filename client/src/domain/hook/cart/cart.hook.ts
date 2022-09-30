@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { CartItemType } from '../../model/cart/cart-item.type';
 import { ProductType } from '../../model/product/product.type';
+import { v4 as uuidv4 } from 'uuid';
 
 const CART_ITEM_NAME = 'CART';
 
@@ -39,7 +40,7 @@ export const useCart = () => {
     };
 
     const addToCart = (productItem: ProductType, qty: number) => {
-        const newItem: CartItemType = { id: productItem._id, imageUrl: productItem.images[0], name: productItem.name, grossPrice: productItem.grossPrice, qty: qty, stock: productItem.stock, amount: (productItem.grossPrice * qty) };
+        const newItem: CartItemType = { itemId: uuidv4(), productId: productItem._id, imageUrl: productItem.images[0], name: productItem.name, grossPrice: productItem.grossPrice, qty: qty, stock: productItem.stock, amount: (productItem.grossPrice * qty) };
         const newCartItems = [...cartItems, newItem];
         setCartItems(newCartItems);
         saveCart(newCartItems);
@@ -47,7 +48,7 @@ export const useCart = () => {
 
     const removeFromCart = (id: string) => {
         setCartItems((currentCart) => {
-            const indexOfItemToRemove = currentCart.findIndex((cartItem) => cartItem.id === id);
+            const indexOfItemToRemove = currentCart.findIndex((cartItem) => cartItem.itemId === id);
 
             if (indexOfItemToRemove === -1) {
                 return currentCart;
@@ -71,7 +72,7 @@ export const useCart = () => {
     };
 
     const changeItemQuantity = (id: string, qty: number) => {
-        const indexToUpdate = cartItems.findIndex((cartItem) => cartItem.id === id);
+        const indexToUpdate = cartItems.findIndex((cartItem) => cartItem.itemId === id);
         const searchObject = cartItems[indexToUpdate];
         const itemChanged = {
             ...searchObject,

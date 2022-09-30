@@ -11,6 +11,7 @@ interface Props {
 
 /**
  * Menu Icon-Button
+ * Stateless components, extensible Style and controlled component
  */
 const MenuIconButton: React.FC<Props> = ({ isOpen, permission, menuList, onClick, style }) => {
 

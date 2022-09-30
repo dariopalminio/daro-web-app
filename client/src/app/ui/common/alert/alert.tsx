@@ -29,7 +29,7 @@ const AlertCloseButton = styled.span`
         margin-left: 15px;
         color: white;
         font-weight: bold;
-        float: right;
+        float: none;
         font-size: 22px;
         line-height: 20px;
         cursor: pointer;
@@ -46,6 +46,7 @@ interface Props {
 
 /**
  * Customized alert
+ * Stateless components
  */
 const Alert: React.FC<Props> = ({ severity, children }) => {
 

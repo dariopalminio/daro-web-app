@@ -13,6 +13,8 @@ interface Props {
 /**
     Modal Dialog
 
+    Stateless components and controlled component
+    
 const {isOpen, toggle} = useModalDialog();
 
 <button onClick={toggle}>Show Modal</button>

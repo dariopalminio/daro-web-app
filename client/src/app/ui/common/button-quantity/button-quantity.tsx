@@ -47,6 +47,7 @@ interface Props {
 
 /**
  * Customized button for quantity number selection
+ * Stateless components and controlled component
  */
 const ButtonQuantity: React.FC<Props> = ({ value, onChange }) => {
 

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import IconButton from "../../common/icon-button/icon-button";
-import { ILayoutContext, LayoutContext } from "../../provider/layout-context-provider";
+import IconButton from "../../../common/icon-button/icon-button";
+import { ILayoutContext, LayoutContext } from "../../../provider/layout-context-provider";
 import { RiArrowLeftSLine, RiCloseFill } from "react-icons/ri"; //ChevronLeftIcon
 import { RiArrowRightSLine } from "react-icons/ri"; //ChevronRightIcon
 
@@ -18,13 +18,13 @@ const Header = styled.div`
     `;
 
 //Styled-components
-const ContentContainer = styled.div`
+const ContentSection = styled.section`
         position: relative;
         width: 100%;
     `;
 
 //Styled-components
-const FooterBottom = styled.div`
+const FooterSection = styled.section`
         position: relative;
         height: 23px;
         width: 100%;
@@ -68,17 +68,17 @@ const SideBarLeft = styled.div<OpenConditionalProps>`
     `;
 
 //Styled-components Using custom props named dynamicWidth
-const ContentMain = styled.div<OpenConditionalProps>`
+const MainSection = styled.section<OpenConditionalProps>`
         position: relative;
         width: calc(99% - ${props => props.dynamicWidth}px);
         float: left;
     `;
 
 interface Props {
-    topbar: React.ReactNode; //Render Prop
-    leftbar: React.ReactNode; //Render Prop
-    footer: React.ReactNode; //Render Prop
-    children?: React.ReactNode;
+    topbar: React.ReactNode; //Render Prop for navbar
+    leftbar: React.ReactNode; //Render Prop for sidebar
+    footer: React.ReactNode; //Render Prop for footer
+    children?: React.ReactNode; //for content
 }
 
 /**
@@ -114,14 +114,14 @@ const Layout: React.FC<Props> = ({ topbar, leftbar, footer, children }) => {
             <SideBarLeft isOpen={isSidebarOpen} dynamicWidth={sidebarWidth}>
                 {leftbar}
             </SideBarLeft>
-            <ContentMain dynamicWidth={sidebarWidth}>
-                <ContentContainer>
+            <MainSection dynamicWidth={sidebarWidth}>
+                <ContentSection>
                     {children}
-                </ContentContainer>
-                <FooterBottom>
+                </ContentSection>
+                <FooterSection>
                     {footer}
-                </FooterBottom>
-            </ContentMain>
+                </FooterSection>
+            </MainSection>
         </LayoutContainer>
     );
 };

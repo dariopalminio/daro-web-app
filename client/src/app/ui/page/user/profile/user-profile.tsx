@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import SessionContext, {
     ISessionContext,
 } from "../../../../../domain/context/session.context";
-import clsx from "clsx";
 import { Profile } from "../../../../../domain/model/user/profile.type";
 import { Address } from "../../../../../domain/model/user/address.type";
 import MyAddresses from "../../../component/user/profile/my-addresses";
@@ -44,7 +43,7 @@ const initialEmptyProfile: Profile = {
 /**
  * User Profile
  * 
- * Pattern: Container Component, Conditional Rendering and Context Provider
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Custom hook
  */
 const UserProfile: FunctionComponent = () => {
     const { t, i18n } = useTranslation();

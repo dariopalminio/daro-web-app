@@ -1,11 +1,24 @@
-import "./products.css";
-import { useEffect } from "react";
-import ProductItem from "./prduct-item";
-import CircularProgress from "../../common/progress/circular-progress";
-import Alert from "../../common/alert/alert";
-import useProducts from "../../../../domain/hook/products/products.hook";
+import ProductItem from "./product-item";
 import { ProductType } from "../../../../domain/model/product/product.type";
+import styled from "styled-components";
 
+export const CatalogContainer = styled.div`
+    margin: 0 auto;
+`;
+
+export const ProductsContainer = styled.div`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    @media (max-width: 1232px) {
+        grid-template-columns: repeat(3, auto);
+    }
+    @media (max-width: 950px) {
+        grid-template-columns: repeat(2, auto);
+    }
+    @media (max-width: 630px) {
+        grid-template-columns: 1fr;
+    }
+`;
 
 interface Props {
     productList: Array<ProductType>;
@@ -18,17 +31,17 @@ const Products: React.FC<Props> = ({ productList }) => {
 
 
     return (
-        <div className="product_container">
-            <div className="product_catalog">
-               {
-                    productList.map((product:any) => (
-                    <ProductItem
-                    productItem={product}
-                    />
-                ))
+        <CatalogContainer>
+            <ProductsContainer>
+                {
+                    productList.map((product: any) => (
+                        <ProductItem
+                            productItem={product}
+                        />
+                    ))
                 }
-            </div>
-        </div>
+            </ProductsContainer>
+        </CatalogContainer>
     )
 }
 

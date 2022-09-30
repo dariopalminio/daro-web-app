@@ -9,8 +9,8 @@ import { useTranslation } from "react-i18next";
 import SingleAttrTable from "../../common/table/single-att-table";
 import { CenteringContainer } from "../../common/elements/centering-container";
 import { ProductType } from "../../../../domain/model/product/product.type";
-import { Alert } from "@material-ui/lab";
 import { Link } from "react-router-dom";
+import Alert from "../../common/alert/alert";
 // Actions
 
 
@@ -69,18 +69,19 @@ const ProductDetail: React.FC<Props> = ({ product }) => {
       <>
         {product && (
           <>
-            <div className="product_detail">
+            <div className="product_image_resume">
               <div className="frame_image">
                 <p className="product_name">{product.name}</p>
                 <CarouselImg uniqueId={product._id} images={product.images} width={"100%"} height={"300px"}></CarouselImg>
                 <p>{product.description}</p>
               </div>
-              <div className="prod_info">
+            </div>
+
+            <div className="prod_info">
                 <p>{t('cart.price')}: ${product.grossPrice}</p>
-
                 <div style={{ marginBottom: "10px" }}>Características principales:</div>
-
                 <SingleAttrTable rowDictionary={getAttributes()} />
+
                 <div className="call_to_action">
                   <div className="call_to_action_info">
                     <p>
@@ -105,15 +106,13 @@ const ProductDetail: React.FC<Props> = ({ product }) => {
                     </p>
                   </div>
                 </div>
+
               </div>
-
-            </div>
-
           </>
         )}
       </>
 
-      {!product && <Alert severity="error">No se ha podido cargar producto!</Alert>}
+      {!product && <Alert severity="error">{t("producto.error.loading")}</Alert>}
 
     </div>
   );

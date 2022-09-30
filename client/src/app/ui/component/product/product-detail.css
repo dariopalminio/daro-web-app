@@ -1,90 +1,88 @@
 .product_detail_container {
-    max-width: 1300px;
-    margin: 1rem auto;
-    display: flex;
-  }
-  
-  .product_detail {
-    display: flex;
-  }
-  
-  .frame_image {
-    margin: 1rem;
+  max-width: 1300px;
+  margin: 1rem auto;
+  display: flex;
+}
 
-  }
-  
-  .prod_info {
-    margin: 1rem;
+.product_image_resume {
+  display: flex;
+  margin: 1rem;
+  width: 80%;
+}
 
-    background: #fff;
-    height: fit-content;
-    font-size: 0.9rem;
+.frame_image {
+  margin: 1rem;
+  width: 100%;
+}
+
+.prod_info {
+  margin: 1rem;
+  height: fit-content;
+  font-size: 0.9rem;
+}
+
+.product_name {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.prod_info>p,
+.call_to_action_info>p {
+  padding: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.prod_info>p:last-child,
+.call_to_action_info>p:last-child {
+  border: none;
+}
+
+.call_to_action {
+  display: block;
+}
+
+.call_to_action_info {
+  width: 250px;
+  margin: 0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.call_to_action_info p {
+  padding: 1rem;
+  font-size: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.call_to_action_info p>button {
+  grid-column: 1/-1;
+  width: 100%;
+  padding: 10px 16px;
+}
+
+.call_to_action_info select {
+  padding: 10px 16px;
+}
+
+@media (max-width: 960px) {
+
+  .product_detail_container {
+    flex-direction: column;
   }
-  
-  .product_name {
-    font-weight: bold;
-    font-size: 1.3rem;
-  }
-  
-  .prod_info > p,
-  .call_to_action_info > p {
+
+  .product_image_resume {
+    width:90%;
     padding: 5px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   }
-  
-  .prod_info > p:last-child,
-  .call_to_action_info > p:last-child {
-    border: none;
+
+  .frame_image {
+    width:100%;
+    margin: 5px;
   }
-  
-  .call_to_action {
- display: block;
-  }
-  
+
   .call_to_action_info {
-    width: 250px;
-    margin: 0;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-  }
-  
-  .call_to_action_info p {
-    padding: 1rem;
-    font-size: 0.8rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .call_to_action_info p > button {
-    grid-column: 1/-1;
     width: 100%;
-    padding: 10px 16px;
+    margin: 0;
   }
-  
-  .call_to_action_info select {
-    padding: 10px 16px;
-  }
-  
-  @media (max-width: 960px) {
-    .product_detail_container {
-      flex-direction: column;
-    }
-  
-    .product_detail {
-      flex-direction: column;
-      flex: 1;
-    }
-  
-    .frame_image {
-      flex: 1;
-    }
-  
-    .prod_info {
-      flex: 1;
-    }
-  
-    .call_to_action_info {
-      width: 100%;
-      margin: 0;
-    }
-  }
+}

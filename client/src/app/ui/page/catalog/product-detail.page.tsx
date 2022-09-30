@@ -1,10 +1,12 @@
 
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Link,
   RouteComponentProps,
 } from "react-router-dom";
 import useProducts from "../../../../domain/hook/products/products.hook";
+import CircularProgress from "../../common/progress/circular-progress";
 import ProductDetail from "../../component/product/product-detail";
 
 type TParams = { productId: string };
@@ -14,12 +16,11 @@ type TParams = { productId: string };
  * 
  * Pattern: Container Component and Conditional Rendering
  */
-export function ProductDetailPage({
-  match,
-}: RouteComponentProps<TParams>) {
+function ProductDetailPage({ match,}: RouteComponentProps<TParams>) {
 
   const { isProcessing, hasError, msg, isSuccess, product, getDetail } = useProducts();
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
     const fetchData = async () => {
       return await getDetail(match.params.productId); //search data
@@ -34,9 +35,9 @@ export function ProductDetailPage({
 
   return (
     <div className="container-page">
-      <Link to="/">Volver al listado</Link>
+      <Link to="/">{t("back.to.home")}</Link>
       {isProcessing &&
-        <h2>Cargando...</h2>
+        <CircularProgress>{t('progress.loading')}</CircularProgress>
       }
 
       {hasError &&
@@ -47,4 +48,7 @@ export function ProductDetailPage({
       }
     </div>
   );
-}
+};
+
+export default ProductDetailPage;
+

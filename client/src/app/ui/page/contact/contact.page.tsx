@@ -12,7 +12,7 @@ import ContactForm from "../../component/contact/contact-form";
  * 
  * Pattern: Container Component, Conditional Rendering and Custom Hooks
  */
-export const ContactPage: FunctionComponent = () => {
+const ContactPage: FunctionComponent = () => {
   const { isProcessing, hasError, msg, isSuccess, sendContactEmail } =
     useNotification(); // Custom Hooks
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ export const ContactPage: FunctionComponent = () => {
   };
 
   return (
-    <div className="container-page">
+    <div className="page_container"  data-testid="page_container_home"> 
       <br />
 
       {(!isProcessing && !isSuccess) &&
@@ -51,3 +51,5 @@ export const ContactPage: FunctionComponent = () => {
     </div >
   );
 };
+
+export default ContactPage;

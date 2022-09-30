@@ -33,6 +33,7 @@ interface Props {
 
 /**
  * Circular Progress for loading process
+ * Stateless components and controlled component
  */
 const CircularProgress: React.FC<Props> = ({ children }) => {
 

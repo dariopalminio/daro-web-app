@@ -7,31 +7,14 @@ import { useTranslation } from 'react-i18next';
 import Button from "../../../common/button/button";
 import Alert from "../../../common/alert/alert";
 
-//@material-ui
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import clsx from "clsx";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    wrapperCenter: {
-      display: "flex",
-      justifyContent: "center",
-    },
-    buttonCustom: {
-      margin: "0 auto auto auto",
-    },
-  })
-);
-
 /**
  * Login Function Component
  *
- * @visibleName Login View
+ * @visibleNa (Stateful/Container/Smart component)me Login View
  */
 const Logout: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const { logout } = useLogout();
-  const classes = useStyles();
   const { t } = useTranslation();
 
 
@@ -52,7 +35,7 @@ const Logout: FunctionComponent = () => {
 
       <br />
 
-      <div className={clsx(classes.wrapperCenter)}>
+      <div>
         <Button
           onClick={() => onClickLogoutHandler()}
         >

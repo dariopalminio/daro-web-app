@@ -28,6 +28,10 @@ const GradientButton = styled.button`
                 transform: rotate(150deg);
               }
           }
+        &:active {
+            background: white;
+            color: black;
+        }
         `;
 
 //Styled-components
@@ -53,6 +57,7 @@ interface Props {
 
 /**
  * Customized button
+ * Stateless components and controlled component
  */
 const Button: React.FC<Props> = ({ children, onClick, type, style, disabled }) => {
 

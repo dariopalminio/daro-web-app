@@ -5,12 +5,13 @@ import Paper from "../../../common/paper/paper";
 
 /**
  * PassRecoveryCallToActionMsg (Password recovery STEP 2)
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Context Provider
  */
-export const PassRecoveryMsgPage: FunctionComponent = () => {
+const PassRecoveryMsgPage: FunctionComponent = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="page_container">
+    <div className="page_container" data-testid="page_container_recovery_step2">
 
           <Paper>
             <div>
@@ -34,3 +35,5 @@ export const PassRecoveryMsgPage: FunctionComponent = () => {
     </div>
   );
 };
+
+export default PassRecoveryMsgPage;

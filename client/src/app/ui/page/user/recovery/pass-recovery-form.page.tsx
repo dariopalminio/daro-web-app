@@ -15,8 +15,9 @@ const passwordsInitialized = {
 
 /**
  * PassRecoveryFormPage (Password recovery STEP 3)
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Context Provider
  */
-export function PassRecoveryFormPage({ match, }: RouteComponentProps<TParams>) {
+function PassRecoveryFormPage({ match, }: RouteComponentProps<TParams>) {
   const [passwords, setPasswords] = useState(passwordsInitialized);
   const { isProcessing, isSuccess, hasError, msg, updatePassword } = useRecovery();
   const { t, i18n } = useTranslation();
@@ -36,7 +37,7 @@ export function PassRecoveryFormPage({ match, }: RouteComponentProps<TParams>) {
   };
 
   return (
-    <div className="page_container">
+    <div className="page_container" data-testid="page_container_recovery_step3">
 
       {isSuccess && (
         <Alert severity="success">{t("recovery.updated.successful")}</Alert>
@@ -57,3 +58,5 @@ export function PassRecoveryFormPage({ match, }: RouteComponentProps<TParams>) {
     </div>
   );
 };
+
+export default PassRecoveryFormPage;

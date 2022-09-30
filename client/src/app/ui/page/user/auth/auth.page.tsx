@@ -5,14 +5,14 @@ import SessionContext, {
 import Logout from "./logout";
 import Login from "./login";
 import { useTranslation } from 'react-i18next';
-import Alert from "@material-ui/lab/Alert";
+import Alert from "../../../common/alert/alert";
 
 /**
  * AuthPage for Login or Logout options
  * 
- * Pattern: Container Component, Conditional Rendering and Context Provider
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Context Provider
  */
-export const AuthPage: FunctionComponent = () => {
+const AuthPage: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const { t } = useTranslation();
 
@@ -47,3 +47,5 @@ export const AuthPage: FunctionComponent = () => {
     </>
   );
 };
+
+export default AuthPage;

@@ -88,7 +88,7 @@ interface Props {
 
 /**
  * TextField "password" | "text"
- * <textarea name="Text1" cols="40" rows="5"></textarea>
+ * Stateless components, extensible Style and controlled component
  */
 const TextField: React.FC<Props> = ({
     id,

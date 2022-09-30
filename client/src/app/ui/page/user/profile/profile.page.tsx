@@ -6,7 +6,12 @@ import SessionContext, {
 import AnonymousProfile from "./anonymous-profile";
 import UserProfile from "./user-profile";
 
-export const ProfilePage: FunctionComponent = () => {
+/**
+ * Profile Page
+ * 
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Context Provider
+ */
+const ProfilePage: FunctionComponent = () => {
   const { t, i18n } = useTranslation();
   const { session } = useContext(SessionContext) as ISessionContext;
 
@@ -15,14 +20,14 @@ export const ProfilePage: FunctionComponent = () => {
   };
 
   return (
-    <>
-      <div className="page_container">
+      <div className="page_container"  data-testid="page_container_profile">
 
         {isNotLogged() && <AnonymousProfile />}
 
         <UserProfile />
 
       </div>
-    </>
   );
 };
+
+export default ProfilePage;

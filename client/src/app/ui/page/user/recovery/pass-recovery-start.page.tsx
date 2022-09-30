@@ -9,8 +9,9 @@ import PassRecoveryStartForm from "../../../component/user/recovery/pass-recover
 
 /**
  * Pass Recovery Start Page (Password recovery STEP 1)
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Context Provider
  */
-export const PassRecoveryStartPage: FunctionComponent = () => {
+const PassRecoveryStartPage: FunctionComponent = () => {
   const [email, setEmail] = useState("");
   const { isProcessing, isSuccess, hasError, msg, sendEmailToRecovery } = useRecovery();
   const { t, i18n } = useTranslation();
@@ -28,7 +29,7 @@ export const PassRecoveryStartPage: FunctionComponent = () => {
   };
 
   return (
-    <div className="page_container">
+    <div className="page_container"  data-testid="page_container_recovery_step1">
 
       {isSuccess && <Redirect to="/user/recovery/msg" />}
 
@@ -53,3 +54,5 @@ export const PassRecoveryStartPage: FunctionComponent = () => {
     </div>
   );
 };
+
+export default PassRecoveryStartPage;

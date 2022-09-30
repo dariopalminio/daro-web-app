@@ -1,5 +1,6 @@
 {
     "home.title": "Home ",
+    "progress.loading": "Loading... ",
     "login.command": "Login",
     "login.title": "Login Form",
     "login.message": "If you are already registered, you can enter with the same email and password.",
@@ -106,8 +107,10 @@
     "menu.user": "User",
     "menu.register": "Register",
     "menu.profile": "Profile",
+    "cart.empty": "Your cart is empty!",
     "cart.name": "Name",
     "cart.price": "Price",
+    "cart.product": "Product",
     "cart.quantity": "Quantity",
     "cart.amount": "Amount",
     "cart.subtotal": "Subtotal",
@@ -116,6 +119,8 @@
     "cart.button.checkout": "Checkout",
     "cart.title.shoppingcart": "Shopping Cart",
     "cart.detail.state": "State",
-    "cart.button.add.to.cart": "Add"
+    "cart.button.add.to.cart": "Add",
+    "producto.error.loading": "No se ha podido cargar producto!",
+    "back.to.home": "Back to Home"
 
 }

@@ -13,10 +13,9 @@ type TParams = { token: string }; //match.params.token
 /**
  * Register Confirm Email Page (Register STEP 3)
  * This page receives a 'token' parameter and passes it to the child component.
- * @param param0 
- * @returns 
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Custom hook
  */
-export function RegisterConfirmEmailPage({match,}: RouteComponentProps<TParams>) {
+function RegisterConfirmEmailPage({match,}: RouteComponentProps<TParams>) {
 
   const [isExecuted, setIsExecuted] = useState(false);
   const { isProcessing, isSuccess, hasError, msg, confirmAccount } = useRegister();
@@ -47,4 +46,6 @@ export function RegisterConfirmEmailPage({match,}: RouteComponentProps<TParams>)
       {(!isSuccess && !isProcessing && hasError) && <Alert severity="error">{t(msg)}</Alert>}
     </div>
   );
-}
+};
+
+export default RegisterConfirmEmailPage;

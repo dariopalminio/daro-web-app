@@ -18,9 +18,9 @@ const userToRegisterInitialized = {
 /**
  * Register Page (Register STEP 1)
  * 
- * Pattern: Container Component, Conditional Rendering and Custom Hooks
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Custom hook
  */
-export const RegisterPage: FunctionComponent = () => {
+const RegisterPage: FunctionComponent = () => {
   const [user, setUser] = useState(userToRegisterInitialized);
   const { t } = useTranslation();
   const { isProcessing, isSuccess, hasError, msg, register } =
@@ -76,3 +76,5 @@ export const RegisterPage: FunctionComponent = () => {
     </div>
   );
 };
+
+export default RegisterPage;

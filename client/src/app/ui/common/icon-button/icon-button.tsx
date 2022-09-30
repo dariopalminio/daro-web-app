@@ -29,6 +29,7 @@ interface Props {
 
 /**
  * Customized IconButton
+ * Stateless components and controlled component
  */
 const IconButton: React.FC<Props> = ({ children, onClick, hide, style }) => {
 

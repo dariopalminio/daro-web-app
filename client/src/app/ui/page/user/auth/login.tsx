@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import  { FunctionComponent } from "react";
 import useLogin from "../../../../../domain/hook/auth/login.hook";
 import Alert from "../../../common/alert/alert";
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import LoginForm from "../../../component/user/auth/login-form";
 
 /**
  * Login Function Component
- *
+ * (Stateful/Container/Smart component)
  * @visibleName Login View
  */
 const Login: FunctionComponent = () => {

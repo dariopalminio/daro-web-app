@@ -4,19 +4,21 @@ import CartContext, { ICartContext } from '../../../../domain/context/cart.conte
 import CartItem from "../../component/cart/cart-item";
 import Cart from "../../component/cart/cart";
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 /**
  * CartPage
  * 
  * Pattern: Container Component, Conditional Rendering and Context Provider
  */
-export const CartPage: FunctionComponent = () => {
+const CartPage: FunctionComponent = () => {
     const { cartItems,
         cartSubTotal,
         removeFromCart,
         getCartCount,
         changeItemQuantity } = useContext(CartContext) as ICartContext;
-
+    const { t } = useTranslation();
+    
     const getCartSubTotal = () => {
         return cartSubTotal;
     };
@@ -28,7 +30,7 @@ export const CartPage: FunctionComponent = () => {
 
     return (
         <div className="container-page">
-            <Link to="/">Volver al listado</Link>
+            <Link to="/">{t("back.to.home")}</Link>
             <Cart
                 empty={cartItems.length === 0}
                 count={getCartCount()}
@@ -48,3 +50,5 @@ export const CartPage: FunctionComponent = () => {
         </div>
     );
 };
+
+export default CartPage;

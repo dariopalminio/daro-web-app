@@ -15,6 +15,7 @@ interface Props {
 
 /**
  * Customized HTML Links
+ * Stateless components and controlled component
  */
 const Link: React.FC<Props> = ({ children, href, style }) => {
 

@@ -15,8 +15,9 @@ import RegisterConfirmStart from "../../../component/user/register/register-conf
 /**
  * Register Confirm Start Page (Register STEP 2)
  * Pague to send email with verification link.
+ * Pattern: Container Component (Stateful/Container/Smart component), Conditional Rendering and Custom hook
  */
-export const RegisterConfirmStartPage: FunctionComponent = () => {
+const RegisterConfirmStartPage: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const { t, i18n } = useTranslation();
 
@@ -59,3 +60,5 @@ export const RegisterConfirmStartPage: FunctionComponent = () => {
     </div>
   );
 };
+
+export default RegisterConfirmStartPage;

@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export const CenteringContainer = styled.div`
+    display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    display: flex;
+    place-items: center;
 `;
