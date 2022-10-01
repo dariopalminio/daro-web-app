@@ -32,7 +32,7 @@ const AuthPage: FunctionComponent = () => {
   return (
     <>
       <div className="page_container" data-testid="page_container_auth">
-      {isNotLogged() && <Login />}
+      {isNotLogged() && <Login redirectTo={"/"}/>}
 
       {needToVerifyEmail() &&
         <Alert severity="warning">

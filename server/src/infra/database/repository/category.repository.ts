@@ -168,4 +168,8 @@ export class CategoryRepository implements IRepository<ICategory> {
         return arrayCategory;
     };
 
+    async count(query: any): Promise<number>{
+        return await this.categoryModel.count(query,);
+     };
+
 }

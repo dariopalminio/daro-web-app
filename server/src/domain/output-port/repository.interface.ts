@@ -23,4 +23,5 @@ export interface IRepository<T> {
     update(query: any, valuesToSet: any): Promise<boolean>;
     delete(id: string): Promise<boolean>;
     findExcludingFields(query: any, fieldsToExclude: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<any[]>;
+    count(query: any): Promise<number>;
   }

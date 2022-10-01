@@ -1,7 +1,8 @@
+import { FilteredProductsDTO } from "../model/product/filtered-products";
 import { ProductType } from "../model/product/product.type";
 
 export interface IProductClient {
 
-    getCatalog: (accessToken: string) => Promise<Array<ProductType>>;
+    getCatalog: (page: number, limit: number, orderBy: string ,accessToken: string) => Promise<FilteredProductsDTO>;
     getProductDetail: (id: string, accessToken: string) => Promise<ProductType>;
   };

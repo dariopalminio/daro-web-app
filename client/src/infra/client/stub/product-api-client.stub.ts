@@ -7,7 +7,11 @@ import { IProductClient } from '../../../domain/service/product-client.interface
 export default function ProductClientStub(): IProductClient {
 
     //Catalog of products hardcoded to simulation
-    const productsFake: Array<any> = [
+    const productsFake  = {
+        page:1,
+        limit:6,
+        count:6,
+        list: [
         {
             _id: "1",
             sku: "1324",
@@ -66,7 +70,7 @@ export default function ProductClientStub(): IProductClient {
             description: "Ciadro primaveral de palmeras al sol.",
             stock: 1
         },
-    ];
+    ]};
 
     //Product Detail hardcoded to simulation
     const productDetailed: any = {
@@ -97,7 +101,7 @@ export default function ProductClientStub(): IProductClient {
     /**
      * Stub function
      */
-    function getCatalog(accessToken: string): Promise<any> {
+    function getCatalog(page: number, limit: number, orderBy: string ,accessToken: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const data: any = productsFake;
             resolve(data);

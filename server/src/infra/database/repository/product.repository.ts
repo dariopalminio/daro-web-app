@@ -60,24 +60,38 @@ export class ProductRepository implements IRepository<IProduct> {
      * const filter= {“name”:“Jeff Bridges”}
      * db.collecion.find(filter,fieldsToExclude)
      * To not exclude fields use empty object: fieldsToExclude={}
+     * pagination:
+     * Page 1: skip = 0, limit = 10
+     * Page 2: skip = 10, limit = 10
+     * Page 3: skip = 20, limit = 10
+     * 
+     * Products.find(filter)
+        .sort({[column]: order })
+        .skip(parseInt(pageNumber, 10) * parseInt(nPerPage, 10))
+        .limit(parseInt(nPerPage, 10));
+        ((parseInt(page.toString(), 10)) - 1 ) * parseInt(limit.toString(), 10); //number = 
+{ orderByField: -1 } .sort( { _id: -1 } )
      * @param query filter
      * @param projection fieldsToExclude
      * @param page 
-     * @param limit 
+     * @param limit //The limit is used to specify the maximum number of results to be returned.
      * @param orderByField 
      * @param isAscending 
      * @returns 
      */
     async findExcludingFields(query: any, fieldsToExclude: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<any[]> {
         let arrayDoc: ProductDocument[];
-
+console.log("order by:", orderByField);
         if (page && limit && orderByField) {
             // All with pagination and sorting
             const direction: number = isAscending ? 1 : -1;
             //const mysort = [[orderByField, direction]];
             const mysort: Record<string, | 1 | -1 | { $meta: "textScore" }> = { reference: 1 };
-            const gap: number = (page - 1) * limit;
-            arrayDoc = await this.productModel.find(query, fieldsToExclude).sort(mysort).skip(gap).limit(limit).exec();
+            const gap =  (page - 1) * limit;
+            //skip method will skip the document as per the number which was we have used with the skip method.
+            const ascending = 1;
+            arrayDoc = await this.productModel.find(query, fieldsToExclude).sort({orderByField: ascending}).skip(gap).limit(limit).exec();
+            console.log("*******************arrayDoc:", arrayDoc);
         } else {
             // All without pagination and without sorting
             arrayDoc = await this.productModel.find(query).exec();
@@ -206,6 +220,10 @@ export class ProductRepository implements IRepository<IProduct> {
         ));
 
         return arrayCategory;
+    };
+
+    async count(query: any): Promise<number>{
+       return await this.productModel.count(query,);
     };
 
 };

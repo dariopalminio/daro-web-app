@@ -8,6 +8,8 @@ import { ProductType } from "../../../../domain/model/product/product.type";
 import NoImage from "../../image/no_image.png";
 import styled from "styled-components";
 
+//box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
 const ProductItemWrapper = styled.div`
   width: 400px;
   padding: 1rem;
@@ -23,6 +25,9 @@ const ProductItemWrapper = styled.div`
   .linkframe:visited { text-decoration: none; }
   .linkframe:hover { text-decoration: none; }
   .linkframe:active { text-decoration: none; }
+  &:hover {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
   @media (max-width: 1232px) {
       width: 360px;
   }

@@ -1,4 +1,3 @@
-
 /*
 * {
   outline: 1px solid red;
@@ -51,6 +50,7 @@ h1 {
   color: #525252;
   padding-left: 1rem;
 }
+
 .positionfixed {
-position: "fixed";
+  position: "fixed";
 }

@@ -156,4 +156,8 @@ export class UserRepository implements IRepository<IUser> {
         return arrayCategory;
     };
 
+    async count(query: any): Promise<number>{
+        return await this.userModel.count(query,);
+     };
+
 }

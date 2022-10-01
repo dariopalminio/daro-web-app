@@ -1,7 +1,8 @@
 
 import { FunctionComponent, useState } from "react";
 import { useTranslation } from 'react-i18next';
-import CircularProgress from "../../common/progress/circular-progress";
+import { CenteringContainer } from "../../common/elements/centering-container";
+import Pagination from "../../component/product/pagination";
 import CatalogPage from "../catalog/catalog.page";
 
 /**

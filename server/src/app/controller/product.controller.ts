@@ -1,5 +1,7 @@
-import { Controller, Inject, Post, Res, HttpStatus, Body, Get, Param, 
-  NotFoundException, Delete, Query, Put, BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
+import {
+  Controller, Inject, Post, Res, HttpStatus, Body, Get, Param,
+  NotFoundException, Delete, Query, Put, BadRequestException, InternalServerErrorException, UseGuards
+} from '@nestjs/common';
 
 import { IProductService } from '../../domain/service/interface/product.service.interface';
 import { Product } from '../../domain/model/product/product';
@@ -9,6 +11,7 @@ import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from '../guard/roles.decorator';
+import { FilteredProductsDTO } from 'src/domain/model/product/filtered-products.dto';
 
 @Controller('products')
 export class ProductController {
@@ -65,46 +68,46 @@ export class ProductController {
     };
   };
 
-    // Get Products /product/actives/all
-    @Get('actives/all')
-    async getAllActives(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
-      try {
-        if (pageParam && limitParam && orderBy && isAsc) {
-          const page: number = parseInt(pageParam);
-          const limit: number = parseInt(limitParam);
-          const orderByField: string = orderBy.toString();
-          const isAscending: boolean = (isAsc === 'true') ? true : false;
-          const list = await this.productService.getAllActives(page, limit, orderByField, isAscending);
-          return res.status(HttpStatus.OK).json(list);
-        } else {
-          const list = await this.productService.getAll();
-          return res.status(HttpStatus.OK).json(list);
-        }
-      } catch (error) {
-        throw new InternalServerErrorException(error);
-      };
+  // Get Products /product/actives/all
+  @Get('actives/all')
+  async getAllActives(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
+    try {
+      if (pageParam && limitParam && orderBy && isAsc) {
+        const page: number = parseInt(pageParam);
+        const limit: number = parseInt(limitParam);
+        const orderByField: string = orderBy.toString();
+        const isAscending: boolean = (isAsc === 'true') ? true : false;
+        const list = await this.productService.getAllActives(page, limit, orderByField, isAscending);
+        return res.status(HttpStatus.OK).json(list);
+      } else {
+        const list = await this.productService.getAll();
+        return res.status(HttpStatus.OK).json(list);
+      }
+    } catch (error) {
+      throw new InternalServerErrorException(error);
     };
+  };
 
-        // Example: http://localhost:3001/api/webshop/v1/products/catalog?page=1&limit=100&orderBy=name&isAsc=true
-        @Get('catalog')
-    async getCatalog(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
-          try {
-            if (pageParam && limitParam && orderBy && isAsc) {
-              const page: number = parseInt(pageParam);
-              const limit: number = parseInt(limitParam);
-              const orderByField: string = orderBy.toString();
-              const isAscending: boolean = (isAsc === 'true') ? true : false;
-              const list = await this.productService.getCatalog(page, limit, orderByField, isAscending);
-              return res.status(HttpStatus.OK).json(list);
-            } else {
-              throw new InternalServerErrorException("No params");
-            }
-          } catch (error) {
-            throw new InternalServerErrorException(error);
-          };
-        };
+  // Example: http://localhost:3001/api/webshop/v1/products/catalog?page=1&limit=100&orderBy=name&isAsc=true
+  @Get('catalog')
+  async getCatalog(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
+    try {
+      if (pageParam && limitParam && orderBy && isAsc) {
+        const page: number = parseInt(pageParam);
+        const limit: number = parseInt(limitParam);
+        const orderByField: string = orderBy.toString();
+        const isAscending: boolean = (isAsc === 'true') ? true : false;
+        const data: FilteredProductsDTO = await this.productService.getCatalog(page, limit, orderByField, isAscending);
+        return res.status(HttpStatus.OK).json(data);
+      } else {
+        throw new InternalServerErrorException("No params");
+      }
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    };
+  };
 
-        
+
   // GET single http://localhost:3001/api/webshop/v1/products/id/632ded6d5a88c40e4fa634e9
   @Get('/id/:productID')
   async getProduct(@Res() res, @Param('productID') productID) {
@@ -118,18 +121,18 @@ export class ProductController {
     return res.status(HttpStatus.OK).json(product);
   };
 
-    // GET single http://localhost:3001/api/webshop/v1/products/id/632ded6d5a88c40e4fa634e9
-    @Get('/detail/id/:productID')
-    async getDetailById(@Res() res, @Param('productID') productID) {
-      let product: any;
-      try {
-        product = await this.productService.getDetailById(productID);
-      } catch (error) {
-        throw new InternalServerErrorException(error);
-      };
-      if (!product) throw new NotFoundException('Product does not exist!');
-      return res.status(HttpStatus.OK).json(product);
+  // GET single http://localhost:3001/api/webshop/v1/products/id/632ded6d5a88c40e4fa634e9
+  @Get('/detail/id/:productID')
+  async getDetailById(@Res() res, @Param('productID') productID) {
+    let product: any;
+    try {
+      product = await this.productService.getDetailById(productID);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
     };
+    if (!product) throw new NotFoundException('Product does not exist!');
+    return res.status(HttpStatus.OK).json(product);
+  };
 
   // Add Product: /product/create
   @UseGuards(RolesGuard)

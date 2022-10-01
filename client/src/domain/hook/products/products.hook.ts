@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { ApiError } from '../../../infra/client/api.error';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import * as StateConfig from '../../domain.config';
+import { FilteredProductsDTO } from '../../model/product/filtered-products';
 import { ProductType } from '../../model/product/product.type';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IProductClient } from '../../service/product-client.interface';
@@ -18,20 +19,25 @@ export default function useProducts(authClientInjected: IAuthTokensClient | null
 
     const [state, setState] = useState<IHookState>(InitialState);
     const [products, setProducts] = useState<Array<ProductType>>([]);
+    const [page, setPage] = useState(0);
+    const [maxPage, setMaxPage] = useState(0);
     const [product, setProduct] = useState<ProductType|null>(null);
     const { session, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const productClient: IProductClient = productClientInjected ? productClientInjected : StateConfig.productClient;
+    const LIMIT = 8;
 
-
-    const getCatalog = async () => {
+    const getCatalog = async (page: number) => {
         setState({ isProcessing: true, hasError: false, msg: '', isSuccess: false });
 
         try {
-            const data = await productClient.getCatalog("withOutAcces");
+            const data: FilteredProductsDTO = await productClient.getCatalog(page, LIMIT, "name", "withOutAcces");
 
             console.log("hook getCatalog data:", data);
 
-            setProducts(data);
+            setProducts(data.list);
+            setPage(data.page);
+            const max = Math.round((data.count/LIMIT)+0.4);
+            setMaxPage(max);
 
             setState({ isProcessing: false, hasError: false, msg: "Success", isSuccess: true });
             return;
@@ -77,6 +83,8 @@ export default function useProducts(authClientInjected: IAuthTokensClient | null
         hasError: state.hasError,
         msg: state.msg,
         isSuccess: state.isSuccess,
+        page,
+        maxPage,
         products,
         product,
         getCatalog,

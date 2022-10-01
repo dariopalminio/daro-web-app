@@ -4,14 +4,20 @@ import Alert from "../../../common/alert/alert";
 import { useTranslation } from 'react-i18next';
 import CircularProgress from "../../../common/progress/circular-progress";
 import LoginForm from "../../../component/user/auth/login-form";
+import { useHistory } from "react-router-dom";
 
+
+interface Props {
+  redirectTo?: string;
+}
 
 /**
  * Login Function Component
  * (Stateful/Container/Smart component)
  * @visibleName Login View
  */
-const Login: FunctionComponent = () => {
+ const Login: React.FC<Props> = ({ redirectTo }) => {
+
 
   const {
     isProcessing,
@@ -21,6 +27,7 @@ const Login: FunctionComponent = () => {
     login,
   } = useLogin();
 
+  const history = useHistory();
   const { t } = useTranslation();
 
   /**
@@ -30,6 +37,10 @@ const Login: FunctionComponent = () => {
     //e.preventDefault();
     login(email, password);
   };
+
+  const redirectToPage = () => {
+    history.push(redirectTo? redirectTo : "/");
+  }
 
   return (
     <div>
@@ -46,6 +57,10 @@ const Login: FunctionComponent = () => {
       )}
 
       {hasError && <Alert severity="error">{t(msg)}</Alert>}
+
+      {isSuccess && (
+        redirectToPage()
+      )}
 
     </div>
   );

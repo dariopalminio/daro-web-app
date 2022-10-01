@@ -2,7 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 import { IProductService } from '../service/interface/product.service.interface';
 import { IProduct } from '../model/product/product.interface';
 import { IRepository } from '../output-port/repository.interface';
-import { CatalogDTO } from '../model/product/catalog.dto';
+import { ProductItemDTO } from '../model/product/product-item.dto';
+import { FilteredProductsDTO } from '../model/product/filtered-products.dto';
 
 
 @Injectable()
@@ -27,7 +28,7 @@ export class ProductService implements IProductService<IProduct> {
   /**
    * Catalog
    */
-  async getCatalog(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<CatalogDTO[]> {
+  async getCatalog(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<FilteredProductsDTO> {
 
     const fieldsToExclude = {
       barcode: 0,
@@ -48,9 +49,14 @@ export class ProductService implements IProductService<IProduct> {
 
     console.log("***********************************getCatalog:");
     const queryQuilter = { active: "true" };
-    const products: CatalogDTO[] = await this.productRepository.findExcludingFields(queryQuilter, fieldsToExclude, page, limit, orderByField, isAscending);
+    const products: ProductItemDTO[] = await this.productRepository.findExcludingFields(queryQuilter, fieldsToExclude, page, limit, orderByField, isAscending);
+    let filtered: FilteredProductsDTO = new FilteredProductsDTO();
+    filtered.list = products;
+    filtered.page = page;
+    filtered.limit = limit;
+    filtered.count = await this.productRepository.count(queryQuilter);
     console.log("***********************************Catalog:", products);
-    return products;
+    return filtered;
   };
 
   async find(query: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<IProduct[]> {
