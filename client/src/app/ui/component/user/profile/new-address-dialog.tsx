@@ -153,6 +153,7 @@ const NewAddressDialog: React.FC<Props> = ({ address, isOpen, onClose, onChange,
 
                 {ifFieldsAreInvalid() &&
                     <Button
+                        type="button" 
                         style={{ marginTop: "15px" }}
                         onClick={handleAddClose}>
                         {t('button.command.add')}
@@ -161,6 +162,7 @@ const NewAddressDialog: React.FC<Props> = ({ address, isOpen, onClose, onChange,
 
                 {!ifFieldsAreInvalid() &&
                     <Button
+                        type="button" 
                         style={{ marginTop: "15px" }}
                         disabled>
                         {t('button.command.add')}

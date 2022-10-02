@@ -108,6 +108,8 @@ const ListBox: React.FC<Props> = ({ id, label, onChange, style, value, options }
     }
 
     const clickHandler = (index: number) => {
+        console.log("ListBox.clickHandler.index:",index);
+        console.log("ListBox.clickHandler.options[index]:",options[index]);
         const selectedValue = options[index];
         onChange(selectedValue);
     }
@@ -125,15 +127,15 @@ const ListBox: React.FC<Props> = ({ id, label, onChange, style, value, options }
                     return (
                         <>
                             <input className="list-box-selectopt"
-                                name="test"
+                                name={id+option}
                                 type="radio"
-                                id={index.toString()}
+                                id={id+option}
                                 onClick={() => clickHandler(index)}
                                 {...(isChecked(index) && {
                                     checked: true
                                 })}
                             />
-                            <label htmlFor={index.toString()}
+                            <label htmlFor={id+option}
                                 className="list-box-option">{options[index]}</label>
                         </>
                     )

@@ -10,12 +10,14 @@ import CatalogPage from "../catalog/catalog.page";
  */
 const HomePage: FunctionComponent = () => {
   const { t } = useTranslation();
-  const [selected, setSelected] = useState("Manzana");
-
-
+  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOpts, setSelectedOpts] = useState("COCO");
   return (
     <div className="page_container" data-testid="page_container_home">
 
+
+
+    
       <CatalogPage></CatalogPage>
 
     </div>

@@ -62,8 +62,8 @@ const SelectListDelete = styled.span`
 interface Props {
     id: string;
     label?: string;
-    onClickSelect?: (index: number) => void;
-    onClickDelete: (index: number) => void;
+    onClickSelect?: (item: string, index: number) => void;
+    onClickDelete: (item: string, index: number) => void;
     style?: any;
     list: string[];
 }
@@ -75,12 +75,12 @@ interface Props {
 const SelectList: React.FC<Props> = ({ id, label, list, onClickSelect, onClickDelete, style }) => {
 
 
-    const selectItem = (index: number) => {
-        onClickSelect && onClickSelect(index);
+    const selectItem = (item: string, index: number) => {
+        onClickSelect && onClickSelect(item, index);
     }
 
-    const deleteItem = (index: number) => {
-        onClickDelete(index);
+    const deleteItem = (item: string, index: number) => {
+        onClickDelete(item, index);
     }
 
     return (
@@ -90,11 +90,11 @@ const SelectList: React.FC<Props> = ({ id, label, list, onClickSelect, onClickDe
                 {list.map((item: string, index: number) => {
                     return (
                         <li
-                            onClick={() => selectItem(index)}>{item}
+                            onClick={() => selectItem(item, index)}>{item}
                             <SelectListDelete
                                 aria-hidden="true"
-                                onClick={() => deleteItem(index)}>
-                                    <RiDeleteBin7Fill onClick={() => deleteItem(index)} size={20}/>
+                                onClick={() => deleteItem(item, index)}>
+                                    <RiDeleteBin7Fill size={20}/>
                                 </SelectListDelete>
                         </li>
                     )

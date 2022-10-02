@@ -39,6 +39,10 @@ const ButonPrevious = styled.div`
     bottom: 50%;
     left: 0;
     z-index: 5;
+    &:hover {
+        background: #D4F4FE;
+        border-radius: 50%;
+    }
 `;
 
 const ButonNext = styled.div`
@@ -49,6 +53,10 @@ const ButonNext = styled.div`
     bottom: 50%;
     right: 0;
     z-index: 5;
+    &:hover {
+        background: #D4F4FE;
+        border-radius: 50%;
+    }
 `;
 
 const ContainerImg = styled.div`
@@ -107,8 +115,9 @@ const ImgCarousel: React.FC<Props> = ({ uniqueId, images, width, height }) => {
             <ImgCarouselMenu>
                 {images.map((image, index) => {
                     const referenceName = `imgcarousel-slide-${uniqueId}-${index}`;
+                    const cyecleColor =  (selected == index) ? "#31C4F3" : "grey";
                     return (
-                        <LabelCyrcle htmlFor={referenceName} />
+                        <LabelCyrcle htmlFor={referenceName} style={{background: cyecleColor}}/>
                     );
                 })}
 

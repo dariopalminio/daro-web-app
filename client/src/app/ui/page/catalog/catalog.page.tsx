@@ -1,12 +1,13 @@
 
 import { FunctionComponent, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
-import useProducts from "../../../../domain/hook/products/products.hook";
+import useCatalog from "../../../../domain/hook/products/catalog.hook";
 import Alert from "../../common/alert/alert";
 import { CenteringContainer } from "../../common/elements/centering-container";
 import CircularProgress from "../../common/progress/circular-progress";
 import Pagination from "../../component/product/pagination";
 import Products from "../../component/product/products";
+import Categories from "./categories";
 
 /**
  * CatalogPage for to list products as catalog
@@ -15,33 +16,32 @@ import Products from "../../component/product/products";
  */
 const CatalogPage: FunctionComponent = () => {
   const { t } = useTranslation();
-  const { isProcessing, hasError, msg, isSuccess, page, maxPage, products, getCatalog } = useProducts();
+  const { isProcessing, hasError, msg, isSuccess, page, maxPage, products, getPreviousPage,
+    getNextPage, getCatalog,categories, getCategories, setCategorySelected,categorySelected } = useCatalog();
 
-  useEffect(() => {
-    // declare the async data fetching function
-    const fetchData = async () => {
-
-      return await getCatalog(1); //search data
-    };
-
-    const result = fetchData()
-      // make sure to catch any error
-      .catch(console.error);;
-
-  }, []);
-
-  const getNextPage = async () =>{
-    if (page!==maxPage) await getCatalog(page + 1); //search data
-  }
-
-  const getPreviousPage = async () =>{
-    console.log();
-    if (page>0) await getCatalog(page - 1); //search data
-  }
+    useEffect(() => {
+      // declare the async data fetching function
+      const fetchData = async () => {
+  
+        return await getCategories(); //search data
+      };
+  
+      fetchData()
+        // make sure to catch any error
+        .catch(console.error);;
+  
+    }, []);
+    
+    const handleClick = async (el: string) => {
+      setCategorySelected(el);
+      await getCatalog(1); //search data
+    }
 
 
   return (
     <div className="page_container">
+
+<Categories onClick={(cat: string) => handleClick(cat)} categorySelected={categorySelected} categories={categories}/>
 
       {isProcessing &&
         <CircularProgress>{t('progress.loading')}</CircularProgress>
@@ -60,9 +60,9 @@ const CatalogPage: FunctionComponent = () => {
           maxPage={maxPage}
           onClickPrevious={() => getPreviousPage()}
           onClickNext={() => getNextPage()}
-          previousLabel={'Previous'}
-          ofLabel={'of'}
-          nextLabel={'Next'} />
+          previousLabel={t('previous')}
+          ofLabel={t('of')}
+          nextLabel={t('next')} />
       </CenteringContainer>
       </>
       }

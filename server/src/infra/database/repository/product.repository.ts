@@ -84,13 +84,12 @@ export class ProductRepository implements IRepository<IProduct> {
 console.log("order by:", orderByField);
         if (page && limit && orderByField) {
             // All with pagination and sorting
-            const direction: number = isAscending ? 1 : -1;
-            //const mysort = [[orderByField, direction]];
-            const mysort: Record<string, | 1 | -1 | { $meta: "textScore" }> = { reference: 1 };
+            let mysort = {}; 
+            mysort[orderByField] = isAscending? 1 : -1; //Record<string, | 1 | -1 | {$meta: "textScore"}>
             const gap =  (page - 1) * limit;
             //skip method will skip the document as per the number which was we have used with the skip method.
             const ascending = 1;
-            arrayDoc = await this.productModel.find(query, fieldsToExclude).sort({orderByField: ascending}).skip(gap).limit(limit).exec();
+            arrayDoc = await this.productModel.find(query, fieldsToExclude).sort(mysort).skip(gap).limit(limit).exec();
             console.log("*******************arrayDoc:", arrayDoc);
         } else {
             // All without pagination and without sorting

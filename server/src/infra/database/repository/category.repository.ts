@@ -65,17 +65,21 @@ export class CategoryRepository implements IRepository<ICategory> {
 
         if (page && limit && orderByField) {
             // All with pagination and sorting
-            const direction: number = isAscending ? 1 : -1;
-            //const mysort = [[orderByField, direction]];
-            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
+            const mysort = {}; 
+            mysort[orderByField] = isAscending? 1 : -1; //Record<string, | 1 | -1 | {$meta: "textScore"}>
+            //const mysort = { description: 1 };
             const gap: number = (page - 1) * limit;
+            //db.text.find({ $text : { $search : "cake" }},{ score: { $meta: "textScore" }})
+            //{ $sort: { <field1>: <sort order>, <field2>: <sort order> ... } }
+
             arrayDoc = await this.categoryModel.find(query, fieldsToExclude).sort(mysort).skip(gap).limit(limit).exec();
         } else {
             // All without pagination and without sorting
             arrayDoc = await this.categoryModel.find(query).exec();
         }
 
-        return this.castArrayDocToCategory(arrayDoc);
+        //return this.castArrayDocToCategory(arrayDoc);
+        return arrayDoc;
     };
     
     async getById(id: string, fieldsToExclude?: any): Promise<ICategory> {

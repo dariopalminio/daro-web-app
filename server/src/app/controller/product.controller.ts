@@ -88,16 +88,16 @@ export class ProductController {
     };
   };
 
-  // Example: http://localhost:3001/api/webshop/v1/products/catalog?page=1&limit=100&orderBy=name&isAsc=true
+  // Example: http://localhost:3001/api/webshop/v1/products/catalog?category=Rubro&page=1&limit=100&orderBy=name&isAsc=true
   @Get('catalog')
-  async getCatalog(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
+  async getCatalog(@Res() res, @Query('page') pageParam, @Query('category') category, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
     try {
       if (pageParam && limitParam && orderBy && isAsc) {
         const page: number = parseInt(pageParam);
         const limit: number = parseInt(limitParam);
         const orderByField: string = orderBy.toString();
         const isAscending: boolean = (isAsc === 'true') ? true : false;
-        const data: FilteredProductsDTO = await this.productService.getCatalog(page, limit, orderByField, isAscending);
+        const data: FilteredProductsDTO = await this.productService.getCatalog(category, page, limit, orderByField, isAscending);
         return res.status(HttpStatus.OK).json(data);
       } else {
         throw new InternalServerErrorException("No params");

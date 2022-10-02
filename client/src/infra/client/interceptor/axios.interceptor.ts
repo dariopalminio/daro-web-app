@@ -1,11 +1,10 @@
-import * as InfraConfig from '../../infrastructure.config';
+import * as InfraConfig from '../../global.config';
 import axios from 'axios';
 import * as SessionStorage from '../../storage/session.storage';
 import { IAuthTokensClient } from '../../../domain/service/auth-tokens-client.interface';
 import { AuthApiClientFactory } from '../factory/auth-api-client.factory';
 
 
-const authTokensClient: IAuthTokensClient = AuthApiClientFactory.create(InfraConfig.is_fake_mode);
 /**
  * axios instance
  */
@@ -15,11 +14,22 @@ let axiosInstance = axios.create();
 /**
  * Request header Interceptors
  */
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use(async (config) => {
 
-  const accessToken = SessionStorage.getAccessToken();
+  let accessToken = SessionStorage.getAccessToken();
+  console.log("interceptors");
+  if (!accessToken) {
+    console.log("interceptors-->No accessToken");
+    try {
+      console.log("interceptors-->Tray obtain app token");
+      accessToken = await InfraConfig.authTokensClient.getAppTokenService();
+    } catch (error: any) {
+      throw error;
+    }
+  }
+  console.log("interceptors set config");
   config.headers = { 'Authorization': `Bearer ${accessToken}` };
-   // 'lang': lang,}; //i18n.language
+  // 'lang': lang,}; //i18n.language
   console.log("axios_instance.config:", config);
 
   return config
@@ -45,7 +55,7 @@ axiosInstance.interceptors.response.use((response) => {
       config._retry = true;
       try {
         const localRefreshToken: string = SessionStorage.getRefreshToken();
-        const res = await authTokensClient.getRefreshTokenService(localRefreshToken);
+        const res = await InfraConfig.authTokensClient.getRefreshTokenService(localRefreshToken);
 
         if (res?.status === 200) {
           const { access_token, refresh_token } = res.data;

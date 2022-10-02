@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/auth/session.type';
-import * as StateConfig from '../../domain.config';
+import * as StateConfig from '../../../infra/global.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IAuthClient } from '../../service/auth-client.interface';
 import { IHookState, InitialState } from '../hook.type';
@@ -18,11 +18,10 @@ import { IHookState, InitialState } from '../hook.type';
  *      login function
  *      logout function
  */
-export default function useLogout(authServiceInjected: IAuthTokensClient | null = null,
+export default function useLogout(
     userClientInjected: IAuthClient | null = null) {
     const { removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState<IHookState>(InitialState);
-    const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authTokensClient;
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 
     /**
@@ -39,30 +38,20 @@ export default function useLogout(authServiceInjected: IAuthTokensClient | null 
 
         if (userId !== null) {
 
-            // First: obtains admin access token
-            const responseAdminToken: Promise<any> = authTokenService.getAdminTokenService();
+            const responseLogout = authClient.logoutService(userId);
 
-            responseAdminToken.then(jwtAdminToken => {
-                // Second: logoutService
-                const responseLogout = authClient.logoutService(userId, jwtAdminToken);
-
-                responseLogout.then(status => {
-                    setState({ isProcessing: false, hasError: false, msg: "logout.success" , isSuccess: true });
-                }).catch(err => {
-                    msgKey = err.message;
-                    setState({ isProcessing: false, hasError: true, msg: msgKey , isSuccess: false });
-                });
-
+            responseLogout.then(status => {
+                setState({ isProcessing: false, hasError: false, msg: "logout.success", isSuccess: true });
             }).catch(err => {
                 msgKey = err.message;
-                setState({ isProcessing: false, hasError: true, msg: msgKey , isSuccess: false });
+                setState({ isProcessing: false, hasError: true, msg: msgKey, isSuccess: false });
             });
 
         } else {
-            setState({ isProcessing: false, hasError: true, msg: "logout.error.not.logged" , isSuccess: false });
+            setState({ isProcessing: false, hasError: true, msg: "logout.error.not.logged", isSuccess: false });
         };
 
-    }, [setState, removeSessionValue, authTokenService, authClient]);
+    }, [setState, removeSessionValue, authClient]);
 
     return {
         isSuccess: state.isSuccess,

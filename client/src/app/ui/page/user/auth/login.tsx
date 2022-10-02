@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 
 
 interface Props {
-  redirectTo?: string;
+  redirectToPath?: string; 
 }
 
 /**
@@ -16,7 +16,7 @@ interface Props {
  * (Stateful/Container/Smart component)
  * @visibleName Login View
  */
- const Login: React.FC<Props> = ({ redirectTo }) => {
+ const Login: React.FC<Props> = ({ redirectToPath }) => {
 
 
   const {
@@ -39,7 +39,7 @@ interface Props {
   };
 
   const redirectToPage = () => {
-    history.push(redirectTo? redirectTo : "/");
+    history.push(redirectToPath? redirectToPath : "/");
   }
 
   return (

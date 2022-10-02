@@ -1,4 +1,4 @@
-import * as OriginConfig from '../infrastructure.config';
+import * as OriginConfig from '../global.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError } from './api.error';
 import qs from 'querystring';
@@ -44,32 +44,40 @@ export default function AuthKeycloakTokensClientImpl(): IAuthTokensClient {
    * same login url: `/auth/realms/${your-realm}/protocol/openid-connect/token`,
    * headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   */
-  function getAdminTokenService(): Promise<string> {
-    const body: NewAdminTokenRequestType = {
-      client_id: OriginConfig.Keycloak.client_id,
-      grant_type: 'password',
-      username: OriginConfig.Keycloak.username_admin,
-      password: OriginConfig.Keycloak.password_admin,
-      scope: 'openid roles',
-      client_secret: OriginConfig.Keycloak.client_secret,
-    };
+  async function getAdminTokenService(): Promise<string> {
+    try {
+      const body: NewAdminTokenRequestType = {
+        client_id: OriginConfig.Keycloak.client_id,
+        grant_type: 'password',
+        username: OriginConfig.Keycloak.username_admin,
+        password: OriginConfig.Keycloak.password_admin,
+        scope: 'openid roles',
+        client_secret: OriginConfig.Keycloak.client_secret,
+      };
 
-    // Token endpoint
-    const URL = OriginConfig.KeycloakPath.token
+      // Token endpoint
+      const URL = OriginConfig.KeycloakPath.token
 
-    //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
-    const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body))
+      //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
+      const response = await axios.post(URL, qs.stringify(body))
 
-    // using .then, create a new promise which extracts the data
-    const adminToken: Promise<string> = promise.then((response) =>
-      response.data.access_token
-    ).catch((error) => {
+      // using .then, create a new promise which extracts the data
+      /*
+      const adminToken: Promise<string> = promise.then((response) =>
+        response.data.access_token
+      ).catch((error) => {
+        // response.status !== 200
+        const authError: ApiError = handleAxiosError(error);
+        throw authError;
+      });
+      */
+
+      return response.data.access_token;
+    } catch (error: any) {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
-    });
-
-    return adminToken;
+    }
   };
 
   /**
@@ -82,30 +90,36 @@ export default function AuthKeycloakTokensClientImpl(): IAuthTokensClient {
    * Content-Type: application/x-www-form-urlencoded.
    * Body with client_id, client_secret and grant_type.
   */
-  function getAppTokenService(): Promise<string> {
+  async function getAppTokenService(): Promise<string> {
+    try {
+      const body: RequesAppToken = {
+        client_id: OriginConfig.Keycloak.client_id,
+        grant_type: 'client_credentials',
+        client_secret: OriginConfig.Keycloak.client_secret,
+      };
 
-    const body: RequesAppToken = {
-      client_id: OriginConfig.Keycloak.client_id,
-      grant_type: 'client_credentials',
-      client_secret: OriginConfig.Keycloak.client_secret,
-    };
+      // Token endpoint
+      const URL = OriginConfig.KeycloakPath.token
 
-    // Token endpoint
-    const URL = OriginConfig.KeycloakPath.token
+      //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
+      const response = await axios.post(URL, qs.stringify(body));
 
-    //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
-    const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
-
-    // using .then, create a new promise which extracts the data
-    const appToken: Promise<string> = promise.then((response) =>
-      response.data.access_token
-    ).catch((error) => {
+      // using .then, create a new promise which extracts the data
+      /** 
+      const appToken: Promise<string> = promise.then((response) =>
+        response.data.access_token
+      ).catch((error) => {
+        // response.status !== 200
+        const authError: ApiError = handleAxiosError(error);
+        throw authError;
+      });
+  */
+      return response.data.access_token;
+    } catch (error: any) {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
-    });
-
-    return appToken;
+    }
   };
 
 
@@ -127,33 +141,39 @@ export default function AuthKeycloakTokensClientImpl(): IAuthTokensClient {
    * @param refresh_token 
    * @returns 
    */
-  function getRefreshTokenService(refreshToken: string): Promise<any> {
+  async function getRefreshTokenService(refreshToken: string): Promise<any> {
+    try {
+      console.log('getRefreshTokenService.refreshToken:', refreshToken);
+      const body: RequesRefreshToken = {
+        client_id: OriginConfig.Keycloak.client_id,
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+        client_secret: OriginConfig.Keycloak.client_secret,
+      };
 
-    console.log('getRefreshTokenService.refreshToken:',refreshToken);
-    const body: RequesRefreshToken = {
-      client_id: OriginConfig.Keycloak.client_id,
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-      client_secret: OriginConfig.Keycloak.client_secret,
-    };
+      // Token endpoint
+      const URL = OriginConfig.KeycloakPath.token
 
-    // Token endpoint
-    const URL = OriginConfig.KeycloakPath.token
+      const response = await axios.post(URL, qs.stringify(body));
 
-    const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
-
-    // using .then, create a new promise which extracts the data
-    const tokens: Promise<any> = promise.then((response) => {
-      console.log('getRefreshTokenService.response',response);
+      // using .then, create a new promise which extracts the data
+      /*
+      const tokens: Promise<any> = promise.then((response) => {
+        console.log('getRefreshTokenService.response',response);
+        return response;
+      }
+      ).catch((error) => {
+        // response.status !== 200
+        const authError: ApiError = handleAxiosError(error);
+        throw authError;
+      });
+  */
       return response;
-    }
-    ).catch((error) => {
+    } catch (error: any) {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
-    });
-
-    return tokens;
+    }
   };
 
   return {

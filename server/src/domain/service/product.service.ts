@@ -28,7 +28,7 @@ export class ProductService implements IProductService<IProduct> {
   /**
    * Catalog
    */
-  async getCatalog(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<FilteredProductsDTO> {
+  async getCatalog(category: string, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<FilteredProductsDTO> {
 
     const fieldsToExclude = {
       barcode: 0,
@@ -48,7 +48,9 @@ export class ProductService implements IProductService<IProduct> {
     };
 
     console.log("***********************************getCatalog:");
-    const queryQuilter = { active: "true" };
+    let queryQuilter;
+    if (category.trim()==='') queryQuilter = { active: "true" };
+      else queryQuilter = { category: category, active: "true" };
     const products: ProductItemDTO[] = await this.productRepository.findExcludingFields(queryQuilter, fieldsToExclude, page, limit, orderByField, isAscending);
     let filtered: FilteredProductsDTO = new FilteredProductsDTO();
     filtered.list = products;

@@ -4,6 +4,7 @@ import { Category } from '../model/category/category';
 import { CategoryDTO } from '../model/category/category.dto';
 import { IRepository } from '../output-port/repository.interface';
 import { ICategoryService } from '../service/interface/category.service.interface';
+import { FilteredProductsDTO } from '../model/product/filtered-products.dto';
 
 
 @Injectable()
@@ -70,4 +71,20 @@ export class CategoryService implements ICategoryService<ICategory> {
   async hasByQuery(query: any): Promise<boolean> {
     return await this.categoryRepository.hasByQuery(query);
   };
+
+  async search(queryFilter?: any, page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<FilteredProductsDTO> {
+
+    console.log("***********************************category search orderByField:", orderByField);
+    console.log("***********************************category search isAscending:", isAscending);
+    const filter = queryFilter? queryFilter : {};
+    const cats: ICategory[] = await this.categoryRepository.findExcludingFields(filter, {}, page, limit, orderByField, isAscending);
+    let filtered: FilteredProductsDTO = new FilteredProductsDTO();
+    filtered.list = cats;
+    filtered.page = page;
+    filtered.limit = limit;
+    filtered.count = await this.categoryRepository.count(filter);
+    console.log("***********************************search:", cats);
+    return filtered;
+  };
+
 };

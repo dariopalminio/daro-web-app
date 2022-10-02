@@ -70,7 +70,7 @@ const SideBarLeft = styled.div<OpenConditionalProps>`
 //Styled-components Using custom props named dynamicWidth
 const MainSection = styled.section<OpenConditionalProps>`
         position: relative;
-        width: calc(99% - ${props => props.dynamicWidth}px);
+        width: calc(100% - ${props => props.dynamicWidth}px);
         float: left;
     `;
 

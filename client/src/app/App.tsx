@@ -9,7 +9,7 @@ import MainContainer from "./ui/page/main-container"
 import TopNavBar from "./ui/component/layout/core/appbar/top-nav-bar"
 import Footer from "./ui/page/footer"
 import SideBar from "./ui/component/layout/core/sidebar"
-import * as StateConfig from '../domain/domain.config';
+import * as GlobalConfig from '../infra/global.config';
 import Themes from "./ui/common/themes/themes";
 
 /**
@@ -30,7 +30,7 @@ const App: FunctionComponent = () => {
               <Layout
                 topbar={<TopNavBar />}
                 leftbar={<SideBar style={{background: "#F9F9F9"}}></SideBar>}
-                footer={<Footer companyName={StateConfig.app_company_name}/>}
+                footer={<Footer companyName={GlobalConfig.app_company_name}/>}
                 >
                 <MainContainer />
               </Layout>

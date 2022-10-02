@@ -6,6 +6,7 @@ import TextField from "../../../common/text-field/text-field";
 import ListBox from "../../../common/list-box/list-box";
 import ProfileLanguage from "./profile-language";
 import MyAddresses from "./my-addresses";
+import { SelectOpts } from "../../../common/select-opts";
 
 const validationFlagInit = {
   userName: true,
@@ -50,6 +51,7 @@ const ProfileForm: React.FC<Props> = ({ initialized, profile, onChange, onSubmit
   };
 
   const handleLanguageChange = (len: string): void => {
+    console.log("handleLanguageChange.len:",len);
     onChange({
       ...profile,
       language: len
@@ -173,13 +175,11 @@ const ProfileForm: React.FC<Props> = ({ initialized, profile, onChange, onSubmit
                 value={profile.email}
               />
         
-              <ListBox
-                id="demo-select-small"
+              <SelectOpts 
                 label={t('profile.docType')}
-                value={profile.docType}
-                options={docTypeOptions}
-                onChange={(selectedOption) => handleDocTypeChange(selectedOption)}
-              />
+                list={docTypeOptions}
+                selectedOption={profile.docType}
+                setSelectedOption={(selectedOption) => handleDocTypeChange(selectedOption)} />
 
               <TextField
                 id="standard-basic-5"

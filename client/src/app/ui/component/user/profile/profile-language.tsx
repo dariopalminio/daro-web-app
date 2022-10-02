@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { supportedLngs } from "../../../../../domain/i18n/supported-lngs";
 import ListBox from "../../../common/list-box/list-box";
+import { SelectOpts } from "../../../common/select-opts";
 
 /**
       <List>
@@ -29,20 +30,21 @@ export default function ProfileLanguage({ onChange }: any) {
 
 
   const changeLanguage = (lng: string) => {
+    console.log('ProfileLanguage.lng', lng);
     i18n.changeLanguage(lng);
     onChange(lng); //set language in parent
   };
 
   return (
     <div>
-      <ListBox
-                id="demo-select-small"
-                label={t("language.current")}
-                value={i18n.language}
-                options={supportedLngs}
-                onChange={(selectedOption) => changeLanguage(selectedOption)}
-                style={{marginTop: "15px"}}
-              />
+
+<SelectOpts 
+  label="Tu lenguaje actual es:" 
+  list={supportedLngs} 
+  selectedOption={i18n.language} 
+  setSelectedOption={(selectedOption) => changeLanguage(selectedOption)} />
+
+    
               
     </div>
   );

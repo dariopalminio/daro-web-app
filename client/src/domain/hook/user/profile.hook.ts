@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { ApiError } from '../../../infra/client/api.error';
 import SessionContext, { ISessionContext } from '../../context/session.context';
-import * as StateConfig from '../../domain.config';
+import * as StateConfig from '../../../infra/global.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IProfileClient } from '../../service/profile-client.interface';
 import { IHookState, InitialState } from '../hook.type';

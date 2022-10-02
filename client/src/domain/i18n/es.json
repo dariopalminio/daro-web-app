@@ -83,7 +83,7 @@
     "profile.docType": "Tipo de documento ",
     "profile.document": "Documento de identidad ",
     "profile.telephone": "Teléfono ",
-    "profile.command.submit": "Actualizar",
+    "profile.command.submit": "Actualizar datos de perfil",
     "profile.update.success": "Sus datos han sido actualizados.",
     "profile.get.user.success": "Puede actualizar sus datos en esta sección.",
     "my.addresses.title": "Mis direcciones",
@@ -121,5 +121,8 @@
     "cart.detail.state": "Estado",
     "cart.button.add.to.cart": "Agregar",
     "producto.error.loading": "No se ha podido cargar producto!",
-    "back.to.home": "Volver"
+    "back.to.home": "Volver",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "of": "de"
  }

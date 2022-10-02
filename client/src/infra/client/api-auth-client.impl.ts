@@ -1,4 +1,4 @@
-import * as InfraConfig from '../infrastructure.config';
+import * as InfraConfig from '../global.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
 import qs from 'querystring';
@@ -23,13 +23,19 @@ export default function ApiAuthClientImpl(): IAuthClient {
    * @param adminToken 
    * @returns 
    */
-  function register(
+  async function register(
     username: string,
     firstName: string,
     lastName: string,
     email: string,
-    password: string,
-    adminToken: string): Promise<any> {
+    password: string): Promise<any> {
+
+    let adminToken: string;
+    try {
+      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+    } catch (error: any) {
+      throw error;
+    }
 
     const body = {
       username: username,
@@ -70,13 +76,19 @@ export default function ApiAuthClientImpl(): IAuthClient {
    * @param accessToken 
    * @returns 
    */
-  function sendStartEmailConfirm(
+  async function sendStartEmailConfirm(
     name: string,
     email: string,
     verificationPageLink: string,
-    lang: string,
-    adminToken: string
-    ): Promise<any> {
+    lang: string
+  ): Promise<any> {
+
+    let adminToken: string;
+    try {
+      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+    } catch (error: any) {
+      throw error;
+    }
 
     //Notification endpoint
     const URL = `${InfraConfig.APIEndpoints.auth}/register/confirm/start`;
@@ -113,7 +125,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
         };
       });
 
-    console.log("******sendStartEmailConfirm---info:",info);
+    console.log("******sendStartEmailConfirm---info:", info);
     return info;
   };
 
@@ -124,10 +136,16 @@ export default function ApiAuthClientImpl(): IAuthClient {
    * @param adminToken 
    * @returns 
    */
-  function confirmAccount(
+  async function confirmAccount(
     token: string,
-    lang: string,
-    adminToken: string): Promise<any> {
+    lang: string): Promise<any> {
+
+    let adminToken: string;
+    try {
+      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+    } catch (error: any) {
+      throw error;
+    }
 
     const body = {
       token: token,
@@ -140,9 +158,10 @@ export default function ApiAuthClientImpl(): IAuthClient {
     const promise: AxiosPromise<any> = axios({
       method: 'post',
       url: URL,
-      headers: { 
-        'Authorization': `Bearer ${adminToken}`, 
-        'lang': lang, },
+      headers: {
+        'Authorization': `Bearer ${adminToken}`,
+        'lang': lang,
+      },
       data: body
     });
 
@@ -151,12 +170,11 @@ export default function ApiAuthClientImpl(): IAuthClient {
       response
     ).catch((error) => {
       // response.status !== 200
-      console.log("error:",error);
+      console.log("error:", error);
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
-    console.log("resp:",resp);
-    console.log("******confirmAccount---resp:",resp);
+
     return resp;
   };
 
@@ -181,7 +199,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
     // using .then, create a new promise which extracts the data
     const tokens: Promise<Tokens> = promise.then((response) => {
-      console.log('loginService.response',response);
+      console.log('loginService.response', response);
       return {
         access_token: response.data.access_token,
         refresh_token: response.data.refresh_token,
@@ -192,7 +210,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
     }
     ).catch((error) => {
       // response.status !== 200
-      console.log('loginService.error',error);
+      console.log('loginService.error', error);
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
@@ -206,7 +224,14 @@ export default function ApiAuthClientImpl(): IAuthClient {
    * @param adminToken 
    * @returns 
    */
-  function logoutService(userId: string, adminToken: string): Promise<number> {
+  async function logoutService(userId: string): Promise<number> {
+
+    let adminToken: string;
+    try {
+      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+    } catch (error: any) {
+      throw error;
+    }
 
     //User endpoint
     const URL = `${InfraConfig.APIEndpoints.auth}/logout`;
@@ -243,11 +268,17 @@ export default function ApiAuthClientImpl(): IAuthClient {
    * @param accessToken 
    * @returns 
    */
-  function sendEmailToRecoveryPass(
+  async function sendEmailToRecoveryPass(
     email: string,
     recoveryPageLink: string,
-    lang: string,
-    adminToken: string): Promise<any> {
+    lang: string): Promise<any> {
+
+    let adminToken: string;
+    try {
+      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+    } catch (error: any) {
+      throw error;
+    }
 
     //Notification endpoint
     const URL = `${InfraConfig.APIEndpoints.auth}/recovery/start`;
@@ -258,7 +289,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
       headers: {
         'Authorization': `Bearer ${adminToken}`,
         'Content-Type': `application/json`,
-        'lang': lang, 
+        'lang': lang,
       },
       data: {
         'userName': email,
@@ -272,9 +303,9 @@ export default function ApiAuthClientImpl(): IAuthClient {
       .then((response) => response.data)
       .catch((error) => {
         const authError: ApiError = handleAxiosError(error);
-          throw authError;
+        throw authError;
       });
-      console.log("******sendEmailToRecoveryPass---info:",info);
+
     return info;
   };
 
@@ -289,9 +320,15 @@ export default function ApiAuthClientImpl(): IAuthClient {
   async function updatePassword(
     token: string,
     password: string,
-    lang: string,
-    adminToken: string): Promise<any> {
-      
+    lang: string): Promise<any> {
+
+    let adminToken: string;
+      try {
+        adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+      } catch (error: any) {
+        throw error;
+    }
+
     const body = {
       token: token,
       password: password
@@ -303,12 +340,13 @@ export default function ApiAuthClientImpl(): IAuthClient {
       const response: any = await axios({
         method: 'post',
         url: URL,
-        headers: { 
+        headers: {
           'Authorization': `Bearer ${adminToken}`,
-          'lang': lang,  },
+          'lang': lang,
+        },
         data: body
       });
-      console.log("******updatePassword---response.data:",response.data);
+
       return response.data;
     } catch (err: any) {
       const authError: ApiError = handleAxiosError(err);

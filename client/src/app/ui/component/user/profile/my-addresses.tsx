@@ -9,6 +9,7 @@ import ModalDialog from "../../../common/dialog/modal-dialog";
 import TextField from "../../../common/text-field/text-field";
 import SelectList from "../../../common/select-list/select-list";
 import NewAddressDialog from "./new-address-dialog";
+import { CenteringContainer } from "../../../common/elements/centering-container";
 
 
 const initialNewAddress: Address = {
@@ -50,7 +51,22 @@ const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
     const handleClickOpen = () => {
         toggle();
     };
+/**
+const removeFromCart = (id: string) => {
+        setCartItems((currentCart) => {
+            const indexOfItemToRemove = currentCart.findIndex((cartItem) => cartItem.itemId === id);
 
+            if (indexOfItemToRemove === -1) {
+                return currentCart;
+            }
+            const newCartItems = [
+                ...currentCart.slice(0, indexOfItemToRemove),
+                ...currentCart.slice(indexOfItemToRemove + 1),
+            ];
+            saveCart(newCartItems);
+            return newCartItems;
+        });
+ */
     const handleDeleteAddress = async (index: number) => {
         const arrayOfAddresses: Array<Address> = myAddresses;
         arrayOfAddresses.splice(index, 1); //delete element of index
@@ -81,16 +97,16 @@ const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
             <h1>
                 {t('my.addresses.title')}
             </h1>
-            <div>
+            <div style={{textAlign: "left"}}>
                 <SelectList
                     id="mySelectList"
                     label="Tus direcciones:"
                     list={getStrinArrayAddresses()}
-                    onClickDelete={(index) => handleDeleteAddress(index)} />
+                    onClickDelete={(item, index) => handleDeleteAddress(index)} />
             </div>
 
             <div>
-                <Button onClick={handleClickOpen}
+                <Button type="button" onClick={handleClickOpen}
                     style={{ marginTop: "15px" }}
                 >
                     {t('my.addresses.add')}

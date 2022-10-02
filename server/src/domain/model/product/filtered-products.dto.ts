@@ -4,5 +4,5 @@ export class FilteredProductsDTO {
     page:  number;
     limit: number;
     count: number;
-    list: ProductItemDTO[];
+    list: any[];
 };

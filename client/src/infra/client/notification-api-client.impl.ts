@@ -1,10 +1,10 @@
 
-import * as InfraConfig from '../infrastructure.config';
+import * as InfraConfig from '../global.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
 import { ContactType } from '../../domain/model/notification/contact.type';
 import { INotificationClient } from '../../domain/service/notification-client.interface';
-
+import axiosInstance from './interceptor/axios.interceptor';
 
 /**
  * NotificationApiService implementation 
@@ -22,16 +22,15 @@ export default function NotificationApiClientImpl(): INotificationClient {
    * @param token Valid access token
    * @returns any
    */
-  function sendContactEmailService(contactData: ContactType, accessToken: string ): Promise<any> {
+  async function sendContactEmailService(contactData: ContactType ): Promise<any> {
 
     //Notification endpoint
     const URL = `${InfraConfig.APIEndpoints.notifications}/sendContactEmail`;
 
-    const promise: AxiosPromise<any> = axios({
+    const promise: AxiosPromise<any> = axiosInstance({
       method: 'post',
       url: URL,
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': `application/json`,
       },
       data: contactData

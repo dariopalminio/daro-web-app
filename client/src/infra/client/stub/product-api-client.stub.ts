@@ -101,7 +101,7 @@ export default function ProductClientStub(): IProductClient {
     /**
      * Stub function
      */
-    function getCatalog(page: number, limit: number, orderBy: string ,accessToken: string): Promise<any> {
+    function getCatalog(category: string, page: number, limit: number, orderBy: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const data: any = productsFake;
             resolve(data);
@@ -111,7 +111,7 @@ export default function ProductClientStub(): IProductClient {
     /**
      * Stub function
      */
-    function getProductDetail(id: string, accessToken: string): Promise<any> {
+    function getProductDetail(id: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const data: any = productDetailed;
             resolve(data);

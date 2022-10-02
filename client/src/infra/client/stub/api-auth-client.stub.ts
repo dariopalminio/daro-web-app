@@ -14,8 +14,7 @@ export default function ApiAuthClientStub(): IAuthClient {
         firstName: string,
         lastName: string,
         email: string,
-        password: string,
-        adminToken: string): Promise<any> {
+        password: string): Promise<any> {
         return new Promise<number>((resolve, reject) => {
             const response: any = {
                 "data": "",
@@ -69,7 +68,7 @@ export default function ApiAuthClientStub(): IAuthClient {
     };
 
 
-    function logoutService(userId: string, adminToken: string): Promise<number> {
+    function logoutService(userId: string): Promise<number> {
         return new Promise<number>((resolve, reject) => {
             resolve(200);
         });
@@ -79,8 +78,7 @@ export default function ApiAuthClientStub(): IAuthClient {
         name: string,
         email: string,
         verificationPageLink: string,
-        lang: string,
-        accessToken: string): Promise<any> {
+        lang: string): Promise<any> {
         return new Promise<number>((resolve, reject) => {
             const response: any = {
                 "isSuccess": true,
@@ -110,8 +108,7 @@ export default function ApiAuthClientStub(): IAuthClient {
 
     function confirmAccount(
         token: string,
-        lang: string,
-        adminToken: string): Promise<any> {
+        lang: string): Promise<any> {
         return new Promise<number>((resolve, reject) => {
             const response: any = {
                 "data": {
@@ -154,8 +151,7 @@ export default function ApiAuthClientStub(): IAuthClient {
     function sendEmailToRecoveryPass(
         email: string,
         recoveryPageLink: string,
-        lang: string,
-        adminToken: string): Promise<any> {
+        lang: string): Promise<any> {
         return new Promise<number>((resolve, reject) => {
             const response: any = {
                 "isSuccess": true,
@@ -186,8 +182,7 @@ export default function ApiAuthClientStub(): IAuthClient {
     function updatePassword(
         token: string,
         password: string,
-        lang: string,
-        adminToken: string): Promise<any> {
+        lang: string): Promise<any> {
         return new Promise<number>((resolve, reject) => {
             const data: any = {
                 "reseted": true

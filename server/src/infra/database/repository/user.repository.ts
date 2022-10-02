@@ -63,8 +63,8 @@ export class UserRepository implements IRepository<IUser> {
         if (page && limit && orderByField) {
             // All with pagination and sorting
             const direction: number = isAscending ? 1 : -1;
-            //const mysort = [[orderByField, direction]];
-            const mysort: Record<string, | 1 | -1 | {$meta: "textScore"}> = { reference: 1 };
+            let mysort = {}; 
+            mysort[orderByField] = isAscending? 1 : -1; //Record<string, | 1 | -1 | {$meta: "textScore"}>
             const gap: number = (page - 1) * limit;
             arrayDoc = await this.userModel.find(query, fieldsToExclude).sort(mysort).skip(gap).limit(limit).exec();
         } else {

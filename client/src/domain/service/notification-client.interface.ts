@@ -4,8 +4,7 @@ import { ContactType } from '../model/notification/contact.type';
 export interface INotificationClient {
 
   sendContactEmailService: (
-    contactData: ContactType,
-    accessToken: string
+    contactData: ContactType
   ) => Promise<any>;
 
 };

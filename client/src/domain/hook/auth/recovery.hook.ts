@@ -1,10 +1,8 @@
 import { useCallback, useState } from 'react';
-//import SessionContext, { ISessionContext } from '../../context/session.context';
-import * as StateConfig from '../../domain.config';
+import * as StateConfig from '../../../infra/global.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IAuthClient } from '../../service/auth-client.interface';
 import { IHookState, InitialState } from '../hook.type';
-
 
 
 /**
@@ -13,17 +11,15 @@ import { IHookState, InitialState } from '../hook.type';
 export default function useRecovery(authServiceInjected: IAuthTokensClient | null = null,
     userClientInjected: IAuthClient | null = null) {
 
-    //const { session, setSessionValue, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState<IHookState>(InitialState);
-    const authTokenService: IAuthTokensClient = authServiceInjected ? authServiceInjected : StateConfig.authTokensClient;
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
 
     /**
-     * sendEmailToRecovery
+     * Send Email To Recovery
      */
     const sendEmailToRecovery = useCallback((email: string, lang: string) => {
 
-        setState({ isProcessing: true, isSuccess: false, hasError: false, msg: 'sending'  });
+        setState({ isProcessing: true, isSuccess: false, hasError: false, msg: 'sending' });
 
         if (!email) {
             const errorMsg = "Some problem creating new user. Email does not exist in session!";
@@ -32,64 +28,43 @@ export default function useRecovery(authServiceInjected: IAuthTokensClient | nul
 
             const recoveryPageLink = `${StateConfig.app_url}/user/recovery/form/`;
 
-            // First: obtains admin access token
-            const responseAdminToken: Promise<any> = authTokenService.getAdminTokenService();
-
-            responseAdminToken.then(jwtAdminToken => {
-                // Second: send email to confirmation process
-                authClient.sendEmailToRecoveryPass(email, recoveryPageLink, lang, jwtAdminToken)
+            // Second: send email to confirmation process
+            authClient.sendEmailToRecoveryPass(email, recoveryPageLink, lang)
                 .then(info => {
                     console.log("Response sendStartEmailConfirm...", info);
-                    setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'ok'  });
+                    setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'ok' });
 
                 })
-                    .catch(err => {
-                        // Error Can not send email
-                        setState({ isProcessing: false, isSuccess: false, hasError: true, msg: "register.error.email-does-not-sent"  });
-                    });
-
-            }).catch(err => {
-                // Error Can not acquire Admin token from service
-                const errorMsgKey = "register.error.cannot.acquire.token";
-                setState({ isProcessing: false, isSuccess: false, hasError: true, msg: errorMsgKey  });
-                //removeSessionValue();
-            });
+                .catch(err => {
+                    // Error Can not send email
+                    setState({ isProcessing: false, isSuccess: false, hasError: true, msg: "register.error.email-does-not-sent" });
+                });
         }
+    }, [authClient]);
 
-    }, [authClient, authTokenService]);
-
+    /**
+     * Update Password
+     */
     const updatePassword = useCallback((token: string, password: string, lang: string) => {
-        setState({ isProcessing: true, isSuccess: false, hasError: false, msg: 'sending'  });
+        setState({ isProcessing: true, isSuccess: false, hasError: false, msg: 'sending' });
 
         if (!token || !password) {
             const errorMsg = "Some problem with data. token or password wrong!";
             setState({ isProcessing: false, isSuccess: false, hasError: true, msg: errorMsg });
         } else {
-
-            // First: obtains admin access token
-            const responseAdminToken: Promise<any> = authTokenService.getAdminTokenService();
-            
-            responseAdminToken.then(jwtAdminToken => {
-                // Second: send email to confirmation process
-                authClient.updatePassword(token, password, lang, jwtAdminToken)
+            // Second: send email to confirmation process
+            authClient.updatePassword(token, password, lang)
                 .then(info => {
-                    setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'Password updated!'  });
+                    setState({ isProcessing: false, isSuccess: true, hasError: false, msg: 'Password updated!' });
 
                 })
-                    .catch(err => {
-                        // Error Can not update password
-                        const msgErrorKey = err.message ;
-                        setState({ isProcessing: false, isSuccess: false, hasError: true, msg: msgErrorKey });
-                    });
-
-            }).catch(err => {
-                // Error Can not acquire Admin token from service
-                const errorMsgKey = "register.error.cannot.acquire.token";
-                setState({ isProcessing: false, isSuccess: false, hasError: true, msg: errorMsgKey  });
-                //removeSessionValue();
-            });
+                .catch(err => {
+                    // Error Can not update password
+                    const msgErrorKey = err.message;
+                    setState({ isProcessing: false, isSuccess: false, hasError: true, msg: msgErrorKey });
+                });
         }
-    }, [authClient, authTokenService]);
+    }, [authClient]);
 
     return {
         isProcessing: state.isProcessing,

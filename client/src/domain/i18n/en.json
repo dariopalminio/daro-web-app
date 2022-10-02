@@ -121,6 +121,8 @@
     "cart.detail.state": "State",
     "cart.button.add.to.cart": "Add",
     "producto.error.loading": "No se ha podido cargar producto!",
-    "back.to.home": "Back to Home"
+    "previous": "Previous",
+    "next": "Next",
+    "of": "of"
 
 }

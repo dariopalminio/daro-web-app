@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ContactType } from '../../model/notification/contact.type';
 import { INotificationClient } from '../../service/notification-client.interface';
-import * as StateConfig from '../../domain.config';
+import * as StateConfig from '../../../infra/global.config';
 import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
 import { IHookState, InitialState } from '../hook.type';
 
@@ -13,13 +13,11 @@ import { IHookState, InitialState } from '../hook.type';
  * @returns 
  */
 export default function useNotification(
-    authTokensClientInjected: IAuthTokensClient | null = null,
     authClientInjected: IAuthTokensClient | null = null,
     notifClientInjected: INotificationClient | null = null) {
     const [state, setState] = useState<IHookState>(InitialState);
     const notifClient: INotificationClient = notifClientInjected ? notifClientInjected : StateConfig.notificationClient;
-    const authTokenService: IAuthTokensClient = authTokensClientInjected ? authTokensClientInjected : StateConfig.authTokensClient;
-
+    
     /**
      * sendContactEmail
      */
@@ -35,30 +33,19 @@ export default function useNotification(
             return;
         };
 
-        const responseAdminToken: Promise<any> = authTokenService.getAdminTokenService();
-
-        responseAdminToken.then(token => {
-            // Second: send email with authorization using app access token    
-            notifClient.sendContactEmailService(contact, token).then(info => {
-                console.log("Response sent info...");
-                console.log(info);
-                setState({ isProcessing: false, hasError: false, msg: "contact.success.sent.email", isSuccess: true })
-            })
-                .catch(err => {
-                    if (err.status === 401) {
-                        //getRefreshToken();
-                    }
-                    const errorKey = "notification.error.cannot.send.email";
-                    console.log("Can not send email!!!", err.message);
-                    setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
-                });
-        }).catch(err => {
-            // Error Can not acquire App token from service
-            const errorKey = "notification.error.cannot.send.email.by.token.fail";
-            setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
-            return;
-        });
-
+        notifClient.sendContactEmailService(contact).then(info => {
+            console.log("Response sent info...");
+            console.log(info);
+            setState({ isProcessing: false, hasError: false, msg: "contact.success.sent.email", isSuccess: true })
+        })
+            .catch(err => {
+                if (err.status === 401) {
+                    //getRefreshToken();
+                }
+                const errorKey = "notification.error.cannot.send.email";
+                console.log("Can not send email!!!", err.message);
+                setState({ isProcessing: false, hasError: true, msg: errorKey, isSuccess: false });
+            });
     };
 
     return {

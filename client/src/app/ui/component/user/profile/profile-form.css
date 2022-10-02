@@ -6,6 +6,8 @@
 .wrapper-user-data {
     display: block;
     width: 50%;
+    text-align: left;
+    padding: 25px;
 }
 
 .wrapper-user-address {

@@ -6,6 +6,7 @@ import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from '../guard/roles.decorator';
+import { FilteredProductsDTO } from 'src/domain/model/product/filtered-products.dto';
 
 @Controller('categories')
 export class CategoryController {
@@ -114,7 +115,7 @@ export class CategoryController {
   @UseGuards(RolesGuard)
   @Roles('admin', 'manage-account')
   @Put('update')
-  async updateProduct(@Res() res, @Body() categoryDTO: ICategory, @Query('id') categoryID) {
+  async updateCategory(@Res() res, @Body() categoryDTO: ICategory, @Query('id') categoryID) {
     let updatedCategory: boolean;
     try {
       updatedCategory = await this.categoryService.updateById(categoryID, categoryDTO);
@@ -127,5 +128,24 @@ export class CategoryController {
       updated: updatedCategory
     });
   };
+
+    // Example: http://localhost:3001/api/webshop/v1/categories/search?page=1&limit=100&orderBy=name&isAsc=true
+    @Get('search')
+    async search(@Res() res,@Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
+      try {
+        if (pageParam && limitParam && orderBy && isAsc) {
+          const page: number = parseInt(pageParam);
+          const limit: number = parseInt(limitParam);
+          const orderByField: string = orderBy.toString();
+          const isAscending: boolean = (isAsc === 'true') ? true : false;
+          const data: FilteredProductsDTO = await this.categoryService.search({},page, limit, orderByField, isAscending);
+          return res.status(HttpStatus.OK).json(data);
+        } else {
+          throw new InternalServerErrorException("No params");
+        }
+      } catch (error) {
+        throw new InternalServerErrorException(error);
+      };
+    };
 
 };

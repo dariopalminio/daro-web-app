@@ -1,9 +1,17 @@
 import dotenv from 'dotenv';
+import { IAuthClient } from '../domain/service/auth-client.interface';
 import { IAuthTokensClient } from '../domain/service/auth-tokens-client.interface';
+import { INotificationClient } from '../domain/service/notification-client.interface';
+import { IProductClient } from '../domain/service/product-client.interface';
+import { IProfileClient } from '../domain/service/profile-client.interface';
+import { ApiAuthClientFactory } from './client/factory/api-auth-client.factory';
 import { AuthApiClientFactory } from './client/factory/auth-api-client.factory';
+import { NotificationApiClientFactory } from './client/factory/notification-api-client.factory';
+import { ProductApiClientFactory } from './client/factory/product-api.factory';
+import { ProfileApiClientFactory } from './client/factory/profile-api-factory';
 
 /**
- * Config file for infrastructure layer
+ * Global Config file
  * 
  * Having a separate configuration file allows you to access variables instantly and
  * improves the maintainability of the codebase since all the variables are in the 
@@ -48,3 +56,15 @@ export const KeycloakPath = {
 };
 
 
+export const app_url = (process.env.REACT_APP_URL ? process.env.REACT_APP_URL : 'http://localhost:3000') as string;
+
+export const app_company_name = (process.env.REACT_APP_COMPANY_NAME ? process.env.REACT_APP_COMPANY_NAME : 'Daro 2021') as string;
+
+export const clientId = process.env.REACT_APP_AUTH_CLIENT_ID;
+
+//Injection of services from origin
+export const authTokensClient: IAuthTokensClient = AuthApiClientFactory.create(is_fake_mode);
+export const notificationClient: INotificationClient = NotificationApiClientFactory.create(is_fake_mode);
+export const userAuthClient: IAuthClient = ApiAuthClientFactory.create(is_fake_mode);
+export const profileClient: IProfileClient = ProfileApiClientFactory.create(is_fake_mode);
+export const productClient: IProductClient = ProductApiClientFactory.create(is_fake_mode);

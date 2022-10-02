@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
 import SessionContext, { ISessionContext } from '../../context/session.context';
 import { SessionType } from '../../model/auth/session.type';
-import * as StateConfig from '../../domain.config';
+import * as StateConfig from '../../../infra/global.config';
 import { Tokens } from '../../model/auth/tokens.type';
 import { IAuthClient } from '../../service/auth-client.interface';
 import { IHookState, InitialState } from '../hook.type';

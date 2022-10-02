@@ -8,7 +8,7 @@ export const StylesTextField = styled.div`
         font-family: Helvetica, Arial, sans-serif;
         font-size: 13px;
         line-height: 20px;
-        margin: 0 5px 5px;
+        margin: 0px;
         display: block;
     }
     
@@ -18,7 +18,7 @@ export const StylesTextField = styled.div`
     }
     
     .input-text-field {
-        width: 97%;
+        width: 100%;
         border: 1px solid #999;
     }
     
@@ -28,7 +28,7 @@ export const StylesTextField = styled.div`
         font-size: 13px;
         height: 33px;
         margin: 0;
-        padding: 0 0 0 15px;
+        padding: 0;
     }
     
     .input-text-field[type=password] {
@@ -37,7 +37,7 @@ export const StylesTextField = styled.div`
         font-size: 13px;
         height: 33px;
         margin: 0;
-        padding: 0 0 0 15px;
+        padding: 0;
     }
     
     .error-message {

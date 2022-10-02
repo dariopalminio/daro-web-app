@@ -30,13 +30,10 @@ export class AuthMiddleware implements NestMiddleware {
         console.log("AUTH_MIDDLEWARE_ON=", this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON'));
         console.log("req.originalUrl:", req.originalUrl);
 
-        //var regularExpression = /\/((?!login|tokens).)*/; //auth/login is excluded
-        //const isUrlExcluded = regularExpression.exec(req.originalUrl);
-        //if (isUrlExcluded) return next();
-
         if (this.globalConfig.get<string>('AUTH_MIDDLEWARE_ON')) {
 
             if (!req.headers || !req.headers.authorization) {
+                console.log("????????????????????????" );
                 console.log("401 Unauthorized! No authorization data in Header." );
                 return res.status(401).json({ message: "Unauthorized! No authorization data in Header." });
             }
@@ -46,9 +43,11 @@ export class AuthMiddleware implements NestMiddleware {
                 console.log("AuthMiddleware.token:", token);
 
                 jwt.verify(token, this.getPEMPublicKey(), { algorithms: ['RS256'] });
-
+                console.log("OKKKKKKKKKKKKKKKKKKKKKKKKKKKK!" );
             } catch (error) {
                 // Unauthorized, invalid signature
+                console.log("????????????????????????" );
+                console.log("401 Invalid token." );
                 return res.status(401).send({ message: error.message });
             };
         };

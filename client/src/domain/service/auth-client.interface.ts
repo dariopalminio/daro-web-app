@@ -8,39 +8,34 @@ export interface IAuthClient {
     firstName: string,
     lastName: string,
     email: string,
-    password: string,
-    adminToken: string): Promise<any>;
+    password: string): Promise<any>;
 
   sendStartEmailConfirm: (
     name: string,
     email: string,
     verificationPageLink: string,
-    lang: string,
-    accessToken: string
+    lang: string
   ) => Promise<any>;
 
   confirmAccount: (
     token: string,
-    lang: string,
-    adminToken: string
+    lang: string
   ) => Promise<any>;
 
   loginService (username: string, pass: string): Promise<Tokens>;
 
-  logoutService: (userId: string, adminToken: string) => Promise<number>;
+  logoutService: (userId: string) => Promise<number>;
   
   sendEmailToRecoveryPass: (
     email: string,
     recoveryPageLink: string,
-    lang: string,
-    adminToken: string
+    lang: string
   ) => Promise<any>;
 
   updatePassword: (
     token: string,
     password: string,
-    lang: string,
-    adminToken: string
+    lang: string
   ) => Promise<any>;
 
 };
