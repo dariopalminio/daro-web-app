@@ -2,8 +2,8 @@ import { Controller, Get, Res, Inject, Headers } from '@nestjs/common';
 import { HealthCheck, HttpHealthIndicator, HealthCheckService, MongooseHealthIndicator } from "@nestjs/terminus";
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ITranslator } from '../../domain/output-port/translator.interface';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { ITranslator } from 'src/domain/output-port/translator.interface';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 
 @Controller()
 export class AppController {

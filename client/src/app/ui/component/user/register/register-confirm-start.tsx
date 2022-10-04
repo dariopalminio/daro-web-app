@@ -1,8 +1,8 @@
-import emailToConfirmImage from "../../../image/email_to_confirm.png";
+import emailToConfirmImage from "app/ui/image/email_to_confirm.png";
 import { useTranslation } from 'react-i18next';
-import Button from "../../../common/button/button";
-import Paper from "../../../common/paper/paper";
-import Alert from "../../../common/alert/alert";
+import Button from "app/ui/common/button/button";
+import Paper from "app/ui/common/paper/paper";
+import Alert from "app/ui/common/alert/alert";
 
  interface Props {
   successMsg: string;

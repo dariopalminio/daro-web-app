@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Address } from "../../../../../domain/model/user/address.type";
-import IUserValidator from "../../../../../domain/helper/user-validator.interface";
-import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory"
-import Button from "../../../common/button/button";
-import useModalDialog from "../../../common/dialog/use-modal-dialog";
-import ModalDialog from "../../../common/dialog/modal-dialog";
-import TextField from "../../../common/text-field/text-field";
-import SelectList from "../../../common/select-list/select-list";
+import { Address } from "domain/model/user/address.type";
+import Button from "app/ui/common/button/button";
+import useModalDialog from "app/ui/common/dialog/use-modal-dialog";
+import SelectList from "app/ui/common/select-list/select-list";
 import NewAddressDialog from "./new-address-dialog";
-import { CenteringContainer } from "../../../common/elements/centering-container";
-
 
 const initialNewAddress: Address = {
     street: '',

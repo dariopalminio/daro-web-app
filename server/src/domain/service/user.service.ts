@@ -1,10 +1,10 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IUserService } from '../service/interface/user.service.interface';
-import { IUser } from '../model/user/user.interface';
-import { User } from '../model/user/user';
+import { IUser } from 'src/domain/model/user/user.interface';
+import { User } from 'src/domain/model/user/user';
 import { IRepository } from '../output-port/repository.interface';
-import { DomainError } from '../../domain/error/domain-error';
-import { UserProfileDTO } from '../model/user/user-profile.dto.type';
+import { DomainError } from 'src/domain/error/domain-error';
+import { UserProfileDTO } from 'src/domain/model/user/user-profile.dto.type';
 
 @Injectable()
 export class UserService implements IUserService<IUser> {

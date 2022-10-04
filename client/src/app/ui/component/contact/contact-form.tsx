@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState } from "react";
-import { ContactType } from "../../../../domain/model/notification/contact.type";
+import { ContactType } from "domain/model/notification/contact.type";
 import { useTranslation } from 'react-i18next';
-import Button from "../../common/button/button";
-import Paper from "../../common/paper/paper";
-import TextField from "../../common/text-field/text-field";
+import Button from "app/ui/common/button/button";
+import Paper from "app/ui/common/paper/paper";
+import TextField from "app/ui/common/text-field/text-field";
 
 const defaultContact: ContactType = {
     name: "",

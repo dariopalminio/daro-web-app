@@ -1,9 +1,9 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { ISessionContext } from '../../context/session.context';
-import { SessionType } from '../../model/auth/session.type';
-import * as StateConfig from '../../../infra/global.config';
-import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
-import { IAuthClient } from '../../service/auth-client.interface';
+import SessionContext, { ISessionContext } from 'domain/context/session.context';
+import { SessionType } from 'domain/model/auth/session.type';
+import * as StateConfig from 'infra/global.config';
+import { IAuthTokensClient } from 'domain/service/auth-tokens-client.interface';
+import { IAuthClient } from 'domain/service/auth-client.interface';
 import { IHookState, InitialState } from '../hook.type';
 
 /**

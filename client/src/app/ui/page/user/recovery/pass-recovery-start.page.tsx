@@ -1,10 +1,10 @@
 import { FunctionComponent, useState } from "react";
-import useRecovery from "../../../../../domain/hook/auth/recovery.hook";
+import useRecovery from "domain/hook/auth/recovery.hook";
 import { Redirect } from "react-router";
 import { useTranslation } from 'react-i18next';
-import Alert from "../../../common/alert/alert";
-import CircularProgress from "../../../common/progress/circular-progress";
-import PassRecoveryStartForm from "../../../component/user/recovery/pass-recovery-start-form";
+import Alert from "app/ui/common/alert/alert";
+import CircularProgress from "app/ui/common/progress/circular-progress";
+import PassRecoveryStartForm from "app/ui/component/user/recovery/pass-recovery-start-form";
 
 
 /**

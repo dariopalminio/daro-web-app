@@ -2,14 +2,14 @@ import {
   Controller, Get, Res, Post, Headers, Delete, Put, Body, Param, Query, Inject,
   HttpStatus, NotFoundException, BadRequestException, InternalServerErrorException, UnauthorizedException, ForbiddenException, ConflictException, UseGuards
 } from '@nestjs/common';
-import { UserRegisterDataDTO } from '../../domain/model/auth/register/user-register-data.dto.type';
-import { IAuthService } from '../../domain/service/interface/auth.service.interface';
-import { StartConfirmEmailDataDTO } from '../../domain/model/auth/register/start-confirm-email-data.dto';
-import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
-import { VerificationCodeDataDTO } from '../../domain/model/auth/register/verification-code-data.dto.type';
-import { RecoveryUpdateDataDTO } from '../../domain/model/auth/recovery/recovery-update-data.dto.type';
-import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { UserRegisterDataDTO } from 'src/domain/model/auth/register/user-register-data.dto.type';
+import { IAuthService } from 'src/domain/service/interface/auth.service.interface';
+import { StartConfirmEmailDataDTO } from 'src/domain/model/auth/register/start-confirm-email-data.dto';
+import { StartRecoveryDataDTO } from 'src/domain/model/auth/recovery/start-recovery-data.dto.type';
+import { VerificationCodeDataDTO } from 'src/domain/model/auth/register/verification-code-data.dto.type';
+import { RecoveryUpdateDataDTO } from 'src/domain/model/auth/recovery/recovery-update-data.dto.type';
+import { LogoutFormDTO } from 'src/domain/model/auth/login/logout-form.dto';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { RolesGuard } from '../guard/roles.guard';

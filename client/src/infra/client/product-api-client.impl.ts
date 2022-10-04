@@ -1,13 +1,23 @@
 
-import * as InfraConfig from '../global.config';
-import axios from 'axios';
-import { IProductClient } from '../../domain/service/product-client.interface';
-import { ProductType } from '../../domain/model/product/product.type';
-import { FilteredProductsDTO } from '../../domain/model/product/filtered-products';
+import * as InfraConfig from 'infra/global.config';
+import { IProductClient } from 'domain/service/product-client.interface';
+import { ProductType } from 'domain/model/product/product.type';
+import { FilteredProductsDTO } from 'domain/model/product/filtered-products';
 import axiosInstance from './interceptor/axios.interceptor';
+import { CategoryType } from 'domain/model/category/category.type';
 
 export default function ProductApiClientImpl(): IProductClient {
 
+
+    async function getCategories(): Promise<Array<CategoryType>> {
+//http://localhost:3001/api/webshop/v1/products/categories/all
+        const myURL = `${InfraConfig.APIEndpoints.products}/categories/all`;
+
+        const resp = await axiosInstance.get(myURL);
+        console.log("HOOK.getCategories:",resp.data);
+
+        return resp.data;
+    };
 
     /**
      * Get Catalog
@@ -61,6 +71,7 @@ export default function ProductApiClientImpl(): IProductClient {
 
     return {
         getCatalog,
-        getProductDetail
+        getProductDetail,
+        getCategories
     };
 };

@@ -2,7 +2,7 @@ import * as ReactDOM from "react-dom";
 import { useContext } from "react";
 import SessionContext, {
   ISessionContext,
-} from "../../../../domain/context/session.context";
+} from "domain/context/session.context";
 import SessionContextProvider from "../../../../app/ui/provider/session-context-provider";
 
 

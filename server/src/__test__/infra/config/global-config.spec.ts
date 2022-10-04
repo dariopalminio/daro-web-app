@@ -1,5 +1,5 @@
 import { IGlobalConfig } from '../../../domain/output-port/global-config.interface';
-import { GlobalConfigImpl } from '../../../infra/config/global-config-impl';
+import { GlobalConfigImpl } from 'infra/config/global-config-impl';
 import { Test, TestingModule } from '@nestjs/testing';
 
 describe('[Unit test] GlobalConfigImpl', () => {

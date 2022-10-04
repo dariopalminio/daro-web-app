@@ -1,11 +1,11 @@
-import RegisterForm from "../../../component/user/register/register-form";
+import RegisterForm from "app/ui/component/user/register/register-form";
 import { useState } from "react";
 import { FunctionComponent } from "react";
-import useRegister from "../../../../../domain/hook/auth/register.hook";
+import useRegister from "domain/hook/auth/register.hook";
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import Alert from "../../../common/alert/alert";
-import CircularProgress from "../../../common/progress/circular-progress";
+import Alert from "app/ui/common/alert/alert";
+import CircularProgress from "app/ui/common/progress/circular-progress";
 
 const userToRegisterInitialized = {
   userName: '',

@@ -1,8 +1,8 @@
 
-import { UserRegisterDataDTO } from '../../model/auth/register/user-register-data.dto.type';
-import { StartConfirmEmailDataDTO } from '../../model/auth/register/start-confirm-email-data.dto';
-import { StartRecoveryDataDTO } from '../../model/auth/recovery/start-recovery-data.dto.type';
-import { VerificationCodeDataDTO } from '../../model/auth/register/verification-code-data.dto.type';
+import { UserRegisterDataDTO } from 'src/domain/model/auth/register/user-register-data.dto.type';
+import { StartConfirmEmailDataDTO } from 'src/domain/model/auth/register/start-confirm-email-data.dto';
+import { StartRecoveryDataDTO } from 'src/domain/model/auth/recovery/start-recovery-data.dto.type';
+import { VerificationCodeDataDTO } from 'src/domain/model/auth/register/verification-code-data.dto.type';
 import { LogoutFormDTO } from '../../../domain/model/auth/login/logout-form.dto';
 import { RecoveryUpdateDataDTO } from '../../../domain/model/auth/recovery/recovery-update-data.dto.type';
 

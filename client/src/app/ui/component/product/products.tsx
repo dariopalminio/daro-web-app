@@ -1,5 +1,5 @@
 import ProductItem from "./product-item";
-import { ProductType } from "../../../../domain/model/product/product.type";
+import { ProductType } from "domain/model/product/product.type";
 import styled from "styled-components";
 
 export const CatalogContainer = styled.div`

@@ -1,11 +1,11 @@
 import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   ISessionContext,
-} from "../../../../../domain/context/session.context";
+} from "domain/context/session.context";
 import Logout from "./logout";
 import Login from "./login";
 import { useTranslation } from 'react-i18next';
-import Alert from "../../../common/alert/alert";
+import Alert from "app/ui/common/alert/alert";
 
 /**
  * AuthPage for Login or Logout options

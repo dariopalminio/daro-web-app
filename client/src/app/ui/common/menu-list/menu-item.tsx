@@ -10,8 +10,8 @@ import styled from "styled-components";
 const StylesSubMenuItem = styled.div`
     .submenuItems {
         display: flex;
-        margin-left: 5px;
-        width: 98%;
+        margin-left: 0px;
+        width: 100%;
     }
 
     .submenulink {
@@ -24,11 +24,11 @@ const StylesSubMenuItem = styled.div`
         margin-left: 0px;
         padding: 12px 0px 12px 15px;
         transition: all 0.4s ease-out;
-        width: 98%;
+        width: 100%;
     }
 
     .submenuItems:hover .submenulink:hover {
-        background-color: #E5E5E5;
+        background: #E5E5E5;
         color: black;
     }
 `;
@@ -46,13 +46,20 @@ interface Props {
 const MenuItem: React.FC<Props> = ({ menuItem, backgroundColor, hoverColor, style }) => {
     const [styleHover, setStyleHover] = useState({});
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
         setStyleHover(hoverColor ? { background: hoverColor } : {});
     };
-    const handleMouseLeave = () => {
+    const handleMouseLeave = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
         setStyleHover(backgroundColor ? { background: backgroundColor } : {});
     };
 
+    /**
+const handleMouseEvent = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+     */
     return (
         <StylesSubMenuItem>
         <div className="submenuItems"
@@ -60,8 +67,8 @@ const MenuItem: React.FC<Props> = ({ menuItem, backgroundColor, hoverColor, styl
                 style: { background: backgroundColor },
             })}
         >
-            <Link to={menuItem.path} className="submenulink" onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave} style={styleHover}>
+            <Link to={menuItem.path} className="submenulink" onMouseEnter={(e)=>handleMouseEnter(e)}
+                onMouseLeave={(e)=>handleMouseLeave(e)} style={styleHover}>
                 {menuItem.icon}&nbsp;{menuItem.title}
             </Link>
         </div>

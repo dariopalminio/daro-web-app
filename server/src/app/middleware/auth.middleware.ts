@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware, Inject } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import extractTokenFromHeader from '../helper/token.helper';
 
 /**

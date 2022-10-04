@@ -2,8 +2,8 @@ import {
     Controller, Get, Res, Post, Headers, Delete, Put, Body, Param, Query, Inject,
     HttpStatus, NotFoundException, BadRequestException, InternalServerErrorException, UnauthorizedException, ForbiddenException, ConflictException, UseGuards
 } from '@nestjs/common';
-import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { LoginFormDTO } from 'src/domain/model/auth/login/login-form.dto';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';

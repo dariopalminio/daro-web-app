@@ -1,22 +1,15 @@
 
-import React, { FunctionComponent, useContext, useState, useEffect } from "react";
+import { FunctionComponent, useContext, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import SessionContext, {
     ISessionContext,
-} from "../../../../../domain/context/session.context";
-import { Profile } from "../../../../../domain/model/user/profile.type";
-import { Address } from "../../../../../domain/model/user/address.type";
-import MyAddresses from "../../../component/user/profile/my-addresses";
-import IUserValidator from "../../../../../domain/helper/user-validator.interface";
-import { UserValidatorFactory } from "../../../../../domain/helper/user-validator.factory";
-import Button from "../../../common/button/button";
-import CircularProgress from "../../../common/progress/circular-progress";
-import Alert from "../../../common/alert/alert";
-import TextField from "../../../common/text-field/text-field";
-import ProfileLanguage from "../../../component/user/profile/profile-language";
-import useProfile from "../../../../../domain/hook/user/profile.hook";
-import ListBox from "../../../common/list-box/list-box";
-import ProfileForm from "../../../component/user/profile/profile-form";
+} from "domain/context/session.context";
+import { Profile } from "domain/model/user/profile.type";
+import { Address } from "domain/model/user/address.type";
+import CircularProgress from "app/ui/common/progress/circular-progress";
+import Alert from "app/ui/common/alert/alert";
+import useProfile from "domain/hook/user/profile.hook";
+import ProfileForm from "app/ui/component/user/profile/profile-form";
 
 
 const initialNewAddress: Address = {

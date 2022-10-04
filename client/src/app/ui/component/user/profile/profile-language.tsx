@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { supportedLngs } from "../../../../../domain/i18n/supported-lngs";
-import ListBox from "../../../common/list-box/list-box";
-import { SelectOpts } from "../../../common/select-opts";
+import { supportedLngs } from "domain/i18n/supported-lngs";
+import { SelectOpts } from "app/ui/common/select-opts";
 
 /**
       <List>

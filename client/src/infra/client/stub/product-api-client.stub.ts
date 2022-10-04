@@ -1,4 +1,5 @@
 
+import { CategoryType } from 'domain/model/category/category.type';
 import { IProductClient } from '../../../domain/service/product-client.interface';
 
 /**
@@ -98,6 +99,80 @@ export default function ProductClientStub(): IProductClient {
         "__v": 0
     };
 
+    const categories_fake = [
+        {
+            "_id": "6338707686b0c1591fc3b14b",
+            "name": "A 1",
+            "description": "aaaaaaaaaaaaaaaaaaa",
+            "__v": 0
+        },
+        {
+            "_id": "6338708186b0c1591fc3b14d",
+            "name": "B 2",
+            "description": "bbbbbbbbbbbbbbbbbbbbbb",
+            "__v": 0
+        },
+        {
+            "_id": "6338709486b0c1591fc3b150",
+            "name": "C 3",
+            "description": "cccc",
+            "__v": 0
+        },
+        {
+            "_id": "6338709d86b0c1591fc3b152",
+            "name": "D 4",
+            "description": "dddd",
+            "__v": 0
+        },
+        {
+            "_id": "633870a586b0c1591fc3b154",
+            "name": "E 5",
+            "description": "eeeeeeeeeeeee",
+            "__v": 0
+        },
+        {
+            "_id": "633870ac86b0c1591fc3b156",
+            "name": "F 6",
+            "description": "fffffffffffffffff",
+            "__v": 0
+        },
+        {
+            "_id": "633870b286b0c1591fc3b158",
+            "name": "G 7",
+            "description": "ggggggggggggggggg",
+            "__v": 0
+        },
+        {
+            "_id": "633871de86b0c1591fc3b165",
+            "name": "H 8",
+            "description": "hhhhhhhhhhhhhhhh",
+            "__v": 0
+        },
+        {
+            "_id": "633871e786b0c1591fc3b167",
+            "name": "I 9",
+            "description": "iiiiiiiiiiiiiiii",
+            "__v": 0
+        },
+        {
+            "_id": "633871f186b0c1591fc3b169",
+            "name": "J 10",
+            "description": "jjjjjjjjjjjjjjjjjjjj",
+            "__v": 0
+        },
+        {
+            "_id": "6338728d58c90bfed0a133f0",
+            "name": "K 11",
+            "description": "AAAA111111",
+            "__v": 0
+        },
+        {
+            "_id": "6338729c58c90bfed0a133f2",
+            "name": "L 12",
+            "description": "BBBBBB222222",
+            "__v": 0
+        }
+    ];
     /**
      * Stub function
      */
@@ -118,8 +193,19 @@ export default function ProductClientStub(): IProductClient {
         });
     };
 
+        /**
+     * Stub function
+     */
+    function getCategories(): Promise<Array<CategoryType>> {
+            return new Promise<any>((resolve, reject) => {
+                const data: Array<CategoryType> = categories_fake;
+                resolve(data);
+            });
+        };
+
     return {
         getCatalog,
-        getProductDetail
+        getProductDetail,
+        getCategories
     };
 };

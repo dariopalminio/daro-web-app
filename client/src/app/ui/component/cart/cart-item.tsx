@@ -1,10 +1,10 @@
 
 import { Link } from "react-router-dom";
-import ButtonQuantity from "../../common/button-quantity/button-quantity";
-import { CartItemType } from "../../../../domain/model/cart/cart-item.type";
+import ButtonQuantity from "app/ui/common/button-quantity/button-quantity";
+import { CartItemType } from "domain/model/cart/cart-item.type";
 import styled from "styled-components";
 import { RiDeleteBin7Fill } from "react-icons/ri";
-import IconButton from "../../common/icon-button/icon-button";
+import IconButton from "app/ui/common/icon-button/icon-button";
 
 const CartItemWrapper = styled.div`
     width: 100%;

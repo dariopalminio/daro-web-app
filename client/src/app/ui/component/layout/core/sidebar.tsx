@@ -1,13 +1,13 @@
-import MenuList from "../../../common/menu-list/menu-list";
 import { useContext } from "react";
-import SessionContext, { ISessionContext } from "../../../../../domain/context/session.context";
 import styled from "styled-components";
 import { RiHome2Fill } from "react-icons/ri";
 import { RiShoppingCart2Fill } from "react-icons/ri";
 import { RiFunctionFill } from "react-icons/ri";
 import { RiMailSendFill} from "react-icons/ri";
 import { useTranslation } from "react-i18next";
-import { AccessType, MenuItemType } from "../../../common/menu-list/menu-item.type";
+import { AccessType, MenuItemType } from "app/ui/common/menu-list/menu-item.type";
+import SessionContext, { ISessionContext } from "domain/context/session.context";
+import MenuList from "app/ui/common/menu-list/menu-list";
 
 //Styled-components
 const SideBarInner = styled.div`

@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ITranslator } from '../../domain/output-port/translator.interface';
+import { ITranslator } from 'src/domain/output-port/translator.interface';
 import { I18nRequestScopeService } from 'nestjs-i18n';
 
 /**

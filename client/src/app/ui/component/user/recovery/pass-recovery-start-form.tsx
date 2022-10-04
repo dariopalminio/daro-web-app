@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import emailToSendImage from "../../../image/email_to_send.png";
+import emailToSendImage from "app/ui/image/email_to_send.png";
 import { useTranslation } from 'react-i18next';
-import Button from "../../../common/button/button";
-import Paper from "../../../common/paper/paper";
-import TextField from "../../../common/text-field/text-field";
-import { CenteringContainer } from "../../../common/elements/centering-container";
+import Button from "app/ui/common/button/button";
+import Paper from "app/ui/common/paper/paper";
+import TextField from "app/ui/common/text-field/text-field";
+import { CenteringContainer } from "app/ui/common/elements/centering-container";
 
 const validationFlagInit = {
   email: true

@@ -1,12 +1,11 @@
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import useCatalog from "../../../../domain/hook/products/catalog.hook";
-import { CenteringContainer } from "../../common/elements/centering-container";
+import { CenteringContainer } from "app/ui/common/elements/centering-container";
+import { CategoryType } from "domain/model/category/category.type";
 
  const CategoriesWrapper = styled.div`
     display: block;
-    width: 100%;
+
     margin: 0px 0px 15px 0px;
     height: 3em;
     border: none;
@@ -18,10 +17,10 @@ import { CenteringContainer } from "../../common/elements/centering-container";
 `;
 
 interface Props {
-    categorySelected: string;
-    categories: string[];
+    categorySelected: CategoryType|null;
+    categories: CategoryType[];
     placeholder?: string;
-    onClick: (cat: string) => void;
+    onClick: (cat: CategoryType) => void;
 }
 
 
@@ -33,8 +32,8 @@ const Categories: React.FC<Props> = ({categorySelected, categories, onClick }) =
     const { t } = useTranslation();
 
       
-    const getLinkColor = (el: string) => {
-        if (el===categorySelected) return 'red';
+    const getLinkColor = (el: CategoryType) => {
+        if (el.name===categorySelected?.name) return 'red';
         return 'blue';
       }
 
@@ -42,10 +41,10 @@ const Categories: React.FC<Props> = ({categorySelected, categories, onClick }) =
         <CategoriesWrapper>
             <CenteringContainer>
 
-            {categories.map((element: string, index: number) => {
+            {categories.map((element: CategoryType, index: number) => {
                     return (
                         <>
-                           <CategoryLink href="#" style={{color: getLinkColor(element)}} onClick={()=>onClick(element)}>{element}</CategoryLink>
+                           <CategoryLink href="#" style={{color: getLinkColor(element)}} onClick={()=>onClick(element)}>{element.name}</CategoryLink>
                         </>
                     )
                 }

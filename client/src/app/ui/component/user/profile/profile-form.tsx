@@ -1,12 +1,11 @@
 import "./profile-form.css";
 import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import Button from "../../../common/button/button";
-import TextField from "../../../common/text-field/text-field";
-import ListBox from "../../../common/list-box/list-box";
+import Button from "app/ui/common/button/button";
+import TextField from "app/ui/common/text-field/text-field";
 import ProfileLanguage from "./profile-language";
 import MyAddresses from "./my-addresses";
-import { SelectOpts } from "../../../common/select-opts";
+import { SelectOpts } from "app/ui/common/select-opts";
 
 const validationFlagInit = {
   userName: true,

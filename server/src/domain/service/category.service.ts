@@ -1,10 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ICategory } from '../model/category/category.interface';
-import { Category } from '../model/category/category';
-import { CategoryDTO } from '../model/category/category.dto';
+import { ICategory } from 'src/domain/model/category/category.interface';
+import { CategoryDTO } from 'src/domain/model/category/category.dto';
 import { IRepository } from '../output-port/repository.interface';
 import { ICategoryService } from '../service/interface/category.service.interface';
-import { FilteredProductsDTO } from '../model/product/filtered-products.dto';
+import { FilteredProductsDTO } from 'src/domain/model/product/filtered-products.dto';
 
 
 @Injectable()
@@ -17,11 +16,8 @@ export class CategoryService implements ICategoryService<ICategory> {
 
 
   // Get all category
-  async getAll(page?: number, limit?: number, orderByField?: string, isAscending?: boolean): Promise<ICategory[]> {
-    /*if (page && limit &&  orderByField){}
-
-    }*/
-    const cats: ICategory[] = await this.categoryRepository.getAll(page, limit, orderByField, isAscending);
+  async getAll(): Promise<ICategory[]> {
+    const cats: ICategory[] = await this.categoryRepository.getAll();
     return cats;
   };
 

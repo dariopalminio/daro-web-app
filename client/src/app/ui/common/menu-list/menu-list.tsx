@@ -1,8 +1,4 @@
-import { RiHome2Fill } from "react-icons/ri";
-import { RiShoppingCart2Fill } from "react-icons/ri";
-import { RiArrowDownSLine } from "react-icons/ri";
 import { MenuItemType } from "./menu-item.type";
-import { Link } from "react-router-dom";
 import MenuItem from "./menu-item";
 
 interface Props {

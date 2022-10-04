@@ -1,14 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IAuth } from '../output-port/auth.interface';
 import IEmailSender from '../output-port/email-sender.interface';
-import { LoginFormDTO } from '../../domain/model/auth/login/login-form.dto';
-import { ITranslator } from '../../domain/output-port/translator.interface';
-import { ResponseCode } from '../../domain/model/service/response.code.enum';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
-import { LoginFormDTOValidator } from '../../domain/validator/login-form-dto.validator';
-import { DomainError } from '../../domain/error/domain-error';
-import { AuthClientDTO } from '../model/auth/token/auth.client.dto';
-import { RequesRefreshToken } from '../model/auth/token/auth.request.refresh.token.dto';
+import { LoginFormDTO } from 'src/domain/model/auth/login/login-form.dto';
+import { ITranslator } from 'src/domain/output-port/translator.interface';
+import { ResponseCode } from 'src/domain/model/service/response.code.enum';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
+import { LoginFormDTOValidator } from 'src/domain/validator/login-form-dto.validator';
+import { DomainError } from 'src/domain/error/domain-error';
+import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
+import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
 import { IAuthTokensService } from './interface/auth.tokens.service.interface';
 
 /**

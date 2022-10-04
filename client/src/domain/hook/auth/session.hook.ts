@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
-import * as SessionStorage from '../../../infra/storage/session.storage';
-import { PermissionType, SessionType } from "../../model/auth/session.type";
-import { DefaultSession as SessionDefaultValue } from '../../model/auth/default-session';
+import * as SessionStorage from 'infra/storage/session.storage';
+import { PermissionType, SessionType } from "domain/model/auth/session.type";
+import { DefaultSession as SessionDefaultValue } from 'domain/model/auth/default-session';
 
 /**
  * Session Custom Hook

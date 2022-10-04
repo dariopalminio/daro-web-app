@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { CartItemType } from '../../model/cart/cart-item.type';
-import { ProductType } from '../../model/product/product.type';
+import { CartItemType } from 'domain/model/cart/cart-item.type';
+import { ProductType } from 'domain/model/product/product.type';
 import { v4 as uuidv4 } from 'uuid';
 
 const CART_ITEM_NAME = 'CART';

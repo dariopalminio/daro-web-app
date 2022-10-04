@@ -1,4 +1,4 @@
-import Button from "../../common/button/button";
+import Button from "app/ui/common/button/button";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 

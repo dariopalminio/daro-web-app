@@ -1,12 +1,12 @@
 import { Injectable, HttpStatus, Inject } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { IAuth } from '../../domain/output-port/auth.interface';
-//import { IServiceResponse } from '../../domain/model/service/service-response.interface';
+import { IAuth } from 'src/domain/output-port/auth.interface';
+//import { IServiceResponse } from 'src/domain/model/service/service-response.interface';
 import { stringify } from 'querystring';
 import { AxiosResponse } from 'axios';
-import { ITranslator } from '../../domain/output-port/translator.interface';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
-import { DomainError } from '../../domain/error/domain-error';
+import { ITranslator } from 'src/domain/output-port/translator.interface';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
+import { DomainError } from 'src/domain/error/domain-error';
 import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
 import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
 

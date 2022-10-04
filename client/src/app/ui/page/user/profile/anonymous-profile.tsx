@@ -1,8 +1,8 @@
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
-import Link from "../../../common/link/link";
-import ProfileLanguage from "../../../component/user/profile/profile-language";
-import Paper from "../../../common/paper/paper";
+import Link from "app/ui/common/link/link";
+import ProfileLanguage from "app/ui/component/user/profile/profile-language";
+import Paper from "app/ui/common/paper/paper";
 
 
 /**

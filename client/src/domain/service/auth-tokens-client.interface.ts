@@ -1,4 +1,4 @@
-import { Tokens } from '../model/auth/tokens.type';
+import { Tokens } from 'domain/model/auth/tokens.type';
 
 //Interface to do dependency inversion
 export interface IAuthTokensClient {

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import Button from "../../../common/button/button";
-import TextField from "../../../common/text-field/text-field";
-import Link from "../../../common/link/link";
-import Paper from "../../../common/paper/paper";
-import { CenteringContainer } from "../../../common/elements/centering-container";
+import Button from "app/ui/common/button/button";
+import TextField from "app/ui/common/text-field/text-field";
+import Link from "app/ui/common/link/link";
+import Paper from "app/ui/common/paper/paper";
+import { CenteringContainer } from "app/ui/common/elements/centering-container";
 
 interface Props {
     onSubmit: (email: string, password: string) => void;

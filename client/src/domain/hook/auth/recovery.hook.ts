@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
-import * as StateConfig from '../../../infra/global.config';
-import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
-import { IAuthClient } from '../../service/auth-client.interface';
-import { IHookState, InitialState } from '../hook.type';
+import * as StateConfig from 'infra/global.config';
+import { IAuthTokensClient } from 'domain/service/auth-tokens-client.interface';
+import { IAuthClient } from 'domain/service/auth-client.interface';
+import { IHookState, InitialState } from 'domain/hook/hook.type';
 
 
 /**

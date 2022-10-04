@@ -4,8 +4,8 @@ import { Route, Switch } from "react-router-dom";
 import RegisterConfirmEmailPage from "./user/register/register-confirm-email.page";
 import PassRecoveryFormPage from "./user/recovery/pass-recovery-form.page";
 import ProductDetailPage from "./catalog/product-detail.page";
-import Alert from "../common/alert/alert";
-import CircularProgress from "../common/progress/circular-progress";
+import Alert from "app/ui/common/alert/alert";
+import CircularProgress from "app/ui/common/progress/circular-progress";
 
 // lazy loading for components that must get loaded when it is required. 
 const HomePage = lazy(() => import("./home/home.page"));

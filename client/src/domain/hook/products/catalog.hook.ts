@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import { ApiError } from '../../../infra/client/api.error';
-import SessionContext, { ISessionContext } from '../../context/session.context';
-import * as StateConfig from '../../../infra/global.config';
-import { FilteredProductsDTO } from '../../model/product/filtered-products';
-import { ProductType } from '../../model/product/product.type';
-import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
-import { IProductClient } from '../../service/product-client.interface';
-import { IHookState, InitialState } from '../hook.type';
+import { ApiError } from 'infra/client/api.error';
+import SessionContext, { ISessionContext } from 'domain/context/session.context';
+import * as StateConfig from 'infra/global.config';
+import { FilteredProductsDTO } from 'domain/model/product/filtered-products';
+import { ProductType } from 'domain/model/product/product.type';
+import { IAuthTokensClient } from 'domain/service/auth-tokens-client.interface';
+import { IProductClient } from 'domain/service/product-client.interface';
+import { IHookState, InitialState } from 'domain/hook/hook.type';
+import { CategoryType } from 'domain/model/category/category.type';
 
 /**
  * use Catalog
@@ -24,8 +25,8 @@ export default function useCatalog(authClientInjected: IAuthTokensClient | null 
     const { session, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const productClient: IProductClient = productClientInjected ? productClientInjected : StateConfig.productClient;
 
-    const [categories, setCategories] = useState<Array<string>>([]);
-    const [categorySelected, setCategorySelected] = useState<string>('');
+    const [categories, setCategories] = useState<Array<CategoryType>>([]);
+    const [categorySelected, setCategorySelected] = useState<CategoryType|null>(null);
 
 
     const LIMIT_ITEMS_BY_PAGE = 8;
@@ -43,15 +44,18 @@ export default function useCatalog(authClientInjected: IAuthTokensClient | null 
     
       }, [categorySelected]);
       
-    const getCategories =  () => {
-        setCategories(["toy","Fragrance","Security"]);
+    const getCategories =  async () => {
+        const data: Array<CategoryType> = await productClient.getCategories();
+
+        setCategories(data);
     };
 
     const getCatalog = async (page: number) => {
         setState({ isProcessing: true, hasError: false, msg: '', isSuccess: false });
 console.log(`******************************getCatalog page ${page} categorySelected ${categorySelected}`);
         try {
-            const data: FilteredProductsDTO = await productClient.getCatalog(categorySelected, page, LIMIT_ITEMS_BY_PAGE, "name");
+            const catStrin : string = categorySelected? categorySelected.name : '';
+            const data: FilteredProductsDTO = await productClient.getCatalog(catStrin, page, LIMIT_ITEMS_BY_PAGE, "name");
 
             console.log("hook getCatalog data:", data);
 

@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import { DTOValidator } from '../../domain/validator/dto.validator';
+import { DTOValidator } from 'src/domain/validator/dto.validator';
 
 
 export class UserRegisterDataDTOValidator extends DTOValidator {

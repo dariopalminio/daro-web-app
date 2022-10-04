@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { ProductType } from '../model/product/product.type';
+import { ProductType } from 'domain/model/product/product.type';
 
 // Global user session context interface for provider
 export interface ICartContext {

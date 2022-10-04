@@ -1,5 +1,5 @@
-import { AuthClientDTO } from '../model/auth/token/auth.client.dto';
-import { RequesRefreshToken } from '../model/auth/token/auth.request.refresh.token.dto';
+import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
+import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
   
 export interface IAuth {
 

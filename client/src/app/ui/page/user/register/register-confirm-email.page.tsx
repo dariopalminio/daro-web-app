@@ -1,12 +1,12 @@
 import {
   RouteComponentProps,
 } from "react-router-dom";
-import React, { useState } from "react";
-import useRegister from "../../../../../domain/hook/auth/register.hook";
-import emailOkImage from "../../../image/email_ok.png";
+import { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import CircularProgress from "../../../common/progress/circular-progress";
-import Alert from "../../../common/alert/alert";
+import CircularProgress from "app/ui/common/progress/circular-progress";
+import Alert from "app/ui/common/alert/alert";
+import emailOkImage from "app/ui/image/email_ok.png";
+import useRegister from "domain/hook/auth/register.hook";
 
 type TParams = { token: string }; //match.params.token
 

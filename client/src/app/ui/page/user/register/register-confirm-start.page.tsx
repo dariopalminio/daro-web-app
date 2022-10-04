@@ -4,13 +4,13 @@ import {
 } from "react";
 import SessionContext, {
   ISessionContext,
-} from "../../../../../domain/context/session.context";
-import useRegister from "../../../../../domain/hook/auth/register.hook";
+} from "domain/context/session.context";
+import useRegister from "domain/hook/auth/register.hook";
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import CircularProgress from "../../../common/progress/circular-progress";
-import Alert from "../../../common/alert/alert";
-import RegisterConfirmStart from "../../../component/user/register/register-confirm-start";
+import CircularProgress from "app/ui/common/progress/circular-progress";
+import Alert from "app/ui/common/alert/alert";
+import RegisterConfirmStart from "app/ui/component/user/register/register-confirm-start";
 
 /**
  * Register Confirm Start Page (Register STEP 2)

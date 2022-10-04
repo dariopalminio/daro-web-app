@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IProductService } from '../service/interface/product.service.interface';
-import { IProduct } from '../model/product/product.interface';
+import { IProduct } from 'src/domain/model/product/product.interface';
 import { IRepository } from '../output-port/repository.interface';
-import { ProductItemDTO } from '../model/product/product-item.dto';
-import { FilteredProductsDTO } from '../model/product/filtered-products.dto';
+import { ProductItemDTO } from 'src/domain/model/product/product-item.dto';
+import { FilteredProductsDTO } from 'src/domain/model/product/filtered-products.dto';
 
 
 @Injectable()

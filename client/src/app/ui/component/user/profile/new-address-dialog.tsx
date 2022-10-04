@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
-import Button from "../../../common/button/button";
-import ModalDialog from "../../../common/dialog/modal-dialog";
-import { CenteringContainer } from "../../../common/elements/centering-container";
-import TextField from "../../../common/text-field/text-field";
+import Button from "app/ui/common/button/button";
+import ModalDialog from "app/ui/common/dialog/modal-dialog";
+import { CenteringContainer } from "app/ui/common/elements/centering-container";
+import TextField from "app/ui/common/text-field/text-field";
 
 interface Props {
     address: any;

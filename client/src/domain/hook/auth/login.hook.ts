@@ -1,10 +1,10 @@
 import { useCallback, useContext, useState } from 'react';
-import SessionContext, { ISessionContext } from '../../context/session.context';
-import { SessionType } from '../../model/auth/session.type';
-import * as StateConfig from '../../../infra/global.config';
-import { Tokens } from '../../model/auth/tokens.type';
-import { IAuthClient } from '../../service/auth-client.interface';
-import { IHookState, InitialState } from '../hook.type';
+import SessionContext, { ISessionContext } from 'domain/context/session.context';
+import { SessionType } from 'domain/model/auth/session.type';
+import * as StateConfig from 'infra/global.config';
+import { Tokens } from 'domain/model/auth/tokens.type';
+import { IAuthClient } from 'domain/service/auth-client.interface';
+import { IHookState, InitialState } from 'domain/hook/hook.type';
 
 
 var jws = require('jws');

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import CartContext, { ICartContext } from '../../../../domain/context/cart.context';
+import CartContext, { ICartContext } from 'domain/context/cart.context';
 import { useContext, useState } from "react";
-import Button from "../../common/button/button";
-import ButtonQuantity from "../../common/button-quantity/button-quantity";
+import Button from "app/ui/common/button/button";
+import ButtonQuantity from "app/ui/common/button-quantity/button-quantity";
 import { useTranslation } from "react-i18next";
-import { ProductType } from "../../../../domain/model/product/product.type";
-import NoImage from "../../image/no_image.png";
+import { ProductType } from "domain/model/product/product.type";
+import NoImage from "app/ui/image/no_image.png";
 import styled from "styled-components";
 
 //box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;

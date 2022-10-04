@@ -1,13 +1,14 @@
 
 import { FunctionComponent, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
-import useCatalog from "../../../../domain/hook/products/catalog.hook";
-import Alert from "../../common/alert/alert";
-import { CenteringContainer } from "../../common/elements/centering-container";
-import CircularProgress from "../../common/progress/circular-progress";
-import Pagination from "../../component/product/pagination";
-import Products from "../../component/product/products";
+import useCatalog from "domain/hook/products/catalog.hook";
+import Alert from "app/ui/common/alert/alert";
+import { CenteringContainer } from "app/ui/common/elements/centering-container";
+import CircularProgress from "app/ui/common/progress/circular-progress";
+import Pagination from "app/ui/component/product/pagination";
+import Products from "app/ui/component/product/products";
 import Categories from "./categories";
+import { CategoryType } from "domain/model/category/category.type";
 
 /**
  * CatalogPage for to list products as catalog
@@ -32,7 +33,7 @@ const CatalogPage: FunctionComponent = () => {
   
     }, []);
     
-    const handleClick = async (el: string) => {
+    const handleClick = async (el: CategoryType) => {
       setCategorySelected(el);
       await getCatalog(1); //search data
     }
@@ -41,7 +42,7 @@ const CatalogPage: FunctionComponent = () => {
   return (
     <div className="page_container">
 
-<Categories onClick={(cat: string) => handleClick(cat)} categorySelected={categorySelected} categories={categories}/>
+  <Categories onClick={(cat: CategoryType) => handleClick(cat)} categorySelected={categorySelected} categories={categories}/>
 
       {isProcessing &&
         <CircularProgress>{t('progress.loading')}</CircularProgress>

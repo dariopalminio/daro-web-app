@@ -2,8 +2,8 @@ import { FunctionComponent, useContext } from "react";
 import { useTranslation } from 'react-i18next';
 import { useHistory } from "react-router-dom";
 import { RiShoppingCart2Fill } from "react-icons/ri";
-import IconButton from "../../../../common/icon-button/icon-button";
-import CartContext, { ICartContext } from "../../../../../../domain/context/cart.context";
+import IconButton from "app/ui/common/icon-button/icon-button";
+import CartContext, { ICartContext } from "domain/context/cart.context";
 import styled from "styled-components";
 
 //@material-ui https://v4.mui.com/

@@ -1,8 +1,8 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, UseGuards } from '@nestjs/common';
-import { IUserService } from '../../domain/service/interface/user.service.interface';
-import { IUser } from '../../domain/model/user/user.interface';
-import { UserDTO } from '../../domain/model/user/user-register.dto.type';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { IUserService } from 'src/domain/service/interface/user.service.interface';
+import { IUser } from 'src/domain/model/user/user.interface';
+import { UserDTO } from 'src/domain/model/user/user-register.dto.type';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserProfileDTO } from 'src/domain/model/user/user-profile.dto.type';

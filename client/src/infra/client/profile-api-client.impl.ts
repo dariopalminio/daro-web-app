@@ -1,7 +1,7 @@
-import * as InfraConfig from '../global.config';
-import { AxiosError, AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
-import { IProfileClient } from '../../domain/service/profile-client.interface';
+import * as InfraConfig from 'infra/global.config';
+import { AxiosPromise } from 'axios';
+import { handleAxiosError, ApiError, AuthStatusEnum } from 'infra/client/api.error';
+import { IProfileClient } from 'domain/service/profile-client.interface';
 import axiosInstance from './interceptor/axios.interceptor';
 
 

@@ -1,24 +1,24 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { IAuthService } from '../service/interface/auth.service.interface';
 import { IAuth } from '../output-port/auth.interface';
-import { UserRegisterDataDTO } from '../model/auth/register/user-register-data.dto.type';
-import { IUserService } from '../../domain/service/interface/user.service.interface';
-import { UserDTO } from '../model/user/user-register.dto.type';
+import { UserRegisterDataDTO } from 'src/domain/model/auth/register/user-register-data.dto.type';
+import { IUserService } from 'src/domain/service/interface/user.service.interface';
+import { UserDTO } from 'src/domain/model/user/user-register.dto.type';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
 import { generateToken, encodeToken, createTokenLink, decodeToken } from '../helper/token.helper';
-import { StartConfirmEmailDataDTO } from '../model/auth/register/start-confirm-email-data.dto';
-import { ParamsRegisterStart } from '../model/auth/register/params-register-start.type';
-import { StartRecoveryDataDTO } from '../../domain/model/auth/recovery/start-recovery-data.dto.type';
-import { VerificationCodeDataDTO } from '../model/auth/register/verification-code-data.dto.type';
-import { RecoveryUpdateDataDTO } from '../model/auth/recovery/recovery-update-data.dto.type';
-import { LogoutFormDTO } from '../../domain/model/auth/login/logout-form.dto';
-import { IUser } from '../model/user/user.interface';
-import { ITranslator } from '../../domain/output-port/translator.interface';
-import { ResponseCode } from '../../domain/model/service/response.code.enum';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
-import { UserRegisterDataDTOValidator } from '../../domain/validator/user-register-data-dto.validator';
-import { DomainError } from '../../domain/error/domain-error';
+import { StartConfirmEmailDataDTO } from 'src/domain/model/auth/register/start-confirm-email-data.dto';
+import { ParamsRegisterStart } from 'src/domain/model/auth/register/params-register-start.type';
+import { StartRecoveryDataDTO } from 'src/domain/model/auth/recovery/start-recovery-data.dto.type';
+import { VerificationCodeDataDTO } from 'src/domain/model/auth/register/verification-code-data.dto.type';
+import { RecoveryUpdateDataDTO } from 'src/domain/model/auth/recovery/recovery-update-data.dto.type';
+import { LogoutFormDTO } from 'src/domain/model/auth/login/logout-form.dto';
+import { IUser } from 'src/domain/model/user/user.interface';
+import { ITranslator } from 'src/domain/output-port/translator.interface';
+import { ResponseCode } from 'src/domain/model/service/response.code.enum';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
+import { UserRegisterDataDTOValidator } from 'src/domain/validator/user-register-data-dto.validator';
+import { DomainError } from 'src/domain/error/domain-error';
 
 /**
  * Authorization service
@@ -58,7 +58,6 @@ export class AuthService implements IAuthService {
       if (!validator.validate(userRegisterData)) {
         throw new Error(await validator.traslateValidateErrorsText(this.i18n));
       };
-
     } catch (error) {
       // Error BadRequestException
       //return this.responseBadRequest(error);

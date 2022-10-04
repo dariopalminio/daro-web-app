@@ -1,10 +1,10 @@
 
-import * as InfraConfig from '../global.config';
+import * as InfraConfig from 'infra/global.config';
 import axios, { AxiosPromise } from 'axios';
-import { handleAxiosError, ApiError, AuthStatusEnum } from './api.error';
-import { ContactType } from '../../domain/model/notification/contact.type';
-import { INotificationClient } from '../../domain/service/notification-client.interface';
-import axiosInstance from './interceptor/axios.interceptor';
+import { handleAxiosError, ApiError, AuthStatusEnum } from 'infra/client/api.error';
+import { ContactType } from 'domain/model/notification/contact.type';
+import { INotificationClient } from 'domain/service/notification-client.interface';
+import axiosInstance from 'infra/client/interceptor/axios.interceptor';
 
 /**
  * NotificationApiService implementation 

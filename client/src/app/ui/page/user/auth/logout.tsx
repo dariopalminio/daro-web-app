@@ -1,11 +1,11 @@
 import { FunctionComponent, useContext } from "react";
 import SessionContext, {
   ISessionContext,
-} from "../../../../../domain/context/session.context";
-import useLogout from "../../../../../domain/hook/auth/logout.hook";
+} from "domain/context/session.context";
+import useLogout from "domain/hook/auth/logout.hook";
 import { useTranslation } from 'react-i18next';
-import Button from "../../../common/button/button";
-import Alert from "../../../common/alert/alert";
+import Button from "app/ui/common/button/button";
+import Alert from "app/ui/common/alert/alert";
 
 /**
  * Login Function Component

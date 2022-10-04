@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { ContactType } from '../../model/notification/contact.type';
-import { INotificationClient } from '../../service/notification-client.interface';
-import * as StateConfig from '../../../infra/global.config';
-import { IAuthTokensClient } from '../../service/auth-tokens-client.interface';
+import { ContactType } from 'domain/model/notification/contact.type';
+import { INotificationClient } from 'domain/service/notification-client.interface';
+import * as StateConfig from 'infra/global.config';
+import { IAuthTokensClient } from 'domain/service/auth-tokens-client.interface';
 import { IHookState, InitialState } from '../hook.type';
 
 

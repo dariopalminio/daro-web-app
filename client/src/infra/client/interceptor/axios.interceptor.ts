@@ -45,7 +45,7 @@ axiosInstance.interceptors.response.use((response) => {
   return response
 }, async (error) => {
   const config = error.config;
-  console.warn('Error status', error.response.status)
+  console.warn('Error status', error.response.status);
   // return Promise.reject(error)
   if (error.response) {
 

@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
-import emailSentImage from "../../../image/email_sent.png";
-import Paper from "../../../common/paper/paper";
+import emailSentImage from "app/ui/image/email_sent.png";
+import Paper from "app/ui/common/paper/paper";
 
 /**
  * PassRecoveryCallToActionMsg (Password recovery STEP 2)

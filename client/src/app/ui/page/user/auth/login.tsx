@@ -1,9 +1,9 @@
 import  { FunctionComponent } from "react";
-import useLogin from "../../../../../domain/hook/auth/login.hook";
-import Alert from "../../../common/alert/alert";
+import useLogin from "domain/hook/auth/login.hook";
+import Alert from "app/ui/common/alert/alert";
 import { useTranslation } from 'react-i18next';
-import CircularProgress from "../../../common/progress/circular-progress";
-import LoginForm from "../../../component/user/auth/login-form";
+import CircularProgress from "app/ui/common/progress/circular-progress";
+import LoginForm from "app/ui/component/user/auth/login-form";
 import { useHistory } from "react-router-dom";
 
 

@@ -1,4 +1,4 @@
-import { ContactType } from '../model/notification/contact.type';
+import { ContactType } from 'domain/model/notification/contact.type';
 
 //Interface to do dependency inversion
 export interface INotificationClient {

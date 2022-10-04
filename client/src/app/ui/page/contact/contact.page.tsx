@@ -1,11 +1,11 @@
 
-import React, { FunctionComponent } from "react";
-import { ContactType } from "../../../../domain/model/notification/contact.type";
-import useNotification from "../../../../domain/hook/contact/notification.hook";
-import Alert from "../../common/alert/alert";
+import { FunctionComponent } from "react";
+import { ContactType } from "domain/model/notification/contact.type";
+import useNotification from "domain/hook/contact/notification.hook";
+import Alert from "app/ui/common/alert/alert";
 import { useTranslation } from 'react-i18next';
-import CircularProgress from "../../common/progress/circular-progress";
-import ContactForm from "../../component/contact/contact-form";
+import CircularProgress from "app/ui/common/progress/circular-progress";
+import ContactForm from "app/ui/component/contact/contact-form";
 
 /**
  * Contact Page

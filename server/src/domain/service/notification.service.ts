@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ContactMessage } from '../model/notification/contact.message';
+import { ContactMessage } from 'src/domain/model/notification/contact.message';
 import { INotificationService } from '../service/interface/notification.service.interface';
 import IEmailSender from '../output-port/email-sender.interface';
 import { validEmail } from '../helper/validators.helper';
-import { ITranslator } from '../../domain/output-port/translator.interface';
-import { ResponseCode } from '../../domain/model/service/response.code.enum';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { ITranslator } from 'src/domain/output-port/translator.interface';
+import { ResponseCode } from 'src/domain/model/service/response.code.enum';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { DomainError } from '../error/domain-error';
 
 @Injectable()

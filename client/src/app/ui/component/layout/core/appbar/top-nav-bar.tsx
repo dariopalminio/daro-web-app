@@ -1,13 +1,13 @@
 import { FunctionComponent, useContext } from "react";
-import logo from "../../../../image/logo_app.png";
+import logo from "app/ui/image/logo_app.png";
 import styled, { useTheme } from "styled-components";
 import CartTopMenu from "./cart-top-menu";
 import { RiMenuFill } from "react-icons/ri";
-import IconButton from "../../../../common/icon-button/icon-button";
-import { ILayoutContext, LayoutContext } from "../../../../provider/layout-context-provider";
-import MenuIconButton from "../../../../common/menu-icon-button/menu-icon-button";
-import SessionContext, { ISessionContext } from "../../../../../../domain/context/session.context";
-import { MenuItemType, AccessType } from "../../../../common/menu-list/menu-item.type";
+import IconButton from "app/ui/common/icon-button/icon-button";
+import { ILayoutContext, LayoutContext } from "app/ui/provider/layout-context-provider";
+import MenuIconButton from "app/ui/common/menu-icon-button/menu-icon-button";
+import SessionContext, { ISessionContext } from "domain/context/session.context";
+import { MenuItemType, AccessType } from "app/ui/common/menu-list/menu-item.type";
 
 //https://react-icons.github.io/react-icons/icons?name=ri
 import { RiAccountCircleFill, RiHome2Fill, RiShoppingCart2Fill } from "react-icons/ri";

@@ -1,16 +1,14 @@
 import "./product-detail.css";
-import { useState, useEffect, useContext } from "react";
-import Button from "../../common/button/button";
-import CartContext, { ICartContext } from '../../../../domain/context/cart.context';
-import CarouselImg from "../../common/img-carousel/img-carouse";
-import useProducts from "../../../../domain/hook/products/products.hook";
-import ButtonQuantity from "../../common/button-quantity/button-quantity";
+import { useState, useContext } from "react";
+import Button from "app/ui/common/button/button";
+import CartContext, { ICartContext } from "domain/context/cart.context";
+import CarouselImg from "app/ui/common/img-carousel/img-carouse";
+import ButtonQuantity from "app/ui/common/button-quantity/button-quantity";
 import { useTranslation } from "react-i18next";
-import SingleAttrTable from "../../common/table/single-att-table";
-import { CenteringContainer } from "../../common/elements/centering-container";
-import { ProductType } from "../../../../domain/model/product/product.type";
-import { Link } from "react-router-dom";
-import Alert from "../../common/alert/alert";
+import SingleAttrTable from "app/ui/common/table/single-att-table";
+import { CenteringContainer } from "app/ui/common/elements/centering-container";
+import { ProductType } from "domain/model/product/product.type";
+import Alert from "app/ui/common/alert/alert";
 // Actions
 
 

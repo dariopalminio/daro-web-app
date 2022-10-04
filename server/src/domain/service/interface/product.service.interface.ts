@@ -1,5 +1,5 @@
 import { IPersistentAggregateService } from './persistent.aggregate.interface';
-import { IProduct } from '../../model/product/product.interface';
+import { IProduct } from 'src/domain/model/product/product.interface';
 import { FilteredProductsDTO } from 'src/domain/model/product/filtered-products.dto';
 
 export interface IProductService<T> extends IPersistentAggregateService<T>{

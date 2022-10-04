@@ -1,5 +1,5 @@
-import { DefaultSession } from '../../domain/model/auth/default-session';
-import { SessionType } from '../../domain/model/auth/session.type';
+import { DefaultSession } from 'domain/model/auth/default-session';
+import { SessionType } from 'domain/model/auth/session.type';
 
 //name in session/local storage
 const SESSION_ITEM_NAME: string = "APP_SESSION_DATA";

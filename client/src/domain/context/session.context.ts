@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import { PermissionType, SessionType } from '../model/auth/session.type';
-import { DefaultSession as SessionDefaultValue} from '../../domain/model/auth/default-session';
+import { PermissionType, SessionType } from 'domain/model/auth/session.type';
+import { DefaultSession as SessionDefaultValue} from 'domain/model/auth/default-session';
 
 
 // Global user session context interface for provider

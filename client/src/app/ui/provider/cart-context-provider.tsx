@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import CartContext from "../../../domain/context/cart.context";
-import { useCart } from "../../../domain/hook/cart/cart.hook";
+import CartContext from "domain/context/cart.context";
+import { useCart } from "domain/hook/cart/cart.hook";
 
 /**
  * Session Context Provider

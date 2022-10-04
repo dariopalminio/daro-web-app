@@ -3,9 +3,9 @@ import {
 } from "react-router-dom";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import useRecovery from "../../../../../domain/hook/auth/recovery.hook";
-import Alert from "../../../common/alert/alert";
-import PassRecoveryForm from "../../../component/user/recovery/pass-recovery-form";
+import useRecovery from "domain/hook/auth/recovery.hook";
+import Alert from "app/ui/common/alert/alert";
+import PassRecoveryForm from "app/ui/component/user/recovery/pass-recovery-form";
 
 type TParams = { token: string }; //match.params.token
 

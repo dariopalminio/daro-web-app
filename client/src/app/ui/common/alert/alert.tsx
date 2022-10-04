@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-//import "./alert.css";
 
 //Styled-components
 const AlertBox = styled.div`
@@ -17,7 +16,6 @@ const AlertBox = styled.div`
             margin-top: 1rem;
         }
         @media screen and (max-width: 767px) {
-            width: 100%;
             margin: 0px auto;
             margin-top: 1rem;
         }

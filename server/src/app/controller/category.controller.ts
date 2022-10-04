@@ -1,14 +1,14 @@
 import { Controller, Get, Res, Post, Delete, Put, Body, Param, Query, Inject, HttpStatus, NotFoundException, InternalServerErrorException, UseGuards } from '@nestjs/common';
-import { ICategoryService } from '../../domain/service/interface/category.service.interface';
-import { ICategory } from '../../domain/model/category/category.interface';
-import { IGlobalConfig } from '../../domain/output-port/global-config.interface';
+import { ICategoryService } from 'src/domain/service/interface/category.service.interface';
+import { ICategory } from 'src/domain/model/category/category.interface';
+import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RolesGuard } from '../guard/roles.guard';
 import { Roles } from '../guard/roles.decorator';
 import { FilteredProductsDTO } from 'src/domain/model/product/filtered-products.dto';
 
-@Controller('categories')
+@Controller('products/categories')
 export class CategoryController {
 
   constructor(
@@ -44,19 +44,12 @@ export class CategoryController {
   // Get Products /product/all
   // http://localhost:3001/api/webshop/v1/catalog/category/all?page=1&limit=2&orderBy=name&isAsc=true
   @Get('all')
-  async getAll(@Res() res, @Query('page') pageParam, @Query('limit') limitParam, @Query('orderBy') orderBy, @Query('isAsc') isAsc) {
+  async getAll(@Res() res) {
     try {
-      if (pageParam && limitParam && orderBy && isAsc) {
-        const page: number = parseInt(pageParam);
-        const limit: number = parseInt(limitParam);
-        const orderByField: string = orderBy.toString();
-        const isAscending: boolean = (isAsc === 'true') ? true : false;
-        const list = await this.categoryService.getAll(page, limit, orderByField, isAscending);
-        return res.status(HttpStatus.OK).json(list);
-      } else {
         const list = await this.categoryService.getAll();
+        console.log("categories getAll",list);
         return res.status(HttpStatus.OK).json(list);
-      }
+    
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     };
