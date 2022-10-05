@@ -8,7 +8,8 @@ import { ITranslator } from 'src/domain/output-port/translator.interface';
 import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { DomainError } from 'src/domain/error/domain-error';
 import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
-import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
+import { RequestRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
+import { NewAdminTokenRequestType } from 'src/domain/model/auth/token/auth.admin.dto';
 
 
 type NewUserRepresentationType = {
@@ -607,7 +608,7 @@ export class AuthKeycloakImpl implements IAuth {
    * @param refresh_token 
    * @returns 
    */
-  async getRefreshToken(body: RequesRefreshToken): Promise<any> {
+  async getRefreshToken(body: RequestRefreshToken): Promise<any> {
 
     // Token endpoint
     const URL = this.config.get<string>('Keycloak_path_token');

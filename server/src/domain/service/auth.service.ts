@@ -19,6 +19,11 @@ import { ResponseCode } from 'src/domain/model/service/response.code.enum';
 import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { UserRegisterDataDTOValidator } from 'src/domain/validator/user-register-data-dto.validator';
 import { DomainError } from 'src/domain/error/domain-error';
+import { User } from '../model/user/user';
+import { IAuthTokensService } from './interface/auth.tokens.service.interface';
+import { PayloadType } from '../model/auth/token/payload.type';
+import { TokensDTO } from '../model/auth/token/tokens.dto';
+const bcrypt = require('bcrypt');
 
 /**
  * Authorization service
@@ -27,8 +32,6 @@ import { DomainError } from 'src/domain/error/domain-error';
 export class AuthService implements IAuthService {
 
   constructor(
-    @Inject('IAuth')
-    private readonly externalAuthService: IAuth,
     @Inject('IUserService')
     private readonly userService: IUserService<IUser>,
     @Inject('IEmailSender')
@@ -37,6 +40,8 @@ export class AuthService implements IAuthService {
     private readonly i18n: ITranslator,
     @Inject('IGlobalConfig')
     private readonly globalConfig: IGlobalConfig,
+    @Inject('IAuthTokensService')
+    private readonly authTokensService: IAuthTokensService,
   ) {
   }
 
@@ -46,11 +51,13 @@ export class AuthService implements IAuthService {
    * 
    * Create a new user in authentication server and in data base.
    * The user will have the email without confirming until he confirms it.
+   * Require Admin token
    * @param userRegisterData 
    * @returns 
    */
   async register(userRegisterData: UserRegisterDataDTO): Promise<any> {
 
+    console.log("userRegisterData:", userRegisterData);
     //Validate data
     console.log("Validate data");
     try {
@@ -59,76 +66,65 @@ export class AuthService implements IAuthService {
         throw new Error(await validator.traslateValidateErrorsText(this.i18n));
       };
     } catch (error) {
+      console.log("Validate data error:", error);
       // Error BadRequestException
       //return this.responseBadRequest(error);
       throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error.message });
     };
 
-    // First: obtains admin access token
-    console.log("First: obtains admin access token");
-    let adminToken;
-    try {
-      adminToken = await this.externalAuthService.getAdminStringToken();
-    } catch (error) {
-      const msg = await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',);
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, { error: error.message });
-    }
-    // Second: creates a new user in authorization server using admin access token
-    console.log("Second: creates a new user in authorization server using admin access token");
-    const authCreatedUserResp = await this.externalAuthService.register(userRegisterData.username,
-      userRegisterData.firstName, userRegisterData.lastName, userRegisterData.email,
-      userRegisterData.password, adminToken);
-
-    //const { isSuccess } = authCreatedUserResp;
-
-    // Third: verifies that the user was created, asking for the information of the created user
-    console.log("Third: verifies that the user was created, asking for the information of the created user");
-    const data: any = await this.externalAuthService.getUserInfoByAdmin(userRegisterData.email, adminToken);
-
-    if (!data) {
-      // ERROR: User could not be created in auth server
-      const msg = "User could not be created in auth server or user get info not work! ";
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, msg, {});
+    //const isEmailExist = await User.findOne({ email: req.body.email });
+    const isEmailExist: boolean = await this.userService.hasByQuery({ email: userRegisterData.email });
+    if (isEmailExist) {
+      //return res.status(400).json({error: 'Email ya registrado'})
+      throw new DomainError(ResponseCode.BAD_REQUEST, 'Email ya registrado', { error: 'Email ya registrado' });
     }
 
-    const authCreatedUser = data.user;
-    const { id } = authCreatedUser; // ID in external authorization server
+    // Encrypt hash of password
+    const salt = await bcrypt.genSalt(10);
+    const passwordCrypted: string = await bcrypt.hash(userRegisterData.password, salt);
 
-    // Four: create new user in user database
-    console.log("Four: create new user in user database");
-    const userRegisterDTO: UserDTO = {
-      authId: id,
+    // Create new user in user database
+    const newUser: UserDTO = {
       userName: userRegisterData.email,
       firstName: userRegisterData.firstName,
       lastName: userRegisterData.lastName,
       email: userRegisterData.email,
-      docType: "",
-      document: "",
-      telephone: "",
-      //birth: Date;
-      //gender: "",
-      language: "",
-      addresses:[]
-    }
+      password: passwordCrypted,
+      roles: ["User"]
+    };
 
+    let wasCreated: boolean;
     try {
-      const wasCreated: boolean = await this.userService.create(userRegisterDTO);
+      wasCreated = await this.userService.create(newUser);
     } catch (error) {
-      // ERROR: User could not be created in user database
-
-      //revert operation in auth server (keycloak)
-      let deletedAuthUser: boolean = false;
-      try {
-        deletedAuthUser = await this.externalAuthService.deleteAuthUser(id, adminToken);
-        //console.log("User was deleted in keycloak:", deletedAuthUser);
-      } catch (error) {
-        const errorMsg = await this.i18n.translate('auth.ERROR.USER_COULD_NOT_DELETED_IN_AUTH_SERVICE',);
-      }
-
-      throw error;
+      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, { error: 'Error al registrar usuario' });
     }
-    console.log("service register-->end:", authCreatedUserResp);
-    return authCreatedUserResp;
+    let userCreated: IUser;
+    if (wasCreated) {
+      try {
+        userCreated = await this.userService.getUserJustRegister(userRegisterData.email );
+      } catch (error) {
+        console.log("Cannot retrieve created user in registration process!");
+        return { message: 'Cannot obtain user from data base!' }
+      }
+      if (!userCreated)
+        return { message: 'Cannot obtain user from data base!' }
+    }
+
+    const payload: PayloadType = {
+      id: userCreated._id,
+      typ: "Bearer",
+      roles: userCreated.roles,
+      email_verified: userCreated.verified,
+      firstName: userCreated.firstName,
+      lastName: userCreated.lastName,
+      username: userCreated.userName,
+      email: userCreated.email
+    };
+
+    const tokens: TokensDTO = this.authTokensService.createTokens(payload, 86400, 86400 * 2);
+    
+    return tokens;
   };
 
   /**
@@ -203,23 +199,6 @@ export class AuthService implements IAuthService {
       throw new DomainError(ResponseCode.BAD_REQUEST, error.message, error);
     };
 
-    //Update user to verificated
-
-    //Update in external auth server
-    let adminToken;
-    try {
-      adminToken = await this.externalAuthService.getAdminStringToken();
-    } catch (error) {
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, error);
-    }
-    let confirmed: boolean = false;
-    confirmed = await this.externalAuthService.confirmEmail(user.authId, user.email, adminToken);
-
-    console.log('auth service confirmAccount:',confirmed);
-    if (!confirmed) {
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Internal Server Error in confirmAccount method!", {});
-    }
-
     //Update in database
     const discardVerificationCode = generateToken(); //generate verification code to invalidate future uses
     user.verified = true;
@@ -241,7 +220,7 @@ export class AuthService implements IAuthService {
 
     //Successful response
     const message = await this.i18n.translate('auth.MESSAGE.CONFIRM_WAS_SUCCESS',);
-    return { message: message};
+    return { message: message };
   };
 
   /**
@@ -280,19 +259,7 @@ export class AuthService implements IAuthService {
       throw new DomainError(ResponseCode.BAD_REQUEST, error.message, { error: error });
     };
 
-    let adminToken: string = logoutFormDTO.adminToken;
-    if (!logoutFormDTO.adminToken) {
-      try {
-        adminToken = await this.externalAuthService.getAdminStringToken();
-      } catch (error) {
-        throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, error.message, error);
-      }
-    }
-
-    // Close session in external auth server
-    const logoutAuthResp = await this.externalAuthService.logout(userAuthId, adminToken);
-
-    return logoutAuthResp;
+    return true;
   };
 
 
@@ -347,6 +314,7 @@ export class AuthService implements IAuthService {
 
   /**
    * recoveryUpdatePassword
+   * Require Admin token
    * @param recoveryUpdateDataDTO 
    * @returns 
    */
@@ -360,31 +328,14 @@ export class AuthService implements IAuthService {
       throw new DomainError(ResponseCode.BAD_REQUEST, "Token data undefined. Can not obtain token.", error);
     }
 
-    //Update password in user
-    //Update in external auth server
-    let adminToken;
-    try {
-      adminToken = await this.externalAuthService.getAdminStringToken();
-    } catch (error) {
-      return {
-        isSuccess: false,
-        status: ResponseCode.INTERNAL_SERVER_ERROR,
-        message: await this.i18n.translate('auth.ERROR.COULD_NOT_GET_ADMIN_TOKEN',),
-        data: {},
-        error: error
-      };
-    }
-    const newPassword = recoveryUpdateDataDTO.password;
-    let reseted: boolean = false;
-    reseted = await this.externalAuthService.resetPassword(user.authId, newPassword, adminToken);
-  
-    if (!reseted) {
-      throw new DomainError(ResponseCode.INTERNAL_SERVER_ERROR, "Internal Server Error", {});
-    }
+    // hash contraseña
+    const salt = await bcrypt.genSalt(10);
+    const newPasswordEncrypted: string = await bcrypt.hash(recoveryUpdateDataDTO.password, salt);
 
     //Update in database
     const discardVerificationCode = generateToken(); //generate verification code to invalidate future uses
     user.verificationCode = discardVerificationCode; //set verification code to invalidate future uses
+    user.password = newPasswordEncrypted;
     const updatedOk: boolean = await this.userService.updateById(user._id, user);
 
     if (!updatedOk) {
@@ -399,7 +350,7 @@ export class AuthService implements IAuthService {
       console.log(error);
     }
 
-    return {reseted: true};
+    return { reseted: true };
   };
 
   /**

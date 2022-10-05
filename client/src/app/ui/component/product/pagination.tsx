@@ -69,7 +69,7 @@ const Pagination: React.FC<Props> = ({ page, maxPage, onClickPrevious, onClickNe
 
     return (
         <PaginationWrapper>
-            {(page !== 1) &&
+            {(page > 1) &&
                 <PaginationAction onClick={() => onClickPrevious()} onMouseEnter={() => setIsPreviousHover(true)} onMouseLeave={() => setIsPreviousHover(false)}>
                     <RiArrowLeftSLine size='25' color={isPreviousHover ? '#FF7B1A' : 'black'} />
                     <a id="pegination_previous">
@@ -79,7 +79,7 @@ const Pagination: React.FC<Props> = ({ page, maxPage, onClickPrevious, onClickNe
             <PaginationInfo>
                 <p>{page}</p><p>{ofLabel ? ofLabel : 'of'}</p><p>{maxPage}</p>
             </PaginationInfo>
-            {(page !== maxPage) &&
+            {(page < maxPage) &&
                 <PaginationAction onClick={() => onClickNext()} onMouseEnter={() => setIsNextHover(true)} onMouseLeave={() => setIsNextHover(false)}>
                     <a id="pagination_next">{nextLabel ? nextLabel : ''}
                     </a>

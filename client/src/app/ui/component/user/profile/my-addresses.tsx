@@ -34,7 +34,7 @@ const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
     const [newAddress, setNewAddress] = React.useState(initialNewAddress);
 
     const convertAddressOneLine = (address: any) => {
-        return address.street + " " + address.department;
+        return address?.street + " " + address?.department;
     };
 
     const getStrinArrayAddresses = () => {
@@ -45,22 +45,7 @@ const MyAddresses: React.FC<IMyProps> = (props: IMyProps) => {
     const handleClickOpen = () => {
         toggle();
     };
-/**
-const removeFromCart = (id: string) => {
-        setCartItems((currentCart) => {
-            const indexOfItemToRemove = currentCart.findIndex((cartItem) => cartItem.itemId === id);
 
-            if (indexOfItemToRemove === -1) {
-                return currentCart;
-            }
-            const newCartItems = [
-                ...currentCart.slice(0, indexOfItemToRemove),
-                ...currentCart.slice(indexOfItemToRemove + 1),
-            ];
-            saveCart(newCartItems);
-            return newCartItems;
-        });
- */
     const handleDeleteAddress = async (index: number) => {
         const arrayOfAddresses: Array<Address> = myAddresses;
         arrayOfAddresses.splice(index, 1); //delete element of index

@@ -1,11 +1,16 @@
+import { Profile } from "domain/model/user/profile.type";
+
 //Interface to do dependency inversion
 export interface IProfileClient {
 
-    getProfileService: (
-      userName: string
-    ) => Promise<any>;
-  
-    updateProfile: (    
-      userProfile: any) => Promise<number>;
+  getProfile: (
+    userName: string
+  ) => Promise<any>;
 
-  };
+  updateProfile: (
+    userProfile: any) => Promise<number>;
+
+  createProfile(
+    userProfile: Profile): Promise<number>;
+
+};

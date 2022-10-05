@@ -38,7 +38,7 @@ export class RolesGuard implements CanActivate {
     obtainRolesFromKeycloakJWT(request: any): Array<string> {
         try {
             console.log("obtainRolesFromKeycloakJWT process...");
-            const token = extractTokenFromHeader(request);
+            const token = extractTokenFromHeader(request.headers);
             const jwtDecoded = jwt.decode(token);
             console.log("RolesGuard.request.toke decoded:", jwtDecoded);
 

@@ -1,11 +1,12 @@
 import RegisterForm from "app/ui/component/user/register/register-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FunctionComponent } from "react";
 import useRegister from "domain/hook/auth/register.hook";
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import Alert from "app/ui/common/alert/alert";
 import CircularProgress from "app/ui/common/progress/circular-progress";
+import { useHistory } from "react-router-dom";
 
 const userToRegisterInitialized = {
   userName: '',
@@ -25,7 +26,12 @@ const RegisterPage: FunctionComponent = () => {
   const { t } = useTranslation();
   const { isProcessing, isSuccess, hasError, msg, register } =
     useRegister(); //Custom Hooks
-
+  const history = useHistory();
+    
+    useEffect(() => {
+      console.log("RegisterPage-->useEffect");
+    }, []);
+    
   const errorText = {
     firstName: t('register.info.helper.text.required'),
     lastName: t('register.info.helper.text.required'), // Letters and spaces can carry accents.
@@ -50,11 +56,13 @@ const RegisterPage: FunctionComponent = () => {
     register(user.firstName, user.lastName, user.email, user.password); //submit to server
   };
 
+  const redirectToStep2 = () => {
+    history.push("/user/register/confirm/start");
+  }
+
   return (
     <div className="page_container">
-      {isSuccess && (
-        <Redirect to='/user/register/confirm/start' />
-      )}
+      {isSuccess && redirectToStep2()}
 
       {!isSuccess && (
         <RegisterForm

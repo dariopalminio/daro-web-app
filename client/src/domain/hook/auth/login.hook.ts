@@ -5,9 +5,7 @@ import * as StateConfig from 'infra/global.config';
 import { Tokens } from 'domain/model/auth/tokens.type';
 import { IAuthClient } from 'domain/service/auth-client.interface';
 import { IHookState, InitialState } from 'domain/hook/hook.type';
-
-
-var jws = require('jws');
+import { convertJwtToSessionType } from './convert-jwt';
 
 /**
  * useLogin Custom Hook
@@ -64,50 +62,6 @@ export default function useLogin(
                 removeSessionValue();
             });
     }, [setState, setNewSession, removeSessionValue, authClient]);
-
-    /**
-     * Decode JWT and return data from payload in SessionType value.
-     * @param jwt Jason Web Token
-     * @returns SessionType object
-     */
-    const convertJwtToSessionType = (tokens: Tokens) => {
-        const jwtDecoded = jws.decode(tokens.access_token);
-        //console.log("refresh_toke:",tokens.refresh_token);
-        const errorJwtDecodedFail = "Decoded JWT fail! JWT decoded is null.";
-        if (!jwtDecoded) throw Error(errorJwtDecodedFail);
-        //console.log("jwtDecoded:",jwtDecoded);
-        const payload = jwtDecoded.payload;
-        console.log("payload:", payload);
-
-        //StateConfig.clientId
-        //const roles = payload.resource_access.rest-client-test.roles //  ['uma_protection', 'admin', 'user']
-
-        let theRoles = [];
-        try {
-            theRoles = payload.resource_access['rest-client-test'].roles;
-            console.log("ROLES:", theRoles);
-        } catch (err) {
-            console.log('Roles not found in JWT!');
-        }
-        //console.log("payload:",payload);
-        // Authorizedaccess_token: (string | null),
-        const userSessionData: SessionType = {
-            createdTimestamp: '', //TODO
-            access_token: tokens.access_token,
-            refresh_token: tokens.refresh_token,
-            expires_in: tokens.expires_in,
-            refresh_expires_in: tokens.refresh_expires_in,
-            date: tokens.date,
-            isLogged: payload.email_verified, //If email ferified is logged
-            email: payload.email,
-            email_verified: payload.email_verified,
-            given_name: payload.given_name,
-            preferred_username: payload.preferred_username,
-            userId: payload.sub,
-            roles: theRoles
-        };
-        return userSessionData;
-    };
 
     return {
         isSuccess: state.isSuccess,

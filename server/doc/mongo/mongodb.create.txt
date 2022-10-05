@@ -1,3 +1,6 @@
+MongoDB Commands: https://mindmajix.com/mongodb-commands
+
+
 //launch db server
 export PATH=/Users/dariopalminio/Applications/mongodb-macos-x86_64-4.4.6/bin:$PATH
 mongod --dbpath /Users/dariopalminio/data/db
@@ -74,3 +77,13 @@ db.category.createIndex({ "name": "text" });
 db.product.createIndex( { name: "text"} );
 
 db.user.createIndex( { userName: "text"} );
+
+mydatabase.dropDatabase();
+
+show databases;
+use darodb;
+db.createUser({user:"admin",pwd:"admin",roles:[{role:"root",db:"admin"}]});
+db.auth('admin','admin');
+db.getUsers();
+db.dbname.save({name:'darodb'});
+show collections;

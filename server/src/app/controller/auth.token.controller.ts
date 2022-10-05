@@ -7,8 +7,11 @@ import { IGlobalConfig } from 'src/domain/output-port/global-config.interface';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HelloWorldDTO } from '../dto/hello-world.dto';
 import { AuthClientDTO } from 'src/domain/model/auth/token/auth.client.dto';
-import { RequesRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
+import { RequestRefreshToken } from 'src/domain/model/auth/token/auth.request.refresh.token.dto';
 import { IAuthTokensService } from 'src/domain/service/interface/auth.tokens.service.interface';
+import { NewAdminTokenRequestType } from 'src/domain/model/auth/token/auth.admin.dto';
+import extractTokenFromHeader from '../helper/token.helper';
+
 
 @Controller('auth/tokens')
 export class AuthTokensController {
@@ -113,11 +116,8 @@ export class AuthTokensController {
        * Use Refresh Tokens
      */
     @Post('refresh')
-    async getRefreshToken(@Headers() headers, @Res() res, @Body() body: RequesRefreshToken) {
-
-
+    async getRefreshToken(@Headers() headers, @Res() res, @Body() body: RequestRefreshToken) {
         let authResponse: any;
-
         try {
             authResponse = await this.authTokensService.getRefreshToken(body);
         } catch (error) {
@@ -125,8 +125,19 @@ export class AuthTokensController {
             if (error.code == 401) throw new UnauthorizedException(error.data);
             throw new InternalServerErrorException(error);
         };
-
-
         return res.status(HttpStatus.OK).json(authResponse);
     };
+
+    @Get('test')
+    async test( @Res() res) {
+        let authResponse: any;
+        try {
+            authResponse = await this.authTokensService.test();
+        } catch (error) {
+           console.log(error);
+        };
+        return res.status(HttpStatus.OK).json(authResponse);
+    };
+
+
 };

@@ -1,18 +1,19 @@
 
 import { Request } from 'express';
+import { IncomingHttpHeaders } from 'http';
 
-export default function extractTokenFromHeader(req: Request): string {
+export default function extractTokenFromHeader(headers: any): string {
 
     console.log('extractTokenFromHeader process...');
-    console.log('extractTokenFromHeader Request:',req);
+    console.log('extractTokenFromHeader headers:',headers);
 
-    if (!req.headers.authorization || !req.headers.authorization.startsWith("Bearer ")) {
+    if (!headers.authorization || !headers.authorization.startsWith("Bearer ")) {
         const e = new Error("Can't extract token string from Bearer token!");
         throw e;
     }
 
 console.log('extractTokenFromHeader process...');
-    const token =  req.headers.authorization.substring(7, req.headers.authorization.length);
+    const token =  headers.authorization.substring(7, headers.authorization.length);
     console.log('extractTokenFromHeader token:',token);
     return token;
 };

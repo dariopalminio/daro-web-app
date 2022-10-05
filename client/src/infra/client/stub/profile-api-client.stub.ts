@@ -1,4 +1,5 @@
 
+import { Profile } from 'domain/model/user/profile.type';
 import { IProfileClient } from '../../../domain/service/profile-client.interface';
 
 /**
@@ -7,14 +8,14 @@ import { IProfileClient } from '../../../domain/service/profile-client.interface
 export default function ProfileClientStub(): IProfileClient {
 
 //Stub function
-function getProfileService(userName: string): Promise<any>{
+function getProfile(userName: string): Promise<any>{
     return new Promise<any>( (resolve, reject) => {
            const resp: any = {
             "_id": "6316b3844c55dc07b0aac559",
             "startVerificationCode": "2022-09-06T02:43:06.034Z",
             "verified": true,
             "enable": true,
-            "authId": "5480285b-0b78-405d-98bf-23c82fd71a66",
+            "userId": "5480285b-0b78-405d-98bf-23c82fd71a66",
             "userName": "dariopalminio@gmail.com",
             "firstName": "Dario Andres",
             "lastName": "Palminio Choy",
@@ -60,8 +61,21 @@ function getProfileService(userName: string): Promise<any>{
   };
 
 
+  //Stub function
+ function createProfile(userProfile: Profile): Promise<number>{
+    return new Promise<any>( (resolve, reject) => {
+           const resp: any = {
+            "message": "User Updated Successfully",
+            "create": true
+        };
+           resolve(resp);
+     });
+  };
+
+
 return {
-    getProfileService,
-    updateProfile
+    getProfile,
+    updateProfile,
+    createProfile
 };
 };

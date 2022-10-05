@@ -1,4 +1,4 @@
-import * as InfraConfig from 'infra/global.config';
+import * as GlobalConfig from 'infra/global.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from 'infra/client/api.error';
 import qs from 'querystring';
@@ -31,7 +31,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
     let adminToken: string;
     try {
-      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+      adminToken = await GlobalConfig.authTokensClient.getAdminTokenService();
     } catch (error: any) {
       throw error;
     }
@@ -46,7 +46,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
     console.log("register:", body);
 
     //User endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/register`;
+    const URL = `${GlobalConfig.APIEndpoints.auth}/register`;
     console.log("url register:", URL);
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -56,15 +56,15 @@ export default function ApiAuthClientImpl(): IAuthClient {
     });
 
     // using .then, create a new promise which extracts the data
-    const r: Promise<any> = promise.then((response) =>
-      response
+    const data: Promise<any> = promise.then((response) =>
+      response.data
     ).catch((error) => {
       // response.status !== 200
       const authError: ApiError = handleAxiosError(error);
       throw authError;
     });
-    console.log("******REGISTER:", r);
-    return r;
+    console.log("******REGISTER:", data);
+    return data;
   };
 
   /**
@@ -84,13 +84,13 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
     let adminToken: string;
     try {
-      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+      adminToken = await GlobalConfig.authTokensClient.getAdminTokenService();
     } catch (error: any) {
       throw error;
     }
 
     //Notification endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/register/confirm/start`;
+    const URL = `${GlobalConfig.APIEndpoints.auth}/register/confirm/start`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -138,10 +138,10 @@ export default function ApiAuthClientImpl(): IAuthClient {
   async function confirmAccount(
     token: string,
     lang: string): Promise<any> {
-
+      console.log("******confirmAccount---info:", token);
     let adminToken: string;
     try {
-      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+      adminToken = await GlobalConfig.authTokensClient.getAdminTokenService();
     } catch (error: any) {
       throw error;
     }
@@ -152,7 +152,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
     console.log("body create user:", body);
     //User endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/register/confirm`;
+    const URL = `${GlobalConfig.APIEndpoints.auth}/register/confirm`;
 
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -191,7 +191,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
     };
 
     //Login endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/tokens/login`;
+    const URL = `${GlobalConfig.APIEndpoints.auth}/tokens/login`;
 
     //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
     const promise: AxiosPromise<any> = axios.post(URL, qs.stringify(body));
@@ -227,13 +227,13 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
     let adminToken: string;
     try {
-      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+      adminToken = await GlobalConfig.authTokensClient.getAdminTokenService();
     } catch (error: any) {
       throw error;
     }
 
     //User endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/logout`;
+    const URL = `${GlobalConfig.APIEndpoints.auth}/logout`;
 
     const body = {
       id: userId,
@@ -274,13 +274,13 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
     let adminToken: string;
     try {
-      adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+      adminToken = await GlobalConfig.authTokensClient.getAdminTokenService();
     } catch (error: any) {
       throw error;
     }
 
     //Notification endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/recovery/start`;
+    const URL = `${GlobalConfig.APIEndpoints.auth}/recovery/start`;
     console.log("recovery URL:", URL);
     const promise: AxiosPromise<any> = axios({
       method: 'post',
@@ -323,7 +323,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
 
     let adminToken: string;
       try {
-        adminToken = await InfraConfig.authTokensClient.getAdminTokenService();
+        adminToken = await GlobalConfig.authTokensClient.getAdminTokenService();
       } catch (error: any) {
         throw error;
     }
@@ -334,7 +334,7 @@ export default function ApiAuthClientImpl(): IAuthClient {
     };
 
     //User endpoint
-    const URL = `${InfraConfig.APIEndpoints.auth}/recovery/update`;
+    const URL = `${GlobalConfig.APIEndpoints.auth}/recovery/update`;
     try {
       const response: any = await axios({
         method: 'post',

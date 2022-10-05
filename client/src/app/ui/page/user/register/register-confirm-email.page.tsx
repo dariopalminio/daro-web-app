@@ -1,7 +1,7 @@
 import {
   RouteComponentProps,
 } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import CircularProgress from "app/ui/common/progress/circular-progress";
 import Alert from "app/ui/common/alert/alert";
@@ -20,6 +20,10 @@ function RegisterConfirmEmailPage({match,}: RouteComponentProps<TParams>) {
   const [isExecuted, setIsExecuted] = useState(false);
   const { isProcessing, isSuccess, hasError, msg, confirmAccount } = useRegister();
   const { t, i18n } = useTranslation();
+  
+  useEffect(() => {
+    console.log("RegisterConfirmEmailPage-->useEffect");
+  }, []);
   
   const executeConfirmRequest = () => {
     setIsExecuted(true);

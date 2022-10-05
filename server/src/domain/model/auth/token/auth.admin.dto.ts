@@ -1,4 +1,4 @@
-type NewAdminTokenRequestType = {
+export type NewAdminTokenRequestType = {
     client_id: string,
     grant_type: string,
     username: string,

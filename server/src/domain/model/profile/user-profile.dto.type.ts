@@ -1,6 +1,6 @@
-import { Address } from "./address.type";
+import { IAddress } from "./address.interface";
 
-export type Profile = {
+export type UserProfileDTO = {
     userId: string;
     userName: string;
     firstName: string;
@@ -10,6 +10,5 @@ export type Profile = {
     document: string;
     telephone: string;
     language: string;
-    addresses: Address[];
+    addresses: IAddress[];
   };
-

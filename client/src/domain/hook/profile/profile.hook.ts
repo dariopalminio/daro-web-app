@@ -29,7 +29,7 @@ export default function useProfile(authClientInjected: IAuthTokensClient | null 
 
         try {
 
-            let info = await profClient.getProfileService(userName);
+            let info = await profClient.getProfile(userName);
             
             setState({ isProcessing: false, hasError: false, msg: "profile.get.user.success", isSuccess: true });
             return info;

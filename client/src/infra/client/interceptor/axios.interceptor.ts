@@ -1,4 +1,4 @@
-import * as InfraConfig from '../../global.config';
+import * as GlobalConfig from '../../global.config';
 import axios from 'axios';
 import * as SessionStorage from '../../storage/session.storage';
 import { IAuthTokensClient } from '../../../domain/service/auth-tokens-client.interface';
@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use(async (config) => {
     console.log("interceptors-->No accessToken");
     try {
       console.log("interceptors-->Tray obtain app token");
-      accessToken = await InfraConfig.authTokensClient.getAppTokenService();
+      accessToken = await GlobalConfig.authTokensClient.getAppTokenService();
     } catch (error: any) {
       throw error;
     }
@@ -51,11 +51,10 @@ axiosInstance.interceptors.response.use((response) => {
 
     if (error.response && error.response.status === 401 && !config._retry) {
       //Request new access token with refresh token
-      //console.log("Request new access token with refresh token:");
       config._retry = true;
       try {
         const localRefreshToken: string = SessionStorage.getRefreshToken();
-        const res = await InfraConfig.authTokensClient.getRefreshTokenService(localRefreshToken);
+        const res = await GlobalConfig.authTokensClient.getRefreshTokenService(localRefreshToken);
 
         if (res?.status === 200) {
           const { access_token, refresh_token } = res.data;

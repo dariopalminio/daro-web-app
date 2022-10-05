@@ -61,7 +61,8 @@ console.log(`******************************getCatalog page ${page} categorySelec
 
             setProducts(data.list);
             setPage(data.page);
-            const max = Math.round((data.count/LIMIT_ITEMS_BY_PAGE)+0.4);
+            let max = Math.round((data.count/LIMIT_ITEMS_BY_PAGE)+0.4);
+            if (max===0) max = 1;
             setMaxPage(max);
 
             setState({ isProcessing: false, hasError: false, msg: "Success", isSuccess: true });

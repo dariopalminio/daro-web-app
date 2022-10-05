@@ -1,6 +1,7 @@
 import {
   FunctionComponent,
-  useContext
+  useContext,
+  useEffect
 } from "react";
 import SessionContext, {
   ISessionContext,
@@ -20,6 +21,10 @@ import RegisterConfirmStart from "app/ui/component/user/register/register-confir
 const RegisterConfirmStartPage: FunctionComponent = () => {
   const { session } = useContext(SessionContext) as ISessionContext;
   const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    console.log("RegisterConfirmStartPage-->useEffect");
+  }, []);
 
   const {
     isProcessing,
@@ -42,15 +47,13 @@ const RegisterConfirmStartPage: FunctionComponent = () => {
     <div className="page_container">
       {isSuccess && (<Redirect to='/user/auth' />)}
 
-      
       <RegisterConfirmStart
-          successMsg={t('register.start.success.temporarily.created')}
-          message={t('register.start.title.email.verirication')}
-          onClick={() => handleSendEmail()} 
-          style={{width: "300px", margin: "34px auto auto auto"}}
-          />
+        successMsg={t('register.start.success.temporarily.created')}
+        message={t('register.start.title.email.verirication')}
+        onClick={() => handleSendEmail()}
+        style={{ width: "300px", margin: "34px auto auto auto" }}
+      />
 
-   
       {hasError && <Alert severity="error">{t(msg)}</Alert>}
 
       {isProcessing && <Alert severity="info">{t(msg)}</Alert>}

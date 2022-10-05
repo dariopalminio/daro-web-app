@@ -16,38 +16,17 @@ export default function ApiAuthClientStub(): IAuthClient {
         email: string,
         password: string): Promise<any> {
         return new Promise<number>((resolve, reject) => {
-            const response: any = {
-                "data": "",
-                "status": 200,
-                "statusText": "OK",
-                "headers": {
-                    "content-length": "2",
-                    "content-type": "application/json; charset=utf-8"
-                },
-                "config": {
-                    "url": "http://localhost:3001/api/webshop/v1/auth/register",
-                    "method": "post",
-                    "data": "{\"username\":\"mariadelcarmenchoy@gmail.com\",\"firstName\":\"Choy\",\"lastName\":\"Maryy\",\"email\":\"mariadelcarmenchoy@gmail.com\",\"password\":\"12345Qwert\"}",
-                    "headers": {
-                        "Accept": "application/json, text/plain, */*",
-                        "Content-Type": "application/json;charset=utf-8",
-                        "Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI4Tmo4RmZUODZOZXRNZXpoWWZrbDZ5VTJMWW1QOWFrUUltLWlid2ZKejJZIn0.eyJleHAiOjE2NjQzMDgxMDAsImlhdCI6MTY2NDMwNzk4MCwianRpIjoiYzQ5MTgyM2ItNWQwMS00MmU3LWJhODQtNDRiMThkNzYzNmVhIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2F1dGgvcmVhbG1zL215LXJlYWxtLXRlc3QiLCJhdWQiOiJyZWFsbS1tYW5hZ2VtZW50Iiwic3ViIjoiMTljNDc0YjktYThlZS00NWU1LTllZDktOTJkMmJmMTU4Y2Y2IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoicmVzdC1jbGllbnQtdGVzdCIsInNlc3Npb25fc3RhdGUiOiJlMDAzZTExNy00ZDVlLTQyYTQtYjllMy1kZWYyZGRkMDQ3MTkiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImFwcC1hZG1pbiIsImFwcC11c2VyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsicmVhbG0tbWFuYWdlbWVudCI6eyJyb2xlcyI6WyJtYW5hZ2UtdXNlcnMiLCJ2aWV3LXVzZXJzIiwicXVlcnktZ3JvdXBzIiwicXVlcnktdXNlcnMiXX0sInJlc3QtY2xpZW50LXRlc3QiOnsicm9sZXMiOlsidW1hX3Byb3RlY3Rpb24iLCJhZG1pbiIsInVzZXIiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJEYXJpbyBQYWxtaW5pbyIsInByZWZlcnJlZF91c2VybmFtZSI6ImRhcmlvcGFsbWluaW9AaG90bWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiRGFyaW8iLCJmYW1pbHlfbmFtZSI6IlBhbG1pbmlvIiwiZW1haWwiOiJkYXJpb3BhbG1pbmlvQGhvdG1haWwuY29tIn0.JdKRR3SomxbiaacDTqgAavGTGPejXg0Qm7gIJHWQ333cBQ841SaGw0_mdSAi2MMjbk7znS1sPVXxYKA5ZgBtxpu0stUjbMjRLu7EuuV173CdWXOh5GXZBhVmmw5kmZMtUcjYWJD1-ueGdU2paVjAz7quajRqPE-Ssg6R1HehiO0svemINQFlG7W_VQ84XGeqt04D14yex535CtLMjXqvEs8injmuJMsgsO5of2nBHBI9FM42zypjOOd4cYIifXlgoBNU78LXfe48WQnC84_6q_g9Dm21HF4qqzYWQFEZuHxbEjdz7yyODYO-S_ateR-7wX0LVw9DZURasfFZyOJSRA"
-                    },
-                    "transformRequest": [
-                        null
-                    ],
-                    "transformResponse": [
-                        null
-                    ],
-                    "timeout": 0,
-                    "xsrfCookieName": "XSRF-TOKEN",
-                    "xsrfHeaderName": "X-XSRF-TOKEN",
-                    "maxContentLength": -1,
-                    "maxBodyLength": -1
-                },
-                "request": {}
+            const data: any = {
+                "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzM2RiYmU5NWNjNTY1YTBjNzMxMzcyYiIsInR5cCI6IkJlYXJlciIsInJvbGVzIjpbIlVzZXIiXSwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJzdE5hbWUiOiJjb2xvY29sbyIsImxhc3ROYW1lIjoiY29sb2NvbG8iLCJ1c2VybmFtZSI6ImNvbG9jb2xvQGdtYWlsLmNvbSIsImVtYWlsIjoiY29sb2NvbG9AZ21haWwuY29tIiwiaWF0IjoxNjY0OTkwMTg1LCJleHAiOjE2NjUwNzY1ODUsImF1ZCI6IkRhcmlvIFBhbG1pbmlvIiwiaXNzIjoiRGFyaW8gUGFsbWluaW8iLCJzdWIiOiI2MzNkYmJlOTVjYzU2NWEwYzczMTM3MmIifQ.Hjl24mQvx3TWGiR1apmzJ-fD1F0WH85UrzbwEYjtyXI2KODVXFK3hIZ0krfVnxeEaMyokgQp_4t8YLTKv13v4LdDoO7Ctgl_3SPvFOazHqcbZ1G-eK1MYsFaCHX1ntHrK718Q4igKCxfS2pyoUJ6dlGoo-22yZtTJCJAvc39aRo",
+                "expires_in": 86400,
+                "refresh_expires_in": 86400,
+                "refresh_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzM2RiYmU5NWNjNTY1YTBjNzMxMzcyYiIsInR5cCI6IkJlYXJlciIsInJvbGVzIjpbIlVzZXIiXSwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJzdE5hbWUiOiJjb2xvY29sbyIsImxhc3ROYW1lIjoiY29sb2NvbG8iLCJ1c2VybmFtZSI6ImNvbG9jb2xvQGdtYWlsLmNvbSIsImVtYWlsIjoiY29sb2NvbG9AZ21haWwuY29tIiwiaWF0IjoxNjY0OTkwMTg1LCJleHAiOjE2NjUxNjI5ODUsImF1ZCI6IkRhcmlvIFBhbG1pbmlvIiwiaXNzIjoiRGFyaW8gUGFsbWluaW8iLCJzdWIiOiI2MzNkYmJlOTVjYzU2NWEwYzczMTM3MmIifQ.HFzj2500Z5Ab6_AiKOjMC5KQHr_1BNETdy--SvrPa0KFc2eCQ3tWq_aRNCacKXvMa5uXb1-Sk5pSKGdEKtqgpV5lmWUToz9mcbtD59Aj2bQVs4OAnk3RNSQGNvOg4dxIfBpgg9YCsyDFX8A-1Yh5P23VEqu0NTjrBGH6qyVu_dk",
+                "token_type": "Bearer",
+                "not-before-policy": 0,
+                "session_state": "",
+                "scope": "profile email"
             };
-            resolve(response);
+            resolve(data);
         });
     };
 

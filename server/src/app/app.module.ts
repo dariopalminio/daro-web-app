@@ -21,8 +21,6 @@ import { AuthMiddleware } from '../app/middleware/auth.middleware';
 import { ProductSchema } from '../infra/database/schema/product.schema';
 import { UserSchema } from '../infra/database/schema/user.schema';
 
-import { AuthKeycloakImpl } from '../infra/auth/auth-keycloak.impl';
-
 import { CategorySchema } from '../infra/database/schema/category.schema';
 import DB_CONNECTION from '../infra/database/db.connection.string';
 import {
@@ -51,6 +49,10 @@ import { AuthTokensService } from 'src/domain/service/auth.tokens.service';
 import { TranslatorI18nImpl } from 'src/infra/i18n/TraslatorI18Impl';
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path';
+import { ProfileSchema } from 'src/infra/database/schema/profile.schema';
+import { ProfileRepository } from 'src/infra/database/repository/profile.repository';
+import { ProfileController } from './controller/profile.controller';
+import { ProfileService } from '../domain/service/profile.service';
 
 console.log("DB_CONNECTION:", DB_CONNECTION);
 
@@ -64,6 +66,7 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
       { name: 'Product', schema: ProductSchema },
       { name: 'Category', schema: CategorySchema },
       { name: 'User', schema: UserSchema },
+      { name: 'Profile', schema: ProfileSchema },
     ]),
     I18nModuleConfig,
     /*ServeStaticModule.forRoot({
@@ -75,7 +78,7 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
       }
     }),*/
   ],
-  controllers: [AppController, AuthController, AuthTokensController, UserController, NotificationController, ProductController, CategoryController],
+  controllers: [AppController, AuthController, AuthTokensController, UserController, ProfileController, NotificationController, ProductController, CategoryController],
   providers: [
     {
       provide: APP_GUARD,
@@ -102,6 +105,10 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
       useClass: UserService,
     },
     {
+      provide: 'IProfileService',
+      useClass: ProfileService,
+    },
+    {
       provide: 'INotificationService',
       useClass: NotificationService,
     },
@@ -122,16 +129,16 @@ console.log("DB_CONNECTION:", DB_CONNECTION);
       useClass: UserRepository,
     },
     {
+      provide: 'IProfileRepository',
+      useClass: ProfileRepository,
+    },
+    {
       provide: 'ICategoryRepository',
       useClass: CategoryRepository,
     },
     {
       provide: 'IProductRepository',
       useClass: ProductRepository,
-    },
-    {
-      provide: 'IAuth',
-      useClass: AuthKeycloakImpl,
     },
     {
       provide: APP_FILTER,

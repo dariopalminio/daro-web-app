@@ -6,6 +6,7 @@ import PassRecoveryFormPage from "./user/recovery/pass-recovery-form.page";
 import ProductDetailPage from "./catalog/product-detail.page";
 import Alert from "app/ui/common/alert/alert";
 import CircularProgress from "app/ui/common/progress/circular-progress";
+import RegisterConfirmStartPage from "./user/register/register-confirm-start.page";
 
 // lazy loading for components that must get loaded when it is required. 
 const HomePage = lazy(() => import("./home/home.page"));
@@ -14,7 +15,7 @@ const CartPage = lazy(() => import("./cart/cart.page"));
 const CatalogPage = lazy(() => import("./catalog/catalog.page"));
 const ContactPage = lazy(() => import("./contact/contact.page"));
 const RegisterPage = lazy(() => import("./user/register/register-form.page"));
-const RegisterConfirmStartPage = lazy(() => import("./user/register/register-confirm-start.page"));
+//const RegisterConfirmStartPage = lazy(() => import("./user/register/register-confirm-start.page"));
 const PassRecoveryStartPage = lazy(() => import("./user/recovery/pass-recovery-start.page"));
 const PassRecoveryMsgPage = lazy(() => import("./user/recovery/pass-recovery-msg.page"));
 const ProfilePage = lazy(() => import("./user/profile/profile.page"));
@@ -51,27 +52,23 @@ const MainContainer: FunctionComponent = () => {
               <CatalogPage />
             </Suspense>
           </Route>
-          <Route path="/catalog/product/detail/:productId" component={ProductDetailPage} exact>
+          <Route path="/catalog/product/detail/:productId" component={ProductDetailPage} exact />
 
-          </Route>
-          <Route path="/user/register/confirm/:token" component={RegisterConfirmEmailPage} exact>
-
-          </Route>
           <Route path="/contact" exact>
             <Suspense fallback={<CircularProgress />}>
               <ContactPage />
             </Suspense>
           </Route>
+
+
           <Route path="/user/register/form" exact>
             <Suspense fallback={<CircularProgress />}>
               <RegisterPage />
             </Suspense>
           </Route>
-          <Route path="/user/register/confirm/start" exact>
-            <Suspense fallback={<CircularProgress />}>
-              <RegisterConfirmStartPage />
-            </Suspense>
-          </Route>
+          <Route path="/user/register/confirm/start" component={RegisterConfirmStartPage} exact/>
+          <Route path="/user/register/confirm/:token" component={RegisterConfirmEmailPage} exact/>
+
           <Route path="/user/recovery/start" exact>
             <Suspense fallback={<CircularProgress />}>
               <PassRecoveryStartPage />
@@ -83,6 +80,7 @@ const MainContainer: FunctionComponent = () => {
             </Suspense>
           </Route>
           <Route path="/user/recovery/form/:token" component={PassRecoveryFormPage} exact></Route>
+          
           <Route path="/user/profile" exact>
             <Suspense fallback={<CircularProgress />}>
               <ProfilePage />

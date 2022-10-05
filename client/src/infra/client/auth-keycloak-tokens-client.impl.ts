@@ -1,4 +1,4 @@
-import * as OriginConfig from 'infra/global.config';
+import * as GlobalConfig from 'infra/global.config';
 import axios, { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError } from 'infra/client/api.error';
 import qs from 'querystring';
@@ -47,30 +47,18 @@ export default function AuthKeycloakTokensClientImpl(): IAuthTokensClient {
   async function getAdminTokenService(): Promise<string> {
     try {
       const body: NewAdminTokenRequestType = {
-        client_id: OriginConfig.Keycloak.client_id,
+        client_id: GlobalConfig.Auth.client_id,
         grant_type: 'password',
-        username: OriginConfig.Keycloak.username_admin,
-        password: OriginConfig.Keycloak.password_admin,
+        username: GlobalConfig.Auth.username_admin,
+        password: GlobalConfig.Auth.password_admin,
         scope: 'openid roles',
-        client_secret: OriginConfig.Keycloak.client_secret,
+        client_secret: GlobalConfig.Auth.client_secret,
       };
 
       // Token endpoint
-      const URL = OriginConfig.KeycloakPath.token
+      const URL = `${GlobalConfig.APIEndpoints.auth}/tokens/admin`;
 
-      //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
       const response = await axios.post(URL, qs.stringify(body))
-
-      // using .then, create a new promise which extracts the data
-      /*
-      const adminToken: Promise<string> = promise.then((response) =>
-        response.data.access_token
-      ).catch((error) => {
-        // response.status !== 200
-        const authError: ApiError = handleAxiosError(error);
-        throw authError;
-      });
-      */
 
       return response.data.access_token;
     } catch (error: any) {
@@ -93,27 +81,16 @@ export default function AuthKeycloakTokensClientImpl(): IAuthTokensClient {
   async function getAppTokenService(): Promise<string> {
     try {
       const body: RequesAppToken = {
-        client_id: OriginConfig.Keycloak.client_id,
+        client_id: GlobalConfig.Auth.client_id,
         grant_type: 'client_credentials',
-        client_secret: OriginConfig.Keycloak.client_secret,
+        client_secret: GlobalConfig.Auth.client_secret,
       };
 
       // Token endpoint
-      const URL = OriginConfig.KeycloakPath.token
+      const URL = `${GlobalConfig.APIEndpoints.auth}/tokens/app`;
 
-      //post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R>;
       const response = await axios.post(URL, qs.stringify(body));
 
-      // using .then, create a new promise which extracts the data
-      /** 
-      const appToken: Promise<string> = promise.then((response) =>
-        response.data.access_token
-      ).catch((error) => {
-        // response.status !== 200
-        const authError: ApiError = handleAxiosError(error);
-        throw authError;
-      });
-  */
       return response.data.access_token;
     } catch (error: any) {
       // response.status !== 200
@@ -145,29 +122,17 @@ export default function AuthKeycloakTokensClientImpl(): IAuthTokensClient {
     try {
       console.log('getRefreshTokenService.refreshToken:', refreshToken);
       const body: RequesRefreshToken = {
-        client_id: OriginConfig.Keycloak.client_id,
+        client_id: GlobalConfig.Auth.client_id,
         grant_type: 'refresh_token',
         refresh_token: refreshToken,
-        client_secret: OriginConfig.Keycloak.client_secret,
+        client_secret: GlobalConfig.Auth.client_secret,
       };
 
       // Token endpoint
-      const URL = OriginConfig.KeycloakPath.token
+      const URL = `${GlobalConfig.APIEndpoints.auth}/tokens/refresh`;
 
       const response = await axios.post(URL, qs.stringify(body));
 
-      // using .then, create a new promise which extracts the data
-      /*
-      const tokens: Promise<any> = promise.then((response) => {
-        console.log('getRefreshTokenService.response',response);
-        return response;
-      }
-      ).catch((error) => {
-        // response.status !== 200
-        const authError: ApiError = handleAxiosError(error);
-        throw authError;
-      });
-  */
       return response;
     } catch (error: any) {
       // response.status !== 200

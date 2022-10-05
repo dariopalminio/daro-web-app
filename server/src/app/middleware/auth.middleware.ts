@@ -39,7 +39,7 @@ export class AuthMiddleware implements NestMiddleware {
             }
 
             try {
-                var token = extractTokenFromHeader(req);
+                var token = extractTokenFromHeader(req.headers);
                 console.log("AuthMiddleware.token:", token);
 
                 jwt.verify(token, this.getPEMPublicKey(), { algorithms: ['RS256'] });
@@ -60,11 +60,12 @@ export class AuthMiddleware implements NestMiddleware {
      * @returns 
      */
     private getPEMPublicKey(): string {
-        if (!this.globalConfig.get<string>('PUBLIC_KEY') || this.globalConfig.get<string>('PUBLIC_KEY') === '')
+        const publicKey: string = this.globalConfig.get<string>('AUTH_PUBLIC_KEY');
+        if (!publicKey || publicKey === '')
             throw Error("The public key is wrong!");
         let pem = '';
         pem += '-----BEGIN PUBLIC KEY-----\n';
-        pem += this.globalConfig.get<string>('PUBLIC_KEY');
+        pem += this.globalConfig.get<string>('AUTH_PUBLIC_KEY');
         pem += '\n';
         pem += '-----END PUBLIC KEY-----\n';
         return pem;

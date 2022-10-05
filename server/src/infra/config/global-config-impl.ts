@@ -55,6 +55,10 @@ export class GlobalConfigImpl implements IGlobalConfig{
 
         this.set('PUBLIC_KEY', process.env.SERVER_BFF_KEYCLOAK_PUBLIC_KEY as string);
 
+        this.set('AUTH_PRIVATE_KEY', process.env.SERVER_BFF_AUTH_PRIVATE_KEY as string);
+        this.set('AUTH_PUBLIC_KEY', process.env.SERVER_BFF_AUTH_PUBLIC_KEY as string);
+        
+
         this.set('is_fake_mode', ((process.env.SERVER_BFF_FAKE === 'true') ? true : false) as boolean);
 
         // Keycloak authentication server

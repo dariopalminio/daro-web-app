@@ -4,7 +4,6 @@ import { IUser } from 'src/domain/model/user/user.interface';
 import { User } from 'src/domain/model/user/user';
 import { IRepository } from '../output-port/repository.interface';
 import { DomainError } from 'src/domain/error/domain-error';
-import { UserProfileDTO } from 'src/domain/model/user/user-profile.dto.type';
 
 @Injectable()
 export class UserService implements IUserService<IUser> {
@@ -30,32 +29,35 @@ export class UserService implements IUserService<IUser> {
     return user;
   };
 
-  // Get a single user by auth id
-  async getByAuthId(authId: string): Promise<IUser> {
-    const user: IUser = await this.userRepository.getById(authId);
-    return user;
+  async getUserJustRegister(userName: string): Promise<IUser> {
+    const fieldsToExclude = {
+      password: 0,
+      verificationCode: 0,
+    };
+
+    const u = await this.getByUserName(userName);
+    const u2 = new User();
+
+    u2._id = u._id;
+    u2.firstName = u.firstName;
+    u2.lastName = u.lastName;
+    u2.email = u.email;
+    u2.userName = u.userName;
+    u2.roles = u.roles;
+    u2.verified = u.verified;
+    return u2;
   };
 
   //Create new user with basic data
   async create(userRegisterDTO: IUser): Promise<boolean> {
     try {
       let newUser: IUser = new User();
-      newUser.authId = userRegisterDTO.authId;
       newUser.userName = userRegisterDTO.userName;
       newUser.email = userRegisterDTO.email;
       newUser.firstName = userRegisterDTO.firstName;
       newUser.lastName = userRegisterDTO.lastName;
-
-
-      newUser.docType = userRegisterDTO.docType,
-      newUser.document = userRegisterDTO.document,
-      newUser.telephone = userRegisterDTO.telephone,
-      //birth: Date;
-      //newUser.gender = userRegisterDTO.gender,
-      newUser.language = userRegisterDTO.language,
-
-      newUser.addresses = userRegisterDTO.addresses,
-
+      newUser.password = userRegisterDTO.password;
+      newUser.roles = userRegisterDTO.roles;
       newUser.verified = false;
       newUser.enable = true;
       newUser.verificationCode = "";
@@ -89,7 +91,7 @@ export class UserService implements IUserService<IUser> {
   };
 
   async getByUserName(userName: string): Promise<IUser> {
-    const query = {userName: userName};
+    const query = { userName: userName };
     const user = await this.userRepository.getByQuery(query);
     return user;
   };
@@ -100,13 +102,6 @@ export class UserService implements IUserService<IUser> {
   };
 
   async update(query: any, valuesToSet: any): Promise<boolean> {
-    const updatedProduct: boolean = await this.userRepository.update(query, valuesToSet);
-    return updatedProduct;
-  };
-
-  async updateProfile(userProfileDTO: UserProfileDTO): Promise<boolean> {
-    const query = {userName: userProfileDTO.userName};
-    const valuesToSet = userProfileDTO;
     const updatedProduct: boolean = await this.userRepository.update(query, valuesToSet);
     return updatedProduct;
   };

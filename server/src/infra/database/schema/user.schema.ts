@@ -12,13 +12,12 @@ export class User {
   enable: boolean;
 
   @Prop({ required: true, unique: true })
-  authId: string;
-
-  @Prop({ required: true, unique: true })
   userName: string;
 
   @Prop({
     required: true,
+    min: 6,
+    max: 255
   })
   firstName: string;
 
@@ -29,30 +28,19 @@ export class User {
 
   @Prop({
     unique: true,
+    required: true,
+    min: 6,
+    max: 1024
   })
   email: string;
 
-  @Prop()
-  docType: string;
+  @Prop({
+    required: true
+  })
+  password: string;
 
   @Prop()
-  document: string;
-
-  @Prop()
-  telephone: string;
-
-  @Prop()
-  language: string;
-
-  @Prop()
-  addresses: [{
-    street: { type: String }, //street with number
-    department: { type: String }, //department, flat or office
-    neighborhood: { type: String }, //neighborhood or commune
-    city: { type: String }, //city
-    state: { type: String }, //state, region or province
-    country: { type: String } //country
-  }]
+  roles: string[];
 
   @Prop({
     default: false,
@@ -67,14 +55,6 @@ export class User {
   })
   startVerificationCode: Date;
 
-/*
-  createdAt: {
-    type: Date,
-    default: () => Date.now(),
-    immutable: true,
-  }*/
-
-
-}
+};
 
 export const UserSchema = SchemaFactory.createForClass(User);

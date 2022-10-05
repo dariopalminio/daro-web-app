@@ -1,4 +1,4 @@
-export type RequesRefreshToken = {
+export type RequestRefreshToken = {
     client_id: string
     grant_type: string
     refresh_token: string

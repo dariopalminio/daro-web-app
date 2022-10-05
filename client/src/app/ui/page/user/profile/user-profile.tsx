@@ -8,7 +8,7 @@ import { Profile } from "domain/model/user/profile.type";
 import { Address } from "domain/model/user/address.type";
 import CircularProgress from "app/ui/common/progress/circular-progress";
 import Alert from "app/ui/common/alert/alert";
-import useProfile from "domain/hook/user/profile.hook";
+import useProfile from "domain/hook/profile/profile.hook";
 import ProfileForm from "app/ui/component/user/profile/profile-form";
 
 
@@ -22,6 +22,7 @@ const initialNewAddress: Address = {
 };
 
 const initialEmptyProfile: Profile = {
+    userId: '',
     userName: '',
     firstName: '',
     lastName: '',
@@ -55,7 +56,8 @@ const UserProfile: FunctionComponent = () => {
             if (info.language) i18n.changeLanguage(info.language.toLowerCase());
 
 
-            console.log('fetchData.info.userName', info.userName);
+            console.log('****************UserProfile PAGE fetchData.info.userName', info);
+
             if (info.userName) {
                 setProfile({
                     ...profile,

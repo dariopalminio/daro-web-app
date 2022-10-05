@@ -5,75 +5,76 @@ import * as StateConfig from 'infra/global.config';
 import { IAuthTokensClient } from 'domain/service/auth-tokens-client.interface';
 import { IAuthClient } from 'domain/service/auth-client.interface';
 import { IHookState, InitialState } from 'domain/hook/hook.type';
+import { convertJwtToSessionType } from './convert-jwt';
+import { IProfileClient } from 'domain/service/profile-client.interface';
+import { Profile } from 'domain/model/user/profile.type';
 
 /**
  * use Register
  * Custom Hook for create new user
  */
 export default function useRegister(authServiceInjected: IAuthTokensClient | null = null,
-    userClientInjected: IAuthClient | null = null) {
+    userClientInjected: IAuthClient | null = null,
+    profileClientInjected: IProfileClient | null = null) {
 
     const { session, setNewSession, removeSessionValue } = useContext(SessionContext) as ISessionContext;
     const [state, setState] = useState<IHookState>(InitialState);
     const authClient: IAuthClient = userClientInjected ? userClientInjected : StateConfig.userAuthClient;
+    const profClient: IProfileClient = profileClientInjected ? profileClientInjected : StateConfig.profileClient;
+
 
     /**
      * Register function
      * Create new user in registration process.
      */
-    const register = useCallback((
-        firstname: string,
-        lastname: string,
-        email: string,
-        password: string) => {
-
+    const register = async (firstname: string, lastname: string, email: string, password: string) => {
+        console.log("useRegister->register");
         setState({ isProcessing: true, hasError: false, msg: "register.info.loading", isSuccess: false });
 
         // creates a new user with authorization using admin access token
+        try {
+            const data = await authClient.register(
+                email,
+                firstname,
+                lastname,
+                email,
+                password);
+            console.log("Register response promise then:", data);
+            const userSessionValue: SessionType = convertJwtToSessionType(data);
 
-        const responseReg = authClient.register(
-            email,
-            firstname,
-            lastname,
-            email,
-            password);
-
-        responseReg.then(resp => {
-            console.log("Register response promise then:", resp);
-            const userValue: SessionType = {
-                createdTimestamp: "",
-                access_token: null,
-                refresh_token: null,
-                expires_in: 0,
-                refresh_expires_in: 0,
-                date: new Date(),
-                isLogged: false,
-                email: email,
-                email_verified: false,
-                given_name: firstname,
-                preferred_username: firstname,
-                userId: "",
-                roles: []
+            //mover la creación de profile al server o buscar otra estrategia
+            const newProf = {
+                userId: userSessionValue.userId,
+                userName: userSessionValue.preferred_username,
+                firstName: userSessionValue.firstName,
+                lastName: userSessionValue.lastName,
+                email: userSessionValue.email,
+                docType: '',
+                document: '',
+                telephone: '',
+                language: '',
+                addresses: []
             };
+            const res = await profClient.createProfile(newProf);
 
-            setNewSession(userValue);
+            setNewSession(userSessionValue);
             setState({ isProcessing: false, hasError: false, msg: "", isSuccess: true });
 
-        }).catch(err => {
+        } catch (err: any) {
             console.log("Error Can not acquire Admin token from service!");
             const errorMsgKey = "register.error.cannot.acquire.token";
             setState({ isProcessing: false, hasError: true, msg: errorMsgKey, isSuccess: false });
             removeSessionValue();
-        });
+        };
 
-    }, [setState, setNewSession, removeSessionValue, authClient]);
+    };
 
     /**
       * Start Confirm Email function
       * Sent notification by email with verification link.
       */
-    const startConfirmEmail = useCallback((userName: string, userEmail: string | undefined, locale: string) => {
-
+    const startConfirmEmail = async (userName: string, userEmail: string | undefined, locale: string) => {
+        console.log("useRegister->startConfirmEmail");
         if (!userEmail) {
             const errorMsg = "Some problem creating new user. Email does not exist in session!";
             setState({ isProcessing: true, hasError: true, msg: errorMsg, isSuccess: false }); console.log();
@@ -81,23 +82,22 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
 
             const email: string = userEmail;
             setState({ isProcessing: true, hasError: false, msg: "Trying to send Email to Confirm!", isSuccess: false }); console.log();
+            try {
+                console.log("startConfirmEmail logged:", session);
+                const verificationPageLink = `${StateConfig.app_url}/user/register/confirm/`;
 
-            console.log("startConfirmEmail logged:", session);
-            const verificationPageLink = `${StateConfig.app_url}/user/register/confirm/`;
+                // Second: send email to confirmation process
+                const info = await authClient.sendStartEmailConfirm(userName, email, verificationPageLink, locale);
 
-            // Second: send email to confirmation process
-            authClient.sendStartEmailConfirm(userName, email, verificationPageLink, locale).then(info => {
                 console.log("Response sendStartEmailConfirm...", info);
                 setState({ isProcessing: false, hasError: false, msg: "register.command.email.sent", isSuccess: true });
 
-            })
-                .catch(err => {
-                    // Error Can not send email
-                    setState({ isProcessing: false, hasError: true, msg: "register.error.email-does-not-sent", isSuccess: false });
-                });
-
+            } catch (err: any) {
+                // Error Can not send email
+                setState({ isProcessing: false, hasError: true, msg: "register.error.email-does-not-sent", isSuccess: false });
+            }
         }
-    }, [session, authClient]);
+    };
 
     /**
   * Validate Email
@@ -105,27 +105,25 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
   * If the token is correct, then update email confirmation field in user to true.
   * @param token Base64 encoded string
   */
-    const confirmAccount = useCallback((token: string, lang: string) => {
-
+    const confirmAccount = async (token: string, lang: string) => {
+        console.log("confirmAccount");
 
         setState({ isProcessing: true, isSuccess: false, hasError: false, msg: "No verificado" });
+        try {
+            const responseValidation = await authClient.confirmAccount(token, lang);
 
-        const responseValidation: Promise<any> = authClient.confirmAccount(token, lang);
-
-        responseValidation.then(resp => { //Confirmed
-
-            console.log("validateEmail, resp:", resp);
+            console.log("validateEmail, resp:", responseValidation);
             const infoConfirmedAccountSuccess = "register.confirm.success.account.confirmed";
             setState({ isProcessing: false, isSuccess: true, hasError: false, msg: infoConfirmedAccountSuccess });
 
-        }).catch(err => {
+        } catch (err: any) {
             // Error: verification code not validated
             console.log("err:", err);
             const e = "Error: verification code not validated.";
             setState({ isProcessing: false, isSuccess: false, hasError: true, msg: e });
-        });
+        }
 
-    }, [authClient]);
+    };
 
     return {
         isSuccess: state.isSuccess,
@@ -135,5 +133,5 @@ export default function useRegister(authServiceInjected: IAuthTokensClient | nul
         register,
         startConfirmEmail,
         confirmAccount
-    };
+    }
 };

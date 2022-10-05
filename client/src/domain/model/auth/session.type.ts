@@ -19,6 +19,8 @@ export interface SessionType {
     given_name: string;
     preferred_username: string;
     userId: string;
+    firstName: string;
+    lastName: string;
     roles: Array<string>;
     //roles: Array<string> | null
   };

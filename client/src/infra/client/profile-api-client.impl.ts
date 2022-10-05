@@ -3,17 +3,16 @@ import { AxiosPromise } from 'axios';
 import { handleAxiosError, ApiError, AuthStatusEnum } from 'infra/client/api.error';
 import { IProfileClient } from 'domain/service/profile-client.interface';
 import axiosInstance from './interceptor/axios.interceptor';
-
-
+import { Profile } from 'domain/model/user/profile.type';
+import axios from 'axios';
+import * as GlobalConfig from 'infra/global.config';
 
 export default function ProfileApiClientImpl(): IProfileClient {
 
-  async function getProfileService(
-    userName: string
-  ): Promise<any> {
+  async function getProfile(userName: string): Promise<any> {
 
     //users endpoint
-    const URL = `${InfraConfig.APIEndpoints.users}/user`;
+    const URL = `${InfraConfig.APIEndpoints.profiles}/profile`;
 
     const config = {
       //headers: { Authorization: `Bearer ${accessToken}` },
@@ -38,8 +37,6 @@ export default function ProfileApiClientImpl(): IProfileClient {
         };
       });
 
-    console.log(info);
-
     return info;
   };
 
@@ -48,8 +45,7 @@ export default function ProfileApiClientImpl(): IProfileClient {
 
     try {
       //User endpoint
-      const URL = `${InfraConfig.APIEndpoints.users}/profile/update`;
-
+      const URL = `${InfraConfig.APIEndpoints.profiles}/update`;
       const response = await axiosInstance({
         method: 'put',
         url: URL,
@@ -65,8 +61,38 @@ export default function ProfileApiClientImpl(): IProfileClient {
     }
   };
 
+  async function createProfile(
+    userProfile: Profile): Promise<number> {
+
+      let adminToken: string;
+      try {
+        adminToken = await GlobalConfig.authTokensClient.getAdminTokenService();
+      } catch (error: any) {
+        throw error;
+      }
+
+    try {
+      //User endpoint
+      const URL = `${InfraConfig.APIEndpoints.profiles}/create`;
+
+      const response = await axios({
+        method: 'post',
+        url: URL,
+        headers: { 'Authorization': `Bearer ${adminToken}` },
+        data: userProfile
+      });
+
+      return response.status;
+    } catch (error:any) {
+      // response.status !== 200
+      const authError: ApiError = handleAxiosError(error);
+      throw authError;
+    }
+  };
+
   return {
-    getProfileService,
-    updateProfile
+    getProfile,
+    updateProfile,
+    createProfile
   };
 };
