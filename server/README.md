@@ -1,6 +1,8 @@
 
 ## Description
 
+Application made only as an exercise for educational purposes.
+
   <p><a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable backend server-side applications.</p>
   <p><a href="https://nestjs.com/" target="_blank">NestJs</a> framework for building backend.</p>
 
