@@ -1,3 +1,5 @@
+## App example
+
 Daro web app Example
 
 Application made only as an exercise for educational purposes.
