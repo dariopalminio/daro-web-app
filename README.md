@@ -1,4 +1,6 @@
-Daro web app
+Daro web app Example
+
+Application made only as an exercise for educational purposes.
 
 ## Stack
 
